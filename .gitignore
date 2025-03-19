@@ -1,22 +1,40 @@
 
+# Virtual environment
 venv/
-.poetry/
-
-
-.env
-
-
-__pycache__/
 *.pyc
 *.pyo
+__pycache__/
 
-
+# Logs & Debug Files
 logs/
 *.log
+*.out
+*.err
 
+# Ignore Database Credentials & Environment Variables
+.env
 
-data/
+# Ignore Dataset Storage (Optional: Uncomment if datasets should not be committed)
+# data/
 
+# Ignore Precompiled Files
+*.pyc
+*.pyd
+*.pyo
+*.so
+__pycache__/
 
-dist/
+# Ignore Dependency Caches
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Ignore IDE & Editor-Specific Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore build artifacts
 build/
+dist/
+*.egg-info/
