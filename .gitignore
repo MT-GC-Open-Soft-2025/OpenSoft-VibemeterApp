@@ -1,22 +1,22 @@
-# Ignore virtual environment (Poetry manages dependencies)
+
 venv/
 .poetry/
 
-# Ignore database credentials
+
 .env
 
-# Ignore compiled Python files
+
 __pycache__/
 *.pyc
 *.pyo
 
-# Ignore logs and cache
+
 logs/
 *.log
 
-# Ignore dataset storage
+
 data/
 
-# Ignore Python package files
+
 dist/
 build/
