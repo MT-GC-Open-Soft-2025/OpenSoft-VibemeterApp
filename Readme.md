@@ -12,15 +12,15 @@ git checkout -b <branch-name>
 ```
 ## 2. Install the required dependencies
 ```bash
-poetry install
+poetry install --no-root
 ```
 Make sure you have poetry installed. If not, you can install it using the following command:
 ```bash
-    curl -sSL https://install.python-poetry.org | python3 -
+curl -sSL https://install.python-poetry.org | python3 -
 ```
 or for windows
 ```bash
-    (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
+(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
 ```
 
 ## 3. Run the FastAPI server
