@@ -23,6 +23,9 @@ or for windows
     (Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
 ```
 
-
+## 3. Run the FastAPI server
+```bash
+poetry run uvicorn server:app --host 0.0.0.0 --port 8000 --reload
+```
 
 
