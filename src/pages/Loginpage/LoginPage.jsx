@@ -13,7 +13,9 @@ const LoginPage = () => {
   };
 
   return (
+   
     <div className="wrapper fadeInDown">
+       <div></div>
       <div id="formContent">
         <div className="fadeIn first">
           <img src={bot} id="icon" alt="User Icon" />
