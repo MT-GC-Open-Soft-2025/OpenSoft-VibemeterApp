@@ -1,21 +1,27 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
-import "./LoginPage.css"
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css"; 
+import "./LoginPage.css";
 import bot from "../../Assets/bot.png";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    navigate("/admin"); // Navigate to AdminPage
+  };
+
   return (
+   
     <div className="wrapper fadeInDown">
+      
       <div id="formContent">
         <div className="fadeIn first">
-          <img
-            src={bot}
-            id="icon"
-            alt="User Icon"
-          />
+          <img src={bot} id="icon" alt="User Icon" />
         </div>
 
-        <form>
+        <form onSubmit={handleLogin}>
           <input
             type="text"
             id="login"
@@ -30,14 +36,6 @@ const LoginPage = () => {
             name="username"
             placeholder="password"
           />
-          
-          {/* <input
-            type="password"
-            id="password"
-            className="fadeIn second"
-            name="password"
-            placeholder="Password"
-          /> */}
           <input type="submit" className="fadeIn fourth btn btn-primary" value="Log In" />
         </form>
 
