@@ -1,6 +1,6 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
-import "./AdminPage.css"
+import "./AdminnPage.css"
 import bot from "../../Assets/bot.png";
 
 const AdminPage = () => {
@@ -43,7 +43,7 @@ const AdminPage = () => {
 
         <div id="formFooter">
           <a className="underlineHover" href="#">
-            Forgot Password?
+            This is admin page.
           </a>
         </div>
       </div>
