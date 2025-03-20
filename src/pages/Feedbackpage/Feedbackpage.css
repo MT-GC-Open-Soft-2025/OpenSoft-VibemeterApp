@@ -1,11 +1,25 @@
-.feedback-container {
+/* Wrapper for the entire feedback box */
+.feedback-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    background-color: #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    margin: 20px auto;
+    width: 80%; /* Adjust width as needed */
+  }
+  
+  /* Container for all feedback sections */
+  .feedback-container {
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
-    padding: 20px;
     gap: 20px;
   }
   
+  /* Individual feedback section */
   .feedback-section {
     flex: 1;
     margin: 10px;
@@ -20,6 +34,7 @@
     color: #333;
   }
   
+  /* Input and Textarea Styling */
   .feedback-input,
   .feedback-textarea {
     width: 100%;
@@ -29,6 +44,7 @@
     border: 1px solid #ccc;
   }
   
+  /* Submit Button */
   .feedback-button {
     margin-top: 10px;
     padding: 8px 16px;
@@ -43,12 +59,19 @@
     background-color: #0056b3;
   }
   
+  /* List Styling */
   ul {
     list-style-type: none;
     padding: 0;
   }
   
   li {
+    margin: 5px 0;
+    color: #555;
+  }
+  
+  /* Contact Details Styling */
+  .feedback-section p {
     margin: 5px 0;
     color: #555;
   }
