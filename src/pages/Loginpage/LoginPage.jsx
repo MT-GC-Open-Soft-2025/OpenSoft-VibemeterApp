@@ -2,13 +2,9 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginPage.css";
 import bot from "../../Assets/bot.png";
-import ButtonComponent from "../../components/ButtonComponent"; 
+import ButtonComponent from "../../components/ButtonComponent"; // Adjust path if needed
 
 const LoginPage = () => {
-  const handleButtonClick = () => {
-    alert("Button clicked!");
-  };
-
   return (
     <div className="wrapper fadeInDown">
       <div id="formContent">
@@ -38,8 +34,9 @@ const LoginPage = () => {
           />
         </form>
 
-        {/* Adding the button component */}
-        <ButtonComponent label="Click Me" onClick={handleButtonClick} />
+        {/* Link to Feedback Page */}
+        <ButtonComponent label="Give Feedback" />
+
 
         <div id="formFooter">
           <a className="underlineHover" href="#">

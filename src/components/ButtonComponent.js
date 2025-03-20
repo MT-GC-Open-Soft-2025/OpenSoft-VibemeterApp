@@ -1,10 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const ButtonComponent = ({ label, onClick }) => {
+const ButtonComponent = ({ label }) => {
+  const navigate = useNavigate();
+
+  const handleButtonClick = () => {
+    navigate("/feedback");
+  };
+
   return (
     <button
       className="btn btn-success fadeIn fourth"
-      onClick={onClick}
+      onClick={handleButtonClick}
       style={{ margin: "10px" }}
     >
       {label}
@@ -13,3 +20,4 @@ const ButtonComponent = ({ label, onClick }) => {
 };
 
 export default ButtonComponent;
+
