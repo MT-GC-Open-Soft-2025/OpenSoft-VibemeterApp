@@ -7,7 +7,6 @@ function App() {
   return (
     <Router>
       <Routes>
-       
         <Route path="/" element={<LoginPage />} />
         <Route path="/admin" element={<AdminPage />} />
       </Routes>
