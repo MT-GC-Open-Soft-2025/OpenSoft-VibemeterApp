@@ -35,7 +35,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
-app.include_router(admin_router)
+app.include_router(admin_router, prefix="/admin", tags=["Admin"])
 
 @app.get("/")
 def home():
