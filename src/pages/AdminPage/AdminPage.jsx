@@ -6,6 +6,7 @@ import bot from "../../Assets/bot.png";
 
 const AdminPage = () => {
   return (
+    
     <div className="wrapper fadeInDown">
       "This is admin page."
     </div>
