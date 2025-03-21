@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/Loginpage/LoginPage';
 import AdminPage from './pages/AdminPage/AdminPage';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
   
 function App() {
   return (
