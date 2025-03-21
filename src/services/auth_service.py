@@ -1,5 +1,3 @@
-
-
 import time
 import jwt
 from fastapi import HTTPException, status
@@ -11,7 +9,6 @@ load_dotenv()
 JWT_SECRET = os.getenv("JWT_SECRET")
 JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
 TOKEN_EXPIRY_SECONDS = os.getenv("TOKEN_EXPIRY_SECONDS")
-
 
 
 async def signin(username:str) -> Dict[str, str]:
