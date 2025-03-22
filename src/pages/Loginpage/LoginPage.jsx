@@ -1,18 +1,28 @@
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { useNavigate } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css"; 
 import "./LoginPage.css";
 import bot from "../../Assets/bot.png";
 import ButtonComponent from "../../components/ButtonComponent"; // Adjust path if needed
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    navigate("/admin"); // Navigate to AdminPage
+  };
+
   return (
+   
     <div className="wrapper fadeInDown">
+      
       <div id="formContent">
         <div className="fadeIn first">
           <img src={bot} id="icon" alt="User Icon" />
         </div>
 
-        <form>
+        <form onSubmit={handleLogin}>
           <input
             type="text"
             id="login"
