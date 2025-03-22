@@ -32,3 +32,6 @@ pip freeze > requirements.txt
 ```bash
 uvicorn server:app --host 0.0.0.0 --port 8000 --reload
 ```
+
+## 4. Gemini API
+[Docs](https://ai.google.dev/gemini-api/docs/text-generation#multi-turn-conversations)
