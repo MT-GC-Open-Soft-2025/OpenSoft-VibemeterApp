@@ -1,8 +1,9 @@
+// File: src/components/Rewards.jsx
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function Rewards() {
-  // Dummy employee data
+  // Full employee data
   const employees = [
     { name: "Alice", points: 205 },
     { name: "Bob", points: 494 },
@@ -16,37 +17,40 @@ export default function Rewards() {
     { name: "Judy", points: 287 },
   ];
 
-  // Find the maximum points among all employees
+  // Filter for Alice's data
+  const alice = employees.find((emp) => emp.name === "Alice");
+
+  // Get max points among all employees for scaling
   const maxPoints = Math.max(...employees.map((emp) => emp.points));
 
+  if (!alice) {
+    return null;
+  }
+
+  const percentage = (alice.points / maxPoints) * 100;
+
   return (
-    <div className="container mt-4" style={{ width: "25%" }}> {/* Reduced width to 1/4th */}
+    <div className="container mt-4" style={{ width: "25%" }}>
       <h2 className="mb-4">Employee Reward Points</h2>
-
-      {employees.map((emp, i) => {
-        const percentage = (emp.points / maxPoints) * 100;
-
-        return (
-          <div key={i} className="mb-4">
-            <div className="d-flex justify-content-between mb-2">
-              <strong>{emp.name}</strong>
-              <span>{emp.points} pts</span>
-            </div>
-            <div className="progress" style={{ height: "24px" }}>
-              <div
-                className="progress-bar bg-info"
-                role="progressbar"
-                style={{ width: `${percentage.toFixed(1)}%` }}
-                aria-valuenow={percentage.toFixed(1)}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              >
-                {percentage.toFixed(1)}%
-              </div>
-            </div>
+      <div className="mb-4">
+        <div className="d-flex justify-content-between mb-1">
+          <strong>{alice.name}</strong>
+          <span>{alice.points} pts</span>
+          <span>{maxPoints}</span>
+        </div>
+        <div className="progress" style={{ height: "24px" }}>
+          <div
+            className="progress-bar bg-info"
+            role="progressbar"
+            style={{ width: `${percentage.toFixed(1)}%` }}
+            aria-valuenow={percentage.toFixed(1)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          >
+            {percentage.toFixed(1)}%
           </div>
-        );
-      })}
+        </div>
+      </div>
     </div>
   );
 }

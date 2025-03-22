@@ -9,13 +9,11 @@ const LoginPage = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    navigate("/admin"); // Navigate to AdminPage
+    navigate("/admin");
   };
 
   return (
-   
     <div className="wrapper fadeInDown">
-      
       <div id="formContent">
         <div className="fadeIn first">
           <img src={bot} id="icon" alt="User Icon" />
@@ -30,13 +28,17 @@ const LoginPage = () => {
             placeholder="employeeId"
           />
           <input
-            type="text"
-            id="login"
+            type="password"
+            id="password"
             className="fadeIn second"
-            name="username"
+            name="password"
             placeholder="password"
           />
-          <input type="submit" className="fadeIn fourth btn btn-primary" value="Log In" />
+          <input
+            type="submit"
+            className="fadeIn fourth btn btn-primary"
+            value="Log In"
+          />
         </form>
 
         <div id="formFooter">
