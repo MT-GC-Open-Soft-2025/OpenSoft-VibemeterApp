@@ -1,8 +1,13 @@
 import transformers
 import torch
+from transformers import pipeline
+from transformers import BartForConditionalGeneration, BartTokenizer
 
 # Load the sentiment analysis pipeline
-sentiment_pipeline = transformers.pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+sentiment_pipeline = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
+model_name = "facebook/bart-large-cnn"
+tokenizer = BartTokenizer.from_pretrained(model_name)
+model = BartForConditionalGeneration.from_pretrained(model_name)
 
 model_id = "meta-llama/Llama-3.3-70B-Instruct"
 
@@ -38,3 +43,10 @@ def generate_response(user_input:str) -> str:
 
     return response
 
+
+def summarize_text(text, max_length=130, min_length=30, length_penalty=2.0):
+    inputs = tokenizer.encode("summarize: " + text, return_tensors="pt", max_length=1024, truncation=True)
+    summary_ids = model.generate(inputs, max_length=max_length, min_length=min_length, length_penalty=length_penalty, num_beams=4)
+    summary = tokenizer.decode(summary_ids[0], skip_special_tokens=True)
+    
+    return summary
