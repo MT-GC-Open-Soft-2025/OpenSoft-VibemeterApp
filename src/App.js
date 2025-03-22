@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/Loginpage/LoginPage';
 import AdminPage from './pages/AdminPage/AdminPage';
 import Navbar from './components/navbar';
-  
-import Feedback from "./pages/Feedbackpage/Feedbackpage";
+
+import FeedbackPage from "./pages/Feedbackpage/Feedbackpage";
 
 function App() {
   return (
@@ -15,6 +15,9 @@ function App() {
           <><Navbar />
           <AdminPage /></>
           } />
+          <Route path="/feedback" element={
+            <FeedbackPage />
+          }/>
       </Routes>
     </Router>
   );
