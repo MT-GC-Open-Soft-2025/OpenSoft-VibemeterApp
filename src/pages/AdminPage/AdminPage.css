@@ -265,4 +265,8 @@ html {
   #icon {
     width:60%;
   }
+
+  .charts {
+    display: flex;
+  }
   
