@@ -1,0 +1,24 @@
+from fastapi import HTTPException
+from typing import Dict, Any
+from src.services.admin_services import fetch_all_employees, fetch_employee_data, fetch_employee_conversation
+
+async def get_all_employees() -> Dict[str, Any]:
+    try:
+        employees = await fetch_all_employees()
+        return {"employees": employees}
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
+async def get_employee_detail(employee_id: str) -> Dict[str, Any]:
+    try:
+        employee = await fetch_employee_data(employee_id)
+        return  employee
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
+async def get_employee_conversation(item_id: str) -> Dict[str, Any]:
+    try:
+        convo_id = await fetch_employee_conversation(item_id)
+        return {"ConvoID": convo_id}
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
