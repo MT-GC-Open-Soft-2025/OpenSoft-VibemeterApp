@@ -60,3 +60,22 @@ async def specific_conversation(employee_id: str, convo_id: str) -> Dict[str, An
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
 
+async def fetch_employee_conversationFeedback_byId(emp_id: str, convo_id: str) -> Any:
+    try:
+        chat = await db["chats"].find_one({"emp_id": emp_id, "convo_id": convo_id})
+        if not chat:
+            raise HTTPException(status_code=404, detail="Chat not found")
+        return chat.get("feedback", None)  # Assuming "feedback" is the field you want
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+    
+    
+
+async def fetch_employee_conversationSummary_byId(emp_id: str, convo_id: str) -> Any:
+    try:
+        chat = await db["chats"].find_one({"emp_id": emp_id, "convo_id": convo_id})
+        if not chat:
+            raise HTTPException(status_code=404, detail="Chat not found")
+        return chat.get("summary", None)  # Assuming "feedback" is the field you want
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
