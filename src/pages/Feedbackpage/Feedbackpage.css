@@ -1,116 +1,109 @@
-/* Full-Page Feedback Wrapper */
+/*css for the feedback page*/
+/* Feedback Wrapper */
 .feedback-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
   background: linear-gradient(135deg, #74ebd5, #acb6e5);
-  margin: 0;
   height: 100vh;
   width: 100%;
   font-family: 'Arial', sans-serif;
+  margin: 0;
 }
 
-/* Bootstrap Container */
+/* Feedback Container */
 .feedback-container {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  gap: 10px;
+  gap: 20px;
   width: 90%;
-  height: 85vh;
   max-width: 1200px;
   padding: 20px;
 }
 
 /* Feedback Section */
-.feedback-section h2 {
-  color: #0e0909; /* Sets the color of the heading text */
-  font-weight: bold;
-  text-transform: uppercase;
-}
 .feedback-section {
   flex: 1;
   margin: 5px;
   padding: 15px;
   border-radius: 8px;
- 
-  background-color: #f5f5f5;
+  background-color: #f8f9fa;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  height: 100%;
   text-align: center;
 }
+.feedback-section:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
 
-/* Blurb Styling */
+.feedback-section h2 {
+  color: #343a40;
+  font-weight: bold;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+/* Conversation Bubbles */
 .conversation {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 5px;
+  gap: 8px;
   margin-top: 10px;
 }
 
-/* Uniform Bubble Styling */
 .bubble {
-  background-color: #007bff;
-  color: rgb(18, 15, 15);
+  background-color: #cccccc;
+  color: white;
   padding: 12px 18px;
-  border-radius: 8px;
+  border-radius: 20px;
   margin: 5px 0;
-  width: 100%;
-  max-width: 100%;
+  cursor: pointer;
   text-align: center;
-  font-size: 16px;
-  transition: transform 0.2s;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Bootstrap Card Style for Bubbles */
-.bubble:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+/* Selected Bubble (Dark Color but Same Size) */
+.bubble.selected {
+  background-color: #555555;
+  color: #ffffff;
 }
 
-/* Pagination Controls */
-/* Pagination Controls */
+/* Pagination */
 .pagination {
-  margin-top: 10px;
+  margin-top: 15px;
   display: flex;
-  justify-content: space-between; /* Position buttons to the sides */
-  gap: 10px;
-  width: 100%; /* Make pagination take full width */
+  justify-content: space-between;
+  width: 100%; /* Full width to push buttons to corners */
 }
 
 .page-btn {
-  padding: 8px 16px;
-  background-color: #cccccc;
+  padding: 5px 10px; /* Reduced button size */
+  background-color: #149c3b;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s;
-  min-width: 100px; /* Ensure consistent button width */
+  min-width: 50px; /* Reduced width */
 }
 
-.page-btn:hover {
-  background-color: #cccccc;
-}
+
 
 .page-btn:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
 }
 
-/* Responsive adjustments */
+/* Responsive Design */
 @media (max-width: 768px) {
   .feedback-container {
     flex-direction: column;
     align-items: center;
   }
+
   .feedback-section {
     width: 100%;
-    max-width: 95%;
-    margin: 5px 0;
+    margin-bottom: 10px;
   }
 }
 

@@ -2,26 +2,29 @@ import React, { useState } from "react";
 import "./Feedbackpage.css";
 
 const Feedback = () => {
-  // Array of messages for dynamic bubbles
-  const messages = [
-    "Hello, how can I assist you?",
-    "I need help with feedback submission.",
-    "Sure, let me guide you through.",
-    "Thank you!",
-    "You're welcome!",
-    "Is there anything else I can help with?",
-    "Yes, just one more thing.",
-    "Got it. Go ahead.",
-    "Thanks a lot!",
-    "No problem!"
+  // Array of conversation IDs and corresponding feedback and summary messages
+  const conversations = [
+    { id: "CONV001", feedback: "Great assistance provided.", summary: "Helped with account setup." },
+    { id: "CONV002", feedback: "Quick response time.", summary: "Resolved payment issue promptly." },
+    { id: "CONV003", feedback: "Very helpful and polite.", summary: "Guided through profile update." },
+    { id: "CONV004", feedback: "Accurate solutions.", summary: "Solved technical glitch." },
+    { id: "CONV005", feedback: "Professional and patient.", summary: "Clarified subscription plans." },
+    { id: "CONV006", feedback: "Friendly interaction.", summary: "Assisted with feedback submission." },
+    { id: "CONV007", feedback: "Helpful guidance.", summary: "Explained account recovery steps." },
+    { id: "CONV008", feedback: "Fast and efficient.", summary: "Resolved login issues." },
+    { id: "CONV009", feedback: "Clear instructions.", summary: "Walked through feature usage." },
+    { id: "CONV010", feedback: "Positive experience.", summary: "Resolved billing queries." }
   ];
 
   // Pagination state
   const messagesPerPage = 5;
   const [currentPage, setCurrentPage] = useState(0);
+  const [selectedFeedback, setSelectedFeedback] = useState("");
+  const [selectedSummary, setSelectedSummary] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(null);//helps in applying the css of selected conversation
 
   // Pagination controls
-  const totalPages = Math.ceil(messages.length / messagesPerPage);
+  const totalPages = Math.ceil(conversations.length / messagesPerPage);
   const handleNext = () => {
     if (currentPage < totalPages - 1) setCurrentPage(currentPage + 1);
   };
@@ -29,8 +32,15 @@ const Feedback = () => {
     if (currentPage > 0) setCurrentPage(currentPage - 1);
   };
 
-  // Slice messages based on the current page
-  const currentMessages = messages.slice(
+  // Handle click on conversation ID
+  const handleConversationClick = (feedback, summary, index) => {
+    setSelectedFeedback(feedback);
+    setSelectedSummary(summary);
+    setSelectedIndex(index);
+  };
+
+  // Slice conversations based on the current page to display only five bubbles
+  const currentConversations = conversations.slice(
     currentPage * messagesPerPage,
     (currentPage + 1) * messagesPerPage
   );
@@ -42,13 +52,17 @@ const Feedback = () => {
         <div className="feedback-section">
           <h2>Conversation ID</h2>
           <div className="conversation">
-            {currentMessages.map((message, index) => (
-              <div key={index} className="bubble" style={{ backgroundColor: "#cccccc" }}>
-                {message}
+            {currentConversations.map((conv, index) => (
+              <div
+                key={conv.id}
+                className={`bubble ${selectedIndex === index + currentPage * messagesPerPage ? "selected" : ""}`}
+                onClick={() => handleConversationClick(conv.feedback, conv.summary, index + currentPage * messagesPerPage)}
+              >
+                {conv.id}
               </div>
             ))}
           </div>
-          {messages.length > messagesPerPage && (
+          {conversations.length > messagesPerPage && (
             <div className="pagination">
               <button onClick={handlePrevious} disabled={currentPage === 0} className="page-btn">
                 Previous
@@ -63,17 +77,13 @@ const Feedback = () => {
         {/* Section 2: Feedback */}
         <div className="feedback-section">
           <h2>Feedback</h2>
-          <ul>
-            <li>Great assistance!</li>
-            <li>Quick response time.</li>
-            <li>Very helpful and polite.</li>
-          </ul>
+          <p>{selectedFeedback || "Click on a conversation ID to view feedback."}</p>
         </div>
 
         {/* Section 3: Summary */}
         <div className="feedback-section">
           <h2>Summary</h2>
-          <p>Feedback submission successful. Thank you for your valuable input!</p>
+          <p>{selectedSummary || "Click on a conversation ID to view summary."}</p>
         </div>
       </div>
     </div>
@@ -81,6 +91,7 @@ const Feedback = () => {
 };
 
 export default Feedback;
+
 
 
 
