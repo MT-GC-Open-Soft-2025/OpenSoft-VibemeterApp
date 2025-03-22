@@ -23,9 +23,6 @@ async def fetch_all_employees() -> List[Dict[str, Any]]:
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
 
-
-
-
 async def fetch_employee_data(employee_id) -> Dict[str, Any]:
     try:
         user_record = await db["employees"].find_one({"emp_id" :employee_id})
@@ -38,13 +35,28 @@ async def fetch_employee_data(employee_id) -> Dict[str, Any]:
         raise HTTPException(status_code=400, detail=str(error))
 
 
-
-
-async def fetch_employee_conversation(item_id: str) -> List[str]:
+async def fetch_employee_conversation(employee_id: str) -> List[str]:
     try:
-        employee = await db["employees"].find_one({"_id": ObjectId(item_id)})
+        employee = await db["employees"].find_one({"emp_id": employee_id})
         if not employee:
             raise HTTPException(status_code=404, detail="Employee not found")
-        return employee.get("convoID", [])
+        return employee.get("convo_id", [])
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
+
+
+async def specific_conversation(employee_id: str, convo_id: str) -> Dict[str, Any]:
+    try:
+        conversation = await db["chats"].find_one({"emp_id": employee_id, "convo_id": convo_id})
+
+        if not conversation:
+            raise HTTPException(status_code=404, detail="Conversation not found")
+
+        conversation["_id"] = str(conversation["_id"]) 
+        return conversation
+
+    except HTTPException as http_error:
+        raise http_error
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
