@@ -3,13 +3,13 @@ import os
 from dotenv import load_dotenv
 from transformers import pipeline
 from transformers import BartForConditionalGeneration, BartTokenizer
-import google.generativeai as genai
+from google import genai
 
 load_dotenv()
 GEMINI_KEY = os.getenv("GEMINI_KEY")
 
-genai.configure(api_key=GEMINI_KEY)
-chatmodel = genai.GenerativeModel("gemini-1.5-flash")
+client = genai.Client(api_key=GEMINI_KEY)
+chat = client.chats.create(model="gemini-1.5-flash")
 
 # Load the sentiment analysis pipeline
 sentiment_pipeline = pipeline("sentiment-analysis", model="distilbert-base-uncased-finetuned-sst-2-english")
@@ -31,8 +31,11 @@ def analyze_response(question: str, answer: str):
 
 # generates a response and returns it 
 def generate_response(user_input:str) -> str:
-    response = chatmodel.generate_content(user_input)
-    return response.text
+    response = chat.send_message(user_input)
+    print(response.text)
+
+    # for message in chat.get_history():
+    #     print(message.parts[0].text)
 
 
 def summarize_text(text, max_length=130, min_length=30, length_penalty=2.0):
@@ -42,5 +45,5 @@ def summarize_text(text, max_length=130, min_length=30, length_penalty=2.0):
     
     return summary
 
-if __name__=="__main__":
-    print(generate_response("I am feeling stressed"))
+# if __name__=="__main__":
+#     generate_response("I am feeling happy")
