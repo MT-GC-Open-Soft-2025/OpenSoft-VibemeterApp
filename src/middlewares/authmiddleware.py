@@ -19,14 +19,13 @@ def authenticate(
 ) -> Dict:
    
     token = credentials.credentials  
-    print(token)
+   
     try:
-        print (token)
+        
         user = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-       # print(decoded)
-        #user = decoded.get("user")
+       
         if not user:
-            print(user)
+            
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token payload."
