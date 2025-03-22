@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from typing import Dict, Any
-from src.services.admin_services import fetch_all_employees, fetch_employee_data, fetch_employee_conversation,specific_conversation
+from src.services.admin_services import fetch_all_employees, fetch_employee_data, fetch_employee_conversation, fetch_employee_conversationFeedback_byId, fetch_employee_conversationSummary_byId
 
 async def get_all_employees() -> Dict[str, Any]:
     try:
@@ -32,3 +32,22 @@ async def get_convo(employee_id:str,convo_id:str)->Dict[str,Any]:
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
             
+
+
+
+async def get_employee_conversationFeedback_byId(emp_id: str, convo_id:str) -> Dict[str, Any]:
+    try:
+        convo = await fetch_employee_conversationFeedback_byId(emp_id, convo_id)
+
+        return {"Feedback of the particular particular ConvoId": convo}
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+
+
+async def get_employee_conversationSummary_byId(emp_id: str, convo_id:str) -> Dict[str, Any]:
+    try:
+        convo = await fetch_employee_conversationSummary_byId(emp_id, convo_id)
+
+        return {"Summary of the particular particular ConvoId": convo}
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
