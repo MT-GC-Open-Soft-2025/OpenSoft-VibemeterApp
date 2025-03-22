@@ -9,12 +9,17 @@ async def get_all_employees() -> Dict[str, Any]:
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
 
-async def get_employee_detail(employee_id: str) -> Dict[str, Any]:
+async def get_employee_detail(employee_id) -> Dict[str, Any]:
     try:
         employee = await fetch_employee_data(employee_id)
+        if not employee :
+            raise HTTPException(status_code=404, detail="Employee not found")
         return  employee
     except Exception as error:
-        raise HTTPException(status_code=500, detail=str(error))
+        raise HTTPException(status_code=400, detail=str(error))
+
+
+
 
 async def get_employee_conversation(item_id: str) -> Dict[str, Any]:
     try:
