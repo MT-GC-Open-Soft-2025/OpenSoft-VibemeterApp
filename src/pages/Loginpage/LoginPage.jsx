@@ -12,6 +12,11 @@ const LoginPage = () => {
     navigate("/admin"); // Navigate to AdminPage
   };
 
+  const userLogin = (e) => {
+    e.preventDefault();
+    navigate("/user"); 
+  };
+
   return (
    
     <div className="wrapper fadeInDown">
@@ -39,6 +44,11 @@ const LoginPage = () => {
           <input type="submit" className="fadeIn fourth btn btn-primary" value="Log In" />
         </form>
 
+        <form onSubmit={userLogin}>
+          
+          <input type="submit" className="fadeIn fourth btn btn-primary" value="Log In User" />
+        </form>
+
         <div id="formFooter">
           <a className="underlineHover" href="#">
             Forgot Password?
@@ -50,3 +60,5 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+
