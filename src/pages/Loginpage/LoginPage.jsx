@@ -7,7 +7,7 @@ import logo from "../../Assets/bot.png";
 import Lottie from "lottie-react";
 import animationData from "../../Assets/animation.json";
 import bot from "../../Assets/bot.png";
-
+import ButtonComponent from "../../components/ButtonComponent"; // Adjust path if needed
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -79,4 +79,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
