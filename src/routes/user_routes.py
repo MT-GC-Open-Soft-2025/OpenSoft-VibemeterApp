@@ -5,9 +5,9 @@ from src.middlewares.authmiddleware import authenticate
 
 user_router = APIRouter()
 
-# ✅ Get User Details Route (Requires Bearer Token)
+
 @user_router.get("/getUserDetails")
-async def get_user_route(user: Dict[str, Any] = Depends(authenticate)):  # Use authenticate
+async def get_user_route(user: Dict[str, Any] = Depends(authenticate)):  
     return await user_controller(user)
 
 
