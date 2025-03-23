@@ -45,15 +45,20 @@
 
 import React from "react";
 import PerformanceGraph from "../../components/PerformanceGraph"; // Adjust the path if needed
+// import Button from "../../components/samplecomponent";
 
-const Admin = () => {
-    return (
-        <div className="admin-container">
+const AdminPage = () => {
+  return (
+    <div className="admin-container">
             <h2>Performance Overview</h2>
             <PerformanceGraph />
-        </div>
-    );
+        
+    <div className="wrapper fadeInDown">
+      "This is admin page."
+    </div>
+    </div>
+  );
 };
 
-export default Admin;
+export default AdminPage;
 
