@@ -12,10 +12,12 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/feedback" element={<FeedbackPage />}/>
         <Route path="/admin" element={
           <>
             <Navbar />
             <Sidebar />
+            
             <div style={{ 
               marginLeft: '200px', 
               marginTop: '64px',

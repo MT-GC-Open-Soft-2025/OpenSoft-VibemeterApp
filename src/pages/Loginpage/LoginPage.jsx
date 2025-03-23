@@ -17,6 +17,7 @@ const LoginPage = () => {
     navigate("/admin");
   };
 
+  
   return (
     <div>
       <div></div>
@@ -55,7 +56,8 @@ const LoginPage = () => {
               value="Log In"
             />
           </form>
-          <ButtonComponent label="Give Feedback" />
+          
+          
 
           <div id="formFooter">
             <a className="underlineHover" href="#">
@@ -79,3 +81,4 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+

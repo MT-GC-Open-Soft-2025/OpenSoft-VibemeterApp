@@ -1,24 +1,24 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import "./AdminPage.css";
 import bot from "../../Assets/bot.png";
-import EmotionZoneChart from "./EmotionZone";
-import PieChart from "./PieChart";
 import ButtonComponent from "../../components/ButtonComponent";
 
 const AdminPage = () => {
+  const navigate = useNavigate(); // Get the navigate function
+
+  // Handle feedback button click
+  const handleFeedback = () => {
+    navigate("/feedback"); // Navigate to the feedback page
+  };
+
   return (
-    <>
-      <div className="wrapper fadeInDown">"This is admin page."</div>
-      <div className="charts">
-        <EmotionZoneChart />
-        <PieChart />
-      </div>
-    </>
+    <div className="wrapper fadeInDown">
+      <h2>This is the admin page.</h2>
+      <ButtonComponent label="Get Feedback" onClick={handleFeedback} />
+    </div>
   );
 };
-
-{/* Link to Feedback Page */}
-<ButtonComponent label="Give Feedback" />
 
 export default AdminPage;
