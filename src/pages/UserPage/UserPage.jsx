@@ -25,7 +25,7 @@ const UserPage = () => {
             <span className="profile-user">Employee ID: 12345</span>
           </div>
 
-          {/* Centered "Let's Chat!" button */}
+          {/* "Let's Chat!" button */}
           <button className="chat-button" onClick={openChat}>
             Let's Chat!
           </button>

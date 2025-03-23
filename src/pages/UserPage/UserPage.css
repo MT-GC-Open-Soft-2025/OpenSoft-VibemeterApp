@@ -1,4 +1,3 @@
-/* Reset some basic elements */
 * {
     margin: 0;
     padding: 0;
@@ -20,38 +19,37 @@
     padding-top: 60px; /* reserve space for header bar */
   }
   
-  /* Header bar at the top left (empty) */
+  /* Header bar*/
   .header {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 60px;
-    background-color: #39ace7; /* blue color */
+    background-color: #39ace7; 
   }
   
   /* Profile container: holds the icon and the user id */
-  /* Removed background, border, and shadow for a cleaner look */
   .profile-container {
     display: flex;
     align-items: center;
     margin: 20px;
   }
   
-  /* Profile icon (left) - increased size */
+  /* Profile icon */
   .profile-icon {
     width: 120px;
     height: 120px;
     margin-right: 50px;
   }
   
-  /* User ID text (right of the icon) - increased font size */
+  /* User ID text */
   .profile-user {
     font-size: 40px;
     color: #333;
   }
   
-  /* "Let's Chat!" button centered on the page */
+  /* "Let's Chat!" */
   .chat-button {
     display: block;
     margin: 100px auto;
