@@ -7,8 +7,6 @@ import logo from "../../Assets/bot.png";
 import Lottie from "lottie-react";
 import animationData from "../../Assets/animation.json";
 import bot from "../../Assets/bot.png";
-import ButtonComponent from "../../components/ButtonComponent"; // Adjust path if needed
-
 const LoginPage = () => {
   const navigate = useNavigate();
 
@@ -67,7 +65,7 @@ const LoginPage = () => {
           
           <input type="submit" className="fadeIn fourth btn btn-primary" value="Log In User" />
         </form>
-          <ButtonComponent label="Give Feedback" />
+         
 
           <div id="formFooter">
             <a className="underlineHover" href="#">
