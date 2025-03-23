@@ -9,6 +9,7 @@ from src.controllers.admin_controller import (
     get_employee_conversationFeedback_byId,
     get_employee_conversationSummary_byId
 )
+from src.middlewares.authmiddleware import adminauthenticate
 
 
 security = HTTPBearer()
@@ -20,7 +21,7 @@ def test_route() -> Dict[str, Any]:
 
 @admin_router.get("/get_details")
 async def employee_data_route(
-    token: HTTPAuthorizationCredentials = Depends(security)
+    
 ) -> Dict[str, Any]:
     return await get_all_employees()
 

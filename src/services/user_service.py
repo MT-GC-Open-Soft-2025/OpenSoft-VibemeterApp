@@ -1,7 +1,6 @@
 from src.models.employee import Employee
 from fastapi import HTTPException, status
 
-# ✅ Fetch User Details from Database
 async def get_user_details(emp_id: str):
     user = await Employee.find(Employee.emp_id == emp_id).first_or_none()
 
