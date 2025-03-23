@@ -1,0 +1,11 @@
+h2 {
+    color: black;
+}
+
+.charts {
+    display: flex;
+    justify-content: center
+}
+.barchart {
+    max-width: 20vw;
+}

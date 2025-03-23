@@ -1,0 +1,30 @@
+[
+    {
+        "name":"Frustrated Zone",
+        "count":51
+    },
+    {
+        "name":"Leaning to Sad Zone",
+        "count":48
+    },
+    {
+        "name":"Leaning to Happy Zone",
+        "count":47
+    },
+    {
+        "name":"Neutral Zone (OK)",
+        "count":47
+    },
+    {
+        "name":"Sad Zone",
+        "count":45
+    },
+    {
+        "name":"Happy Zone",
+        "count":39
+    },
+    {
+        "name":"Excited Zone",
+        "count":38
+    }
+]
