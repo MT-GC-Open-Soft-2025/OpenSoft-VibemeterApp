@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"; 
 import "./LoginPage.css";
 import bot from "../../Assets/bot.png";
-import ButtonComponent from "../../components/ButtonComponent"; // Adjust path if needed
+
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -44,8 +44,7 @@ const LoginPage = () => {
           />
         </form>
 
-        {/* Link to Feedback Page */}
-        <ButtonComponent label="Give Feedback" />
+        
 
 
         <div id="formFooter">

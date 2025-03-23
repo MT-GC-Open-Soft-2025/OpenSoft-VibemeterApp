@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Feedbackpage.css';
 
 const FeedbackPage = () => {
+  const navigate = useNavigate();
+
   // Array of conversation IDs and corresponding feedback and summary messages
   const conversations = [
     { id: 'CONV001', feedback: 'Great assistance provided.', summary: 'Helped with account setup.' },
@@ -39,6 +42,11 @@ const FeedbackPage = () => {
     setSelectedIndex(index);
   };
 
+  // Handle go back to admin page
+  const handleGoBack = () => {
+    navigate('/admin');
+  };
+
   // Slice conversations based on the current page
   const currentConversations = conversations.slice(
     currentPage * messagesPerPage,
@@ -50,6 +58,7 @@ const FeedbackPage = () => {
       {/* Navbar integrated into the feedback wrapper */}
       <nav className='navbar'>
         <div className='nav-content'>Chat Feedback</div>
+        <button className='go-back-btn' onClick={handleGoBack}>Go Back</button>
       </nav>
 
       <div className='feedback-container'>
