@@ -5,6 +5,7 @@ import AdminPage from './pages/AdminPage/AdminPage';
 import Navbar from './components/navbar';
 
 import FeedbackPage from "./pages/Feedbackpage/Feedbackpage";
+import Sidebar from './components/sidebar';
 
 import UserPage from './pages/UserPage/UserPage';
 
@@ -14,14 +15,25 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/admin" element={ 
-          <><Navbar />
-          <AdminPage /></>
-          } />
-          <Route path="/feedback" element={
+        <Route path="/admin" element={
+          <>
+            <Navbar />
+            <Sidebar />
+            <div style={{ 
+              marginLeft: '200px', 
+              marginTop: '64px',
+              backgroundColor: 'white',
+              minHeight: '100vh',
+              padding: '20px'
+            }}>
+              <AdminPage />
+            </div>
+          </>
+        } />
+        <Route path="/user" element={<UserPage />} />
+        <Route path="/feedback" element={
             <FeedbackPage />
           }/>
-        <Route path="/user" element={<UserPage />} />
       </Routes>
     </Router>
   );
