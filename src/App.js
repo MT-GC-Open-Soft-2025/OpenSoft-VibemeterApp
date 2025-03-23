@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/Loginpage/LoginPage';
 import AdminPage from './pages/AdminPage/AdminPage';
 import Navbar from './components/navbar';
+
+import FeedbackPage from "./pages/Feedbackpage/Feedbackpage";
 import Sidebar from './components/sidebar';
-  
+
 function App() {
   return (
     <Router>
@@ -31,3 +33,4 @@ function App() {
 }
 
 export default App;
+
