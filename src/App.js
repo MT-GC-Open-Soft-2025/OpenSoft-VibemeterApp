@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/Loginpage/LoginPage';
 import AdminPage from './pages/AdminPage/AdminPage';
 import Navbar from './components/navbar';
+import Sidebar from './components/sidebar';
   
 function App() {
   return (
@@ -12,7 +13,16 @@ function App() {
         <Route path="/admin" element={
           <>
             <Navbar />
-            <AdminPage />
+            <Sidebar />
+            <div style={{ 
+              marginLeft: '200px', 
+              marginTop: '64px',
+              backgroundColor: 'white',
+              minHeight: '100vh',
+              padding: '20px'
+            }}>
+              <AdminPage />
+            </div>
           </>
         } />
       </Routes>
