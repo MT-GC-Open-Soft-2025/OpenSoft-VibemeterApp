@@ -18,8 +18,8 @@ def authenticate(
    
     token = credentials.credentials  
     try:
-        decoded = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-        user = decoded.get("user")
+        user = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
+        #user = decoded.get("user")
         if not user:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

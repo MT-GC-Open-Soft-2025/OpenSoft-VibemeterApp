@@ -17,12 +17,13 @@ async def signin(username:str) -> Dict[str, str]:
     if not user_record:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password"
+            detail="Invalid username"
         )
 
     
     payload = {
-        "emp_id": user_record.emp_id,    
+        "emp_id": user_record.emp_id,   
+         
         "iat": int(time.time()),
         "exp": int(time.time()) + int(TOKEN_EXPIRY_SECONDS)
     }
