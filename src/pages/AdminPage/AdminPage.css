@@ -267,6 +267,10 @@ input[type=text]:placeholder {
   width:60%;
 }
 
+.charts {
+  display: flex;
+}
+
 
 
   
