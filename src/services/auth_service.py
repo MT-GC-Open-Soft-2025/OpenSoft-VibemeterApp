@@ -25,7 +25,8 @@ async def signin(username:str) -> Dict[str, str]:
 
     
     payload = {
-        "emp_id": user_record.emp_id,    
+        "emp_id": user_record.emp_id,   
+         
         "iat": int(time.time()),
         "exp": int(time.time()) + int(TOKEN_EXPIRY_SECONDS)
     }
