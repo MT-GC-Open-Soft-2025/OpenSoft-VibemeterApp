@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css"; 
 import "./LoginPage.css";
 import bot from "../../Assets/bot.png";
+import ButtonComponent from "../../components/ButtonComponent"; // Adjust path if needed
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -41,13 +42,21 @@ const LoginPage = () => {
             name="username"
             placeholder="password"
           />
-          <input type="submit" className="fadeIn fourth btn btn-primary" value="Log In" />
+          <input
+            type="submit"
+            className="fadeIn fourth btn btn-primary"
+            value="Log In"
+          />
         </form>
 
         <form onSubmit={userLogin}>
           
           <input type="submit" className="fadeIn fourth btn btn-primary" value="Log In User" />
         </form>
+
+        {/* Link to Feedback Page */}
+        <ButtonComponent label="Give Feedback" />
+
 
         <div id="formFooter">
           <a className="underlineHover" href="#">
@@ -60,5 +69,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-
