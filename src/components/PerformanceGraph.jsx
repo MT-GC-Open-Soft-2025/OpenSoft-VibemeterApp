@@ -1,113 +1,15 @@
 
-// import React from "react";
-// import { Bar } from "react-chartjs-2";
-// import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, LineElement, PointElement } from "chart.js";
-// import "./PerformanceGraph.css";
-// ChartJS.register(
-//     CategoryScale,LinearScale,BarElement,Title,Tooltip,Legend
-// );
-
-// ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
-// const PerformanceGraph = () => {
-//     const data = {
-//         labels: ["Work Hours", "Leaves", "Onboarding"],
-//         datasets: [
-//             {
-//                 label: "Work Hours",
-//                 data: [7, 0, 0],
-//                 backgroundColor: "#50aad7",
-//                 borderRadius: 10,
-//                 barThickness:-60,
-//             },
-//             {
-//                 label: "Sick Leave",
-//                 data: [0, 3, 0],
-//                 backgroundColor: "#92badd",
-//                 stack: "leave",
-//                 barThickness:60,
-//             },
-//             {
-//                 label: "Casual Leave",
-//                 data: [0, 2, 0],
-//                 backgroundColor: "#08ddcb",
-//                 stack: "leave",
-//                 barThickness:60,
-//             },
-//             {
-//                 label: "Unpaid Leave",
-//                 data: [0, 2, 0],
-//                 backgroundColor: "#c1dcf3",
-//                 stack: "leave",
-//                 barThickness:60,
-//             },
-//             {
-//                 label: "Annual Leave",
-//                 data: [0, 2, 0],
-//                 backgroundColor: "#1E90FF",
-//                 stack: "leave",
-//                 borderRadius: 10,
-//                 barThickness:60,
-//             },
-//             {
-//                 label: "Onboarding Performance",
-//                 data: [0, 0, 6],
-//                 backgroundColor: "#7fd7d0",
-//                 borderRadius: 10,
-//                 barThickness:-60,
-//             },
-//         ],
-//     };
-
-//     const options = {
-//         responsive: true,
-//         plugins: {
-//             legend: {
-//                 display: true,
-//                 position: "bottom",
-//                 labels: {
-//                     usePointStyle: true,
-//                     padding: 20,
-//                 },
-//             },
-//             title: { display: true },
-//         },
-//         layout: {
-//             padding: { left: 0, right: 0 },
-//         },
-//         scales: {
-//             x: {
-//                 grid: { display: false },
-//                 ticks: {
-//                     font: { size: 14, weight: "bold" ,},
-//                     padding: 10,
-//                 },
-//             },
-//             y: {
-//                 beginAtZero: true,
-//                 ticks: { stepSize: 1 },
-//             },
-//         },
-        
-//     };
-
-//     return (
-//         <div className="chart-container">
-//             <h3 className="chart-title">Performance Graph</h3>
-//             <div className="chart-wrapper">
-//                 <Bar data={data} options={options} />
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default PerformanceGraph;
 import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import "./PerformanceGraph.css";
 
-const PerformanceGraph = () => {
+const PerformanceGraph = ({ employeeId }) => {
+    if (!employeeId) {
+            return <div className="empty-graph">Select an employee to see data</div>;
+          }
+        
+          console.log("Rendering Graph for:", employeeId); // ✅ Debugging Log
     const options = {
         chart: {
             type: "column",
@@ -170,3 +72,89 @@ const PerformanceGraph = () => {
 };
 
 export default PerformanceGraph;
+// // import React from "react";
+// // import Highcharts from "highcharts";
+// // import HighchartsReact from "highcharts-react-official";
+// // import "./PerformanceGraph.css";
+
+// // const PerformanceGraph = ({ employeeId }) => {
+// //   if (!employeeId) {
+// //     return <div className="empty-graph">Select an employee to see data</div>;
+// //   }
+
+// //   const options = {
+// //     chart: { type: "column", backgroundColor: "#fff", borderRadius: 10 },
+// //     title: {
+// //       text: `Performance Graph - ${employeeId}`,
+// //       align: "center",
+// //       style: { fontSize: "18px", fontWeight: "bold" },
+// //     },
+// //     xAxis: {
+// //       categories: ["Work Hours", "Leaves", "Onboarding", "Performance"],
+// //       labels: { style: { fontSize: "14px", fontWeight: "bold" }, y: 25 },
+// //     },
+// //     yAxis: { title: { text: "Count" }, allowDecimals: false, min: 0 },
+// //     legend: { layout: "horizontal", align: "center", verticalAlign: "bottom" },
+// //     series: [
+// //       { name: "Work Hours", data: [7, 0, 0, 0], color: "#50aad7" },
+// //       { name: "Sick Leave", data: [0, 3, 0, 0], color: "#92badd" },
+// //       { name: "Casual Leave", data: [0, 2, 0, 0], color: "#08ddcb" },
+// //       { name: "Unpaid Leave", data: [0, 2, 0, 0], color: "#c1dcf3" },
+// //       { name: "Annual Leave", data: [0, 2, 0, 0], color: "#1E90FF" },
+// //       { name: "Onboarding Performance", data: [0, 0, 6, 0], color: "#7fd7d0" },
+// //       { name: "Performance Rating", data: [0, 0, 0, 5], color: "#7fe5ff" },
+// //     ],
+// //   };
+
+// //   return (
+// //     <div className="chart-container">
+// //       <HighchartsReact highcharts={Highcharts} options={options} />
+// //     </div>
+// //   );
+// // };
+
+// // export default PerformanceGraph;
+// import React from "react";
+// import Highcharts from "highcharts";
+// import HighchartsReact from "highcharts-react-official";
+// import "./PerformanceGraph.css";
+
+// const PerformanceGraph = ({ employeeId }) => {
+//   if (!employeeId) {
+//     return <div className="empty-graph">Select an employee to see data</div>;
+//   }
+
+//   console.log("Rendering Graph for:", employeeId); // ✅ Debugging Log
+
+//   const options = {
+//     chart: { type: "column", backgroundColor: "#fff", borderRadius: 10 },
+//     title: {
+//       text: `Performance Graph - ${employeeId}`,
+//       align: "center",
+//       style: { fontSize: "18px", fontWeight: "bold" },
+//     },
+//     xAxis: {
+//       categories: ["Work Hours", "Leaves", "Onboarding", "Performance"],
+//       labels: { style: { fontSize: "14px", fontWeight: "bold" }, y: 25 },
+//     },
+//     yAxis: { title: { text: "Count" }, allowDecimals: false, min: 0 },
+//     legend: { layout: "horizontal", align: "center", verticalAlign: "bottom" },
+//     series: [
+//       { name: "Work Hours", data: [7, 0, 0, 0], color: "#50aad7" },
+//       { name: "Sick Leave", data: [0, 3, 0, 0], color: "#92badd" },
+//       { name: "Casual Leave", data: [0, 2, 0, 0], color: "#08ddcb" },
+//       { name: "Unpaid Leave", data: [0, 2, 0, 0], color: "#c1dcf3" },
+//       { name: "Annual Leave", data: [0, 2, 0, 0], color: "#1E90FF" },
+//       { name: "Onboarding Performance", data: [0, 0, 6, 0], color: "#7fd7d0" },
+//       { name: "Performance Rating", data: [0, 0, 0, 5], color: "#7fe5ff" },
+//     ],
+//   };
+
+//   return (
+//     <div className="chart-container">
+//       <HighchartsReact highcharts={Highcharts} options={options} />
+//     </div>
+//   );
+// };
+
+// export default PerformanceGraph;
