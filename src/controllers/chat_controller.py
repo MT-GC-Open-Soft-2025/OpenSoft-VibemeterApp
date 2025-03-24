@@ -18,7 +18,6 @@ async def response_controller(payload,user) -> Dict[str, Any]:
    convid= payload.convid
    message= payload.message
    chatObj= payload.chatObj
-   que= payload.question
 
    chat_record = await Chat.find(Chat.convid==convid).first_or_none()
    if not chat_record:
@@ -27,5 +26,5 @@ async def response_controller(payload,user) -> Dict[str, Any]:
             detail="Could not retrive chat session"
         )
    
-   response= await send_response(user,que, message,convid, chatObj)
+   response= await send_response(user,message,convid, chatObj)
    return response
