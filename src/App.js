@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/Loginpage/LoginPage';
 import AdminPage from './pages/AdminPage/AdminPage';
 import Navbar from './components/navbar';
+import Feedbacknavbar from './components/Feedbacknavbar';
 
 import FeedbackPage from "./pages/Feedbackpage/Feedbackpage";
 import Sidebar from './components/sidebar';
@@ -12,7 +13,14 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/feedback" element={<FeedbackPage />}/>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/feedback" element={
+  <>
+    
+    <FeedbackPage />
+  </>
+} />
+
         <Route path="/admin" element={
           <>
             <Navbar />

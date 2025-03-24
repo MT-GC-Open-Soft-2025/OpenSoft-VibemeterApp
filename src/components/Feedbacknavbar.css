@@ -1,20 +1,46 @@
 .navbar {
-    background-color: #56BAED;
-    padding: 1rem;
-    
-    border-bottom-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    box-shadow: 2px 2px 10px gray;
-  }
-  
-  .nav-content {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    max-width: 1200px;
-    margin: 0;
-    padding-left: 10px;
-  }
+  background-color: #56BAED;
+  padding: 1rem;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  box-shadow: 2px 2px 10px gray;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Ensures button stays on the right */
+}
+
+.nav-content {
+  color: white; 
+  font-size: 18px; 
+  font-weight: bold;
+  padding-left: 10px;
+}
+
+.go-back-btn {
+  background: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  padding: 0;
+  border: none;
+  text-decoration: none;
+  display: inline; /* Ensures it behaves like text */
+}
+
+/* Completely remove hover effects */
+.go-back-btn:hover,
+.go-back-btn:focus {
+  background: none !important;
+  color: white !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+}
+
+
   
   
   

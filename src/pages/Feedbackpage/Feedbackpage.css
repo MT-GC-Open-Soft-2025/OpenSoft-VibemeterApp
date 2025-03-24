@@ -11,27 +11,7 @@
   margin: 0;
 }
 
-/* Navbar at the top of the page */
-.navbar {
-  background-color: #3697aa;
-  padding: 1rem;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  border-bottom-right-radius: 10px;
-  border-bottom-left-radius: 10px;
-  box-shadow: 2px 2px 10px gray;
-  z-index: 1000;
-}
 
-.nav-content {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  color: white;
-}
 
 /* Feedback Container */
 .feedback-container {
@@ -132,23 +112,27 @@
 }
 
 .go-back-btn {
-  background-color: #3697aa;
+  background: none;
   color: white;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
-  margin-left: auto;
-  margin-right: 20px;
-  transition: background-color 0.3s;
+  position: absolute;
+  right: 20px;
+  padding: 0;
+  border: none;
+  text-decoration: none;
+  display: inline; /* Ensures it behaves like text */
 }
 
-.go-back-btn:hover {
-  background-color: #2b7e8b;
-}
-
+/* Completely remove hover effects */
+.go-back-btn:hover,
 .go-back-btn:focus {
-  outline: none;
+  background: none !important;
+  color: white !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
 }
 
 

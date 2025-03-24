@@ -6,6 +6,7 @@ import bot from "../../Assets/bot.png";
 import ButtonComponent from "../../components/ButtonComponent";
 import EmotionZoneChart from "./EmotionZone";
 import PieChart from "./PieChart";
+
 const AdminPage = () => {
   const navigate = useNavigate(); // Get the navigate function
 
@@ -14,10 +15,13 @@ const AdminPage = () => {
     navigate("/feedback"); // Navigate to the feedback page
   };
 
+  // Handle redirect button click
+  
   return (
     <div className="wrapper fadeInDown">
       <h2>This is the admin page.</h2>
       <ButtonComponent label="Get Feedback" onClick={handleFeedback} />
+      
       <div className="charts">
         <EmotionZoneChart />
         <PieChart />
@@ -27,3 +31,4 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
+

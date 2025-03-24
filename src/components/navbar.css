@@ -1,6 +1,5 @@
 .navbar {
   background-color: #56BAED;
-  
   padding: 1rem;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
@@ -11,6 +10,9 @@
   z-index: 99;
   height: 64px;
   box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .nav-content {
@@ -20,8 +22,10 @@
   max-width: 1200px;
   margin: 0;
   padding-left: 10px;
+  width: 100%;
 }
 
+/* Search Bar */
 .search-container {
   flex: 0 1 300px;
   margin-left: 30px;
@@ -41,10 +45,6 @@
   text-align: left;
 }
 
-.search-bar:focus {
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
 .search-container button {
   position: absolute;
   right: 8px;
@@ -54,7 +54,7 @@
   cursor: pointer;
   background: none;
   display: flex;
-  align-items: left;
+  align-items: center;
   justify-content: center;
   padding: 0;
 }
@@ -72,3 +72,31 @@
   padding-left: 5px;
   font-size: 0.8rem;
 }
+
+/* Go Back Text Styling */
+.go-back-btn {
+  background: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  right: 20px;
+  padding: 0;
+  border: none;
+  text-decoration: none;
+  display: inline; /* Ensures it behaves like text */
+}
+
+/* Completely remove hover effects */
+.go-back-btn:hover,
+.go-back-btn:focus {
+  background: none !important;
+  color: white !important;
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+}
+
+
+  
