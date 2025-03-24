@@ -1,6 +1,6 @@
 from src.services.ai_services import analyze_response, generate_response
-
-
+from src.models.chats import Chat, Message
+from fastapi import HTTPException, status, Query
 
 counter=-1
 async def send_response(user:any, que: str, msg:str, convid:str, chatObj):
@@ -18,4 +18,17 @@ async def send_response(user:any, que: str, msg:str, convid:str, chatObj):
           else:
             gen_ai_response= await generate_response(msg,chatObj)
             return gen_ai_response
+          
+async def get_chat(conv_id: str): # e.g. /chat?conv_id=123
+    chat_record = await Chat.find(Chat.convid == conv_id).first_or_none()
+    if not chat_record:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Chat not found"
+        )
+    
+    return {
+        "chat": chat_record.messages,
+    }
+    
 

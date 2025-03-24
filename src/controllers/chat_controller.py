@@ -1,10 +1,9 @@
-from src.services.chat_service import send_message
 from src.models.employee import Employee
 from src.models.chats import Chat
 from pydantic import BaseModel
 from fastapi import HTTPException, status
 from typing import Optional, Dict, Any
-from src.services.chat_service import send_response
+from src.services.chat_service import send_response, get_chat
 
 
 class Chat_frontend(BaseModel):
@@ -29,3 +28,8 @@ async def response_controller(payload,user) -> Dict[str, Any]:
    
    response= await send_response(user,que, message,convid, chatObj)
    return response
+
+async def getChat_controller(conv_id: str):
+
+    response = await get_chat(conv_id)
+    return response # return list of messages

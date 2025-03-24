@@ -1,8 +1,5 @@
-
-
 import motor.motor_asyncio
 from beanie import init_beanie
-
 
 from .employee import Employee
 from .chats import Chat
@@ -11,8 +8,6 @@ load_dotenv()
 import os
 MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = os.getenv("DB_NAME")
-
-
 
 
 async def init_db():

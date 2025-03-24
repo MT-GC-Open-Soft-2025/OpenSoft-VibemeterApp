@@ -1,5 +1,3 @@
-
-
 from beanie import Document
 from typing import List,Optional
 
