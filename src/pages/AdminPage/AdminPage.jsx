@@ -1,7 +1,9 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import "./AdminPage.css";
 import bot from "../../Assets/bot.png";
+import ButtonComponent from "../../components/ButtonComponent";
 import EmotionZoneChart from "./EmotionZone";
 import PieChart from "./PieChart";
 import Navbar from "../../components/Adminpagenavbar";
@@ -10,6 +12,13 @@ import Searchbar from "../../components/Adminpagesearchbar";
 // import Button from "../../components/samplecomponent";
 
 const AdminPage = () => {
+  const navigate = useNavigate(); // Get the navigate function
+
+  // Handle feedback button click
+  const handleFeedback = () => {
+    navigate("/feedback"); // Navigate to the feedback page
+  };
+
   return (
     <>
       <Navbar />
@@ -28,7 +37,8 @@ const AdminPage = () => {
           <PieChart />
         </div>
       </div>
-    </>
+   
+     </>
   );
 };
 
