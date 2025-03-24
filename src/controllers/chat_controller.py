@@ -11,7 +11,6 @@ class Chat_frontend(BaseModel):
     convid: str
     message: str
     chatObj: any
-    question: str
 
 
 async def response_controller(payload,user) -> Dict[str, Any]:
