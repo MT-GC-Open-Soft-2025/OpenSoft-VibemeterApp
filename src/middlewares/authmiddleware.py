@@ -4,6 +4,8 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Optional, Dict
 from dotenv import load_dotenv
 import os
+import logging
+import sys
 
 load_dotenv()
 JWT_SECRET = os.getenv("JWT_SECRET")
@@ -17,10 +19,13 @@ def authenticate(
 ) -> Dict:
    
     token = credentials.credentials  
+   
     try:
+        
         user = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-        #user = decoded.get("user")
+       
         if not user:
+            
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid token payload."
@@ -34,14 +39,14 @@ def authenticate(
     except jwt.InvalidTokenError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid token."
+            detail="#Invalid token."
         )
 
 def adminauthenticate(
     user: dict = Depends(authenticate),
 ) -> dict:
    
-    if user.get("role") != "admin":
+    if user["emp_id"]!= "admin":
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Access denied. Admin only."
