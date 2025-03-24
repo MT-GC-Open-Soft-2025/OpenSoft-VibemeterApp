@@ -48,7 +48,7 @@ async def response_controller(payload,user) -> Dict[str, Any]:
    response= await send_response(user,que, message,convid, chatObj)
    return response
 
-async def getChat_controller(conv_id: str):
+async def getChat_controller(conv_id: str) -> Dict[str, Any]:
 
     response = await get_chat(conv_id)
     return response # return list of messages

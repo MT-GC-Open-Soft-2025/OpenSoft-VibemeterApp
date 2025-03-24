@@ -26,7 +26,7 @@ async def send_response(user:any, que: str, msg:str, convid:str, chatObj):
             gen_ai_response= await generate_response(msg,chatObj)
             return gen_ai_response
           
-async def get_chat(conv_id: str): # e.g. /chat?conv_id=123
+async def get_chat(conv_id: str) -> Dict[str, Any]: # e.g. /chat?conv_id=123
     chat_record = await Chat.find(Chat.convid == conv_id).first_or_none()
     if not chat_record:
         raise HTTPException(
