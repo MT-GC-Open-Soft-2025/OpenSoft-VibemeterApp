@@ -1,51 +1,73 @@
-/* Employee card block */
-.employee-card {
+.graph-card {
   border: 1px solid #ddd;
   border-radius: 12px;
-  margin-bottom: 30px;
   padding: 20px;
-  background-color: #f8f9fa; 
+  background-color: #f8f9fa;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  text-align: center;
 }
 
-/* Vertical performance box */
-.performance-box {
-  position: relative;
-  width: 60px;
+/* Container: scale + bars */
+.graph-container {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+}
+
+/* Scale */
+.scale {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   height: 200px;
-  border: 2px solid #17a2b8; 
+  margin-right: 12px;
+  font-size: 0.8rem;
+  color: #6c757d;
+  width: 40px;
+  align-items: flex-end;
+  text-align: right;
+}
+
+/* Bars */
+.bars-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-grow: 1;
+  width: 100%;
+  padding: 0 30px;
+}
+
+/* Each bar + label */
+.metric-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  margin: 0 10px;
+}
+
+/* Bar */
+.metric-box {
+  position: relative;
+  width: 50px;
+  height: 200px;
+  border: 2px solid #6c757d;
   border-radius: 8px;
-  overflow: hidden;
   background-color: #e9ecef;
-  margin-top: 10px;
-  transition: transform 0.4s ease;
+  overflow: hidden;
+  transition: transform 0.3s ease;
 }
 
-/* Box hover effect */
-.performance-box:hover {
+.metric-box:hover {
   transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(23, 162, 184, 0.4);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
 }
 
-/* Green fill */
-.performance-fill {
+.metric-fill {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #17a2b8; 
   transition: height 0.4s ease;
   border-radius: 0 0 6px 6px;
-}
-
-/* Scale on the left */
-.scale {
-  height: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-right: 8px;
-  font-size: 0.8rem;
-  color: #6c757d; 
 }

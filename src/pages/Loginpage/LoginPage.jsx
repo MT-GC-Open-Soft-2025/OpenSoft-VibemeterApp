@@ -15,8 +15,6 @@ const LoginPage = () => {
     navigate("/admin");
   };
 
-
-
   const userLogin = (e) => {
     e.preventDefault();
     navigate("/user"); 

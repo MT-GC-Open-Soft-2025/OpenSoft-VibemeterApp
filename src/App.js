@@ -2,9 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/Loginpage/LoginPage';
 import AdminPage from './pages/AdminPage/AdminPage';
-<<<<<<< HEAD
 import Performance from './components/Performance';
-=======
+import Rewards from './components/Rewards';
+import Badges from "./components/Badges";
 import Navbar from './components/navbar';
 
 import FeedbackPage from "./pages/Feedbackpage/Feedbackpage";
@@ -12,20 +12,11 @@ import Sidebar from './components/sidebar';
 
 import UserPage from './pages/UserPage/UserPage';
 
->>>>>>> b503b3e1a7dd50bc4c46b5ee1f310d0721fbd54b
-  
-import Rewards from './components/Rewards';
-
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-<<<<<<< HEAD
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/rewards" element={<Rewards />} />
-        <Route path="/performance" element={<Performance />} />
-=======
         <Route path="/feedback" element={<FeedbackPage />}/>
         <Route path="/admin" element={
           <>
@@ -42,16 +33,19 @@ function App() {
               <AdminPage />
             </div>
           </>
-        } />
+        } /> 
         <Route path="/user" element={<UserPage />} />
         <Route path="/feedback" element={
             <FeedbackPage />
-          }/>
->>>>>>> b503b3e1a7dd50bc4c46b5ee1f310d0721fbd54b
+        }/>
+        <Route path="/performance" element={<Performance />} />
+        <Route path="/rewards" element={<Rewards />} />
+        <Route path="/badges" element={<Badges />} />
       </Routes>
     </Router>
   );
 }
 
 export default App;
+
 

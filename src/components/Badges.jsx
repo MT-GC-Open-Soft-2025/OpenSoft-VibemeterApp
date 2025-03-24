@@ -1,16 +1,13 @@
-// File: src/components/Badges.jsx
 import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Badges.css";
 
-// Import badge images for each award (adjust paths & filenames as needed)
 import badge1 from "../Assets/badge1.png";
 import badge2 from "../Assets/badge2.png";
 import badge3 from "../Assets/badge3.png";
 import badge4 from "../Assets/badge4.png";
 
 export default function Badges() {
-  // Map award names to badge images
   const awardBadgeMap = {
     "Innovation Award": badge1,
     "Leadership Excellence": badge2,
@@ -18,7 +15,6 @@ export default function Badges() {
     "Star Performer": badge4,
   };
 
-  // All employees data
   const employees = [
     {
       name: "Alice",
@@ -83,7 +79,6 @@ export default function Badges() {
                   alt="Award Badge"
                   className="badge-img"
                 />
-                {/* Custom tooltip shows award name on hover */}
                 <span className="badge-tooltip">{award}</span>
               </div>
             ))}
