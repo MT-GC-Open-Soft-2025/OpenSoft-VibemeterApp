@@ -31,12 +31,17 @@ const AdminPage = () => {
         padding: '20px'
       }}>
         <Searchbar />
-        <div className="wrapper fadeInDown">"This is admin page."</div>
-        <div className="charts">
-          <EmotionZoneChart />
-          <PieChart />
-        </div>
+
+        <div className="wrapper fadeInDown">
+      <h2>This is the admin page.</h2>
+      <ButtonComponent label="Get Feedback" onClick={handleFeedback} />
+      <div className="charts">
+        <EmotionZoneChart />
+        <PieChart />
       </div>
+      </div>
+      </div>
+   
    
      </>
   );
