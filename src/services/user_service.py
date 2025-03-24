@@ -8,6 +8,7 @@ async def get_user_details(emp_id: str):
         return {
             
             "emp_id": user.emp_id,
+            #if emotion score there else dont show
             "emotion_score" : user.emotion_score,
             "vibe_score" : user.vibe_score,
             "factors_in_sorted_order" : user.factors_in_sorted_order,

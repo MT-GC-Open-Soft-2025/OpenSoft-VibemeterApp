@@ -1,16 +1,18 @@
 from fastapi import HTTPException
 from typing import Dict, Any
-from src.services.admin_services import fetch_all_employees, fetch_employee_data, fetch_employee_conversation, fetch_employee_conversationFeedback_byId, fetch_employee_conversationSummary_byId,specific_conversation
+from src.services.admin_services import get_all_employees, fetch_employee_data, fetch_employee_conversation, fetch_employee_conversationFeedback_byId, fetch_employee_conversationSummary_byId,specific_conversation
 
-async def get_all_employees() -> Dict[str, Any]:
+async def get_all_employees_controller() -> Dict[str, Any]:
     try:
-        employees = await fetch_all_employees()
+        print("HI2")
+        employees = await get_all_employees()
         return {"employees": employees}
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
 
 async def get_employee_detail(employee_id) -> Dict[str, Any]:
     try:
+        print("employee_id",employee_id)
         employee = await fetch_employee_data(employee_id)
         if not employee :
             raise HTTPException(status_code=404, detail="Employee not found")
@@ -39,7 +41,7 @@ async def get_employee_conversationFeedback_byId(emp_id: str, convo_id:str) -> D
     try:
         convo = await fetch_employee_conversationFeedback_byId(emp_id, convo_id)
 
-        return {"Feedback of the particular particular ConvoId": convo}
+        return {"Feedback ": convo}
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
 
@@ -48,6 +50,6 @@ async def get_employee_conversationSummary_byId(emp_id: str, convo_id:str) -> Di
     try:
         convo = await fetch_employee_conversationSummary_byId(emp_id, convo_id)
 
-        return {"Summary of the particular particular ConvoId": convo}
+        return {"Summary ": convo}
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))

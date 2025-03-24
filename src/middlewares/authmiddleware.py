@@ -46,7 +46,7 @@ def adminauthenticate(
     user: dict = Depends(authenticate),
 ) -> dict:
    
-    if user.emp_id!= "admin":
+    if user["emp_id"]!= "admin":
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Access denied. Admin only."
