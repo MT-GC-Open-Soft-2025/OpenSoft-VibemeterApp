@@ -50,9 +50,14 @@
   background-color: #e6e6e6;
   padding: 20px;
   display: flex;
+  color: #8f8d8d;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
+}
+
+.chat-heading {
+  color:#8f8d8d;
 }
 
 /* Conversation list in left partition */
@@ -67,7 +72,7 @@
 
 /* Conversation bubble */
 .bubble {
-  background-color: #cccccc;
+  background-color: #8f8d8d;
   color: white;
   padding: 12px;
   border-radius: 10px;
@@ -102,7 +107,7 @@
 }
 
 .page-btn:disabled {
-  background-color: #8ed4e2;
+  background-color: #47cce6;
   cursor: not-allowed;
 }
 
@@ -115,7 +120,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #707070;
+  background-color: #fff;
 }
 
 /* Right partition content container */
@@ -167,4 +172,46 @@
     flex-direction: row;
     justify-content: space-around;
   }
+}
+
+/* "Hi" message bubble styling (when chat starts) */
+.chat-message {
+  align-self: flex-start;       /* Positions message toward the left inside .chat-right-content */
+  background-color: #2a7f91;
+  color: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  max-width: 60%;
+}
+
+/* Container for the input bar at the bottom */
+.chat-input-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #2a7f91;
+  border-radius: 10px;
+  margin-top: auto;  /* pushes input bar to the bottom */
+}
+
+/* The input box for typing messages */
+.chat-input {
+  width: 100%;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #2a7f91;
+  border: 1px solid #2a7f91;
+  border-radius: 10px;
+}
+
+/* If you want to reposition the animation container, keep or adjust existing margin rules */
+.animation-container {
+  width: 250px;
+  margin-bottom: 40px;
+  display: flex;
+  /* margin-right: 133px; remove or keep as you prefer */
 }

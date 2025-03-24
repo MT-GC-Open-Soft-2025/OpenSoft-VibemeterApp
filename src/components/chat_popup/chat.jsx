@@ -21,9 +21,13 @@ const Chat = ({ onClose }) => {
   const messagesPerPage = 5;
   const totalPages = Math.ceil(conversations.length / messagesPerPage);
   const [currentPage, setCurrentPage] = useState(0);
+
   const [selectedMessage, setSelectedMessage] = useState('Please select a chat.');
   const [selectedDetails, setSelectedDetails] = useState('Please select a chat.');
   const [selectedIndex, setSelectedIndex] = useState(null);
+
+  // New state to track whether chat has started
+  const [chatStarted, setChatStarted] = useState(false);
 
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
@@ -49,6 +53,11 @@ const Chat = ({ onClose }) => {
     (currentPage + 1) * messagesPerPage
   );
 
+  // Handler for "Start Chat!" button
+  const handleStartChat = () => {
+    setChatStarted(true);
+  };
+
   return (
     <div className="chat-overlay" onClick={onClose}>
       <div className="chat-window" onClick={(e) => e.stopPropagation()}>
@@ -56,12 +65,14 @@ const Chat = ({ onClose }) => {
         <div className="chat-container">
           {/* Left Partition: Chat Buttons & Pagination */}
           <div className="chat-left">
-            <h2>Chats</h2>
+            <h2 className="chat-heading">Chats</h2>
             <div className="conversation">
               {currentConversations.map((conv, index) => (
                 <div
                   key={conv.id}
-                  className={`bubble ${selectedIndex === index + currentPage * messagesPerPage ? 'selected' : ''}`}
+                  className={`bubble ${
+                    selectedIndex === index + currentPage * messagesPerPage ? 'selected' : ''
+                  }`}
                   onClick={() => handleConversationClick(conv.message, conv.details, index + currentPage * messagesPerPage)}
                 >
                   {conv.id}
@@ -80,13 +91,34 @@ const Chat = ({ onClose }) => {
             )}
           </div>
 
-          {/* Right Partition: Animation & Start Chat Button */}
+          {/* Right Partition */}
           <div className="chat-right">
             <div className="chat-right-content">
-              <div className="animation-container">
-                <Lottie animationData={animationData} loop={true} />
-              </div>
-              <button className="start-chat-btn">Start Chat!</button>
+              {/* Conditionally render the animation and start button if chat not started */}
+              {!chatStarted && (
+                <>
+                  <div className="animation-container">
+                    <Lottie animationData={animationData} loop={true} />
+                  </div>
+                  <button className="start-chat-btn" onClick={handleStartChat}>
+                    Start Chat!
+                  </button>
+                </>
+              )}
+
+              {/* Once chat is started, show the "Hi" message and input bar */}
+              {chatStarted && (
+                <>
+                  <div className="chat-message hi-message">Hi Whatsup!</div>
+                  <div className="chat-input-container">
+                    <input
+                      type="text"
+                      className="chat-input"
+                      placeholder="Type your message..."
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
