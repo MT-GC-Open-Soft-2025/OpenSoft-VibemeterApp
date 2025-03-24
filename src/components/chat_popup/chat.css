@@ -1,0 +1,170 @@
+/* Full-screen overlay */
+.chat-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Chat window container */
+.chat-window {
+  position: relative;
+  width: 90%;
+  max-width: 1000px;
+  height: 80%;
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Close button */
+.chat-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Container for left and right partitions */
+.chat-container {
+  display: flex;
+  flex: 1;
+}
+
+/* Left Partition */
+.chat-left {
+  width: 40%;
+  background-color: #e6e6e6;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* Conversation list in left partition */
+.conversation {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  flex: 1;
+  margin-top: 10px;
+}
+
+/* Conversation bubble */
+.bubble {
+  background-color: #cccccc;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bubble.selected {
+  background-color: #555555;
+}
+
+/* Pagination controls */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.page-btn {
+  padding: 8px 12px;
+  background-color: #3697aa;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.page-btn:hover {
+  background-color: #2a7f91;
+}
+
+.page-btn:disabled {
+  background-color: #8ed4e2;
+  cursor: not-allowed;
+}
+
+/* Right Partition */
+.chat-right {
+  width: 60%;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #707070;
+}
+
+/* Right partition content container */
+.chat-right-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Animation container: centers the bot animation */
+.animation-container {
+  width: 250px;
+  margin-bottom: 40px;
+  display: flex;
+  margin-right:133px
+}
+
+/* Start Chat Button styling */
+.start-chat-btn {
+  padding: 10px 20px;
+  background-color: #3697aa;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 30px;
+  height: 3rem;
+  margin-top: 255px;  /* Added margin-top for spacing */
+}
+
+.start-chat-btn:hover {
+  background-color: #2a7f91;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chat-container {
+    flex-direction: column;
+  }
+  .chat-left, .chat-right {
+    width: 100%;
+  }
+  .pagination {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+}
