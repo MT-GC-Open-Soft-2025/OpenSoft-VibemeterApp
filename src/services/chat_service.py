@@ -5,17 +5,15 @@ from fastapi import HTTPException, status
 
 from src.models.employee import Employee
 from src.models.chats import Chat, Message
-from src.services.ai_services import analyze_response, generate_response
-
-
+from src.services.ai_services import analyze_response, generate_response, initialize
 
 counter=-1
 async def send_response(user:any, que: str, msg:str, convid:str, chatObj):
     
-    #Assume that previous chat history exists
+    
     
         while (counter < len(user.factors_in_sorted_order)): 
-        #Retrive Employee priority order list
+        
           factor_in_sorted_order= user.factors_in_sorted_order
           sem_analyzer_response = await analyze_response(que, msg)
         
@@ -31,10 +29,10 @@ async def send_response(user:any, que: str, msg:str, convid:str, chatObj):
 
 async def initiate_chat_service(convo_id: str, emp_id: str) -> Dict[str, Any]:
     
+    
     employee_doc = await Employee.find_one(Employee.emp_id == emp_id).first_or_none()
     if not employee_doc:       
         raise ValueError(f"Employee with ID '{emp_id}' not found.")
-
   
     emotion_score = employee_doc.emotion_score
     factors = employee_doc.factors_in_sorted_order or []
