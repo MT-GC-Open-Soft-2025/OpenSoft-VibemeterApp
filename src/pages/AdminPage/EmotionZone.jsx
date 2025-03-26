@@ -20,7 +20,7 @@ const EmotionZoneChart = () => {
           <XAxis dataKey="name" angle={-30} textAnchor="end" tick={{ fontSize: 12 }} />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="count" fill= "#27d9e2" barSize={50} />
+          <Bar dataKey="count" fill= "#0d709e" barSize={50} />
         </BarChart>
       </ResponsiveContainer>
     </div>
