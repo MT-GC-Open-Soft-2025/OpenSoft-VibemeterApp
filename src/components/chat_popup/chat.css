@@ -57,7 +57,7 @@
 }
 
 .chat-heading {
-  color:#8f8d8d;
+  color: #8f8d8d;
 }
 
 /* Conversation list in left partition */
@@ -121,6 +121,39 @@
   align-items: center;
   justify-content: center;
   background-color: #fff;
+  position: relative; /* enables absolute positioning inside */
+}
+
+/* End Chat button at the top-left corner */
+.end-chat-btn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background-color: #bc3b2d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.end-chat-btn:hover {
+  background-color: #973025;
+}
+
+/* Hello box below the End Chat button */
+.hello-box {
+  position: absolute;
+  top: 70px;
+  left: 20px;
+  padding: 10px;
+  color: white;
+  background-color: #3697aa;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
 }
 
 /* Right partition content container */
@@ -138,7 +171,7 @@
   width: 250px;
   margin-bottom: 40px;
   display: flex;
-  margin-right:133px
+  margin-right: 145px;
 }
 
 /* Start Chat Button styling */
@@ -151,13 +184,43 @@
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-right: 30px;
-  height: 3rem;
-  margin-top: 255px;  /* Added margin-top for spacing */
+  margin-top: 255px;
 }
 
 .start-chat-btn:hover {
   background-color: #2a7f91;
+}
+
+/* Chat input container */
+.chat-input-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #2a7f91;
+  border-radius: 10px;
+  margin-top: auto;
+  border-width: 1px;
+  padding: 1px;
+}
+
+/* Chat input */
+.chat-input {
+  flex: 1;
+  padding: 8px;
+  background-color: #2a7f91;
+  border-width: 1px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+/* Send photo styling */
+.send-photo {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin-left: 2px;
+  margin-right: 3px;
 }
 
 /* Responsive adjustments */
@@ -172,46 +235,4 @@
     flex-direction: row;
     justify-content: space-around;
   }
-}
-
-/* "Hi" message bubble styling (when chat starts) */
-.chat-message {
-  align-self: flex-start;       /* Positions message toward the left inside .chat-right-content */
-  background-color: #2a7f91;
-  color: #fff;
-  padding: 10px;
-  border-radius: 10px;
-  margin-bottom: 10px;
-  max-width: 60%;
-}
-
-/* Container for the input bar at the bottom */
-.chat-input-container {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: #2a7f91;
-  border-radius: 10px;
-  margin-top: auto;  /* pushes input bar to the bottom */
-}
-
-/* The input box for typing messages */
-.chat-input {
-  width: 100%;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  background-color: #2a7f91;
-  border: 1px solid #2a7f91;
-  border-radius: 10px;
-}
-
-/* If you want to reposition the animation container, keep or adjust existing margin rules */
-.animation-container {
-  width: 250px;
-  margin-bottom: 40px;
-  display: flex;
-  /* margin-right: 133px; remove or keep as you prefer */
 }

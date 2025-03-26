@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './chat.css';
 import Lottie from "lottie-react";
 import animationData from "../../Assets/animation.json";
+import photo from "../../Assets/send.png"; // Adjust path if needed
+import bcrypt from 'bcryptjs'; // Import bcryptjs for hashing
 
 const Chat = ({ onClose }) => {
   // Example conversations with IDs and corresponding chat details
@@ -26,8 +28,9 @@ const Chat = ({ onClose }) => {
   const [selectedDetails, setSelectedDetails] = useState('Please select a chat.');
   const [selectedIndex, setSelectedIndex] = useState(null);
 
-  // New state to track whether chat has started
+  // State to track whether chat has started and to store unique conversation ID
   const [chatStarted, setChatStarted] = useState(false);
+  const [conversationId, setConversationId] = useState('');
 
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
@@ -53,9 +56,22 @@ const Chat = ({ onClose }) => {
     (currentPage + 1) * messagesPerPage
   );
 
-  // Handler for "Start Chat!" button
+  // Handler for "Start Chat!" button that generates a hashed unique conversation ID
   const handleStartChat = () => {
+    // Create a raw string including timestamp and a random value
+    const rawId = `CHAT-${Date.now()}-${Math.random()}`;
+    // Hash the rawId with a salt round of 10
+    const uniqueId = bcrypt.hashSync(rawId, 10);
+    setConversationId(uniqueId);
+    console.log("Unique conversation ID:", uniqueId);
     setChatStarted(true);
+  };
+
+  // Handler for "End Chat" button
+  const handleEndChat = () => {
+    setChatStarted(false);
+    // Optionally clear the conversationId if needed:
+    // setConversationId('');
   };
 
   return (
@@ -63,17 +79,17 @@ const Chat = ({ onClose }) => {
       <div className="chat-window" onClick={(e) => e.stopPropagation()}>
         <span className="chat-close" onClick={onClose}>&times;</span>
         <div className="chat-container">
-          {/* Left Partition: Chat Buttons & Pagination */}
+          {/* Left Partition */}
           <div className="chat-left">
             <h2 className="chat-heading">Chats</h2>
             <div className="conversation">
               {currentConversations.map((conv, index) => (
                 <div
                   key={conv.id}
-                  className={`bubble ${
-                    selectedIndex === index + currentPage * messagesPerPage ? 'selected' : ''
-                  }`}
-                  onClick={() => handleConversationClick(conv.message, conv.details, index + currentPage * messagesPerPage)}
+                  className={`bubble ${selectedIndex === index + currentPage * messagesPerPage ? 'selected' : ''}`}
+                  onClick={() =>
+                    handleConversationClick(conv.message, conv.details, index + currentPage * messagesPerPage)
+                  }
                 >
                   {conv.id}
                 </div>
@@ -93,8 +109,20 @@ const Chat = ({ onClose }) => {
 
           {/* Right Partition */}
           <div className="chat-right">
+            {/* End Chat button at top-left, plus the "hello" box below it */}
+            {chatStarted && (
+              <>
+                <button className="end-chat-btn" onClick={handleEndChat}>
+                  End Chat
+                </button>
+                <div className="hello-box">
+                  Hello
+                </div>
+              </>
+            )}
+
             <div className="chat-right-content">
-              {/* Conditionally render the animation and start button if chat not started */}
+              {/* If chat not started, show animation and start button */}
               {!chatStarted && (
                 <>
                   <div className="animation-container">
@@ -106,18 +134,16 @@ const Chat = ({ onClose }) => {
                 </>
               )}
 
-              {/* Once chat is started, show the "Hi" message and input bar */}
+              {/* If chat started, show input bar with send photo */}
               {chatStarted && (
-                <>
-                  <div className="chat-message hi-message">Hi Whatsup!</div>
-                  <div className="chat-input-container">
-                    <input
-                      type="text"
-                      className="chat-input"
-                      placeholder="Type your message..."
-                    />
-                  </div>
-                </>
+                <div className="chat-input-container">
+                  <input
+                    type="text"
+                    className="chat-input"
+                    placeholder="Type your message..."
+                  />
+                  <img src={photo} alt="Send" className="send-photo" />
+                </div>
               )}
             </div>
           </div>
