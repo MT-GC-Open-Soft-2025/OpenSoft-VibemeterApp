@@ -131,6 +131,35 @@
   }
 }
 
+.go-back-btn {
+  background-color: #3697aa;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: 20px;
+  transition: background-color 0.3s;
+}
+
+.go-back-btn:hover {
+  background-color: #2b7e8b;
+}
+
+.go-back-btn:focus {
+  outline: none;
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
