@@ -1,4 +1,5 @@
-// import React, { useState ,useEffect} from "react";
+
+// import React, { useState, useEffect } from "react";
 // import "./SearchBar.css";
 
 // const employees = ["EMP1234", "EMP5678", "EMP9101", "EMP2345", "EMP2789"]; // Replace with real data
@@ -18,38 +19,27 @@
 //     document.addEventListener("click", handleClickOutside);
 //     return () => document.removeEventListener("click", handleClickOutside);
 //   }, []);
-  
 
 //   const validateInput = (value) => /^EMP\d{4}$/.test(value);
 
-  
 //   const handleSearchChange = (e) => {
 //     const value = e.target.value.toUpperCase();
 //     setSearchTerm(value);
-  
+//     if (typeof onSearch === "function") {
+//       onSearch("");
+//     }
 //     if (value === "") {
 //       setFilteredEmployees([]);
 //       setShowDropdown(true);
 //       setErrorMessage("");
-//       onSearch(""); 
 //       return;
 //     }
-   
-  
-//   if (!validateInput(value) && value.length >= 7) {
+//     if (!validateInput(value) && value.length >= 7) {
 //       setErrorMessage("Invalid Employee ID. Use EMPXXXX.");
 //       setFilteredEmployees([]);
 //       setShowDropdown(false);
 //       return;
 //     }
-//   // if (!validateInput(value) && value.length >= 7) {
-//   //   setErrorMessage("Invalid Employee ID. Use EMPXXXX.");
-//   //   setFilteredEmployees([]);
-//   //   setShowDropdown(false);
-//   //   onSearch("");  // Ensure graph disappears when input is invalid
-//   //   return;
-//   // }
-  
 //     setErrorMessage("");
 //     const filtered = employees.filter((emp) => emp.startsWith(value));
 //     setFilteredEmployees(filtered);
@@ -60,44 +50,39 @@
 //     setSearchTerm(emp);
 //     setShowDropdown(false);
 //     setErrorMessage("");
-  
-//     console.log("Employee Clicked:", emp); // ✅ Debugging Log
+
 //     if (typeof onSearch === "function") {
 //       onSearch(emp);
 //     }
 //   };
-  
+
 //   const handleKeyDown = (e) => {
 //     if (e.key === "Enter") {
+//       // If valid ID and it exists in the list
 //       if (validateInput(searchTerm) && employees.includes(searchTerm)) {
-//         console.log("Enter Pressed, Employee:", searchTerm); // ✅ Debugging Log
+//         setErrorMessage("");
 //         if (typeof onSearch === "function") {
 //           onSearch(searchTerm);
 //         }
 //         setShowDropdown(false);
-//         setErrorMessage("");
 //       } else {
 //         setErrorMessage("Invalid Employee ID.");
 //       }
 //     }
 //   };
-  
-
 
 //   return (
-//     <nav >
+//     <nav>
 //       <div className="search-container">
-       
-// <input
-//   type="text"
-//   className="search-bar"
-//   placeholder="Search Employee ID..."
-//   value={searchTerm}
-//   onChange={handleSearchChange}
-//   onFocus={() => setShowDropdown(false)} 
-//   onKeyDown={handleKeyDown}
-// />
-
+//         <input
+//           type="text"
+//           className="search-bar"
+//           placeholder="Search Employee ID..."
+//           value={searchTerm}
+//           onChange={handleSearchChange}
+//           onFocus={() => setShowDropdown(false)}
+//           onKeyDown={handleKeyDown}
+//         />
 //         {errorMessage && <p className="error-message">{errorMessage}</p>}
 //         {showDropdown && (
 //           <ul className="dropdown">
@@ -119,42 +104,36 @@ import "./SearchBar.css";
 
 const employees = ["EMP1234", "EMP5678", "EMP9101", "EMP2345", "EMP2789"]; // Replace with real data
 
-const Navbar = ({ onSearch }) => {
+const Navbar = ({ onSearch, clearSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest(".search-container")) {
-        setShowDropdown(false);
-      }
-    };
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
+    if (clearSearch) {
+      setSearchTerm(""); // Clear the search bar when an employee is selected
+    }
+  }, [clearSearch]);
 
   const validateInput = (value) => /^EMP\d{4}$/.test(value);
 
   const handleSearchChange = (e) => {
     const value = e.target.value.toUpperCase();
     setSearchTerm(value);
-    
-    // Hide the graph immediately whenever user starts typing something new
+
+    // Reset selection when typing
     if (typeof onSearch === "function") {
       onSearch("");
     }
 
-    // If input is empty
     if (value === "") {
       setFilteredEmployees([]);
-      setShowDropdown(true);
+      setShowDropdown(false);
       setErrorMessage("");
       return;
     }
 
-    // If input is already long but invalid
     if (!validateInput(value) && value.length >= 7) {
       setErrorMessage("Invalid Employee ID. Use EMPXXXX.");
       setFilteredEmployees([]);
@@ -162,7 +141,6 @@ const Navbar = ({ onSearch }) => {
       return;
     }
 
-    // Otherwise, filter employees for dropdown
     setErrorMessage("");
     const filtered = employees.filter((emp) => emp.startsWith(value));
     setFilteredEmployees(filtered);
@@ -170,11 +148,10 @@ const Navbar = ({ onSearch }) => {
   };
 
   const handleSelectEmployee = (emp) => {
-    setSearchTerm(emp);
+    setSearchTerm(""); // Clear the search field after selection
     setShowDropdown(false);
     setErrorMessage("");
 
-    // Show the graph again with the selected employee
     if (typeof onSearch === "function") {
       onSearch(emp);
     }
@@ -182,12 +159,12 @@ const Navbar = ({ onSearch }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      // If valid ID and it exists in the list
       if (validateInput(searchTerm) && employees.includes(searchTerm)) {
         setErrorMessage("");
         if (typeof onSearch === "function") {
           onSearch(searchTerm);
         }
+        setSearchTerm(""); // Clear the search bar after pressing Enter
         setShowDropdown(false);
       } else {
         setErrorMessage("Invalid Employee ID.");
@@ -204,7 +181,7 @@ const Navbar = ({ onSearch }) => {
           placeholder="Search Employee ID..."
           value={searchTerm}
           onChange={handleSearchChange}
-          onFocus={() => setShowDropdown(false)}
+          onFocus={() => setShowDropdown(true)}
           onKeyDown={handleKeyDown}
         />
         {errorMessage && <p className="error-message">{errorMessage}</p>}
