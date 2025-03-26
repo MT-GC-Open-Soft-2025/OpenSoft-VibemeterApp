@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
-// import "./AdminnPage.css";
-import EmojiMeter from "../../components/EmojiMeter";
+import "./AdminPage.css";
 import bot from "../../Assets/bot.png";
 import ButtonComponent from "../../components/ButtonComponent";
 import EmotionZoneChart from "./EmotionZone";
 import PieChart from "./PieChart";
+import EmojiMeter from "./EmojiMeter";
 import Navbar from "../../components/Adminpagenavbar";
 import Sidebar from "../../components/Adminpagesidebar";
 import Searchbar from "../../components/Adminpagesearchbar";
@@ -21,7 +21,7 @@ const AdminPage = () => {
   };
 
   return (
-    <>
+    <>0
       <Navbar />
       <Sidebar />
       <div style={{ 
@@ -40,18 +40,12 @@ const AdminPage = () => {
         <EmotionZoneChart />
         <PieChart />
       </div>
+      <div className="Meters-vibe">
+        <EmojiMeter/>
       </div>
       </div>
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-50 to-gray-100 p-4">
-    <h1 className="text-4xl font-bold mb-8 text-center">Admin Dashboard</h1>
-    <div className="w-full max-w-4xl">
-      <EmojiMeter />
-      
-      <div className="mt-8 text-center text-gray-600">
-        <p>Welcome to your admin dashboard. The emoji above represents your current happiness level.</p>
       </div>
-      </div></div>
-     
+   
    
      </>
   );
