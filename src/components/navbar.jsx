@@ -7,11 +7,11 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="nav-content">
         <div className="search-container">
-          <input 
+          {/* <input 
             type="text" 
             className="search-bar" 
             placeholder="Search..."
-          />
+          /> */}
           <button type="button">
             <img 
               src={searchIcon} 
@@ -19,6 +19,9 @@ const Navbar = () => {
               className="search-icon"
             />
           </button>
+          <div className='nameOfAdmin'>
+            Admin
+          </div>
         </div>
       </div>
     </nav>

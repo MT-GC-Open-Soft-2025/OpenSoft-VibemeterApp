@@ -1,7 +1,7 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import "./PieChart.css";
 
-// Pie chart data with variables
 const pieDataValues = {
   value1: 20,
   value2: 10,
@@ -20,7 +20,7 @@ const pieData = [
   { name: "6", value: pieDataValues.value6 }
 ];
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
+const COLORS = ['#48777A', '#607EA2', '#52677D', '#3E6985','#38506A','#567CBD'];
 
 const PercentagePieChart = () => {
   return (
