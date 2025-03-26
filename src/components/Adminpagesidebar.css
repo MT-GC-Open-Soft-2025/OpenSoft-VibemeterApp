@@ -1,5 +1,5 @@
 .sidebar {
-    width: 300px;
+    width: 200px;
     background-color: white;
     height: calc(100vh - 64px);
     position: fixed;
@@ -30,11 +30,6 @@
 .profile-icon {
     height: 120px;
     width: 120px;
-<<<<<<< HEAD:src/components/sidebar.css
-    margin-top: 1.5rem;
-    margin-bottom: 1rem;
-=======
->>>>>>> 31d25266ffe532fbc32470c9f4dbcb0cbd8243fb:src/components/Adminpagesidebar.css
     border-radius: 50%;
     object-fit: cover;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -55,10 +50,9 @@
 .sidebar-item {
     padding: 15px 25px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #333;
     transition: all 0.3s ease;
-
 }
 
 .sidebar-item:hover, .sidebar-item.active {
