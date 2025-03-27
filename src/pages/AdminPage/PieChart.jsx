@@ -1,7 +1,7 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import "./PieChart.css";
 
-// Pie chart data with variables
 const pieDataValues = {
   value1: 20,
   value2: 10,
