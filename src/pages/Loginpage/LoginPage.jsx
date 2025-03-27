@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginPage.css";
 import landscape from "../../Assets/landscape.webp";
@@ -11,15 +12,36 @@ import { FaUser, FaUserShield } from "react-icons/fa";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [empId, setEmpId] = useState("");
+  // const [password, setPassword] = useState("");
 
   // Fix for handleToggle error
   const handleToggle = () => {
     setIsAdmin((prev) => !prev);
   };
 
-  const handleLogin = (e) => {
+  const handleChange = (e) => {
+    setEmpId(e.target.value);
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    navigate(isAdmin ? "/admin" : "/user");
+    if (!empId) {
+      alert("Please enter your employee ID.");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/auth/signin", {
+        username: empId,
+      });
+
+      alert("Login successful!");
+      localStorage.setItem("token", response.data.access_token);
+      navigate(isAdmin ? "/admin" : "/user");
+    } catch (error) {
+      alert(error.response?.data?.detail || "Login failed. Please try again.");
+    }
   };
 
   return (
@@ -45,14 +67,9 @@ const LoginPage = () => {
             <input
               type="text"
               className="fadeIn second"
-              name="username"
-              placeholder="employeeId"
-            />
-            <input
-              type="password"
-              className="fadeIn second"
-              name="password"
-              placeholder="password"
+              name="empId"
+              placeholder="Enter your employeeId"
+              onChange={handleChange}
             />
             <input
               type="submit"
