@@ -14,7 +14,7 @@
   /* Overall page container */
   .wrapper {
     min-height: 100vh;
-    background-color: #f7f7f7;
+    background-color: #fff;
     position: relative;
     padding-top: 60px; /* reserve space for header bar */
   }
@@ -33,6 +33,7 @@
   .profile-container {
     display: flex;
     align-items: center;
+    background-color: #fff;
     margin: 20px;
   }
   
