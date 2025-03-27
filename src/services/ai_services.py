@@ -21,14 +21,12 @@ def analyze_response(question: str, answer: str):
     """Formats question and answer into a structured sentence, 
     feeds it to the sentiment model, and returns the sentiment result."""
     
-    formatted_text = f"When the bot asked '{question}', the user replied '{answer}'."
-    result = sentiment_pipeline(formatted_text)[0]  # Extracting the first result
-    
-    # Convert to dictionary with label as key and score as value
+    formatted_text = f"When the bot asked '{question}', the user replied '{answer}'.Go through this "
+    result = sentiment_pipeline(formatted_text)[0]  
     return {result["label"]: result["score"]}
 
 def initialize():
-    chat = client.chats.create(model="gemini-1.5-flash")
+    chat = client.chats.create(model="gemini-2.0-flash")
     return chat
 
 # generates a response and returns it 
