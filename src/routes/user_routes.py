@@ -5,7 +5,6 @@ from src.middlewares.authmiddleware import authenticate
 
 user_router = APIRouter()
 
-
 @user_router.get("/getUserDetails")
 async def get_user_route(user: Dict[str, Any] = Depends(authenticate)):  
     return await user_controller(user)
@@ -13,23 +12,3 @@ async def get_user_route(user: Dict[str, Any] = Depends(authenticate)):
 @user_router.get("/getConvoids")
 async def get_convoids_route(user: Dict[str, Any] = Depends(authenticate)):
     return await convoid_controller(user)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
