@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginPage.css";
@@ -6,25 +6,24 @@ import landscape from "../../Assets/landscape.webp";
 import logo from "../../Assets/bot.png";
 import Lottie from "lottie-react";
 import animationData from "../../Assets/animation.json";
-import bot from "../../Assets/bot.png";
+import { FaUser, FaUserShield } from "react-icons/fa";
+
 const LoginPage = () => {
   const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  // Fix for handleToggle error
+  const handleToggle = () => {
+    setIsAdmin((prev) => !prev);
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
-    navigate("/admin");
-  };
-
-
-
-  const userLogin = (e) => {
-    e.preventDefault();
-    navigate("/user"); 
+    navigate(isAdmin ? "/admin" : "/user");
   };
 
   return (
     <div>
-      <div></div>
       {/* Glass Effect Header */}
       <header className="glass-header">
         <div className="logo">
@@ -41,6 +40,7 @@ const LoginPage = () => {
           <div className="fadeIn first">
             <img src={landscape} id="icon" alt="User Icon" />
           </div>
+
           <form onSubmit={handleLogin}>
             <input
               type="text"
@@ -57,20 +57,17 @@ const LoginPage = () => {
             <input
               type="submit"
               className="fadeIn fourth"
-              value="Log In"
+              value={isAdmin ? "LOGIN AS ADMIN" : "LOGIN AS USER"}
             />
           </form>
 
-        <form onSubmit={userLogin}>
-          
-          <input type="submit" className="fadeIn fourth btn btn-primary" value="Log In User" />
-        </form>
-         
-
-          <div id="formFooter">
-            <a className="underlineHover" href="#">
-              Forgot Password?
-            </a>
+          {/* Toggle Button */}
+          <div className={`toggle-container ${isAdmin ? 'admin' : 'user'}`} onClick={handleToggle}>
+            <div className="toggle-switch">
+              {isAdmin ? <FaUserShield size={20} color="#fff" /> : <FaUser size={20} color="#fff" />}
+            </div>
+            <div className="icon user-icon"><FaUser size={20} /></div>
+            <div className="icon admin-icon"><FaUserShield size={20} /></div>
           </div>
         </div>
 
