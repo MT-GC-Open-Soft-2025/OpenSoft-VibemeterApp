@@ -244,12 +244,11 @@
 
 .chat-message {
   max-width: 70%;
-  margin-bottom: 1px;
-  margin-top: 3px;
   padding: 2px 8px;
+  padding-top: 9px;
   border-radius: 10px;
   font-size: 1rem;
-  line-height: 1.5;
+  line-height: 1.2;
   white-space: pre-wrap;
   word-break: break-word;
   display: flex;
