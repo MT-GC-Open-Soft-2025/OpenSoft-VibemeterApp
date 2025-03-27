@@ -13,17 +13,12 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LoginPage />} />
-        <Route path="/admin" element={ 
-          <>
-          <AdminPage /></>
-          } />
-           <Route path="/user" element={<UserPage />} />
-          <Route path="/feedback" element={
-            <FeedbackPage />
-            <Route path="/performance" element={<Performance />} />
-            <Route path="/rewards" element={<Rewards />} />
-            <Route path="/badges" element={<Badges />} />
-          }/>
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/user" element={<UserPage />} />
+        <Route path="/feedback" element={<FeedbackPage />} />
+        <Route path="/performance" element={<Performance />} />
+        <Route path="/rewards" element={<Rewards />} />
+        <Route path="/badges" element={<Badges />} />
       </Routes>
     </Router>
   );

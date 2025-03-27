@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginPage.css";
@@ -12,51 +11,36 @@ import { FaUser, FaUserShield } from "react-icons/fa";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [employeeId, setEmployeeId] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Fix for handleToggle error
   const handleToggle = () => {
     setIsAdmin((prev) => !prev);
   };
 
-  // State for storing employee ID & error message
-  const [employeeId, setEmployeeId] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
-  // Validate range: EMP001 -> EMP500
   const isValidEmpId = (id) => {
-    const regex = /^EMP(\d{4})$/; // Now expects 4 digits: EMP0001
+    const regex = /^EMP(\d{4})$/;
     const match = id.match(regex);
-  
     if (!match) return false;
-  
     const num = parseInt(match[1], 10);
-    return num >= 1 && num <= 500;  // Valid from EMP0001 to EMP0500
+    return num >= 1 && num <= 500;
   };
 
   const handleLogin = (e) => {
     e.preventDefault();
-    navigate(isAdmin ? "/admin" : "/user");
 
-    // If invalid employeeId
     if (!isValidEmpId(employeeId)) {
       setErrorMessage("Invalid ID");
       return;
     }
 
-    // If valid, clear error and navigate
     setErrorMessage("");
-    navigate("/admin");
-  };
-
-  // For user login we won't check employeeId, or do the same check as needed
-  const userLogin = (e) => {
-    e.preventDefault();
-    navigate("/user");
+    navigate(isAdmin ? "/admin" : "/user");
   };
 
   return (
     <div>
-      {/* Glass Effect Header */}
+      {/* Header */}
       <header className="glass-header">
         <div className="logo">
           <img src={logo} alt="Company Logo" />
@@ -71,9 +55,7 @@ const LoginPage = () => {
             <img src={landscape} id="icon" alt="User Icon" />
           </div>
 
-
           <form onSubmit={handleLogin}>
-            {/* Employee ID field */}
             <input
               type="text"
               className="fadeIn second"
@@ -96,21 +78,29 @@ const LoginPage = () => {
               value={isAdmin ? "LOGIN AS ADMIN" : "LOGIN AS USER"}
             />
 
-            {/* Show error message in red, if any */}
             {errorMessage && (
-              <p style={{ color: "red", marginTop: "10px" }}>
-                {errorMessage}
-              </p>
+              <p style={{ color: "red", marginTop: "10px" }}>{errorMessage}</p>
             )}
           </form>
 
           {/* Toggle Button */}
-          <div className={`toggle-container ${isAdmin ? 'admin' : 'user'}`} onClick={handleToggle}>
+          <div
+            className={`toggle-container ${isAdmin ? "admin" : "user"}`}
+            onClick={handleToggle}
+          >
             <div className="toggle-switch">
-              {isAdmin ? <FaUserShield size={20} color="#fff" /> : <FaUser size={20} color="#fff" />}
+              {isAdmin ? (
+                <FaUserShield size={20} color="#fff" />
+              ) : (
+                <FaUser size={20} color="#fff" />
+              )}
             </div>
-            <div className="icon user-icon"><FaUser size={20} /></div>
-            <div className="icon admin-icon"><FaUserShield size={20} /></div>
+            <div className="icon user-icon">
+              <FaUser size={20} />
+            </div>
+            <div className="icon admin-icon">
+              <FaUserShield size={20} />
+            </div>
           </div>
         </div>
 
