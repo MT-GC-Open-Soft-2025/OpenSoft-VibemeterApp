@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './chat.css';
 import Lottie from "lottie-react";
 import animationData from "../../Assets/animation.json";
@@ -31,6 +31,13 @@ const Chat = ({ onClose }) => {
   // State to track whether chat has started and to store unique conversation ID
   const [chatStarted, setChatStarted] = useState(false);
   const [conversationId, setConversationId] = useState('');
+
+  // 1) Store chat messages and the current input text
+  const [chatMessages, setChatMessages] = useState([]);
+  const [inputValue, setInputValue] = useState('');
+
+  // Ref for the chat history container
+  const chatHistoryRef = useRef(null);
 
   const handleNext = () => {
     if (currentPage < totalPages - 1) {
@@ -65,6 +72,11 @@ const Chat = ({ onClose }) => {
     setConversationId(uniqueId);
     console.log("Unique conversation ID:", uniqueId);
     setChatStarted(true);
+
+    // Optionally clear or initialize chat messages
+    setChatMessages([
+      { sender: 'bot', text: 'Hello! How can I help you today?' }
+    ]);
   };
 
   // Handler for "End Chat" button
@@ -72,6 +84,51 @@ const Chat = ({ onClose }) => {
     setChatStarted(false);
     // Optionally clear the conversationId if needed:
     // setConversationId('');
+    // Clear messages
+    setChatMessages([]);
+    setInputValue('');
+  };
+
+  // 2) Function that simulates a bot response
+  const simulateBotResponse = (userMessage) => {
+    // For demonstration, we’re just returning a dummy string
+    return `You said: "${userMessage}". How else can I help?`;
+  };
+
+  // 3) Handle sending a user message
+  const handleSendMessage = () => {
+    if (!inputValue.trim()) return; // Ignore empty messages
+
+    // Add the user message
+    const newUserMessage = { sender: 'user', text: inputValue };
+    setChatMessages((prevMessages) => [...prevMessages, newUserMessage]);
+
+    // Clear the input
+    setInputValue('');
+
+    // Simulate a bot reply
+    const botReplyText = simulateBotResponse(inputValue);
+    const newBotMessage = { sender: 'bot', text: botReplyText };
+
+    // Delay the bot response to mimic "thinking"
+    setTimeout(() => {
+      setChatMessages((prevMessages) => [...prevMessages, newBotMessage]);
+    }, 800);
+  };
+
+  // 4) Auto-scroll to the bottom of the chat when messages update
+  useEffect(() => {
+    if (chatHistoryRef.current) {
+      chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
+  // Handle pressing Enter in the input
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSendMessage();
+    }
   };
 
   return (
@@ -86,7 +143,9 @@ const Chat = ({ onClose }) => {
               {currentConversations.map((conv, index) => (
                 <div
                   key={conv.id}
-                  className={`bubble ${selectedIndex === index + currentPage * messagesPerPage ? 'selected' : ''}`}
+                  className={`bubble ${
+                    selectedIndex === index + currentPage * messagesPerPage ? 'selected' : ''
+                  }`}
                   onClick={() =>
                     handleConversationClick(conv.message, conv.details, index + currentPage * messagesPerPage)
                   }
@@ -109,16 +168,11 @@ const Chat = ({ onClose }) => {
 
           {/* Right Partition */}
           <div className="chat-right">
-            {/* End Chat button at top-left, plus the "hello" box below it */}
+            {/* End Chat button at top-left */}
             {chatStarted && (
-              <>
-                <button className="end-chat-btn" onClick={handleEndChat}>
-                  End Chat
-                </button>
-                <div className="hello-box">
-                  Hello
-                </div>
-              </>
+              <button className="end-chat-btn" onClick={handleEndChat}>
+                End Chat
+              </button>
             )}
 
             <div className="chat-right-content">
@@ -134,16 +188,39 @@ const Chat = ({ onClose }) => {
                 </>
               )}
 
-              {/* If chat started, show input bar with send photo */}
+              {/* If chat started, show chat messages + input bar */}
               {chatStarted && (
-                <div className="chat-input-container">
-                  <input
-                    type="text"
-                    className="chat-input"
-                    placeholder="Type your message..."
-                  />
-                  <img src={photo} alt="Send" className="send-photo" />
-                </div>
+                <>
+                  {/* Chat History Area */}
+                  <div className="chat-history" ref={chatHistoryRef}>
+                    {chatMessages.map((msg, idx) => (
+                      <div
+                        key={idx}
+                        className={`chat-message ${msg.sender === 'bot' ? 'bot' : 'user'}`}
+                      >
+                        <p>{msg.text}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Chat Input */}
+                  <div className="chat-input-container">
+                    <input
+                      type="text"
+                      className="chat-input"
+                      placeholder="Type your message..."
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                    />
+                    <img
+                      src={photo}
+                      alt="Send"
+                      className="send-photo"
+                      onClick={handleSendMessage}
+                    />
+                  </div>
+                </>
               )}
             </div>
           </div>
