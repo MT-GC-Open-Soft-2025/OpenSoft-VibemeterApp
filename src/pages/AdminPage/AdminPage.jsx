@@ -72,6 +72,7 @@ import EmotionZoneChart from "./EmotionZone";
 import PieChart from "./PieChart";
 import Sidebar from "../../components/Adminpagesidebar";
 import Navbar from "../../components/SearchBar";
+import Goback from "../../components/Admingoback";
 
 const AdminPage = () => {
   const navigate = useNavigate();
@@ -93,7 +94,13 @@ const AdminPage = () => {
       }}>
         {/* Search Bar */}
         <Navbar onSearch={handleSearch} clearSearch={selectedEmployee !== ""} />
-        
+        {/*Goback*/}
+        {selectedEmployee && (
+          <div style={{ display: "flex", justifyContent: "flex-end", margin: "10px 20px" }}>
+            <Goback onClick={() => setSelectedEmployee("")} />
+          </div>
+        )}
+
         <p>Selected Employee: {selectedEmployee}</p>
 
         {/* Show PerformanceGraph when employee is selected, else show other charts */}
