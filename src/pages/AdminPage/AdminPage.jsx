@@ -92,13 +92,16 @@ const AdminPage = () => {
         padding: '20px'
       }}>
         {/* Search Bar */}
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "20px",marginLeft:"20px" }}>
         <Navbar onSearch={handleSearch} clearSearch={selectedEmployee !== ""} />
+        </div>
+       
         
-        <p>Selected Employee: {selectedEmployee}</p>
+        
 
         {/* Show PerformanceGraph when employee is selected, else show other charts */}
         {selectedEmployee ? (
-          <>
+          <> <p>Selected Employee: {selectedEmployee}</p>
              <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
       <ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} />
     </div>
