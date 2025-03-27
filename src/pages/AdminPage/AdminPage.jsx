@@ -12,6 +12,11 @@ import Badges from "../../components/Badges";
 import ButtonComponent from "../../components/ButtonComponent";
 import EmotionZoneChart from "./EmotionZone";
 import PieChart from "./PieChart";
+import Navbar from "../../components/Adminpagenavbar";
+import Sidebar from "../../components/Adminpagesidebar";
+import Searchbar from "../../components/Adminpagesearchbar";
+// import Button from "../../components/samplecomponent";
+
 const AdminPage = () => {
   const navigate = useNavigate(); // Get the navigate function
 
@@ -21,7 +26,19 @@ const AdminPage = () => {
   };
 
   return (
-    <div className="wrapper fadeInDown">
+    <>
+      <Navbar />
+      <Sidebar />
+      <div style={{ 
+        marginLeft: '200px', 
+        marginTop: '64px',
+        backgroundColor: 'white',
+        minHeight: '100vh',
+        padding: '20px'
+      }}>
+        <Searchbar />
+
+        <div className="wrapper fadeInDown">
       <h2>This is the admin page.</h2>
       <ButtonComponent label="Get Feedback" onClick={handleFeedback} />
       <div className="charts">
@@ -32,8 +49,12 @@ const AdminPage = () => {
       <Rewards />
       <Performance />
       <Badges />
-    </div>
+      </div>
     
+      </div>
+   
+   
+     </>
   );
 };
 

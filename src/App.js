@@ -5,11 +5,7 @@ import AdminPage from './pages/AdminPage/AdminPage';
 import Performance from './components/Performance';
 import Rewards from './components/Rewards';
 import Badges from "./components/Badges";
-import Navbar from './components/navbar';
-
 import FeedbackPage from "./pages/Feedbackpage/Feedbackpage";
-import Sidebar from './components/sidebar';
-
 import UserPage from './pages/UserPage/UserPage';
 
 function App() {
@@ -20,9 +16,6 @@ function App() {
         <Route path="/feedback" element={<FeedbackPage />}/>
         <Route path="/admin" element={
           <>
-            <Navbar />
-            <Sidebar />
-            
             <div style={{ 
               marginLeft: '200px', 
               marginTop: '64px',
@@ -33,11 +26,8 @@ function App() {
               <AdminPage />
             </div>
           </>
-        } /> 
+        } />
         <Route path="/user" element={<UserPage />} />
-        <Route path="/feedback" element={
-            <FeedbackPage />
-        }/>
         <Route path="/performance" element={<Performance />} />
         <Route path="/rewards" element={<Rewards />} />
         <Route path="/badges" element={<Badges />} />
@@ -47,5 +37,3 @@ function App() {
 }
 
 export default App;
-
-
