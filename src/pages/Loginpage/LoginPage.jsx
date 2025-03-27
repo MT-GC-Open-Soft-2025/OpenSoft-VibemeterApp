@@ -30,7 +30,10 @@ const LoginPage = () => {
           <img src={logo} alt="Company Logo" />
           <h5>MyCompany</h5>
         </div>
-        <button className="contact-button">Contact Us</button>
+        <button className="contact-button" onClick={() =>navigate("/contact")}>
+        
+          Contact Us
+        </button>
       </header>
 
       {/* Main Wrapper */}
