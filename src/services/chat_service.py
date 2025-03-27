@@ -46,7 +46,7 @@ async def initiate_chat_service(convo_id: str, user: Any) -> Dict[str, Any]:
 
 
 
-async def send_message(user:any, msg:str, convid:str):
+async def send_message(user:any, msg:str, convid:str)-> Dict[str, Any]:
     
     #user_record= await Employee.find(Employee.emp_id == user['emp_id']).first_or_none()
     chat_record = await Chat.find(Chat.convid == convid).first_or_none()
@@ -62,7 +62,7 @@ async def send_message(user:any, msg:str, convid:str):
     dict_bot= Message(sender="bot", timestamp=datetime.datetime.now(), message=que)
     chat_record.messages.append(dict_bot)
     await chat_record.save()
-    return que
+    return {"response":que}
 
     
     
