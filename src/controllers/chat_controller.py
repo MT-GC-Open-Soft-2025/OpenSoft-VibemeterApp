@@ -6,7 +6,7 @@ from src.models.chats import Chat
 from pydantic import BaseModel
 from fastapi import HTTPException, status
 from typing import Optional, Dict, Any
-from src.services.chat_service import send_response
+from src.services.chat_service import send_message
 from src.services.chat_service import initiate_chat_service
 
 
@@ -16,10 +16,10 @@ class Chat_frontend(BaseModel):
     
 
 
-async def initiate_chat_controller(convo_id: str, emp_id: str) -> Dict[str, Any]:
+async def initiate_chat_controller(convo_id: str, user:Any) -> Dict[str, Any]:
     
     try:
-        new_chat = await initiate_chat_service(convo_id, emp_id)
+        new_chat = await initiate_chat_service(convo_id, user)
         return new_chat
     except ValueError as e:
         
@@ -48,7 +48,7 @@ async def response_controller(payload,user) -> Dict[str, Any]:
                 detail="Could not get payload"
             )
         
-        response = await send_response(user, message, convid)
+        response = await send_message(user, message, convid)
         return response
         
     except Exception as error:

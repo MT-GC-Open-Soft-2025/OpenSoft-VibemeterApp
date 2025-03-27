@@ -2,19 +2,51 @@ from src.services.ai_services import analyze_response, generate_response
 from src.models.employee import Employee
 from src.models.chats import Chat, Message
 import datetime
-from ai_services import initialize as initi
+from typing import Dict, Any
+from src.services.ai_services import initialize as initi
+
+async def initiate_chat_service(convo_id: str, user: Any) -> Dict[str, Any]:
+    try:
+    
+            emp_id = user['emp_id']   
+        
+            emotion_score = user['vibe_score']
+            factors = user['factors_in_sorted_order']
+            #convert the list to string
+            factors = ', '.join(factors)
+            prompt = f"This is employee {emp_id}. He has factors in sorted order as: {factors}. The first factor is affecting him most maybe then next and so on. Start talking to him about his first problem. If at any point you feel he isnt interested to talk about it move to next topic. Start your response greeting him. Also remember you are a company councellor. So act like one formal yet friendly. Also remember the factors have been decided from user and company data. So employee doesnt know there is something like the sorted list and he shouldnt know. So move topics swiftly when needed.Start the convo right away. Your name is Vibey. start with hello employee. Dont give any here we go, this is as follows or anything"
+            print (prompt)
+            chatObj = initi()
+            bot_message_text = generate_response(prompt,chatObj) 
+            print(bot_message_text)
+            
+        
+
+        
+            bot_message = Message(
+                sender="bot",
+                timestamp=datetime.datetime.now(),
+                message=bot_message_text
+            )
+
+            new_chat_doc = Chat(
+                convid=convo_id,
+                empid=emp_id,
+                initial_prompt=prompt,
+                feedback="-1",
+                summary="",
+                messages=[bot_message]
+            )
+
+        #create new chat in chats collection
+            await new_chat_doc.insert()
+            return {"response":bot_message_text}
+    except Exception as e:
+        raise ValueError(str(e))    
 
 
-#initial prompt fetch
 
-que=""
-chatObj= None
-flag=0
-
-chatObj = initi()
-que= generate_response("This is employee 123. He has factors in sorted order as: [rewards, leaves, performance ,activity].The first factor is affecting him most maybe then next and so on.Start talking to him about his first problem. If at any point you feel he isnt interested to talk about it move to next topic. Start your response greeting him. Also remember you are a company councellor. So act like one formal yet friendly. Also remember the factors have been decided from user and company data. So employee doesnt know there is something like the sorted list and he shouldnt know. So move topics swiftly when needed.",chatObj)
-#chat_record.append for initaite
-async def send_response(user:any, msg:str, convid:str):
+async def send_message(user:any, msg:str, convid:str):
     
     #user_record= await Employee.find(Employee.emp_id == user['emp_id']).first_or_none()
     chat_record = await Chat.find(Chat.convid == convid).first_or_none()
@@ -25,97 +57,15 @@ async def send_response(user:any, msg:str, convid:str):
     dict_user= Message(sender="user", timestamp=datetime.datetime.now(), message=msg)  
     chat_record.messages.append(dict_user)
     prompt = f"This is an ongoing chat. Initial prompt : {chat_record.initial_prompt}The messages or converstaion till now is as follows: {chat_record.messages} Continue the chat."
-    que=generate_response(prompt,chatObj1)
-    que= generate_response(msg,chatObj)
+    print(prompt)
+    que=generate_response(prompt,chatObj1)    
     dict_bot= Message(sender="bot", timestamp=datetime.datetime.now(), message=que)
     chat_record.messages.append(dict_bot)
-    chat_record.save()
+    await chat_record.save()
     return que
 
     
     
     
         
-    # if (counter < len(factor_in_sorted_order)):       
-          
-        
-            
-        
-    #       if flag==0 and msg.lower() == "yes":
-    #         counter = counter+1
-    #         que = f"Alright. Then are you upset about ${factor_in_sorted_order[counter]}"
-    #         #Append the mssg to chat_record.mssgs as sender, timestamp, mssg
-    #         #chat_record.messages.append(dict_user)
-    #         dict_bot= Message(sender="bot", timestamp=datetime.datetime.now(), message=que)
-    #         chat_record.messages.append(dict_bot)
-    #         chat_record.save() 
-    #         flag=0 
-    #         #return dictionary of qs is this and flag is this
-    #         dict_reply= {"question": que, "flag": flag}
-    #         return dict_reply
-        
-        
-    #       if msg.lower() == "skip":
-    #         counter= counter+1
-    #         que = f"Alright. Then are you upset about ${factor_in_sorted_order[counter]}"            
-    #         dict_bot= Message(sender="bot", timestamp=datetime.datetime.now(), message=que)
-    #         chat_record.messages.append(dict_bot)
-    #         chat_record.save() 
-    #         flag=0 
-    #         #return dictionary of qs is this and flag is this
-    #         dict_reply= {"question": que, "flag": flag}
-    #         return dict_reply          
-               
-            
-        
-    #       else:
-    #         gen_ai_response= await generate_response(msg,chatObj)
-    #         que = gen_ai_response
-    #         dict_bot= Message(sender="bot", timestamp=datetime.datetime.now(), message=que)
-    #         chat_record.messages.append(dict_bot)
-    #         chat_record.save() 
-    #         flag=1
-    #         dict_reply= {"question": que, "flag": flag}
-    #         return dict_reply
-            
-        
-
-
-
-
-async def initiate_chat_service(convo_id: str, emp_id: str) -> Dict[str, Any]:
-    
-    
-    employee_doc = await Employee.find_one(Employee.emp_id == emp_id).first_or_none()
-    if not employee_doc:       
-        raise ValueError(f"Employee with ID '{emp_id}' not found.")
-  
-    emotion_score = employee_doc.emotion_score
-    factors = employee_doc.factors_in_sorted_order or []
-
    
-    if emotion_score < 5:
-       
-        topic = factors[0] if factors else "some topic"
-        bot_message_text = f"Hello, we noticed you are upset about {topic}."
-    else:
-       
-        bot_message_text = "Hello, what's up? Is there anything bothering you?"
-
- 
-    bot_message = Message(
-        sender="bot",
-        timestamp=datetime.now(),
-        message=bot_message_text
-    )
-
-    new_chat_doc = Chat(
-        convid=convo_id,
-        empid=emp_id,
-        # feedback=-1,
-        # summary=None,
-        messages=[bot_message]
-    )
-
-    inserted_chat = await new_chat_doc.insert()  
-    return inserted_chat.model_dump()
