@@ -13,9 +13,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
   const [empId, setEmpId] = useState("");
-  // const [password, setPassword] = useState("");
 
-  // Fix for handleToggle error
   const handleToggle = () => {
     setIsAdmin((prev) => !prev);
   };
@@ -32,12 +30,34 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/auth/signin", {
-        username: empId,
-      });
+      let response;
+      if (isAdmin) {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("No token found. Please log in as a user first.");
+          return;
+        }
+
+        
+        response = await axios.get(
+          "http://127.0.0.1:8000/admin/test",
+          { username: empId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } else {
+        
+        response = await axios.post("http://127.0.0.1:8000/auth/signin", {
+          username: empId,
+        });
+
+        localStorage.setItem("token", response.data.access_token);
+      }
 
       alert("Login successful!");
-      localStorage.setItem("token", response.data.access_token);
       navigate(isAdmin ? "/admin" : "/user");
     } catch (error) {
       alert(error.response?.data?.detail || "Login failed. Please try again.");
@@ -68,7 +88,7 @@ const LoginPage = () => {
               type="text"
               className="fadeIn second"
               name="empId"
-              placeholder="Enter your employeeId"
+              placeholder="Enter your employee ID"
               onChange={handleChange}
             />
             <input
@@ -79,12 +99,23 @@ const LoginPage = () => {
           </form>
 
           {/* Toggle Button */}
-          <div className={`toggle-container ${isAdmin ? 'admin' : 'user'}`} onClick={handleToggle}>
+          <div
+            className={`toggle-container ${isAdmin ? "admin" : "user"}`}
+            onClick={handleToggle}
+          >
             <div className="toggle-switch">
-              {isAdmin ? <FaUserShield size={20} color="#fff" /> : <FaUser size={20} color="#fff" />}
+              {isAdmin ? (
+                <FaUserShield size={20} color="#fff" />
+              ) : (
+                <FaUser size={20} color="#fff" />
+              )}
             </div>
-            <div className="icon user-icon"><FaUser size={20} /></div>
-            <div className="icon admin-icon"><FaUserShield size={20} /></div>
+            <div className="icon user-icon">
+              <FaUser size={20} />
+            </div>
+            <div className="icon admin-icon">
+              <FaUserShield size={20} />
+            </div>
           </div>
         </div>
 
