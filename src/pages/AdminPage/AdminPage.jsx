@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./AdminPage.css";
 
-import Sidebar from "../../components/Adminpagesidebar";
-import Navbar from "../../components/SearchBar";
 import PerformanceGraph from "../../components/PerformanceGraph";
 import Rewards from "../../components/Rewards";
 import Performance from "../../components/Performance";
