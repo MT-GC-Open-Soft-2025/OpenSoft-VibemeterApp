@@ -4,6 +4,7 @@ from beanie import Document
 from typing import List,Optional
 
 class Employee(Document):
+    #id: Optional[PyObjectId] = Field(alias="_id", default=None)
     emp_id: str 
     #make all other optional
     

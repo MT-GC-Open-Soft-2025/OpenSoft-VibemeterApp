@@ -15,5 +15,7 @@ class Chat(Document):
     empid: str
     initial_prompt: str
     messages: List[Message]  
+    feedback:str
+    summary:str
     class Settings:
         name = "chats"
