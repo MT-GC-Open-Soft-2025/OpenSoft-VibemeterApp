@@ -5,7 +5,7 @@ import datetime
 from ai_services import initialize as initi
 
 
-counter=0
+#initial prompt fetch
 
 que=""
 chatObj= None
@@ -16,12 +16,16 @@ que= generate_response("This is employee 123. He has factors in sorted order as:
 #chat_record.append for initaite
 async def send_response(user:any, msg:str, convid:str):
     
-    user_record= await Employee.find(Employee.emp_id == user['emp_id']).first_or_none()
+    #user_record= await Employee.find(Employee.emp_id == user['emp_id']).first_or_none()
     chat_record = await Chat.find(Chat.convid == convid).first_or_none()
+    chatObj1= initi()
+    
     #factor_in_sorted_order= user_record.factors_in_sorted_order
     
     dict_user= Message(sender="user", timestamp=datetime.datetime.now(), message=msg)  
     chat_record.messages.append(dict_user)
+    prompt = f"This is an ongoing chat. Initial prompt : {chat_record.initial_prompt}The messages or converstaion till now is as follows: {chat_record.messages} Continue the chat."
+    que=generate_response(prompt,chatObj1)
     que= generate_response(msg,chatObj)
     dict_bot= Message(sender="bot", timestamp=datetime.datetime.now(), message=que)
     chat_record.messages.append(dict_bot)

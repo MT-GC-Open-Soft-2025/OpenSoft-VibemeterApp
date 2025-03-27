@@ -13,6 +13,7 @@ class Message(BaseModel):
 class Chat(Document):
     convid: str
     empid: str
+    initial_prompt: str
     messages: List[Message]  
     class Settings:
         name = "chats"
