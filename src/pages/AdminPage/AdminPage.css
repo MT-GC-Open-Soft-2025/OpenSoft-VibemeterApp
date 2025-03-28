@@ -8,7 +8,7 @@ html {
 body {
   font-family: "Poppins", sans-serif;
   height: 100vh;
-  background: white;
+  background: linear-gradient(135deg, #74ebd5, #acb6e5);
 }
 
 a {
@@ -296,3 +296,13 @@ input[type=text]:placeholder {
     height: 20px;
     text-align: left;
   }
+.charts {
+  display: flex;
+}
+
+
+
+
+
+
+  

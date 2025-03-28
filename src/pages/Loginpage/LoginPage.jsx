@@ -11,20 +11,36 @@ import { FaUser, FaUserShield } from "react-icons/fa";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [employeeId, setEmployeeId] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // Fix for handleToggle error
   const handleToggle = () => {
     setIsAdmin((prev) => !prev);
   };
 
+  const isValidEmpId = (id) => {
+    const regex = /^EMP(\d{4})$/;
+    const match = id.match(regex);
+    if (!match) return false;
+    const num = parseInt(match[1], 10);
+    return num >= 1 && num <= 500;
+  };
+
   const handleLogin = (e) => {
     e.preventDefault();
+
+    if (!isValidEmpId(employeeId)) {
+      setErrorMessage("Invalid ID");
+      return;
+    }
+
+    setErrorMessage("");
     navigate(isAdmin ? "/admin" : "/user");
   };
 
   return (
     <div>
-      {/* Glass Effect Header */}
+      {/* Header */}
       <header className="glass-header">
         <div className="logo">
           <img src={logo} alt="Company Logo" />
@@ -36,9 +52,7 @@ const LoginPage = () => {
         </button>
       </header>
 
-      {/* Main Wrapper */}
       <div className="wrapper fadeInDown">
-        {/* Form Content */}
         <div id="formContent">
           <div className="fadeIn first">
             <img src={landscape} id="icon" alt="User Icon" />
@@ -50,37 +64,54 @@ const LoginPage = () => {
               className="fadeIn second"
               name="username"
               placeholder="employeeId"
+              value={employeeId}
+              onChange={(e) => setEmployeeId(e.target.value.toUpperCase())}
             />
+
             <input
               type="password"
               className="fadeIn second"
               name="password"
               placeholder="password"
             />
+
             <input
               type="submit"
               className="fadeIn fourth"
               value={isAdmin ? "LOGIN AS ADMIN" : "LOGIN AS USER"}
             />
+
+            {errorMessage && (
+              <p style={{ color: "red", marginTop: "10px" }}>{errorMessage}</p>
+            )}
           </form>
 
           {/* Toggle Button */}
-          <div className={`toggle-container ${isAdmin ? 'admin' : 'user'}`} onClick={handleToggle}>
+          <div
+            className={`toggle-container ${isAdmin ? "admin" : "user"}`}
+            onClick={handleToggle}
+          >
             <div className="toggle-switch">
-              {isAdmin ? <FaUserShield size={20} color="#fff" /> : <FaUser size={20} color="#fff" />}
+              {isAdmin ? (
+                <FaUserShield size={20} color="#fff" />
+              ) : (
+                <FaUser size={20} color="#fff" />
+              )}
             </div>
-            <div className="icon user-icon"><FaUser size={20} /></div>
-            <div className="icon admin-icon"><FaUserShield size={20} /></div>
+            <div className="icon user-icon">
+              <FaUser size={20} />
+            </div>
+            <div className="icon admin-icon">
+              <FaUserShield size={20} />
+            </div>
           </div>
         </div>
 
-        {/* Animation Container */}
         <div className="animation-container">
           <Lottie animationData={animationData} loop={true} />
         </div>
       </div>
 
-      {/* Glass Effect Footer */}
       <footer className="glass-footer">
         <p>© 2025 MyCompany. All rights reserved.</p>
       </footer>
