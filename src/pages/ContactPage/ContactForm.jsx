@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import emailjs from "@emailjs/browser";
 import "./ContactForm.css"; // Import the CSS file
+import Feedbacknavbar from '../../components/Feedbacknavbar';
 
 const ContactForm = () => {
   const navigate = useNavigate();
@@ -50,12 +51,13 @@ const ContactForm = () => {
   };
 
   return (
-    <div className='feedback-wrapper'>
-      <nav className='navbar'>
-        <div className='nav-content'>Contact Us</div>
-        <button className='go-back-btn' onClick={handleGoBack}>Go Back</button>
-      </nav>
-
+     <div className='feedback-wrapper'>
+    {/* //   <nav className='navbar'>
+    //     <div className='nav-content'>Contact Us</div>
+    //     <button className='go-back-btn' onClick={handleGoBack}>Go Back</button>
+    //   </nav>
+     */}
+    <Feedbacknavbar title="Contact Us" />
 
       
     <div className="contact-form-container">
@@ -89,6 +91,7 @@ const ContactForm = () => {
       {status && <p className="success-message">{status}</p>}
     </div>
     </div>
+    
   );
 };
 

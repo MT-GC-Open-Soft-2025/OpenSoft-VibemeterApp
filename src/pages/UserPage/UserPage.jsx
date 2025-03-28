@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import "./UserPage.css";
 import user from "../../Assets/user.png";
 import Chat from "../../components/chat_popup/chat.jsx"; // Adjust the relative path as necessary
-
+import Feedbacknavbar from "../../components/Feedbacknavbar.jsx";
 const UserPage = () => {
   const navigate = useNavigate();
   const [showChat, setShowChat] = useState(false);
@@ -17,17 +17,14 @@ const UserPage = () => {
 
   return (
     <div className='feedback-wrapper'>
-      <nav className='navbar'>
-        <div className='nav-content'>User Page</div>
-        <button className='go-back-btn' onClick={handleGoBack}>Go Back</button>
-      </nav>
-    <>
+      
+      <Feedbacknavbar title="User Page" />
+   
       {showChat ? (
         <Chat onClose={closeChat} />
       ) : (
         <div >
-          {/* Header bar on the top left */}
-          <div className="header"></div>
+          
 
           {/* Profile container with icon and employee id */}
           <div className="profile-container">
@@ -41,7 +38,7 @@ const UserPage = () => {
           </button>
         </div>
       )}
-    </>
+   
     </div>
   );
 };
