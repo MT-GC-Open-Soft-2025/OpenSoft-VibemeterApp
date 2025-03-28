@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from fastapi import HTTPException, status
 from typing import Optional, Dict, Any
 from src.services.chat_service import send_message
-from src.services.chat_service import initiate_chat_service
+from src.services.chat_service import initiate_chat_service,end_chat
 
 
 class Chat_frontend(BaseModel):
@@ -37,10 +37,8 @@ async def initiate_chat_controller(convo_id: str, user:Any) -> Dict[str, Any]:
 async def response_controller(payload,user) -> Dict[str, Any]:
     convid= payload.convid
     message= payload.message
-    #chatObj= payload.chatObj
     
-    try:
-        #chat_record = await Chat.find(Chat.convid == convid).first_or_none()
+    try:       
 
         if not convid or not message:
             raise HTTPException(
@@ -53,3 +51,20 @@ async def response_controller(payload,user) -> Dict[str, Any]:
         
     except Exception as error:
             raise HTTPException(status_code=400, detail=str(error))
+
+async def end_chat_controller(convo_id: str, feedback: str) -> Dict[str, Any]:
+    try:
+        end_chat_data = await end_chat(convo_id, feedback)
+        return end_chat_data
+    except ValueError as e:
+        
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e)
+        )
+    except Exception as e:
+        
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error ending chat"
+        )

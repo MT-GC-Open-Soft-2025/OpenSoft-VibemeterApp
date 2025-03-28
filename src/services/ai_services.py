@@ -41,7 +41,7 @@ def generate_response(user_input:str,chat1) -> str:
 
 
 def summarize_text(text,chatObj): 
-    prompt = f"Based on current conversation between bot and user, summarize it in points in concise and clear manner highlighting the problems faced by user and how bot helps him and in the end give the main issue in 1,2 lines why you think user is sad, in case he admits that he is sad.:\n\n{text}"
+    prompt = f"Based on current conversation between bot and user, summarize it in points in concise and clear manner highlighting the problems faced by user and how bot helps him and in the end give the main issue in 1,2 lines why you think user is sad, in case he admits that he is sad.Also analyse sentiment on scale of 0-1 as to how intense is his situattion and say whether HR needs to intervene or not. \n\n{text}"
     response = chatObj.send_message(prompt)
     return response.text
 

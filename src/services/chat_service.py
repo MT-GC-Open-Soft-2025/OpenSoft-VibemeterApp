@@ -1,4 +1,4 @@
-from src.services.ai_services import analyze_response, generate_response
+from src.services.ai_services import analyze_response, generate_response, summarize_text
 from src.models.employee import Employee
 from src.models.chats import Chat, Message
 import datetime
@@ -48,11 +48,10 @@ async def initiate_chat_service(convo_id: str, user: Any) -> Dict[str, Any]:
 
 async def send_message(user:any, msg:str, convid:str)-> Dict[str, Any]:
     
-    #user_record= await Employee.find(Employee.emp_id == user['emp_id']).first_or_none()
-    chat_record = await Chat.find(Chat.convid == convid).first_or_none()
-    chatObj1= initi()
     
-    #factor_in_sorted_order= user_record.factors_in_sorted_order
+    chat_record = await Chat.find(Chat.convid == convid).first_or_none()
+    chatObj1= initi()  
+   
     
     dict_user= Message(sender="user", timestamp=datetime.datetime.now(), message=msg)  
     chat_record.messages.append(dict_user)
@@ -67,5 +66,19 @@ async def send_message(user:any, msg:str, convid:str)-> Dict[str, Any]:
     
     
     
+async def end_chat(convid:str, feedback:str) -> Dict[str, Any]:
+   try:
+        chat_record = await Chat.find(Chat.convid == convid).first_or_none()
+        if(chat_record.feedback != "-1"):
+            raise ValueError("Feedback already given")
+        chat_record.feedback = feedback
+        chatObj3= initi()
+        text=str(chat_record.messages) 
+        print(text)              
+        summary = summarize_text(text,chatObj3)
+        chat_record.summary = summary
         
-   
+        await chat_record.save()
+        return {"response": summary}
+   except Exception as e:
+        raise ValueError(str(e))
