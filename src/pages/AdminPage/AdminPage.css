@@ -296,3 +296,13 @@ input[type=text]:placeholder {
     height: 20px;
     text-align: left;
   }
+.charts {
+  display: flex;
+}
+
+
+
+
+
+
+  

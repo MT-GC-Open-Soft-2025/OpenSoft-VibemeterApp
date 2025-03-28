@@ -19,6 +19,15 @@ function App() {
         <Route path="/performance" element={<Performance />} />
         <Route path="/rewards" element={<Rewards />} />
         <Route path="/badges" element={<Badges />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/feedback" element={
+  <>
+    
+    <FeedbackPage />
+  </>
+} />
+
+       
       </Routes>
     </Router>
   );
