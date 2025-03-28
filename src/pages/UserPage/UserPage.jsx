@@ -1,21 +1,31 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import "./UserPage.css";
 import user from "../../Assets/user.png";
 import Chat from "../../components/chat_popup/chat.jsx"; // Adjust the relative path as necessary
 
 const UserPage = () => {
+  const navigate = useNavigate();
   const [showChat, setShowChat] = useState(false);
+  const handleGoBack = () => {
 
+    navigate(-1);
+  };
   const openChat = () => setShowChat(true);
   const closeChat = () => setShowChat(false);
 
   return (
+    <div className='feedback-wrapper'>
+      <nav className='navbar'>
+        <div className='nav-content'>User Page</div>
+        <button className='go-back-btn' onClick={handleGoBack}>Go Back</button>
+      </nav>
     <>
       {showChat ? (
         <Chat onClose={closeChat} />
       ) : (
-        <div className="wrapper fadeInDown">
+        <div >
           {/* Header bar on the top left */}
           <div className="header"></div>
 
@@ -32,6 +42,7 @@ const UserPage = () => {
         </div>
       )}
     </>
+    </div>
   );
 };
 
