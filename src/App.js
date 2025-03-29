@@ -8,6 +8,9 @@ import Feedbacknavbar from './components/Feedbacknavbar';
 import FeedbackPage from "./pages/Feedbackpage/Feedbackpage";
 import Sidebar from './components/sidebar';
 
+import UserPage from './pages/UserPage/UserPage';
+
+  
 function App() {
   return (
     <Router>
@@ -37,6 +40,10 @@ function App() {
             </div>
           </>
         } />
+        <Route path="/user" element={<UserPage />} />
+        <Route path="/feedback" element={
+            <FeedbackPage />
+          }/>
       </Routes>
     </Router>
   );
