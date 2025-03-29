@@ -2,10 +2,10 @@ import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Badges.css";
 
-import badge1 from "../Assets/badge1.png";
-import badge2 from "../Assets/badge2.png";
-import badge3 from "../Assets/badge3.png";
-import badge4 from "../Assets/badge4.png";
+import badge1 from "../../Assets/badge1.png";
+import badge2 from "../../Assets/badge2.png";
+import badge3 from "../../Assets/badge3.png";
+import badge4 from "../../Assets/badge4.png";
 
 export default function Badges() {
   const awardBadgeMap = {

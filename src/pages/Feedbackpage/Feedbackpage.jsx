@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Feedbackpage.css';
-import Feedbacknavbar from '../../components/Feedbacknavbar'; // Update the path
+import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar'; // Update the path
 // Importing FeedbackNavbar component
 
 const FeedbackPage = () => {

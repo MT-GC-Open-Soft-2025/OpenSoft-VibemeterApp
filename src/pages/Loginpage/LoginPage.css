@@ -99,7 +99,9 @@ align-items: center;
 padding: 5px 50px;
 color: white;
 }
-
+.glass-header{
+  background-color: #3697;
+}
 .glass-footer {
 border-top: solid rgba(255, 255, 255, 0.3);
 border-bottom: none;
