@@ -22,14 +22,6 @@ const LoginPage = () => {
 
 
 
-  const isValidEmpId = (id) => {
-    const regex = /^EMP(\d{4})$/;
-    const match = id.match(regex);
-    if (!match) return false;
-    const num = parseInt(match[1], 10);
-    return num >= 1 && num <= 500;
-  };
-
   const handleChange = (e) => {
     setEmpId(e.target.value);
   };
@@ -37,10 +29,6 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // if (!isValidEmpId(employeeId)) {
-    //   setErrorMessage("Invalid ID");
-    //   return;
-    // }
 
     setErrorMessage("");
     if (!empId) {
@@ -50,34 +38,43 @@ const LoginPage = () => {
 
     try {
       let response;
+      
       if (isAdmin) {
         const token = localStorage.getItem("token");
         if (!token) {
           alert("No token found. Please log in as a user first.");
           return;
         }
-
+  
         
+        if (empId !== "admin") {
+          alert("Access denied! Only admins can log in.");
+          return;
+        }
+  
         response = await axios.get(
           "http://127.0.0.1:8000/admin/test",
-          { username: empId },
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
+  
+        alert("Admin login successful!");
+        navigate("/admin");
+  
       } else {
         
         response = await axios.post("http://127.0.0.1:8000/auth/signin", {
           username: empId,
         });
-
+  
         localStorage.setItem("token", response.data.access_token);
+  
+        alert("Login successful!");
+        navigate("/user");
       }
-
-      alert("Login successful!");
-      navigate(isAdmin ? "/admin" : "/user");
     } catch (error) {
       alert(error.response?.data?.detail || "Login failed. Please try again.");
     }
