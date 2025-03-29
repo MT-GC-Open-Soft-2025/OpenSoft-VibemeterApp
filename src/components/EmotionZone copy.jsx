@@ -13,15 +13,14 @@ const emotionData = [
 
 const EmotionZoneChart = () => {
   return (
-    <div className="charts" style={{ width: "50%", height: 400}}>
+    <div className="charts" style={{ width: "50%", height: 400 }}>
       <h2 style={{color: "black"}}>Emotion Zone Distribution</h2>
       <ResponsiveContainer className= "barchart" width="100%" height="100%">
-        <BarChart data={emotionData} margin={{ top: 20, right:0, left: 20, bottom: 50 }}>
+        <BarChart data={emotionData} margin={{ top: 20, right: 30, left: 20, bottom: 50 }}>
           <XAxis dataKey="name" angle={-30} textAnchor="end" tick={{ fontSize: 12 }} />
           <YAxis />
           <Tooltip />
-         
-          <Bar dataKey="count" fill= "#0d709e" barSize={50} />
+          <Bar dataKey="count" fill="#007bff" barSize={50} />
         </BarChart>
       </ResponsiveContainer>
     </div>

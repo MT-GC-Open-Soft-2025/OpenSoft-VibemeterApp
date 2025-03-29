@@ -8,9 +8,9 @@ const Feedbacknavbar = ({ title }) => {
   return (
     <nav className="navbar">
       <div className="nav-content">
-        {title ? `${title} - Chat Feedback` : "Chat Feedback"}
+        {title ? `${title} ` : "Chat Feedback"}
       </div>
-      <span className="go-back-btn" onClick={() => navigate('/admin')}>
+      <span className="go-back-btn" onClick={() => navigate(-1)}>
         Go Back
       </span>
     </nav>
