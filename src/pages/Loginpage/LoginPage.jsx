@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginPage.css";
-import landscape from "../../Assets/landscape.webp";
+import landscape from "../../Assets/landscape.jpg";
 import logo from "../../Assets/bot.png";
 import Lottie from "lottie-react";
 import animationData from "../../Assets/animation.json";
@@ -11,15 +12,56 @@ import { FaUser, FaUserShield } from "react-icons/fa";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
+  const [empId, setEmpId] = useState("");
 
-  // Fix for handleToggle error
   const handleToggle = () => {
     setIsAdmin((prev) => !prev);
   };
 
-  const handleLogin = (e) => {
+  const handleChange = (e) => {
+    setEmpId(e.target.value);
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    navigate(isAdmin ? "/admin" : "/user");
+    if (!empId) {
+      alert("Please enter your employee ID.");
+      return;
+    }
+
+    try {
+      let response;
+      if (isAdmin) {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("No token found. Please log in as a user first.");
+          return;
+        }
+
+        
+        response = await axios.get(
+          "http://127.0.0.1:8000/admin/test",
+          { username: empId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } else {
+        
+        response = await axios.post("http://127.0.0.1:8000/auth/signin", {
+          username: empId,
+        });
+
+        localStorage.setItem("token", response.data.access_token);
+      }
+
+      alert("Login successful!");
+      navigate(isAdmin ? "/admin" : "/user");
+    } catch (error) {
+      alert(error.response?.data?.detail || "Login failed. Please try again.");
+    }
   };
 
   return (
@@ -45,14 +87,9 @@ const LoginPage = () => {
             <input
               type="text"
               className="fadeIn second"
-              name="username"
-              placeholder="employeeId"
-            />
-            <input
-              type="password"
-              className="fadeIn second"
-              name="password"
-              placeholder="password"
+              name="empId"
+              placeholder="Enter your employee ID"
+              onChange={handleChange}
             />
             <input
               type="submit"
@@ -62,12 +99,23 @@ const LoginPage = () => {
           </form>
 
           {/* Toggle Button */}
-          <div className={`toggle-container ${isAdmin ? 'admin' : 'user'}`} onClick={handleToggle}>
+          <div
+            className={`toggle-container ${isAdmin ? "admin" : "user"}`}
+            onClick={handleToggle}
+          >
             <div className="toggle-switch">
-              {isAdmin ? <FaUserShield size={20} color="#fff" /> : <FaUser size={20} color="#fff" />}
+              {isAdmin ? (
+                <FaUserShield size={20} color="#fff" />
+              ) : (
+                <FaUser size={20} color="#fff" />
+              )}
             </div>
-            <div className="icon user-icon"><FaUser size={20} /></div>
-            <div className="icon admin-icon"><FaUserShield size={20} /></div>
+            <div className="icon user-icon">
+              <FaUser size={20} />
+            </div>
+            <div className="icon admin-icon">
+              <FaUserShield size={20} />
+            </div>
           </div>
         </div>
 

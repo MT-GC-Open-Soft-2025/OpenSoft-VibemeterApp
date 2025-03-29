@@ -71,7 +71,6 @@ h2 {
   background-position: center;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  
 }
 
 #icon {
@@ -154,19 +153,19 @@ input:focus::placeholder {
 color: #ccc; /* Lighten the placeholder on focus */
 }
 
-/* Animation Container for Right Side */
 .animation-container {
-position: absolute;
-top: 50%;
-right: 3%;
-transform: translateY(-50%);
-width: 80vw; /* Adjusts to 40% of viewport width */
-height: 80vw; 
-max-width: 600px;
-max-height: 600px;
-z-index: 0;
-pointer-events: none;
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  width: 40vw;
+  height: 40vw;
+  max-width: 400px;
+  max-height: 400px;
+  z-index: 0;
+  pointer-events: none;
 }
+
 
 /* Ensure Animation Fits */
 .animation-container canvas,
