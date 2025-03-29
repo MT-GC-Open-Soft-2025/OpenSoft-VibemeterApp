@@ -67,10 +67,8 @@ export default function Badges() {
 
   return (
     <div className="badges-container container mt-4">
-      <h2>Employee Awards</h2>
       {alice && (
         <div className="employee-section mb-4">
-          <h5>{alice.name}</h5>
           <div className="employee-awards">
             {alice.awards.map((award, i) => (
               <div key={i} className="badge-img-container">
