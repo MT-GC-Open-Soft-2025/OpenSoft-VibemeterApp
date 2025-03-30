@@ -36,7 +36,7 @@
   .profile-container {
     display: flex;
     align-items: center;
-    background-color: #fff;
+    background-color: transparent;
     margin: 20px;
   }
   
