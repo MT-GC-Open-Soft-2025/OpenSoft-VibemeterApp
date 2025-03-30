@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginPage.css";
-import landscape from "../../Assets/landscape.webp";
+import landscape from "../../Assets/landscape.jpg";
 import logo from "../../Assets/bot.png";
 import Lottie from "lottie-react";
 import animationData from "../../Assets/animation.json";
@@ -11,31 +12,75 @@ import { FaUser, FaUserShield } from "react-icons/fa";
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
-  const [employeeId, setEmployeeId] = useState("");
+  //const [employeeId, setEmployeeId] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [empId, setEmpId] = useState("");
 
   const handleToggle = () => {
     setIsAdmin((prev) => !prev);
   };
 
-  const isValidEmpId = (id) => {
-    const regex = /^EMP(\d{4})$/;
-    const match = id.match(regex);
-    if (!match) return false;
-    const num = parseInt(match[1], 10);
-    return num >= 1 && num <= 500;
+
+
+  // const isValidEmpId = (id) => {
+  //   const regex = /^EMP(\d{4})$/;
+  //   const match = id.match(regex);
+  //   if (!match) return false;
+  //   const num = parseInt(match[1], 10);
+  //   return num >= 1 && num <= 500;
+  // };
+
+  const handleChange = (e) => {
+    setEmpId(e.target.value);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!isValidEmpId(employeeId)) {
-      setErrorMessage("Invalid ID");
+    // if (!isValidEmpId(employeeId)) {
+    //   setErrorMessage("Invalid ID");
+    //   return;
+    // }
+
+    setErrorMessage("");
+    if (!empId) {
+      alert("Please enter your employee ID.");
       return;
     }
 
-    setErrorMessage("");
-    navigate(isAdmin ? "/admin" : "/user");
+    try {
+      let response;
+      if (isAdmin) {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          alert("No token found. Please log in as a user first.");
+          return;
+        }
+
+        
+        response = await axios.get(
+          "http://127.0.0.1:8000/admin/test",
+          { username: empId },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      } else {
+        
+        response = await axios.post("http://127.0.0.1:8000/auth/signin", {
+          username: empId,
+        });
+
+        localStorage.setItem("token", response.data.access_token);
+      }
+
+      alert("Login successful!");
+      navigate(isAdmin ? "/admin" : "/user");
+    } catch(error) {
+      alert(error.response?.data?.detail || "Login failed. Please try again.");
+    }
   };
 
   return (
@@ -62,17 +107,9 @@ const LoginPage = () => {
             <input
               type="text"
               className="fadeIn second"
-              name="username"
-              placeholder="employeeId"
-              value={employeeId}
-              onChange={(e) => setEmployeeId(e.target.value.toUpperCase())}
-            />
-
-            <input
-              type="password"
-              className="fadeIn second"
-              name="password"
-              placeholder="password"
+              name="empId"
+              placeholder="Enter your employee ID"
+              onChange={handleChange}
             />
 
             <input
@@ -91,6 +128,7 @@ const LoginPage = () => {
             className={`toggle-container ${isAdmin ? "admin" : "user"}`}
             onClick={handleToggle}
           >
+         
             <div className="toggle-switch">
               {isAdmin ? (
                 <FaUserShield size={20} color="#fff" />
@@ -103,7 +141,9 @@ const LoginPage = () => {
             </div>
             <div className="icon admin-icon">
               <FaUserShield size={20} />
+              
             </div>
+           
           </div>
         </div>
 
