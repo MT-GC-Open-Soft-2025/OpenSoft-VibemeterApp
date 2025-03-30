@@ -7,7 +7,7 @@ class Employee(Document):
     #make all other optional
     
     #emotion_score: Optional[float]=None
-    vibe_score: Optional[float]=None
+    vibe_score: Optional[float]=-1
     factors_in_sorted_order: Optional[List[str]]=None
     
     

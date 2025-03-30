@@ -83,8 +83,6 @@ async def initiate_chat_service(convo_id: str, user: Any) -> Dict[str, Any]:
                        
             bot_message_text = generate_response(prompt,chatObj) 
             print(bot_message_text)
-            
-        
 
         
             bot_message = Message(
@@ -158,6 +156,14 @@ async def end_chat(convid:str, feedback:str) -> Dict[str, Any]:
         print(text)              
         summary = summarize_text(text,chatObj3)
         chat_record.summary = summary
+        employee_record = await Employee.find(Employee.emp_id == chat_record.empid).first_or_none()
+
+        if(employee_record.vibe_score==-1): # if no vibe score initially
+            prompt = f"Based on the summary {summary} of the conversation between bot and employee with id {chat_record.empid}, give a vibe score of the employee between 0-5. Higher vibe score means employee is happy and lower means he is sad/stressed. Only return the score, not any other text, it can be in decimal also."
+            resp = chatObj3.send_message(prompt)
+            employee_record.vibe_score = resp.text # new vibe score provided by chatbot
+            await employee_record.save() # update it
+            
         
         await chat_record.save()
         return {"response": summary}
