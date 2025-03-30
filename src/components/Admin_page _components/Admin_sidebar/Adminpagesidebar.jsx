@@ -28,12 +28,15 @@ const Sidebar = () => {
                     >
                         Overview
                     </li>
-                    <li 
+                    {/* <li 
                         className={`sidebar-item ${activeItem === 'Contact Us' ? 'active' : ''}`}
                         onClick={() => handleItemClick('Contact Us')}
                     >
                         Contact Us       
-                    </li>
+                    </li> */}
+                     <li className="sidebar-item" onClick={() =>navigate("/contact")}>
+          Contact Us
+        </li>
                     <li 
                         className="sidebar-item logout-item"
                         onClick={() => handleItemClick('Log Out')}

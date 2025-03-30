@@ -1,0 +1,47 @@
+/* 
+.chart-container {
+    width: 60%;
+    margin: auto;
+    text-align: center;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.chart-title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.chart-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.recharts-cartesian-axis-tick {
+    text-anchor: middle !important;
+    transform: translateY(10px); }
+
+.recharts-legend {
+    text-align: center;
+    margin-top: 15px;
+    padding-bottom: 10px;
+} */
+.chart-container {
+  width: 60%;
+  margin: auto;
+  text-align: center;
+  padding: 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  
+}
+
+.highcharts-legend {
+  text-align: center;
+  margin-top: 10px;
+  padding-bottom: 10px;
+}
