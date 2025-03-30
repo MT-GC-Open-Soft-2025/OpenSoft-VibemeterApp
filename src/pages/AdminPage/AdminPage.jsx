@@ -3,18 +3,19 @@ import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./AdminPage.css";
 
-import PerformanceGraph from "../../components/Admin_page _components/Admin_performance_rewards/PerformanceGraph";
-import Rewards from "../../components/Admin_page _components/Admin_performance_rewards/Rewards";
-import Performance from "../../components/Admin_page _components/Admin_performance_rewards/Performance";
-import Badges from "../../components/Badges/Badges";
+import PerformanceGraph from "../../components/Admin_page _components/Admin_performance_rewards/PerformanceGraph.jsx";
+import Rewards from "../../components/Admin_page _components/Admin_performance_rewards/Rewards.jsx";
+import Performance from "../../components/Admin_page _components/Admin_performance_rewards/Performance.jsx";
+import Badges from "../../components/Badges/Badges.jsx";
 import ButtonComponent from "../../components/ButtonComponent";
 import EmotionZoneChart from "./EmotionZone";
 import PieChart from "./PieChart";
-import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
-import Navbar from "../../components/Search-bar/SearchBar";
-import Goback from "../../components/Admin_page _components/Admin_goback/Admingoback";
-import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar';
+import Navbar from "../../components/Search-bar/SearchBar.jsx";
+import Goback from "../../components/Admin_page _components/Admin_goback/Admingoback.jsx";
+import user from "../../Assets/user.png";
 
+import Sidebar from "\../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar.jsx";
+import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar.jsx";
 const employees = ["EMP1234", "EMP5678", "EMP9101", "EMP2345", "EMP2789"];
 
 const AdminPage = () => {
@@ -31,39 +32,55 @@ const AdminPage = () => {
 
   return (
     <>
-      <Feedbacknavbar title="Admin Page"/>
+     <Feedbacknavbar title="Admin Page"/>
       <Sidebar />
-      <div style={{
-        marginLeft: '200px',
-        marginTop: '64px',
-        backgroundColor: 'white',
-        minHeight: '100vh',
-        padding: '20px'
-      }}>
+      <div
+        style={{
+          marginLeft: "200px",
+          marginTop: "64px",
+          backgroundColor: "white",
+          minHeight: "100vh",
+          padding: "20px",
+        }}
+      >
         {/* Search Bar */}
-        <Navbar onSearch={handleSearch} clearSearch={selectedEmployee !== ""} />
-        
-        
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "20px",
+            marginLeft: "20px",
+          }}
+        >
+          <Navbar onSearch={handleSearch} clearSearch={selectedEmployee !== ""} />
+        </div>
 
         {selectedEmployee ? (
-          <> <p>Selected Employee: {selectedEmployee}</p>
-             <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-      <ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} />
-    </div>
-            {/* <div><ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} /></div> */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              marginTop: "20px",
+            }}
+          >
+            <div className="description">
+              <div className="profile-container">
+                <img src={user} alt="User Icon" className="profile-icon" />
+                <span className="profile-user">Employee ID: {selectedEmployee}</span>
+              </div>
+              <Badges />
+              <ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} />
+            </div>
+
             <PerformanceGraph employeeId={selectedEmployee} />
             <Rewards />
-            {/* <Performance /> */}
-            <Badges />
-          </>
+          </div>
         ) : (
-          <>
-            <div className="charts">
-              <EmotionZoneChart />
-              <PieChart />
-            </div>
-            
-          </>
+          <div className="charts">
+            <EmotionZoneChart />
+            <PieChart />
+          </div>
         )}
       </div>
     </>
@@ -71,4 +88,3 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
-

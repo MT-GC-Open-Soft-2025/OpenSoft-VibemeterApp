@@ -2,13 +2,13 @@
 /* BASIC */
 
 html {
-  background-color: linear-gradient(135deg, #74ebd5, #acb6e5) !important;
+  background-color: #56baed;
 }
 
 body {
   font-family: "Poppins", sans-serif;
   height: 100vh;
-  background: linear-gradient(135deg, #74ebd5, #acb6e5) !important;
+  background: linear-gradient(135deg, #74ebd5, #acb6e5);
 }
 
 a {
@@ -39,7 +39,7 @@ h2 {
   justify-content: center;
   width: 100%;
   min-height: 100%;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 #formContent {
@@ -300,8 +300,19 @@ input[type=text]:placeholder {
   display: flex;
 }
 
-
-
+.description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+}
+/* .profile-container {
+  width: 100vw;
+} */
+/* .profile-container{
+  height: 2rem;
+} */
 
 
 
