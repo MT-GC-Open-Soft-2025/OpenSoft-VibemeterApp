@@ -24,6 +24,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  height: fit-content;
 }
 
 /* Close button */
@@ -143,18 +144,6 @@
   background-color: #973025;
 }
 
-/* Hello box below the End Chat button */
-.hello-box {
-  position: absolute;
-  top: 70px;
-  left: 20px;
-  padding: 10px;
-  color: white;
-  background-color: #3697aa;
-  border: none;
-  border-radius: 10px;
-  font-size: 0.9rem;
-}
 
 /* Right partition content container */
 .chat-right-content {
@@ -177,11 +166,11 @@
 /* Start Chat Button styling */
 .start-chat-btn {
   padding: 10px 20px;
+  font-size: 1rem;
   background-color: #3697aa;
   color: white;
   border: none;
   border-radius: 4px;
-  font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s;
   margin-top: 255px;
@@ -204,6 +193,22 @@
   padding: 1px;
 }
 
+
+/* Chat history container with fixed size and scroll */
+.chat-history {
+  width: 100%;
+  height: 470px; /* Set a fixed height */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+
 /* Chat input */
 .chat-input {
   flex: 1;
@@ -213,6 +218,7 @@
   border-radius: 10px;
   color: #fff;
 }
+
 
 /* Send photo styling */
 .send-photo {
@@ -235,4 +241,32 @@
     flex-direction: row;
     justify-content: space-around;
   }
+}
+
+.chat-message {
+  max-width: 70%;
+  padding: 2px 8px;
+  padding-top: 9px;
+  border-radius: 10px;
+  font-size: 1rem;
+  line-height: 1.2;
+  white-space: pre-wrap;
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+}
+
+/* Different styling for user vs. bot messages */
+.chat-message.user {
+  margin-top: 30px;
+  align-self: flex-end;
+  background-color: #2a7f91;
+  color: #fff;
+}
+
+.chat-message.bot {
+  margin-top: 40px;
+  align-self: flex-start;
+  background-color: #e6e6e6;
+  color: #333;
 }

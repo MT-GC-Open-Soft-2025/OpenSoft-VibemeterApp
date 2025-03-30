@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import emailjs from "@emailjs/browser";
 import "./ContactForm.css"; // Import the CSS file
-import Feedbacknavbar from '../../components/Feedbacknavbar';
+import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar';
 
 const ContactForm = () => {
   const navigate = useNavigate();
