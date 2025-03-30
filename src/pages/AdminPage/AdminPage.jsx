@@ -34,7 +34,7 @@ const AdminPage = () => {
 
   return (
     <>
-     <Feedbacknavbar title="Admin Page"/>
+      <Feedbacknavbar title="Admin Page" />
       <Sidebar />
       <div style={{
         marginLeft: '200px',
@@ -44,26 +44,25 @@ const AdminPage = () => {
         padding: '20px'
       }}>
         {/* Search Bar */}
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "20px",marginLeft:"20px" }}>
-        <Navbar onSearch={handleSearch} clearSearch={selectedEmployee !== ""} />
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "20px", marginLeft: "20px" }}>
+          <Navbar onSearch={handleSearch} clearSearch={selectedEmployee !== ""} />
         </div>
-       
-        
-        
+
+
+
 
         {selectedEmployee ? (
           <> <p>Selected Employee: {selectedEmployee}</p>
-             <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-      <ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} />
-    </div>
+            <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+              <ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} />
+            </div>
             {/* <div><ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} /></div> */}
+            <EmojiMeter />
+
             <PerformanceGraph employeeId={selectedEmployee} />
             <Rewards />
             {/* <Performance /> */}
             <Badges />
-            <div className="Meters-vibe">
-        <EmojiMeter/>
-      </div>
           </>
         ) : (
           <>
@@ -71,8 +70,8 @@ const AdminPage = () => {
               <EmotionZoneChart />
               <PieChart />
             </div>
-           
-            
+
+
           </>
         )}
       </div>

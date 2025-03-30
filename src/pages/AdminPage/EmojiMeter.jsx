@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap
+// import "./EmojiMeter.css";
+
 
 // Function to determine emoji and styling
 const getEmojiByValue = (value) => {
