@@ -2,14 +2,16 @@ from src.models.employee import Employee
 from src.models.chats import Chat
 from pydantic import BaseModel
 from fastapi import HTTPException, status
-from typing import Dict, Any
-
-from src.services.chat_service import send_message, get_chat, initiate_chat_service,end_chat
+from typing import Optional, Dict, Any
+from src.services.chat_service import initiate_chat_service,end_chat, get_feedback_questions,add_feedback,send_message, get_chat
 
 
 class Chat_frontend(BaseModel):
     convid: str
     message: str
+    
+class Feedback(BaseModel):
+    feedback: Dict[str,int]    
     
 
 
@@ -48,6 +50,40 @@ async def response_controller(payload,user) -> Dict[str, Any]:
         
     except Exception as error:
             raise HTTPException(status_code=400, detail=str(error))
+        
+async def feedback_controller() -> Dict[str, Any]:
+    try:
+        feedback_questions = await get_feedback_questions()
+        return feedback_questions
+    except ValueError as e:
+        
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e)
+        )
+    except Exception as e:
+        
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error getting feedback questions"
+        )  
+
+async def add_feedback_controller(feedback:Dict[str,int]) -> Dict[str, Any]:
+    try:
+        feedback_data = await add_feedback(feedback)
+        return feedback_data
+    except ValueError as e:
+        
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e)
+        )
+    except Exception as e:
+        
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error adding feedback"
+        )              
 
 async def end_chat_controller(convo_id: str, feedback: str) -> Dict[str, Any]:
     try:
