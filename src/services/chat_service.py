@@ -1,8 +1,11 @@
 from src.services.ai_services import analyze_response, generate_response, summarize_text
 from src.models.employee import Employee
 from src.models.chats import Chat, Message
+from src.models.feedback_ratings import Feedback_ratings
 import datetime
-from typing import Dict, Any
+from typing import Dict, Any,List
+import json
+import os
 from src.services.ai_services import initialize as initi
 
 async def initiate_chat_service(convo_id: str, user: Any) -> Dict[str, Any]:
@@ -11,12 +14,19 @@ async def initiate_chat_service(convo_id: str, user: Any) -> Dict[str, Any]:
             emp_id = user['emp_id']   
         
             emotion_score = user['vibe_score']
-            factors = user['factors_in_sorted_order']
-            #convert the list to string
+            factors = user['factors_in_sorted_order']            
             factors = ', '.join(factors)
-            prompt = f"This is employee {emp_id}. He has factors in sorted order as: {factors}. The first factor is affecting him most maybe then next and so on. Start talking to him about his first problem. If at any point you feel he isnt interested to talk about it move to next topic. Start your response greeting him. Also remember you are a company councellor. So act like one formal yet friendly. Also remember the factors have been decided from user and company data. So employee doesnt know there is something like the sorted list and he shouldnt know. So move topics swiftly when needed.Start the convo right away. Your name is Vibey. start with hello employee. Dont give any here we go, this is as follows or anything"
-            print (prompt)
+            prompt_sad = f"This is employee {emp_id}. He is a sad person with vibe score of {emotion_score}/5. He has factors in sorted order as: {factors}. The first factor is affecting him most maybe then next and so on. Start talking to him about his first problem. If at any point you feel he isnt interested to talk about it move to next topic. Start your response greeting him. Also remember you are a company councellor. So act like one formal yet friendly. Also remember the factors have been decided from user and company data. So employee doesnt know there is something like the sorted list and he shouldnt know. So move topics swiftly when needed.Start the convo right away. Your name is Vibey. start with hello employee. Dont give any here we go, this is as follows or anything"
+            prompt_happy = f"This is employee {emp_id}. He is more or less happy person with vibe score of {emotion_score}/5. The factors affects his mood inversely as per data is {factors}. Start talking to him about his day. If you feel that his vibe seems a bit low, intelligently ask him about factors which have been mentioned. Start your response greeting him. Also remember you are a company councellor. So act like one formal yet friendly. Also remember the factors have been decided from user and company data. So employee doesnt know there is something like the sorted list and he shouldnt know. So move topics swiftly when needed. Start the convo right away. Your name is Vibey. start with hello employee. Dont give any here we go, this is as follows or anything"
+            prompt_neutral = f"This is employee {emp_id}. He is a neutral person with vibe score of {emotion_score}/5. The factors affects his mood inversely as per data is {factors}. Start talking to him about his day. Try to figure out intelligently what is stopping him from being happy. Start your response greeting him. Also remember you are a company councellor. So act like one formal yet friendly. Also remember the factors have been decided from user and company data. So employee doesnt know there is something like the sorted list and he shouldnt know. So move topics swiftly when needed. Start the convo right away. Your name is Vibey. start with hello employee. Dont give any here we go, this is as follows or anything"
             chatObj = initi()
+            if emotion_score >= 3.5:
+                prompt= prompt_happy
+            elif emotion_score >=2.5 :
+                prompt= prompt_neutral
+            else :
+                prompt= prompt_sad
+                       
             bot_message_text = generate_response(prompt,chatObj) 
             print(bot_message_text)
             
@@ -64,6 +74,23 @@ async def send_message(user:any, msg:str, convid:str)-> Dict[str, Any]:
     return {"response":que}
 
     
+async def get_feedback_questions():
+    qs_file_path = os.path.join(os.path.dirname(__file__),"..","utils", "Feedback_Bank.json")
+    try:
+        qs=[]
+        with open(qs_file_path, "r") as qs_file:
+            qs = json.load(qs_file)
+        return {"response":qs}
+    except Exception as e:
+        raise ValueError(str(e))
+  
+async def add_feedback(feedback:Dict[str,int]) -> Dict[str, Any]:
+    try:
+       feedback_record = Feedback_ratings(**feedback)
+       await feedback_record.insert()
+       return {"response": "Feedback added successfully"}
+    except Exception as e:
+        raise ValueError(str(e))    
     
     
 async def end_chat(convid:str, feedback:str) -> Dict[str, Any]:
