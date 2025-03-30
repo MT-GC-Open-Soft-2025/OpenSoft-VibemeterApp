@@ -1,11 +1,5 @@
-from typing import Dict, Any
-from datetime import datetime
-
-from fastapi import HTTPException, status
-
+from src.services.ai_services import analyze_response, generate_response, summarize_text
 from src.models.employee import Employee
-from src.models.chats import Chat, Message
-from src.services.ai_services import analyze_response, generate_response
 from src.models.chats import Chat, Message
 from fastapi import HTTPException, status, Query
 
@@ -60,21 +54,84 @@ async def initiate_chat_service(convo_id: str, emp_id: str) -> Dict[str, Any]:
     else:
        
         bot_message_text = "Hello, what's up? Is there anything bothering you?"
+import datetime
+from typing import Dict, Any
+from src.services.ai_services import initialize as initi
 
- 
-    bot_message = Message(
-        sender="bot",
-        timestamp=datetime.now(),
-        message=bot_message_text
-    )
+async def initiate_chat_service(convo_id: str, user: Any) -> Dict[str, Any]:
+    try:
+    
+            emp_id = user['emp_id']   
+        
+            emotion_score = user['vibe_score']
+            factors = user['factors_in_sorted_order']
+            #convert the list to string
+            factors = ', '.join(factors)
+            prompt = f"This is employee {emp_id}. He has factors in sorted order as: {factors}. The first factor is affecting him most maybe then next and so on. Start talking to him about his first problem. If at any point you feel he isnt interested to talk about it move to next topic. Start your response greeting him. Also remember you are a company councellor. So act like one formal yet friendly. Also remember the factors have been decided from user and company data. So employee doesnt know there is something like the sorted list and he shouldnt know. So move topics swiftly when needed.Start the convo right away. Your name is Vibey. start with hello employee. Dont give any here we go, this is as follows or anything"
+            print (prompt)
+            chatObj = initi()
+            bot_message_text = generate_response(prompt,chatObj) 
+            print(bot_message_text)
+            
+        
 
-    new_chat_doc = Chat(
-        convid=convo_id,
-        empid=emp_id,
-        # feedback=-1,
-        # summary=None,
-        messages=[bot_message]
-    )
+        
+            bot_message = Message(
+                sender="bot",
+                timestamp=datetime.datetime.now(),
+                message=bot_message_text
+            )
 
-    inserted_chat = await new_chat_doc.insert()  
-    return inserted_chat.model_dump()
+            new_chat_doc = Chat(
+                convid=convo_id,
+                empid=emp_id,
+                initial_prompt=prompt,
+                feedback="-1",
+                summary="",
+                messages=[bot_message]
+            )
+
+        #create new chat in chats collection
+            await new_chat_doc.insert()
+            return {"response":bot_message_text}
+    except Exception as e:
+        raise ValueError(str(e))    
+
+
+
+async def send_message(user:any, msg:str, convid:str)-> Dict[str, Any]:
+    
+    
+    chat_record = await Chat.find(Chat.convid == convid).first_or_none()
+    chatObj1= initi()  
+   
+    
+    dict_user= Message(sender="user", timestamp=datetime.datetime.now(), message=msg)  
+    chat_record.messages.append(dict_user)
+    prompt = f"This is an ongoing chat. Initial prompt : {chat_record.initial_prompt}The messages or converstaion till now is as follows: {chat_record.messages} Continue the chat."
+    print(prompt)
+    que=generate_response(prompt,chatObj1)    
+    dict_bot= Message(sender="bot", timestamp=datetime.datetime.now(), message=que)
+    chat_record.messages.append(dict_bot)
+    await chat_record.save()
+    return {"response":que}
+
+    
+    
+    
+async def end_chat(convid:str, feedback:str) -> Dict[str, Any]:
+   try:
+        chat_record = await Chat.find(Chat.convid == convid).first_or_none()
+        if(chat_record.feedback != "-1"):
+            raise ValueError("Feedback already given")
+        chat_record.feedback = feedback
+        chatObj3= initi()
+        text=str(chat_record.messages) 
+        print(text)              
+        summary = summarize_text(text,chatObj3)
+        chat_record.summary = summary
+        
+        await chat_record.save()
+        return {"response": summary}
+   except Exception as e:
+        raise ValueError(str(e))

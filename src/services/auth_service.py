@@ -23,7 +23,7 @@ async def signin(username:str) -> Dict[str, str]:
     
     payload = {
         "emp_id": user_record.emp_id, 
-        "emotion_score" : user_record.emotion_score,
+        
         "vibe_score" : user_record.vibe_score,
         "factors_in_sorted_order" : user_record.factors_in_sorted_order,
         "iat": int(time.time()),

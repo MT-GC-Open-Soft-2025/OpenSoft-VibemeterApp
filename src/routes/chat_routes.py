@@ -1,6 +1,8 @@
+from fastapi import APIRouter, Depends
+from typing import Dict, Any, Any
 
-from fastapi import APIRouter, Depends, HTTPException,status, Query
-from typing import Dict, Any
+from src.controllers.chat_controller import initiate_chat_controller,Chat_frontend,response_controller,end_chat_controller
+
 from src.middlewares.authmiddleware import authenticate
 from src.controllers.chat_controller import Chat_frontend, response_controller, getChat_controller, initiate_chat_controller
 
@@ -9,14 +11,13 @@ chat_router = APIRouter()
 
 @chat_router.post("/initiate_chat/{convo_id}")
 async def initiate_chat_route(convo_id: str, current_user: dict = Depends(authenticate)) -> Dict[str, Any]:
-
-    emp_id = current_user.get("emp_id")
-    new_chat_data = await initiate_chat_controller(convo_id, emp_id)
+    print("current_user",current_user)   
+    new_chat_data = await initiate_chat_controller(convo_id, current_user)
 
     return new_chat_data
 
 @chat_router.post("/send")
-async def send_chat(payload: Chat_frontend, user:Dict[str,str]= Depends(authenticate)):
+async def send_chat(payload: Chat_frontend, user:Dict[str,Any]= Depends(authenticate)):
 
     response = await response_controller(payload,user) 
     return response 
@@ -25,3 +26,10 @@ async def send_chat(payload: Chat_frontend, user:Dict[str,str]= Depends(authenti
 async def get_chat(conv_id:str) -> Dict[str,Any]:
     response = await getChat_controller(conv_id)
     return response
+
+@chat_router.post("/end_chat/{convo_id}/{feedback}")
+async def end_chat_route(convo_id: str, feedback:str,current_user: dict = Depends(authenticate)) -> Dict[str, Any]:
+    print("current_user",current_user)   
+    end_chat_data = await end_chat_controller(convo_id, feedback)
+
+    return end_chat_data
