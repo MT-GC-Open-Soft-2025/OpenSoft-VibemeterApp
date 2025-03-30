@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 from src.models.employee import Employee
 from src.models.chats import Chat
+from src.models.feedback_ratings import Feedback_ratings
 
 load_dotenv()
 
@@ -88,5 +89,24 @@ async def fetch_employee_conversationSummary_byId(emp_id: str, convo_id: str) ->
         if not chat:
             raise HTTPException(status_code=404, detail="Chat not found")
         return chat.summary
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+    
+async def fetch_average_feedback_score() -> Any:
+    try:
+        feedbacks = await Feedback_ratings.find_all().to_list()
+        scores = [0 for _ in range(5)] # initially score is zero for each of the 5 questions
+        for feedback in feedbacks:
+            scores[0] = scores[0] + feedback.Q1
+            scores[1] = scores[1] + feedback.Q2
+            scores[2] = scores[2] + feedback.Q3
+            scores[3] = scores[3] + feedback.Q4
+            scores[4] = scores[4] + feedback.Q5
+
+        for score in scores:
+            score = score/len(feedbacks) # find average
+        
+        return scores # return a list with average scores for each question
+    
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
