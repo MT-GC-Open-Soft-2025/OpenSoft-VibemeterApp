@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import "./UserPage.css";
 import user from "../../Assets/user.png";
 import Chat from "../../components/chat_popup/chat.jsx"; // Adjust the relative path as necessary
-import Feedbacknavbar from "../../components/Feedbacknavbar.jsx";
+import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar.jsx";
 const UserPage = () => {
   const navigate = useNavigate();
   const [showChat, setShowChat] = useState(false);
