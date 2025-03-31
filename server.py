@@ -9,6 +9,11 @@ from src.routes.auth_routes import auth_router
 from src.routes.user_routes import user_router  
 from src.routes.chat_routes import chat_router
 
+#enable cors
+from fastapi.middleware.cors import CORSMiddleware
+
+
+
 from src.routes.admin_routes import admin_router
 import os
 
@@ -34,8 +39,17 @@ async def lifespan(app: FastAPI):
     yield
     print("Shutting down")
 
+#enable cors
+
 
 app = FastAPI(lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 app.include_router(user_router, prefix="/user", tags=["User"])
