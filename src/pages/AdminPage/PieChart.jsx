@@ -20,7 +20,7 @@ const pieData = [
   { name: "6", value: pieDataValues.value6 }
 ];
 
-const COLORS = ['#4B9CD3', '#005A9C', '#B0C4DE', '#56BAED', '#0077FF', '#6699CC'];
+const COLORS = ['#4B9CD3', '#005A9C', '#008B8B', '#56BAED', '#0077FF', '#2E8B57'];
 
 const PercentagePieChart = () => {
   return (
