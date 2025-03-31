@@ -13,7 +13,7 @@ import PieChart from "./PieChart";
 import Sidebar from "../../components/Adminpagesidebar";
 import Navbar from "../../components/SearchBar";
 import Goback from "../../components/Admingoback";
-
+import Feedbacknavbar from "../../components/Feedbacknavbar";
 const employees = ["EMP1234", "EMP5678", "EMP9101", "EMP2345", "EMP2789"];
 
 const AdminPage = () => {
@@ -31,9 +31,11 @@ const AdminPage = () => {
   return (
     <>
       <Sidebar />
+      <Feedbacknavbar title="Admin Page" />
       <div style={{
         marginLeft: '200px',
-        marginTop: '64px',
+        marginTop: '100px',
+        
         backgroundColor: 'white',
         minHeight: '100vh',
         padding: '20px'
