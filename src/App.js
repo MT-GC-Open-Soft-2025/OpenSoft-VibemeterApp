@@ -36,6 +36,8 @@ import FeedbackPage from "./pages/Feedbackpage/Feedbackpage"; // Old layout (if 
 import SurveyForm from './pages/SurveyForm/SurveyForm';           // New renamed form
 import UserPage from './pages/UserPage/UserPage';
 import ContactForm from './pages/ContactPage/ContactForm'; // Import Contact Form
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 function App() {
   return (
