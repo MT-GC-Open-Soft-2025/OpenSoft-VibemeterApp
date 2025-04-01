@@ -4,7 +4,10 @@
     box-sizing: border-box;
   }
   
-  body,
+  body{
+    /* background:linear-gradient(135deg, #003366, #009688); */
+
+  }
   html {
     height: 100%;
     width: 100%;
@@ -14,7 +17,7 @@
   /* Overall page container */
   .wrapper {
     min-height: 100vh;
-    background-color: #f7f7f7;
+    background-color: #fff;
     position: relative;
     padding-top: 60px; /* reserve space for header bar */
   }
@@ -33,6 +36,7 @@
   .profile-container {
     display: flex;
     align-items: center;
+    background-color: transparent;
     margin: 20px;
   }
   
@@ -55,7 +59,7 @@
     margin: 100px auto;
     padding: 15px 30px;
     font-size: 16px;
-    background-color: #6fcdfc;;
+    background-color: #3697aa;;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -64,6 +68,6 @@
   }
   
   .chat-button:hover {
-    background-color: #39ace7;;
+    background: linear-gradient(45deg, #008abf, #00c78c);
   }
   

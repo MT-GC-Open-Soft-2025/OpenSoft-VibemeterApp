@@ -1,123 +1,82 @@
-
-
-// import React,{ useState } from "react";
-// import PerformanceGraph from "../../components/PerformanceGraph"; 
-// import { useNavigate } from "react-router-dom"; 
-// import "bootstrap/dist/css/bootstrap.min.css"; 
-// import "./AdminPage.css";
-// import bot from "../../Assets/bot.png";
-// import ButtonComponent from "../../components/ButtonComponent";
-// import EmotionZoneChart from "./EmotionZone";
-// import PieChart from "./PieChart";
-// import Navbar from "../../components/SearchBar";
-// import Sidebar from "../../components/Adminpagesidebar";
-// import Searchbar from "../../components/Adminpagesearchbar";
-// const AdminPage = () => {
-//   const navigate = useNavigate(); 
-//   const handleFeedback = () => {
-//     navigate("/feedback");
-//   };
-//   const [selectedEmployee, setSelectedEmployee] = useState("");
-//     const [, forceUpdate] = useState(); 
-  
-//     const handleSearch = (employeeId) => {
-//       console.log("Before Update: ", selectedEmployee);
-//       setSelectedEmployee(employeeId);
-//       forceUpdate({});
-//       console.log("After Update: ", employeeId);
-//     };
-// return (
-//   <>
-//     <Sidebar />
-//     <div style={{ 
-//       marginLeft: '200px', 
-//       marginTop: '64px',
-//       backgroundColor: 'white',
-//       minHeight: '100vh',
-//       padding: '20px'
-//     }}>
-//       <div>
-//         <Navbar onSearch={handleSearch} />
-//         <p>Selected Employee: {selectedEmployee}</p> 
-
-//         {selectedEmployee && selectedEmployee.trim() !== "" ? (
-//           <>
-//             <PerformanceGraph employeeId={selectedEmployee} />
-//             <div><ButtonComponent label="Get Feedback" onClick={handleFeedback} /></div>
-//           </>
-//         ) : (
-//           <>
-//             <div className="charts">
-//               <EmotionZoneChart />
-//               <PieChart />
-//             </div>
-//             {/* <div className="no-data">No Data Available</div> */}
-//           </>
-//         )}
-//       </div>
-//     </div>
-//   </>
-// );
-
-// };
-
-// export default AdminPage;
 import React, { useState } from "react";
-import PerformanceGraph from "../../components/PerformanceGraph";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./AdminPage.css";
+
+import PerformanceGraph from "../../components/Admin_page _components/Admin_performance_rewards/PerformanceGraph";
+import Rewards from "../../components/Admin_page _components/Admin_performance_rewards/Rewards";
+import Performance from "../../components/Admin_page _components/Admin_performance_rewards/Performance";
+import Badges from "../../components/Badges/Badges";
 import ButtonComponent from "../../components/ButtonComponent";
 import EmotionZoneChart from "./EmotionZone";
 import PieChart from "./PieChart";
-import Sidebar from "../../components/Adminpagesidebar";
-import Navbar from "../../components/SearchBar";
+import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
+import Navbar from "../../components/Search-bar/SearchBar";
+import Goback from "../../components/Admin_page _components/Admin_goback/Admingoback";
+import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar';
+import user from "../../Assets/user.png";
+
+const employees = ["EMP1234", "EMP5678", "EMP9101", "EMP2345", "EMP2789"];
 
 const AdminPage = () => {
   const navigate = useNavigate();
   const [selectedEmployee, setSelectedEmployee] = useState("");
 
   const handleSearch = (employeeId) => {
-    setSelectedEmployee(employeeId);
+    if (employees.includes(employeeId)) {
+      setSelectedEmployee(employeeId);
+    } else {
+      setSelectedEmployee(""); // Prevents rendering if invalid ID is entered
+    }
   };
 
   return (
     <>
+      <Feedbacknavbar title="Admin Page"/>
       <Sidebar />
       <div style={{
         marginLeft: '200px',
         marginTop: '64px',
-        backgroundColor: 'white',
+        backgroundImage: 'linear-gradient(135deg, #74ebd5,#acb6e5)',
         minHeight: '100vh',
         padding: '20px'
       }}>
-        {/* Search Bar */}
+      
         <Navbar onSearch={handleSearch} clearSearch={selectedEmployee !== ""} />
         
-        <p>Selected Employee: {selectedEmployee}</p>
+        
 
-        {/* Show PerformanceGraph when employee is selected, else show other charts */}
         {selectedEmployee ? (
-          <>
-             <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-      <ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} />
-    </div>
-            {/* <div><ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} /></div> */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              marginTop: "20px",
+            }}
+          >
+            <div className="description">
+              <div className="profile-container">
+                <img src={user} alt="User Icon" className="profile-icon" />
+                <span className="profile-user">Employee ID: {selectedEmployee}</span>
+              </div>
+              <Badges />
+              <ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} />
+            </div>
+
             <PerformanceGraph employeeId={selectedEmployee} />
-            
-          </>
+            <Rewards />
+          </div>
         ) : (
           <>
             <div className="charts">
               <EmotionZoneChart />
               <PieChart />
             </div>
-           
+            
           </>
         )}
       </div>
-
-      
     </>
   );
 };

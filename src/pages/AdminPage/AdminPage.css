@@ -8,7 +8,7 @@ html {
 body {
   font-family: "Poppins", sans-serif;
   height: 100vh;
-  background: linear-gradient(135deg, #74ebd5, #acb6e5);
+  /* background: linear-gradient(135deg, #74ebd5, #acb6e5); */
 }
 
 a {
@@ -33,13 +33,14 @@ h2 {
 /* STRUCTURE */
 
 .wrapper {
+  
   display: flex;
   align-items: center;
   flex-direction: column; 
   justify-content: center;
   width: 100%;
   min-height: 100%;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 #formContent {
@@ -267,9 +268,52 @@ input[type=text]:placeholder {
   width:60%;
 }
 
+  .charts {
+    display: flex;
+    /* width: 60rem; */
+  }
+  .chartContainingdiv{
+    position: fixed;
+    right: 0%;
+    width: 80vw;
+  }
+  .Hello {
+    color: #0f0c36;
+    font-size: 2rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  .search-bar {
+    margin-top: 1rem;
+    margin-bottom: 5rem;
+    width: 100%;
+    padding: 0.1rem 2.5rem 0.1rem 1rem;
+    border: none;
+    border-radius: 15px;
+    outline: none;
+    font-size: 0.8rem;
+    height: 20px;
+    text-align: left;
+  }
 .charts {
   display: flex;
 }
+
+.description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+}
+/* .profile-container {
+  width: 100vw;
+} */
+/* .profile-container{
+  height: 2rem;
+} */
 
 
 

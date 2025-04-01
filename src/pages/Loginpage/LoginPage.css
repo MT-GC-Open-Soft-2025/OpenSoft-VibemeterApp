@@ -6,7 +6,7 @@ html {
 }
 
 body {
-  background-image: url('https://wallpapercrafter.com/sizes/1920x1080/88972-abstract-simple-background-hd-4k-5k-8k-deviantart.jpg') !important;
+  /* background-image: url('https://wallpapercrafter.com/sizes/1920x1080/88972-abstract-simple-background-hd-4k-5k-8k-deviantart.jpg') !important; */
   font-family: "Poppins", sans-serif;
   height: 100vh;
   background-size: cover;
@@ -99,7 +99,9 @@ align-items: center;
 padding: 5px 50px;
 color: white;
 }
-
+.glass-header{
+  background-color: #3697;
+}
 .glass-footer {
 border-top: solid rgba(255, 255, 255, 0.3);
 border-bottom: none;

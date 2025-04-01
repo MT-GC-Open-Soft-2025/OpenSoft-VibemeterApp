@@ -44,7 +44,7 @@
 }
 
 .search-bar:focus ~ .search-icon {
-    opacity: 0.8;
+    opacity: 1;
 }
 
 .search-bar::placeholder {
