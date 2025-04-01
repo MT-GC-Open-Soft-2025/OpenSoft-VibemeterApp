@@ -102,7 +102,7 @@
 import React, { useState, useEffect } from "react";
 import "./SearchBar.css";
 
-const employees = ["EMP1234", "EMP5678", "EMP9101", "EMP2345", "EMP2789"]; // Replace with real data
+const employees = ["EMP0254", "EMP0301", "EMP0102", "EMP0105", "EMP0338","EMP0085","EMP0277","EMP0328","EMP0456","EMP0185"]; // Replace with real data
 
 const Navbar = ({ onSearch, clearSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");

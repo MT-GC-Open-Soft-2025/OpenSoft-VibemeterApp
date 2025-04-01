@@ -1,53 +1,78 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./AdminPage.css";
 
 import PerformanceGraph from "../../components/Admin_page _components/Admin_performance_rewards/PerformanceGraph";
 import Rewards from "../../components/Admin_page _components/Admin_performance_rewards/Rewards";
-import Performance from "../../components/Admin_page _components/Admin_performance_rewards/Performance";
 import Badges from "../../components/Badges/Badges";
 import ButtonComponent from "../../components/ButtonComponent";
 import EmotionZoneChart from "./EmotionZone";
 import PieChart from "./PieChart";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Navbar from "../../components/Search-bar/SearchBar";
-import Goback from "../../components/Admin_page _components/Admin_goback/Admingoback";
-import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar';
+import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
 import user from "../../Assets/user.png";
-
-const employees = ["EMP1234", "EMP5678", "EMP9101", "EMP2345", "EMP2789"];
 
 const AdminPage = () => {
   const navigate = useNavigate();
   const [selectedEmployee, setSelectedEmployee] = useState("");
+  const [employeeDetails, setEmployeeDetails] = useState(null);
+  const [error, setError] = useState("");
+  const token = localStorage.getItem("token");
 
-  const handleSearch = (employeeId) => {
-    if (employees.includes(employeeId)) {
+  console.log("Stored Token:", token);
+
+  const handleSearch = async (employeeId) => {
+    if (!employeeId) {
+      console.error("No Employee ID provided!");
+      return;
+    }
+  
+    //console.log("Searching for Employee ID:", employeeId);
+    //console.log("Stored Token:", token);
+    
+  
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/admin/get_detail/${employeeId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      //console.log("Employee Data Received:", response.data);
       setSelectedEmployee(employeeId);
-    } else {
-      setSelectedEmployee(""); // Prevents rendering if invalid ID is entered
+      setEmployeeDetails(response.data);
+      setError("");
+    } catch (err) {
+      console.error("Error fetching employee details:", err.response?.data || err.message);
+      
+      setError("Employee not found or unauthorized");
+      setSelectedEmployee("");
+      setEmployeeDetails(null);
     }
   };
-
+  
   return (
     <>
-      <Feedbacknavbar title="Admin Page"/>
+      <Feedbacknavbar title="Admin Page" />
       <Sidebar />
       <Feedbacknavbar title="Admin Page" />
-      <div style={{
-        marginLeft: '200px',
-        marginTop: '64px',
-        backgroundImage: 'linear-gradient(135deg, #74ebd5,#acb6e5)',
-        minHeight: '100vh',
-        padding: '20px'
-      }}>
-      
+      <div
+        style={{
+          marginLeft: "200px",
+          marginTop: "64px",
+          backgroundImage: "linear-gradient(135deg, #74ebd5,#acb6e5)",
+          minHeight: "100vh",
+          padding: "20px",
+        }}
+      >
         <Navbar onSearch={handleSearch} clearSearch={selectedEmployee !== ""} />
-        
-        
 
-        {selectedEmployee ? (
+        {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
+
+        {selectedEmployee && employeeDetails ? (
           <div
             style={{
               display: "flex",
@@ -60,22 +85,19 @@ const AdminPage = () => {
               <div className="profile-container">
                 <img src={user} alt="User Icon" className="profile-icon" />
                 <span className="profile-user">Employee ID: {selectedEmployee}</span>
-              </div>
-              <Badges />
+                </div>
+              <Badges employeeData={employeeDetails?.user_record}/>
               <ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} />
             </div>
 
-            <PerformanceGraph employeeId={selectedEmployee} />
-            <Rewards />
+            <PerformanceGraph employeeData={employeeDetails?.user_record} />
+            <Rewards employeeData={employeeDetails?.user_record}/>
           </div>
         ) : (
-          <>
-            <div className="charts">
-              <EmotionZoneChart />
-              <PieChart />
-            </div>
-            
-          </>
+          <div className="charts">
+            <EmotionZoneChart />
+            <PieChart />
+          </div>
         )}
       </div>
     </>
@@ -83,4 +105,3 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
-

@@ -41,6 +41,7 @@ const LoginPage = () => {
       
       if (isAdmin) {
         const token = localStorage.getItem("token");
+        console.log("Stored Token on login:", token);
         if (!token) {
           alert("No token found. Please log in as a user first.");
           return;
@@ -71,6 +72,7 @@ const LoginPage = () => {
         });
   
         localStorage.setItem("token", response.data.access_token);
+        
   
         alert("Login successful!");
         navigate("/user");
