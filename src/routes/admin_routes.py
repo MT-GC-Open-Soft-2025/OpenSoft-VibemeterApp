@@ -7,7 +7,8 @@ from src.controllers.admin_controller import (
     get_employee_conversation,
     get_convo,
     get_employee_conversationFeedback_byId,
-    get_employee_conversationSummary_byId
+    get_employee_conversationSummary_byId,
+    get_aggregate_list
 )
 from src.middlewares.authmiddleware import adminauthenticate
 from src.models.chats import Message
@@ -72,3 +73,9 @@ async def employee_convoId_summary_route(emp_id: str, convo_id: str,admin:dict=D
     return await get_employee_conversationSummary_byId(emp_id, convo_id)
 
 
+@admin_router.get("/get_aggregate_feedback")
+async def get_aggregate_feedback(admin:dict=Depends(adminauthenticate)) -> Any:
+    if(not admin):
+        print("Admin not found")
+        return {"message":"Admin not found"}
+    return await get_aggregate_list()

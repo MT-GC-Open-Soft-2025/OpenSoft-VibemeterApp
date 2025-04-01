@@ -9,6 +9,12 @@ from datetime import datetime, timezone
 from src.routes.auth_routes import auth_router
 from src.routes.user_routes import user_router  
 from src.routes.chat_routes import chat_router
+
+#enable cors
+from fastapi.middleware.cors import CORSMiddleware
+
+
+
 from src.routes.admin_routes import admin_router
 import os
 
@@ -30,6 +36,8 @@ async def lifespan(app: FastAPI):
     await init_db()
     yield
     print("Shutting down")
+
+#enable cors
 
 
 app = FastAPI(lifespan=lifespan)

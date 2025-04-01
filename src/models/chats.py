@@ -4,6 +4,8 @@ from beanie import Document
 from pydantic import BaseModel
 from typing import List
 from datetime import datetime
+from pymongo import ASCENDING
+
 
 class Message(BaseModel):
     sender: str         
@@ -11,7 +13,9 @@ class Message(BaseModel):
     message: str
 
 class Chat(Document):
-    convid: str
+    #hw to make convid unique
+    
+    convid: str 
     empid: str
     initial_prompt: str
     messages: List[Message]  
@@ -19,3 +23,4 @@ class Chat(Document):
     summary:str
     class Settings:
         name = "chats"
+        
