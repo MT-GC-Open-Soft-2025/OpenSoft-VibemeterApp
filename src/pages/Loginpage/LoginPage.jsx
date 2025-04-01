@@ -93,45 +93,49 @@ const LoginPage = () => {
             <h4 className="text-primary mt-3">Taking care of your mind is a superpower 💙</h4>
           </div>
 
-          <form onSubmit={handleLogin}>
-            <input
-              type="text"
-              className="fadeIn second"
-              name="username"
-              placeholder="employeeId"
-            />
-            <input
-              type="password"
-              className="fadeIn second"
-              name="password"
-              placeholder="password"
-            />
+          {/* Right: Sign-In Card */}
+          <div className="col-md-6" data-aos="fade-left">
+            <div className="signin-card ms-md-4 mt-4 mt-md-0">
+              <h2 className="text-primary fw-bold mb-3">Welcome Back 🌱</h2>
+              <p className="text-muted mb-4">Let’s continue your journey to mental wellness.</p>
 
-            <input
-              type="submit"
-              className="fadeIn fourth"
-              value={isAdmin ? "LOGIN AS ADMIN" : "LOGIN AS USER"}
-            />
+              <form onSubmit={handleLogin} className="w-100">
+                <input
+                  type="text"
+                  className="form-control mb-3"
+                  name="empId"
+                  placeholder="Enter your employee ID"
+                  onChange={handleChange}
+                />
+                <button type="submit" className="btn btn-primary w-100">
+                  {isAdmin ? "ADMIN LOGIN" : "USER LOGIN"}
+                </button>
+              </form>
 
-            {errorMessage && (
-              <p style={{ color: "red", marginTop: "10px" }}>{errorMessage}</p>
-            )}
-          </form>
+              {errorMessage && <p className="text-danger mt-3">{errorMessage}</p>}
+              {/* <p className="text-muted mt-3 small">
+                Don’t have an account? <a href="#" className="text-primary">Create one</a>
+              </p> */}
 
-          {/* Toggle Button */}
-          <div className={`toggle-container ${isAdmin ? 'admin' : 'user'}`} onClick={handleToggle}>
-            <div className="toggle-switch">
-              {isAdmin ? (
-                <FaUserShield size={20} color="#fff" />
-              ) : (
-                <FaUser size={20} color="#fff" />
-              )}
-            </div>
-            <div className="icon user-icon">
-              <FaUser size={20} />
-            </div>
-            <div className="icon admin-icon">
-              <FaUserShield size={20} />
+              {/* Toggle Button */}
+              <div
+                className={`toggle-container ${isAdmin ? "admin" : "user"}`}
+                onClick={handleToggle}
+              >
+                <div className="toggle-switch">
+                  {isAdmin ? (
+                    <FaUserShield size={20} color="#fff" />
+                  ) : (
+                    <FaUser size={20} color="#fff" />
+                  )}
+                </div>
+                <div className="icon user-icon">
+                  <FaUser size={20} />
+                </div>
+                <div className="icon admin-icon">
+                  <FaUserShield size={20} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
