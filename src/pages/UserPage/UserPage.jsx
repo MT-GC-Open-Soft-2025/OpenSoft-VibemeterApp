@@ -18,7 +18,7 @@ const UserPage = () => {
 
   const handleFeedback = () => {
     // This navigates to the new SurveyForm on /feedback
-    navigate("/feedback");
+    navigate("/surveyform");
   };
 
   return (
