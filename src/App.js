@@ -35,6 +35,7 @@ import AdminPage from './pages/AdminPage/AdminPage';
 import FeedbackPage from "./pages/Feedbackpage/Feedbackpage";
 import UserPage from './pages/UserPage/UserPage';
 import ContactForm from './pages/ContactPage/ContactForm'; // Import Contact Form
+import Chat from './components/chat_popup/chat';
 
 function App() {
   return (
@@ -44,6 +45,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/user" element={<UserPage />} />
+        <Route path="/chat" element={<Chat />} />
         <Route path="/feedback" element={<FeedbackPage />} />
         <Route path="/contact" element={<ContactForm />} /> {/* New Contact Page */}
       </Routes>
