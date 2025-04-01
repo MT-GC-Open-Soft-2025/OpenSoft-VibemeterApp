@@ -1,73 +1,140 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body{
-    /* background:linear-gradient(135deg, #003366, #009688); */
+/* Feedback Wrapper */
+.feedback-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(to right, #a8edea, #fed6e3);
+  padding: 20px;
+  box-sizing: border-box;
+}
 
+/* Profile Container */
+.profile-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+/* Profile Icon */
+.profile-icon {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Profile User */
+.profile-user {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+}
+
+/* Chat Button */
+.chat-button {
+  background-color: #2a9d8f;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.chat-button:hover {
+  background-color: #21867a;
+}
+
+/* Bot Container - Bottom-Right Aligned */
+.bot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse; /* Keeps bubble on the left */
+}
+
+/* Bot Animation */
+.bot-animation {
+  width: 180px;
+  height: auto;
+}
+
+/* Chat Bubble - Adjusted Below Mouth */
+.chat-bubble {
+  background-color: white;
+  color: black;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+  max-width: 120px;
+  text-align: center;
+  position: relative;
+  margin-right: 0;
+  transform: translate(-30px, -20px); /* Moving the bubble lower near the mouth */
+
+  /* Apply the up-down animation */
+  animation: moveUpDown 1.5s ease-in-out infinite; /* 3s is the speed, you can adjust this */
+}
+
+/* Chat Bubble Tail - Adjusted */
+.chat-bubble::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -6px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-right: 6px solid white;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+/* Keyframes for up and down animation */
+@keyframes moveUpDown {
+  0% {
+    transform: translate(-30px, -20px);
   }
-  html {
-    height: 100%;
-    width: 100%;
-    font-family: Arial, sans-serif;
+  50% {
+    transform: translate(-30px, -30px); /* Moves the bubble 10px higher */
   }
-  
-  /* Overall page container */
-  .wrapper {
-    min-height: 100vh;
-    background-color: #fff;
-    position: relative;
-    padding-top: 60px; /* reserve space for header bar */
+  100% {
+    transform: translate(-30px, -20px); /* Back to original position */
   }
-  
-  /* Header bar*/
-  .header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background-color: #39ace7; 
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .bot-container {
+    right: 10px;
+    bottom: 10px;
   }
-  
-  /* Profile container: holds the icon and the user id */
-  .profile-container {
-    display: flex;
-    align-items: center;
-    background-color: transparent;
-    margin: 20px;
+
+  .bot-animation {
+    width: 140px;
   }
-  
-  /* Profile icon */
-  .profile-icon {
-    width: 120px;
-    height: 120px;
-    margin-right: 50px;
+
+  .chat-bubble {
+    font-size: 10px;
+    max-width: 100px;
+    padding: 4px 8px;
+    transform: translate(-25px, -15px); /* Slightly adjusted for smaller screens */
   }
-  
-  /* User ID text */
-  .profile-user {
-    font-size: 40px;
-    color: #333;
-  }
-  
-  /* "Let's Chat!" */
-  .chat-button {
-    display: block;
-    margin: 100px auto;
-    padding: 15px 30px;
-    font-size: 16px;
-    background-color: #3697aa;;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .chat-button:hover {
-    background: linear-gradient(45deg, #008abf, #00c78c);
-  }
+}
+
+
+
+
+
+
   
