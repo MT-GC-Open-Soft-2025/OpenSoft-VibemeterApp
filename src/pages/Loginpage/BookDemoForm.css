@@ -1,0 +1,17 @@
+.book-demo-section {
+    background: linear-gradient(to bottom right, #dbeafe, #f0f9ff);
+    padding-top: 80px;
+    scroll-margin-top: 80px;
+  }
+  
+  .book-demo-section .form-control {
+    border-radius: 12px;
+    padding: 0.75rem;
+    font-size: 1rem;
+  }
+  
+  .book-demo-section button {
+    font-weight: 600;
+    border-radius: 12px;
+  }
+  

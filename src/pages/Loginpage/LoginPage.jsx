@@ -11,6 +11,7 @@ import animationData from "../../Assets/animation.json";
 import { FaUser, FaUserShield } from "react-icons/fa";
 
 const LoginPage = () => {
+  // console.log("Hi")
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -79,7 +80,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Element name="signin" className="signin-section d-flex align-items-center">
+    <Element name="login" className="signin-section d-flex align-items-center">
       <div className="container py-5">
         <div className="row align-items-center">
           {/* Left: Mental Wellness Illustration */}
@@ -143,5 +144,7 @@ const LoginPage = () => {
     </Element>
   );
 };
+console.log("FAQPage Loaded!");
+
 
 export default LoginPage;
