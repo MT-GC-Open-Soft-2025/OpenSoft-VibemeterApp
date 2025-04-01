@@ -7,6 +7,7 @@ import Chat from "../../components/chat_popup/chat.jsx"; // Adjust the relative 
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar.jsx";
 const UserPage = () => {
   const navigate = useNavigate();
+  
   const [showChat, setShowChat] = useState(false);
   const handleGoBack = () => {
 
@@ -14,6 +15,11 @@ const UserPage = () => {
   };
   const openChat = () => setShowChat(true);
   const closeChat = () => setShowChat(false);
+
+  const handleFeedback = () => {
+    // This navigates to the new SurveyForm on /feedback
+    navigate("/feedback");
+  };
 
   return (
     <div className='feedback-wrapper'>
@@ -23,19 +29,19 @@ const UserPage = () => {
       {showChat ? (
         <Chat onClose={closeChat} />
       ) : (
-        <div >
-          
-
-          {/* Profile container with icon and employee id */}
+        <div className="content-container">
           <div className="profile-container">
             <img src={user} alt="User Icon" className="profile-icon" />
             <span className="profile-user">Employee ID: 12345</span>
           </div>
-
-          {/* "Let's Chat!" button */}
-          <button className="chat-button" onClick={openChat}>
-            Let's Chat!
-          </button>
+          <div className="button-group">
+            <button className="chat-button" onClick={openChat}>
+              Let's Chat!
+            </button>
+            <button className="feedback-button" onClick={handleFeedback}>
+              Fill Feedback
+            </button>
+          </div>
         </div>
       )}
    
