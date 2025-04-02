@@ -4,9 +4,9 @@ import "./chat.css";
 import Lottie from "lottie-react";
 import animationData from "../../Assets/animation.json";
 import photo from "../../Assets/send.png"; // Adjust path if needed
-import bcrypt from "bcryptjs"; // Import bcryptjs for hashing
 import axios from "axios";
 import { nanoid } from "nanoid";
+import Swal from "sweetalert2";
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -63,27 +63,73 @@ const Chat = () => {
   const messagesPerPage = 7;
   const totalPages = Math.ceil(conversations.length / messagesPerPage);
   const [currentPage, setCurrentPage] = useState(0);
-  const [selectedMessage, setSelectedMessage] = useState(
-    "Please select a chat."
-  );
-  const [selectedDetails, setSelectedDetails] = useState(
-    "Please select a chat."
-  );
+  const [rating, setRating] = useState(0);
+
+  const [selectedMessage, setSelectedMessage] = useState("Please select a chat.");
+  const [selectedDetails, setSelectedDetails] = useState("Please select a chat.");
   const [selectedIndex, setSelectedIndex] = useState(null);
 
+  // Chat state
   const [chatStarted, setChatStarted] = useState(false);
   const [conversationId, setConversationId] = useState("");
-
   const [chatMessages, setChatMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
 
   const chatHistoryRef = useRef(null);
 
-  // Function to handle closing the chat and navigating back to /user
+  // Restore conversation state from localStorage on component mount
+  useEffect(() => {
+    const savedChatMessages = localStorage.getItem("chatMessages");
+    const savedConversationId = localStorage.getItem("conversationId");
+    const savedChatStarted = localStorage.getItem("chatStarted");
+
+    if (savedChatMessages) {
+      const parsedMessages = JSON.parse(savedChatMessages);
+      if (parsedMessages.length > 0) {
+        setChatMessages(parsedMessages);
+        // If there are previous messages, mark chat as started.
+        setChatStarted(true);
+      }
+    }
+    if (savedConversationId) {
+      setConversationId(savedConversationId);
+    }
+    // Optionally, if you want to honor the saved chatStarted flag:
+    // if (savedChatStarted === "true") {
+    //   setChatStarted(true);
+    // }
+  }, []);
+
+  // Persist chat messages whenever they change
+  useEffect(() => {
+    localStorage.setItem("chatMessages", JSON.stringify(chatMessages));
+  }, [chatMessages]);
+
+  // Persist chatStarted flag in localStorage
+  useEffect(() => {
+    localStorage.setItem("chatStarted", chatStarted.toString());
+  }, [chatStarted]);
+
+  // Persist conversationId in localStorage
+  useEffect(() => {
+    localStorage.setItem("conversationId", conversationId);
+  }, [conversationId]);
+
+  // Auto-scroll chat history to the bottom on new message
+  useEffect(() => {
+    if (chatHistoryRef.current) {
+      chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
+
+  // Handle closing chat and clearing storage
   const handleCloseChat = () => {
     setChatStarted(false);
     setChatMessages([]);
     setInputValue("");
+    localStorage.removeItem("chatMessages");
+    localStorage.removeItem("chatStarted");
+    localStorage.removeItem("conversationId");
     navigate("/user");
   };
 
@@ -118,28 +164,84 @@ const Chat = () => {
     setChatStarted(true);
     const token = localStorage.getItem("token");
 
-    const res = await axios.post(
-      `http://127.0.0.1:8000/chat/initiate_chat/${uniqueId}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log(res);
-
-    setChatMessages([{ sender: "bot", text: res.data.response }]);
+    try {
+      const res = await axios.post(
+        `http://127.0.0.1:8000/chat/initiate_chat/${uniqueId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res);
+      setChatMessages([{ sender: "bot", text: res.data.response }]);
+    } catch (err) {
+      console.error("Error starting chat:", err);
+    }
   };
 
-  const handleEndChat = () => {
+  const generateStarRatingUI = (currentRating) => {
+    let starsHtml = "";
+    for (let i = 1; i <= 5; i++) {
+      starsHtml += `
+        <input type="radio" id="star${i}" name="rating" value="${i}" ${
+        i === currentRating ? "checked" : ""
+      }>
+        <label for="star${i}">⭐</label>
+      `;
+    }
+    return `<div style="font-size: 30px; display: flex; gap: 10px; justify-content: center;">${starsHtml}</div>`;
+  };
+
+  const openFeedbackPopup = async () => {
+    const { value: selectedRating } = await Swal.fire({
+      title: "Give Your Feedback",
+      html: generateStarRatingUI(rating),
+      showCancelButton: true,
+      confirmButtonText: "Submit",
+      preConfirm: () => {
+        const selected = document.querySelector('input[name="rating"]:checked');
+        return selected
+          ? parseInt(selected.value)
+          : Swal.showValidationMessage("Please select a rating!");
+      },
+    });
+
+    if (selectedRating) {
+      setRating(selectedRating);
+      Swal.fire("Thank You!", `You rated: ${selectedRating} ⭐`, "success");
+      console.log("User Feedback:", selectedRating);
+      sendFeedback(selectedRating);
+    }
+  };
+
+  const sendFeedback = async (feedback) => {
     setChatStarted(false);
+    const token = localStorage.getItem("token");
+    const uniqueId = localStorage.getItem("uniqueId");
+
+    try {
+      const res = await axios.post(
+        `http://127.0.0.1:8000/chat/end_chat/${uniqueId}/${feedback}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(res);
+    } catch (err) {
+      console.error("Error ending chat:", err);
+    }
+
+    // Clear conversation data from state and localStorage
     setChatMessages([]);
     setInputValue("");
-  };
-
-  const simulateBotResponse = (userMessage) => {
-    return `You said: "${userMessage}". How else can I help?`;
+    localStorage.removeItem("chatMessages");
+    localStorage.removeItem("chatStarted");
+    localStorage.removeItem("conversationId");
   };
 
   const handleSendMessage = async () => {
@@ -150,8 +252,8 @@ const Chat = () => {
       const newUserMessage = { sender: "user", text: inputValue };
       setChatMessages((prevMessages) => [...prevMessages, newUserMessage]);
 
-      let convo = String(localStorage.getItem("uniqueId"));
-      let mess = String(inputValue);
+      const convo = String(localStorage.getItem("uniqueId"));
+      const mess = String(inputValue);
 
       const response = await fetch("http://127.0.0.1:8000/chat/send", {
         method: "POST",
@@ -167,25 +269,16 @@ const Chat = () => {
       }
 
       const data = await response.json();
-
       setInputValue("");
-
-      // const botReplyText = simulateBotResponse(inputValue);
       const newBotMessage = { sender: "bot", text: data.response };
 
       setTimeout(() => {
         setChatMessages((prevMessages) => [...prevMessages, newBotMessage]);
       }, 800);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
-
-  useEffect(() => {
-    if (chatHistoryRef.current) {
-      chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
-    }
-  }, [chatMessages]);
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -197,7 +290,7 @@ const Chat = () => {
   return (
     <div className="chat-overlay">
       <div className="chat-window">
-        {/* Close Button (Now Navigates to /user) */}
+        {/* Close Button */}
         <span className="chat-close" onClick={handleCloseChat}>
           &times;
         </span>
@@ -248,32 +341,20 @@ const Chat = () => {
 
           <div className="chat-right">
             {chatStarted && (
-              <button className="end-chat-btn" onClick={handleEndChat}>
+              <button className="end-chat-btn" onClick={openFeedbackPopup}>
                 End Chat
               </button>
             )}
 
             <div className="chat-right-content">
-              {!chatStarted && (
-                <>
-                  <div className="animation-container">
-                    <Lottie animationData={animationData} loop={true} />
-                  </div>
-                  <button className="start-chat-btn" onClick={handleStartChat}>
-                    Start Chat!
-                  </button>
-                </>
-              )}
-
-              {chatStarted && (
+              {/* If chat has started (or restored), show the conversation */}
+              {chatStarted ? (
                 <>
                   <div className="chat-history" ref={chatHistoryRef}>
                     {chatMessages.map((msg, idx) => (
                       <div
                         key={idx}
-                        className={`chat-message ${
-                          msg.sender === "bot" ? "bot" : "user"
-                        }`}
+                        className={`chat-message ${msg.sender === "bot" ? "bot" : "user"}`}
                       >
                         <p>{msg.text}</p>
                       </div>
@@ -296,6 +377,15 @@ const Chat = () => {
                       onClick={handleSendMessage}
                     />
                   </div>
+                </>
+              ) : (
+                <>
+                  <div className="animation-container">
+                    <Lottie animationData={animationData} loop={true} />
+                  </div>
+                  <button className="start-chat-btn" onClick={handleStartChat}>
+                    Start Chat!
+                  </button>
                 </>
               )}
             </div>
