@@ -3,17 +3,27 @@ import { useNavigate } from "react-router-dom";
 import "./Adminpagesidebar.css";
 import Profilepic from "./Adminprofile.png";
 import logoutIcon from "./Adminlogout.png";
+import Swal from "sweetalert2";
 
 const Sidebar = () => {
     const [activeItem, setActiveItem] = useState('Overview');
     const navigate = useNavigate();
 
-    const handleItemClick = (itemName) => {
-        setActiveItem(itemName);
-        if (itemName === 'Log Out') {
-            navigate('/');
-        }
-    };
+    const handleItemClick = () => {
+        Swal.fire({
+          title: "Are you sure?",
+          text: "You will be logged out.",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes, log out",
+          cancelButtonText: "No, stay",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.removeItem("token");
+            navigate(-1);
+          }
+        });
+      };
 
     return (
         <div className="sidebar">
