@@ -127,7 +127,7 @@ const Chat = () => {
         
         <div className="chat-container">
           <div className="chat-left">
-            <h2 className="chat-heading">Chats</h2>
+            <h5 className="chat-heading fw-bold mt-4">👨 Employee Chats</h5>
             <div className="conversation">
               {currentConversations.map((conv, index) => (
                 <div

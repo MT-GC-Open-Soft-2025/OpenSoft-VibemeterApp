@@ -10,7 +10,7 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  background-color: #f7f7f7;
+  background-color: #f9fafb;
 }
 
 /* Chat window container */
@@ -46,10 +46,10 @@
 
 /* Left Partition */
 .chat-left {
-  width: 30%;
+  width: 260px;
   background-color: #2a7f91;
   padding-top: 5px !important;
-  padding: 20px;
+  padding: 15px;
   display: flex;
   color: #ffffff;
   flex-direction: column;
@@ -59,13 +59,15 @@
 
 .chat-heading {
   color: #ffffff;
+  text-align:center;
+  font-size: 18px;
 }
 
 /* Conversation list in left partition */
 .conversation {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.1px;
   overflow-y: auto;
   flex: 1;
   margin-top: 10px;
@@ -73,13 +75,15 @@
 
 /* Conversation bubble */
 .bubble {
-  background-color: #8f8d8d;
+  background-color: #67a2aeab;
   color: white;
-  padding: 12px;
-  border-radius: 10px;
+  padding: 10px;
+  border-radius: 8px;
   text-align: center;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-size: 10px;
+  font-weight:500;
 }
 
 .bubble.selected {
@@ -114,14 +118,13 @@
 
 /* Right Partition */
 .chat-right {
-  width: 70%;
+  width: 85%;
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fff;
   position: relative; /* enables absolute positioning inside */
   background-color: #edebeb;
 }
@@ -162,7 +165,7 @@
   width: 250px;
   margin-bottom: 40px;
   display: flex;
-  margin-right: 55% !important;
+  margin-right: 58% !important;
 }
 
 /* Start Chat Button styling */
