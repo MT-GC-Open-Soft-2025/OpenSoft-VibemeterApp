@@ -36,16 +36,17 @@ const AdminPage = () => {
     <>
       <Feedbacknavbar title="Admin Page" />
       <Sidebar />
-      <div
-        style={{
-          marginLeft: "200px",
-          marginTop: "64px",
-          backgroundImage: "linear-gradient(135deg, #74ebd5,#acb6e5)",
-          minHeight: "100vh",
-          padding: "20px",
-        }}
-      >
+      <div style={{
+        marginLeft: '200px',
+        marginTop: '64px',
+        backgroundImage: 'linear-gradient(135deg,rgb(255, 255, 255),rgb(168 241 255))',
+        minHeight: '100vh',
+        padding: '20px'
+      }}>
         <Navbar setSelectedEmployee={setSelectedEmployee} /> 
+        <div className="text-container">
+          <h3><b>Hello ADMIN !</b></h3>
+        </div>
 
         {selectedEmployee ? (
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "20px" }}>
@@ -65,7 +66,6 @@ const AdminPage = () => {
         ) : (
           <div className="charts">
             <EmotionZoneChart />
-            <PieChart />
           </div>
         )}
       </div>

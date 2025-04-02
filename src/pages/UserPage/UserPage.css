@@ -38,7 +38,7 @@
   width: 100%;
 }
 
-.nav-link {
+.nav-link1 {
   background: none;
   color: white;
   border: none;
@@ -49,7 +49,7 @@
   font-weight: bold;
 }
 
-.nav-link.logout {
+.nav-link1.logout {
   color: #ff6b6b;
 }
 
@@ -310,7 +310,7 @@ h1 {
   flex-direction: row;
   width: auto;
 }
-.nav-link {
+.nav-link1 {
   margin-top: 1rem;
   background-color: #3697aa;;
   color: white;
@@ -322,7 +322,7 @@ h1 {
   font-weight: bold;
   border-radius: 0.5rem;
 }
-.nav-link:hover {
+.nav-link1:hover {
   color: rgb(237, 224, 224);
 }
 .bot-container {
