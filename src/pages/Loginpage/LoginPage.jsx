@@ -5,6 +5,7 @@ import { Element, Link } from "react-scroll";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginPage.css";
 import { FaUser, FaUserShield } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -76,7 +77,11 @@ const LoginPage = () => {
           },
         });
 
-        alert("Admin login successful!");
+        // alert("Admin login successful!");
+        Swal.fire({
+          icon: 'success',
+          title: 'Admin login successful!',
+        });
         navigate("/admin");
       } else {
         response = await axios.post("http://127.0.0.1:8000/auth/signin", {
@@ -85,11 +90,22 @@ const LoginPage = () => {
 
         localStorage.setItem("token", response.data.access_token);
 
-        alert("Login successful!");
+        //alert("Login successful!");
+        Swal.fire({
+          icon: 'success',
+          title: 'Login successful!',
+        });
+
+
         navigate("/user");
       }
     } catch (error) {
-      alert(error.response?.data?.detail || "Login failed. Please try again.");
+      // alert(error.response?.data?.detail || "Login failed. Please try again.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops!',
+        text: error.response?.data?.detail || "Login failed. Please try again.",
+      });
     }
   };
 

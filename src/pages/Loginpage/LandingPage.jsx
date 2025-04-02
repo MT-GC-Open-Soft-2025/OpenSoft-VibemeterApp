@@ -26,7 +26,7 @@ const LandingPage = () => {
       
             {/* Hero Section */}
             <div className="mb-5 animate__animated animate__fadeInDown">
-              <h1 className="display-4 fw-bold text-primary">Welcome to MindWell</h1>
+              <h1 className="display-4 fw-bold text-primary">Welcome to WellBee</h1>
               <p className="lead text-muted">
                 Your mental well-being companion — guided support, self-care, and motivation.
               </p>
@@ -43,7 +43,7 @@ const LandingPage = () => {
                 />
               </div>
               <div className="col-md-6 text-start">
-                <h2 className="fw-semibold text-primary">Meet MindBot 🤖</h2>
+                <h2 className="fw-semibold text-primary">Meet Vibey 🤖</h2>
                 <p className="text-muted">
                   Your friendly mental wellness chatbot, always here to talk, check in,
                   and help guide you through daily ups and downs.
@@ -59,7 +59,7 @@ const LandingPage = () => {
             <div id="fitness" className="row align-items-center my-5 animate__animated animate__fadeInRight">
               <div className="col-md-6 order-md-2">
                 <img
-                  src="https://img.freepik.com/free-vector/mindfulness-concept-illustration_114360-8101.jpg"
+                  src="https://img.freepik.com/free-vector/cartoon-business-people-meditating-illustration_23-2148910628.jpg?semt=ais_hybrid"
                   alt="Mental Fitness"
                   className="img-fluid rounded shadow"
                 />
