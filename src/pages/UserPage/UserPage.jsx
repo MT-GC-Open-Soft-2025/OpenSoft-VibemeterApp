@@ -303,7 +303,8 @@ const UserPage = () => {
         </div>
         <div className="ancestor2" id="descrip">
           <div id="rew" className="meet">
-            Wow, you haven’t taken any leaves. You're a rockstar! 🚀
+          PLEASE TAKE A MOMENT TO FILL OUT THIS SHORT SURVEY - YOUR FEEDBACK MATTERS! 
+          <button className="nav-link" onClick={handleFeedback}>Submit Survey</button>
           </div>
         </div>
       </>
