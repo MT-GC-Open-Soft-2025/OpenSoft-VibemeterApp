@@ -7,17 +7,30 @@ import PerformanceGraph from "../../components/Admin_page _components/Admin_perf
 import Rewards from "../../components/Admin_page _components/Admin_performance_rewards/Rewards";
 import Badges from "../../components/Badges/Badges";
 import ButtonComponent from "../../components/ButtonComponent";
+
 import EmotionZoneChart from "./EmotionZone";
 import PieChart from "./PieChart";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Navbar from "../../components/Search-bar/SearchBar";
-import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar';
+import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
 import user from "../../Assets/user.png";
-import EmojiMeter from "./EmojiMeter";  // ✅ Importing EmojiMeter
+import EmojiMeter from "./EmojiMeter";  
 
 const AdminPage = () => {
   const navigate = useNavigate();
-  const [selectedEmployee, setSelectedEmployee] = useState(""); // ✅ Employee ID State
+  const [selectedEmployee, setSelectedEmployee] = useState(""); 
+
+  const handlegetfeedback = () => {
+    if (!selectedEmployee) {
+      console.error("❌ Error: No employee selected.");
+      return;
+    }
+
+    localStorage.setItem("selectedEmployee", selectedEmployee);
+    console.log("✅ Employee stored:", localStorage.getItem("selectedEmployee"));
+
+    navigate(`/feedback`);
+  };
 
   return (
     <>
@@ -42,14 +55,7 @@ const AdminPage = () => {
                 <span className="profile-user">Employee ID: {selectedEmployee}</span>
               </div>
               <Badges />
-              <ButtonComponent label="Get Feedback" onClick={() => {
-                  localStorage.setItem("employeeId", selectedEmployee);
-                  navigate(`/feedback`);
-              }} />
-
-
-              
-              {/* ✅ Pass selectedEmployee as a prop */}
+              <button  onClick={handlegetfeedback} > Get </button>
               <EmojiMeter employeeId={selectedEmployee} />
             </div>
             

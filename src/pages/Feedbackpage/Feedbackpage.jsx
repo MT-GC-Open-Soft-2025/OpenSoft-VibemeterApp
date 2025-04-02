@@ -9,7 +9,7 @@ const FeedbackPage = () => {
   const [employeeId, setEmployeeId] = useState("");
 
 useEffect(() => {
-  const storedId = localStorage.getItem("employeeId");
+  const storedId = localStorage.getItem("selectedEmployee");
   setEmployeeId(storedId);
 }, []);
 
@@ -31,19 +31,20 @@ useEffect(() => {
       try {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("No authentication token found. Please log in.");
-
+          
         const response = await axios.get(
           `http://127.0.0.1:8000/admin/get_conversations/${employeeId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
+        console.log(response)
 
-        if (!Array.isArray(response.data)) {
+        if (!Array.isArray(response.data.ConvoID)) {
           throw new Error("Invalid API response format!");
         }
 
-        setConversations(response.data);
+        setConversations(response.data.ConvoID);
       } catch (err) {
         console.error("Error fetching conversations:", err.message);
         setError(err.message);
@@ -66,17 +67,45 @@ useEffect(() => {
       if (!token) throw new Error("No authentication token found. Please log in.");
 
       const feedbackRes = await axios.get(
-        `http://127.0.0.1:8000/get_conversationFeedback/${employeeId}/${convId}`,
+        `http://127.0.0.1:8000/admin/get_conversationFeedback/${employeeId}/${convId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       const summaryRes = await axios.get(
-        `http://127.0.0.1:8000/get_conversationSummary/${employeeId}/${convId}`,
+        `http://127.0.0.1:8000/admin/get_conversationSummary/${employeeId}/${convId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      console.log(feedbackRes)
+      console.log(feedbackRes.data["Feedback "] )
+      console.log(summaryRes.data["Summary "])
 
-      setSelectedFeedback(feedbackRes.data.user_record.feedback || "No feedback available.");
-      setSelectedSummary(summaryRes.data.user_record.summary || "No summary available.");
+
+
+      function parseTextResponse(text) {
+        // Split into lines
+        const lines = text.split("\n");
+        
+        // Initialize an object to store parsed data
+        const parsedData = {};
+        let currentSection = null;
+    
+        lines.forEach(line => {
+            line = line.trim();  // Remove extra spaces
+    
+            // Detect section headers (lines starting and ending with **)
+            if (/^\*\*(.+?)\*\*$/.test(line)) {
+                currentSection = line.replace(/\*\*/g, "").trim(); // Remove **
+                parsedData[currentSection] = "";
+            } else if (currentSection) {
+                parsedData[currentSection] += (parsedData[currentSection] ? " " : "") + line;
+            }
+        });
+        
+        return parsedData;
+    }
+      
+      setSelectedFeedback(feedbackRes.data["Feedback "] || "No feedback available.");
+      setSelectedSummary(JSON.stringify(parseTextResponse(summaryRes.data["Summary "]),null,2) || "No summary available.");
     } catch (err) {
       console.error("Error fetching feedback & summary:", err.message);
       setSelectedFeedback("Error fetching feedback.");
@@ -102,11 +131,11 @@ useEffect(() => {
               <div className="conversation">
                 {conversations.map((conv, index) => (
                   <div
-                    key={conv.id}
+                    key={conv}
                     className={`bubble ${selectedIndex === index ? "selected" : ""}`}
-                    onClick={() => handleConversationClick(conv.id, index)}
+                    onClick={() => handleConversationClick(conv, index)}
                   >
-                    {conv.id}
+                    {conv}
                   </div>
                 ))}
               </div>
