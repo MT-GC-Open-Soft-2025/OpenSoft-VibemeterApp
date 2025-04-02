@@ -70,6 +70,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 import animationData from "../../Assets/Newanimation.json"; // Bot animation
 import Lottie from "lottie-react";
+import { Link } from "react-router-dom";
 import EmojiMeter from "./EmojiMeter";
 
 import {
@@ -215,7 +216,14 @@ const UserPage = () => {
               </div>
           <div className="bot-container">
             <div className="chat-bubble">Hi! How can I assist you?</div>
-            <Lottie animationData={animationData} loop={true} className="bot-animation" />
+            <Link to="/chat">
+              <Lottie 
+                animationData={animationData} 
+                loop={true} 
+                className="bot-animation" 
+                style={{ cursor: "pointer" }} // Makes it clear that it's clickable
+              />
+            </Link>
           </div>
         </div>
       </main>
