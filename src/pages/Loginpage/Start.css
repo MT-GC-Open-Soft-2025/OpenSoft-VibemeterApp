@@ -45,9 +45,24 @@
     justify-content: center;
     padding-top: 80px; /* for navbar space */
   }
-  
+  .container{
+    margin: 0px 0px;
+    padding: 0px 0px;
+
+  }
   .navbar {
     z-index: 999;
+  }
+  .logo-container {
+    display: flex;
+    align-items: center;
+    height: 100%; 
+    margin-left: 50px;
+  }
+  .logo-img {
+    height: 50px; 
+    width: auto; 
+    object-fit: contain;
   }
   /* Dark mode root */
   .dark-mode {
