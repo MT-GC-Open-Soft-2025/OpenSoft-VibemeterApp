@@ -5,7 +5,7 @@
   justify-content: center;
   align-items: center;
   background: linear-gradient(135deg, #74ebd5, #acb6e5);
-  height: 100vh;
+  height: auto;
   width: 100%;
   font-family: 'Arial', sans-serif;
   margin: 0;

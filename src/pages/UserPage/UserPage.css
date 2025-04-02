@@ -1,73 +1,104 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  body{
-    /* background:linear-gradient(135deg, #003366, #009688); */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  }
-  html {
-    height: 100%;
-    width: 100%;
-    font-family: Arial, sans-serif;
-  }
+body{
+  /* background:linear-gradient(135deg, #003366, #009688); */
+
+}
+html {
+  height: 100%;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* Overall page container */
+.wrapper {
+  min-height: 100vh;
+  background-color: #fff;
+  position: relative;
+  padding-top: 60px; /* reserve space for header bar */
+}
+
+/* Header bar*/
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #39ace7; 
+}
+
+/* Profile container: holds the icon and the user id */
+.profile-container {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  margin: 20px;
+}
+
+/* Profile icon */
+.profile-icon {
+  width: 120px;
+  height: 120px;
+  margin-right: 50px;
+}
+
+/* User ID text */
+.profile-user {
+  font-size: 40px;
+  color: #333;
+}
+
+/* "Let's Chat!" */
+.chat-button {
+  display: block;
+  margin: 50px auto;
+  padding: 15px 30px;
+  font-size: 16px;
+  background-color: #3697aa;;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chat-button:hover {
+  background: linear-gradient(45deg, #008abf, #00c78c);
+}
+.parent {
+  width: 87%;
+  margin-top: 60px;
+  /* display: flex;
+  justify-content: center; */
+}
+h1 {
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: #10526c;
+}
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+}
+.para {
+  font-size: 1.25rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.meet {
+  color: #10526c;
   
-  /* Overall page container */
-  .wrapper {
-    min-height: 100vh;
-    background-color: #fff;
-    position: relative;
-    padding-top: 60px; /* reserve space for header bar */
-  }
-  
-  /* Header bar*/
-  .header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background-color: #39ace7; 
-  }
-  
-  /* Profile container: holds the icon and the user id */
-  .profile-container {
-    display: flex;
-    align-items: center;
-    background-color: transparent;
-    margin: 20px;
-  }
-  
-  /* Profile icon */
-  .profile-icon {
-    width: 120px;
-    height: 120px;
-    margin-right: 50px;
-  }
-  
-  /* User ID text */
-  .profile-user {
-    font-size: 40px;
-    color: #333;
-  }
-  
-  /* "Let's Chat!" */
-  .chat-button {
-    display: block;
-    margin: 100px auto;
-    padding: 15px 30px;
-    font-size: 16px;
-    background-color: #3697aa;;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .chat-button:hover {
-    background: linear-gradient(45deg, #008abf, #00c78c);
-  }
-  
+}
+.ancestor {
+  padding-top: -10rem;
+}
+.firstRow{
+  display: flex;
+
+}
