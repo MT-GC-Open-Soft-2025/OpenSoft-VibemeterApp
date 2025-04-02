@@ -135,7 +135,7 @@ const UserPage = () => {
               Download Brochure
             </a> */}
             <button
-              className="nav-link"
+              className="nav-link1"
               onClick={handleDownload}
               style={{
                 padding: "10px 20px",
@@ -304,7 +304,7 @@ const UserPage = () => {
         <div className="ancestor2" id="descrip">
           <div id="rew" className="meet">
           PLEASE TAKE A MOMENT TO FILL OUT THIS SHORT SURVEY - YOUR FEEDBACK MATTERS! 
-          <button className="nav-link" onClick={handleFeedback}>Submit Survey</button>
+          <button className="nav-link1" onClick={handleFeedback}>Submit Survey</button>
           </div>
         </div>
       </>
@@ -314,7 +314,7 @@ const UserPage = () => {
         <div className="ancestor2" id="descrip">
           <div id="rew" className="meet">
           PLEASE TAKE A MOMENT TO FILL OUT THIS SHORT SURVEY - YOUR FEEDBACK MATTERS! 
-          <button className="nav-link" onClick={handleFeedback}>Submit Survey</button>
+          <button className="nav-link1" onClick={handleFeedback}>Submit Survey</button>
           </div>
         </div>
         <div className="card">
