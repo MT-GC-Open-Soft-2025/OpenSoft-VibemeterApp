@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./AdminPage.css";
 
@@ -14,38 +13,15 @@ import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Admin
 import Navbar from "../../components/Search-bar/SearchBar";
 import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar';
 import user from "../../Assets/user.png";
-import EmojiMeter from "./EmojiMeter";
+import EmojiMeter from "./EmojiMeter";  // ✅ Importing EmojiMeter
 
 const AdminPage = () => {
   const navigate = useNavigate();
-  const [selectedEmployee, setSelectedEmployee] = useState("");
-  const [employees, setEmployees] = useState([]);
-
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/admin/employees");
-        setEmployees(response.data);
-      } catch (error) {
-        console.error("Error fetching employee data:", error);
-      }
-    };
-
-    fetchEmployees();
-  }, []);
-
-  const handleSearch = (employeeId) => {
-    if (employees.includes(employeeId)) {
-      setSelectedEmployee(employeeId);
-    } else {
-      setSelectedEmployee(""); // Prevents rendering if invalid ID is entered
-      alert("Employee not found.");
-    }
-  };
+  const [selectedEmployee, setSelectedEmployee] = useState(""); // ✅ Employee ID State
 
   return (
     <>
-      <Feedbacknavbar title="Admin Page"/>
+      <Feedbacknavbar title="Admin Page" />
       <Sidebar />
       <div style={{
         marginLeft: '200px',
@@ -54,7 +30,7 @@ const AdminPage = () => {
         minHeight: '100vh',
         padding: '20px'
       }}>
-        <Navbar onSearch={handleSearch} clearSearch={selectedEmployee !== ""} />
+        <Navbar setSelectedEmployee={setSelectedEmployee} /> 
         <div className="text-container">
           <h3><b>Hello ADMIN !</b></h3>
         </div>
@@ -67,9 +43,17 @@ const AdminPage = () => {
                 <span className="profile-user">Employee ID: {selectedEmployee}</span>
               </div>
               <Badges />
-              <ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} />
-                <EmojiMeter/>
+              <ButtonComponent label="Get Feedback" onClick={() => {
+                  localStorage.setItem("employeeId", selectedEmployee);
+                  navigate(`/feedback`);
+              }} />
+
+
+              
+              {/* ✅ Pass selectedEmployee as a prop */}
+              <EmojiMeter employeeId={selectedEmployee} />
             </div>
+            
             <PerformanceGraph employeeId={selectedEmployee} />
             <Rewards />
           </div>
