@@ -70,6 +70,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 import animationData from "../../Assets/Newanimation.json"; // Bot animation
 import Lottie from "lottie-react";
+import EmojiMeter from "./EmojiMeter";
 
 import {
   Chart as ChartJS,
@@ -209,6 +210,9 @@ const UserPage = () => {
             <p>{performanceMessage}</p>
             <img src={performanceImage} alt="Performance" />
           </div>
+          <div className="vibe-meter-container">
+                <EmojiMeter />
+              </div>
           <div className="bot-container">
             <div className="chat-bubble">Hi! How can I assist you?</div>
             <Lottie animationData={animationData} loop={true} className="bot-animation" />

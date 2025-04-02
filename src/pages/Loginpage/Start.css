@@ -115,3 +115,12 @@
     background-color: #374151;
   }
   
+  .nav-link {
+    color: rgba(79, 78, 78, 0.786) !important;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .nav-link:hover {
+    color: black !important;
+  }
+  

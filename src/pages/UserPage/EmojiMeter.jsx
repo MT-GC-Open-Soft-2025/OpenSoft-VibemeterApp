@@ -1,70 +1,71 @@
-import React, { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap
-// import "./EmojiMeter.css";
+import React, { useState } from 'react';
+import './EmojiMeter.css';
 
+const VibeMeter = () => {
+  const [happiness, setHappiness] = useState(Math.floor(Math.random() * 101));
+  const [loading, setLoading] = useState(false);
 
-// Function to determine emoji and styling
-const getEmojiByValue = (value) => {
-  switch (value) {
-    case 1:
-      return <span className="display-1 text-danger">😭</span>; // Crying Face (Red)
-    case 2:
-      return <span className="display-1 text-danger">😢</span>; // Sad Face with Tear (Red)
-    case 3:
-      return <span className="display-1 text-warning">🙁</span>; // Slightly Frowning Face (Amber)
-    case 4:
-      return <span className="display-1 text-warning">😐</span>; // Neutral Face (Amber)
-    case 5:
-      return <span className="display-1 text-success">🙂</span>; // Slightly Smiling Face (Green)
-    case 6:
-      return <span className="display-1 text-success">😊</span>; // Smiling Face (Green)
-    default:
-      return <span className="display-1 text-secondary">❓</span>; // Unknown (Gray)
-  }
-};
-
-
-// Function to determine mood text
-const getTextByValue = (value) => {
-  switch (value) {
-    case 1: return "Very Bad";
-    case 2: return "Bad";
-    case 3: return "Not Good";
-    case 4: return "Average";
-    case 5: return "Happy";
-    case 6: return "Very Happy";
-    default: return "Invalid";
-  }
-};
-
-export default function EmojiMeter() {
-  const [value, setValue] = useState(5);
-
-  const generateRandomValue = () => {
-    const newValue = Math.floor(Math.random() * 6) + 1; // Generates a number between 1 and 6
-    setValue(newValue);
+  // Determine mood based on happiness percentage
+  const getMood = () => {
+    if (happiness >= 70) return { icon: 'bi-emoji-smile-fill', text: 'Happy', color: 'success' };
+    if (happiness >= 40) return { icon: 'bi-emoji-neutral-fill', text: 'Neutral', color: 'primary' };
+    return { icon: 'bi-emoji-frown-fill', text: 'Sad', color: 'danger' };
   };
 
+  // Calculate stroke dash offset for circle progress
+  const radius = 90;
+  const circumference = 2 * Math.PI * radius;
+  const dashOffset = circumference - (happiness / 100) * circumference;
+  const mood = getMood();
 
-  useEffect(() => {
-    generateRandomValue();
-  }, []);
+  // Handle refresh click
+  const refreshHappiness = () => {
+    setLoading(true);
+    // Simulate API call delay
+    setTimeout(() => {
+      setHappiness(Math.floor(Math.random() * 101));
+      setLoading(false);
+    }, 1000);
+  };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center min-vh-100">
-      <div className="card text-center shadow-lg p-4" style={{ width: "22rem" }}>
-        <div className="card-header bg-primary text-white">
-          <h4>Emoji Mood Meter</h4>
-        </div>
-        <div className="card-body">
-          {getEmojiByValue(value)}
-          <h5 className="mt-3">{getTextByValue(value)}</h5>
-          <p className="text-muted">Mood Value: <strong>{value}</strong></p>
-          <button className="btn btn-primary" onClick={generateRandomValue}>
-            Generate Random Mood
-          </button>
-        </div>
-      </div>
+    <div className="vibe-meter">
+   <div className={`vibe-circle ${mood.color}`}>
+  <svg className="vibe-progress" width="200" height="200" viewBox="0 0 200 200">
+    <circle
+      className="vibe-progress-bg"
+      cx="100"
+      cy="100"
+      r={radius}
+      strokeWidth="10"
+    />
+    <circle
+      className={`vibe-progress-fill vibe-${mood.color}`}
+      cx="100"
+      cy="100"
+      r={radius}
+      strokeWidth="10"
+      strokeDasharray={circumference}
+      strokeDashoffset={dashOffset}
+    />
+  </svg>
+  <div className="vibe-content">
+    <i className={`bi ${mood.icon} vibe-icon`}></i>
+    <div className="vibe-percentage">{happiness}%</div>
+    <div className="vibe-label">{mood.text}</div>
+  </div>
+</div>
+
+      <button 
+        className="vibe-button" 
+        onClick={refreshHappiness} 
+        disabled={loading}
+      >
+        <i className={`bi ${loading ? 'bi-arrow-repeat spin' : 'bi-arrow-clockwise'}`}></i>
+        {loading ? 'Refreshing...' : 'Refresh Vibe'}
+      </button>
     </div>
   );
-}
+};
+
+export default VibeMeter;
