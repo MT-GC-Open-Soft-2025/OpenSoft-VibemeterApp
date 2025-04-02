@@ -4,12 +4,13 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import "./PerformanceGraph.css";
 
-const PerformanceGraph = ({ employeeId }) => {
-    if (!employeeId) {
+const PerformanceGraph = ({ employeeData }) => {
+    if (!employeeData) {
             return <div className="empty-graph">Select an employee to see data</div>;
           }
+          console.log("Rendering Graph for:", employeeData); // ✅ Debugging Log
         
-          console.log("Rendering Graph for:", employeeId); // ✅ Debugging Log
+          console.log("Rendering Graph for:", employeeData.emp_id); // ✅ Debugging Log
     const options = {
         chart: {
             type: "column",
@@ -54,13 +55,13 @@ const PerformanceGraph = ({ employeeId }) => {
             },
         },
         series: [
-            { name: "Work Hours", data: [7, 0, 0,0], color: "#50aad7", stack: "work" },
-            { name: "Sick Leave", data: [0, 3, 0,0], color: "#92badd", stack: "leave" },
-            { name: "Casual Leave", data: [0, 2, 0,0], color: "#08ddcb", stack: "leave" },
-            { name: "Unpaid Leave", data: [0, 2, 0,0], color: "#c1dcf3", stack: "leave" },
-            { name: "Annual Leave", data: [0, 2, 0,0], color: "#1E90FF", stack: "leave" },
-            { name: "Onboarding Performance", data: [0, 0, 6,0], color: "#7fd7d0", stack: "onboarding" },
-            { name: "Performance Rating", data: [0, 0, 0,5], color: "#7fe5ff", stack: "performance" },
+            { name: "Work Hours", data: [employeeData.total_work_hours || 0,0,0,0], color: "#50aad7" ,stack: "work"},
+      { name: "Sick Leave", data: [0,employeeData.types_of_leaves?.["Sick Leave"] || 0,0,0], color: "#92badd", stack: "leave" },
+      { name: "Casual Leave", data: [0,employeeData.types_of_leaves?.["Casual Leave"] || 0,0,0], color: "#08ddcb" , stack: "leave"},
+      { name: "Unpaid Leave", data: [0,employeeData.types_of_leaves?.["Unpaid Leave"] || 0,0,0], color: "#c1dcf3" , stack: "leave"},
+      { name: "Annual Leave", data: [0,employeeData.types_of_leaves?.["Annual Leave"] || 0,0,0], color: "#1E90FF" , stack: "leave"},
+            { name: "Onboarding Performance", data: [0,0,employeeData.feedback || 0,0], color: "#7fd7d0", stack: "onboarding" },
+            { name: "Performance Rating", data: [0, 0, 0,employeeData.weighted_performance>0?employeeData.weighted_performance:0], color: "#7fe5ff", stack: "performance" },
         ],
     };
 

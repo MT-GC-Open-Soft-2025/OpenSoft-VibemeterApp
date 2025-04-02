@@ -6,7 +6,7 @@ const Feedbacknavbar = ({ title }) => {
   const navigate = useNavigate();
 
   return (
-    <nav className="navbar">
+    <nav className="navbar1">
       <div className="nav-content">
         {title ? `${title} ` : "Chat Feedback"}
       </div>

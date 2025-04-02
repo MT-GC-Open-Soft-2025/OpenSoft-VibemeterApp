@@ -1,6 +1,6 @@
-.navbar {
+.navbar1 {
   width: 100%;
-  position: fixed;
+  position: sticky;
   z-index: 1000;
   
   background-color: #3697aa;;
