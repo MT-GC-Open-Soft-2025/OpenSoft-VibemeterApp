@@ -1,174 +1,93 @@
-
-// import React, { useState, useEffect } from "react";
-// import "./SearchBar.css";
-
-// const employees = ["EMP1234", "EMP5678", "EMP9101", "EMP2345", "EMP2789"]; // Replace with real data
-
-// const Navbar = ({ onSearch }) => {
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const [filteredEmployees, setFilteredEmployees] = useState([]);
-//   const [errorMessage, setErrorMessage] = useState("");
-//   const [showDropdown, setShowDropdown] = useState(false);
-
-//   useEffect(() => {
-//     const handleClickOutside = (event) => {
-//       if (!event.target.closest(".search-container")) {
-//         setShowDropdown(false);
-//       }
-//     };
-//     document.addEventListener("click", handleClickOutside);
-//     return () => document.removeEventListener("click", handleClickOutside);
-//   }, []);
-
-//   const validateInput = (value) => /^EMP\d{4}$/.test(value);
-
-//   const handleSearchChange = (e) => {
-//     const value = e.target.value.toUpperCase();
-//     setSearchTerm(value);
-//     if (typeof onSearch === "function") {
-//       onSearch("");
-//     }
-//     if (value === "") {
-//       setFilteredEmployees([]);
-//       setShowDropdown(true);
-//       setErrorMessage("");
-//       return;
-//     }
-//     if (!validateInput(value) && value.length >= 7) {
-//       setErrorMessage("Invalid Employee ID. Use EMPXXXX.");
-//       setFilteredEmployees([]);
-//       setShowDropdown(false);
-//       return;
-//     }
-//     setErrorMessage("");
-//     const filtered = employees.filter((emp) => emp.startsWith(value));
-//     setFilteredEmployees(filtered);
-//     setShowDropdown(filtered.length > 0);
-//   };
-
-//   const handleSelectEmployee = (emp) => {
-//     setSearchTerm(emp);
-//     setShowDropdown(false);
-//     setErrorMessage("");
-
-//     if (typeof onSearch === "function") {
-//       onSearch(emp);
-//     }
-//   };
-
-//   const handleKeyDown = (e) => {
-//     if (e.key === "Enter") {
-//       // If valid ID and it exists in the list
-//       if (validateInput(searchTerm) && employees.includes(searchTerm)) {
-//         setErrorMessage("");
-//         if (typeof onSearch === "function") {
-//           onSearch(searchTerm);
-//         }
-//         setShowDropdown(false);
-//       } else {
-//         setErrorMessage("Invalid Employee ID.");
-//       }
-//     }
-//   };
-
-//   return (
-//     <nav>
-//       <div className="search-container">
-//         <input
-//           type="text"
-//           className="search-bar"
-//           placeholder="Search Employee ID..."
-//           value={searchTerm}
-//           onChange={handleSearchChange}
-//           onFocus={() => setShowDropdown(false)}
-//           onKeyDown={handleKeyDown}
-//         />
-//         {errorMessage && <p className="error-message">{errorMessage}</p>}
-//         {showDropdown && (
-//           <ul className="dropdown">
-//             {filteredEmployees.map((emp) => (
-//               <li key={emp} onClick={() => handleSelectEmployee(emp)}>
-//                 {emp}
-//               </li>
-//             ))}
-//           </ul>
-//         )}
-//       </div>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
 import React, { useState, useEffect } from "react";
+import { FaSearch } from "react-icons/fa";
+import Swal from "sweetalert2";
+import axios from "axios";
 import "./SearchBar.css";
 
-const employees = ["EMP1234", "EMP5678", "EMP9101", "EMP2345", "EMP2789"]; // Replace with real data
-
-const Navbar = ({ onSearch, clearSearch }) => {
+const Navbar = ({ setSelectedEmployee }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [employees, setEmployees] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
-    if (clearSearch) {
-      setSearchTerm(""); // Clear the search bar when an employee is selected
-    }
-  }, [clearSearch]);
+    const fetchEmployees = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://127.0.0.1:8000/admin/get_details", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
+        console.log("API Response:", response.data);
+        setEmployees(Array.isArray(response.data) ? response.data : []);
+      } catch (error) {
+        console.error("Error fetching employee data:", error);
+        setEmployees([]);
+      }
+    };
+    fetchEmployees();
+  }, []);
 
   const validateInput = (value) => /^EMP\d{4}$/.test(value);
 
   const handleSearchChange = (e) => {
     const value = e.target.value.toUpperCase();
     setSearchTerm(value);
-
-    // Reset selection when typing
-    if (typeof onSearch === "function") {
-      onSearch("");
-    }
+    setErrorMessage("");
 
     if (value === "") {
-      setFilteredEmployees([]);
       setShowDropdown(false);
-      setErrorMessage("");
       return;
     }
 
     if (!validateInput(value) && value.length >= 7) {
       setErrorMessage("Invalid Employee ID. Use EMPXXXX.");
-      setFilteredEmployees([]);
       setShowDropdown(false);
       return;
     }
 
-    setErrorMessage("");
-    const filtered = employees.filter((emp) => emp.startsWith(value));
-    setFilteredEmployees(filtered);
+    const filtered = Array.isArray(employees) ? employees.filter((emp) => emp.startsWith(value)) : [];
     setShowDropdown(filtered.length > 0);
   };
 
-  const handleSelectEmployee = (emp) => {
-    setSearchTerm(""); // Clear the search field after selection
-    setShowDropdown(false);
-    setErrorMessage("");
-
-    if (typeof onSearch === "function") {
-      onSearch(emp);
+  const handleSearchClick = async () => {
+    if (!validateInput(searchTerm)) {
+      Swal.fire({
+        icon: "error",
+        title: "Invalid Format",
+        text: "Please enter an Employee ID in the format EMPXXXX.",
+        confirmButtonColor: "#d33",
+      });
+      return;
     }
-  };
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      if (validateInput(searchTerm) && employees.includes(searchTerm)) {
-        setErrorMessage("");
-        if (typeof onSearch === "function") {
-          onSearch(searchTerm);
-        }
-        setSearchTerm(""); // Clear the search bar after pressing Enter
-        setShowDropdown(false);
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`http://127.0.0.1:8000/admin/get_detail/${searchTerm}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data && Object.keys(response.data).length > 0) {
+        Swal.fire({
+          icon: "success",
+          title: "Employee Found!",
+          text: `Redirecting to Employee ID: ${searchTerm}`,
+          confirmButtonColor: "#007bff",
+        }).then(() => {
+          setSelectedEmployee(searchTerm);
+          setSearchTerm("");
+          setShowDropdown(false);
+        });
       } else {
-        setErrorMessage("Invalid Employee ID.");
+        throw new Error("Employee not found.");
       }
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Employee Not Found!",
+        text: "The entered Employee ID does not exist or you don't have permission.",
+        confirmButtonColor: "#d33",
+      });
     }
   };
 
@@ -181,14 +100,15 @@ const Navbar = ({ onSearch, clearSearch }) => {
           placeholder="Search Employee ID..."
           value={searchTerm}
           onChange={handleSearchChange}
-          onFocus={() => setShowDropdown(true)}
-          onKeyDown={handleKeyDown}
         />
+        <button className="search-icon-btn" onClick={handleSearchClick}>
+          <FaSearch />
+        </button>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {showDropdown && (
           <ul className="dropdown">
-            {filteredEmployees.map((emp) => (
-              <li key={emp} onClick={() => handleSelectEmployee(emp)}>
+            {employees.filter((emp) => emp.startsWith(searchTerm)).map((emp) => (
+              <li key={emp} onClick={() => setSearchTerm(emp)}>
                 {emp}
               </li>
             ))}
