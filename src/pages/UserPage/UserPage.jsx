@@ -68,6 +68,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./UserPage.css";
 import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
+import animationData from "../../Assets/Newanimation.json"; // Bot animation
+import Lottie from "lottie-react";
+
 import {
   Chart as ChartJS,
   ArcElement,
@@ -205,6 +208,10 @@ const UserPage = () => {
             <h4>Performance Overview</h4>
             <p>{performanceMessage}</p>
             <img src={performanceImage} alt="Performance" />
+          </div>
+          <div className="bot-container">
+            <div className="chat-bubble">Hi! How can I assist you?</div>
+            <Lottie animationData={animationData} loop={true} className="bot-animation" />
           </div>
         </div>
       </main>
