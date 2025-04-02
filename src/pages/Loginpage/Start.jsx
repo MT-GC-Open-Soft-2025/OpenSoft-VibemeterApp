@@ -30,8 +30,8 @@ const Start = () => {
       <div>
         {/* Navigation Bar */}
         <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
-          <div className="container">
-          <div className="logo-container">
+          <div className="container-fluid">
+          <div className="logo-container" style={{ marginLeft: "20px"}}>
               <img src={logo} alt="WellBee Logo" className="logo-img" />
             </div>
           
@@ -39,7 +39,7 @@ const Start = () => {
               <span className="navbar-toggler-icon" />
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
-              <ul className="navbar-nav ms-auto">
+              <ul className="navbar-nav ms-auto" style={{ marginRight: "30px"}}>
                 <li className="nav-item">
                   <Link className="nav-link" to="landing" smooth duration={500}>Home</Link>
                 </li>

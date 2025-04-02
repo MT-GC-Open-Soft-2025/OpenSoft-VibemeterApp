@@ -45,7 +45,7 @@
     justify-content: center;
     padding-top: 80px; /* for navbar space */
   }
-  .container{
+  .container-fluid{
     margin: 0px 0px;
     padding: 0px 0px;
 
@@ -57,7 +57,6 @@
     display: flex;
     align-items: center;
     height: 100%; 
-    margin-left: 50px;
   }
   .logo-img {
     height: 50px; 
