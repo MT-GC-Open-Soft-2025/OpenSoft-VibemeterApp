@@ -124,3 +124,19 @@
     color: black !important;
   }
   
+  .container{
+    margin: 0px 0px;
+    padding: 0px 0px;
+
+  }
+.logo-container {
+    display: flex;
+    align-items: center;
+    height: 100%; 
+    margin-left: 0px;
+  }
+  .logo-img {
+    height: 50px; 
+    width: auto; 
+    object-fit: contain;
+  }

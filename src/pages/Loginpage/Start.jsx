@@ -7,7 +7,7 @@ import Footer from './Footer';
 import ChatInterface from './ChatInterface';
 import { Element } from 'react-scroll';
 import BookDemoForm from './BookDemoForm';
-
+import logo from './company_logo.png';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Start.css';
@@ -31,7 +31,10 @@ const Start = () => {
         {/* Navigation Bar */}
         <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
           <div className="container">
-            <a className="navbar-brand fw-bold" href="#">WellBee</a>
+          <div className="logo-container">
+              <img src={logo} alt="WellBee Logo" className="logo-img" />
+            </div>
+          
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
               <span className="navbar-toggler-icon" />
             </button>
