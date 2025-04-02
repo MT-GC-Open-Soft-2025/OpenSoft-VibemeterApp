@@ -1,50 +1,42 @@
-// import React from 'react';
-// import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-// import LoginPage from './pages/Loginpage/LoginPage';
-// import AdminPage from './pages/AdminPage/AdminPage';
-
-
-// import FeedbackPage from "./pages/Feedbackpage/Feedbackpage";
-
-// import UserPage from './pages/UserPage/UserPage';
-
-  
-// function App() {
-//   return (
-//     <Router>
-//       <Routes>
-//         <Route path="/" element={<LoginPage />} />
-//         <Route path="/admin" element={ 
-//           <>
-//           <AdminPage /></>
-//           } />
-//            <Route path="/user" element={<UserPage />} />
-//           <Route path="/feedback" element={
-//             <FeedbackPage />
-//           }/>
-//       </Routes>
-//     </Router>
-//   );
-// }
-
-// export default App;
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LoginPage from './pages/Loginpage/LoginPage';
+import Start from './pages/Loginpage/Start';
 import AdminPage from './pages/AdminPage/AdminPage';
 import FeedbackPage from "./pages/Feedbackpage/Feedbackpage"; // Old layout (if needed)
 import SurveyForm from './pages/SurveyForm/SurveyForm';           // New renamed form
 import UserPage from './pages/UserPage/UserPage';
-import ContactForm from './pages/ContactPage/ContactForm'; // Import Contact Form
+import ContactForm from './pages/ContactPage/ContactForm'; 
+import { useEffect } from 'react';
+import {Link, Element } from 'react-scroll';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import './App.css';
 import Chat from './components/chat_popup/chat';
+import LoginPage from './pages/Loginpage/LoginPage';
 
-function App() {
+
+import 'animate.css';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+const App = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: false,
+      mirror: true,
+      offset: 100,
+    });
+  }, []);
+
+
+
+
+
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<Start />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/user" element={<UserPage />} />
@@ -58,8 +50,6 @@ function App() {
       </Routes>
     </Router>
   );
-}
+};
 
 export default App;
-
-

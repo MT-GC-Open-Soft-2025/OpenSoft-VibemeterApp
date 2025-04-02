@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Feedbackpage.css';
 import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar'; // Update the path
 // Importing FeedbackNavbar component
 
 const FeedbackPage = () => {
   const navigate = useNavigate();
- 
-  // Array of conversation IDs and corresponding feedback and summary messages
-  const conversations = [
-    { id: 'CONV001', feedback: 'Great assistance provided.', summary: 'Helped with account setup.' },
-    { id: 'CONV002', feedback: 'Quick response time.', summary: 'Resolved payment issue promptly.' },
-    { id: 'CONV003', feedback: 'Very helpful and polite.', summary: 'Guided through profile update.' },
-    { id: 'CONV004', feedback: 'Accurate solutions.', summary: 'Solved technical glitch.' },
-    { id: 'CONV005', feedback: 'Professional and patient.', summary: 'Clarified subscription plans.' },
-    { id: 'CONV006', feedback: 'Friendly interaction.', summary: 'Assisted with feedback submission.' },
-    { id: 'CONV007', feedback: 'Helpful guidance.', summary: 'Explained account recovery steps.' },
-    { id: 'CONV008', feedback: 'Fast and efficient.', summary: 'Resolved login issues.' },
-    { id: 'CONV009', feedback: 'Clear instructions.', summary: 'Walked through feature usage.' },
-    { id: 'CONV010', feedback: 'Positive experience.', summary: 'Resolved billing queries.' }
-  ];
-
-  // Pagination state
+  const [conversations, setConversations] = useState([]);
   const messagesPerPage = 5;
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedFeedback, setSelectedFeedback] = useState('Please select a conversation ID.');
   const [selectedSummary, setSelectedSummary] = useState('Please select a conversation ID.');
   const [selectedIndex, setSelectedIndex] = useState(null);
 
-  // Pagination controls
+  // Fetch feedback data from the backend
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/admin/get_conversationFeedback/{emp_id}/{convo_id}");
+        setConversations(response.data); 
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+      }
+    };
+
+    fetchFeedback();
+  }, []);
+
+  // Pagination logic
   const totalPages = Math.ceil(conversations.length / messagesPerPage);
   const handleNext = () => {
     if (currentPage < totalPages - 1) setCurrentPage(currentPage + 1);
@@ -37,7 +37,7 @@ const FeedbackPage = () => {
     if (currentPage > 0) setCurrentPage(currentPage - 1);
   };
 
-  // Handle click on conversation ID
+  // Handle selection
   const handleConversationClick = (feedback, summary, index) => {
     setSelectedFeedback(feedback);
     setSelectedSummary(summary);
@@ -53,8 +53,7 @@ const FeedbackPage = () => {
   return (
     <div className='feedback-wrapper'>
       {/* Feedback Navbar */}
-      <Feedbacknavbar title="" />
-
+      <Feedbacknavbar title="Admin Feedback" />
 
       <div className='feedback-container'>
         <div className='feedback-section'>
@@ -93,20 +92,3 @@ const FeedbackPage = () => {
 };
 
 export default FeedbackPage;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

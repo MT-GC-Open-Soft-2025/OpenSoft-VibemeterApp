@@ -163,9 +163,10 @@
 /* Animation container: centers the bot animation */
 .animation-container {
   width: 250px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   display: flex;
-  margin-right: 58% !important;
+  justify-content: center;
+ 
 }
 
 /* Start Chat Button styling */
