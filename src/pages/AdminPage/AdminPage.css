@@ -10,7 +10,9 @@ body {
   height: 100vh;
   /* background: linear-gradient(135deg, #74ebd5, #acb6e5); */
 }
-
+.Meters-vibe {
+  display: flex;
+}
 a {
   color: #92badd;
   display:inline-block;
@@ -314,6 +316,32 @@ input[type=text]:placeholder {
 /* .profile-container{
   height: 2rem;
 } */
+
+/* Meters-Vibe */
+
+.Meters-vibe {
+  display: flex;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+}
+/* .profile-container {
+  width: 100vw;
+} */
+/* .profile-container{
+  height: 2rem;
+} */
+
+
+
+
+
+  
 
 
 

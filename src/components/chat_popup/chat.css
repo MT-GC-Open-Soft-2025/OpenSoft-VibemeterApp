@@ -29,7 +29,7 @@
 /* Close button */
 .chat-close {
   position: absolute;
-  top: 10px;
+  top: 0px;
   right: 15px;
   font-size: 28px;
   font-weight: bold;
@@ -47,7 +47,7 @@
 /* Left Partition */
 .chat-left {
   width: 30%;
-  background-color: #b1f2ffc6;
+  background-color: #2a7f91;
   padding-top: 5px !important;
   padding: 20px;
   display: flex;
@@ -58,7 +58,7 @@
 }
 
 .chat-heading {
-  color: #8f8d8d;
+  color: #ffffff;
 }
 
 /* Conversation list in left partition */
@@ -162,7 +162,7 @@
   width: 250px;
   margin-bottom: 40px;
   display: flex;
-  margin-right: 33%;
+  margin-right: 55% !important;
 }
 
 /* Start Chat Button styling */
@@ -190,7 +190,7 @@
   justify-content: flex-start;
   background-color: #2a7f91;
   border-radius: 10px;
-  margin-top: auto;
+  margin-top: 10px;
   border-width: 1px;
   padding: 1px;
 }

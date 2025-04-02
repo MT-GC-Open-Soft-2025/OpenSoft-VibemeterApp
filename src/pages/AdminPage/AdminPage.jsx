@@ -15,6 +15,7 @@ import Navbar from "../../components/Search-bar/SearchBar";
 import Goback from "../../components/Admin_page _components/Admin_goback/Admingoback";
 import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar';
 import user from "../../Assets/user.png";
+import EmojiMeter from "./EmojiMeter";
 
 const employees = ["EMP1234", "EMP5678", "EMP9101", "EMP2345", "EMP2789"];
 
@@ -62,6 +63,7 @@ const AdminPage = () => {
               </div>
               <Badges />
               <ButtonComponent label="Get Feedback" onClick={() => navigate("/feedback")} />
+                <EmojiMeter/>
             </div>
 
             <PerformanceGraph employeeId={selectedEmployee} />
@@ -82,4 +84,3 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
-
