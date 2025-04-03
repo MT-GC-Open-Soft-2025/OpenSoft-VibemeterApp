@@ -5,6 +5,7 @@ import Lottie from "lottie-react";
 import animationData from "../../Assets/animation.json";
 import photo from "../../Assets/send.png"; // Adjust path if needed
 import bcrypt from 'bcryptjs'; // Import bcryptjs for hashing
+import axios from "axios"
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -68,16 +69,30 @@ const Chat = () => {
     (currentPage + 1) * messagesPerPage
   );
 
-  const handleStartChat = () => {
+  const handleStartChat = async () => {
     const rawId = `CHAT-${Date.now()}-${Math.random()}`;
     const uniqueId = bcrypt.hashSync(rawId, 10);
     setConversationId(uniqueId);
     console.log("Unique conversation ID:", uniqueId);
     setChatStarted(true);
+    const token = localStorage.getItem("token")
+
+    const res = await axios.post(`http://127.0.0.1:8000/chat/initiate_chat/${rawId}`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`, 
+      },
+    });
+    console.log(res)
+
 
     setChatMessages([
-      { sender: 'bot', text: 'Hello! How can I help you today?' }
+      {sender: 'bot', text: res.data.response}
     ]);
+
+    // setChatMessages([
+    //   { sender: 'bot', text: 'Hello! How can I help you today?' }
+    // ]);
+
   };
 
   const handleEndChat = () => {
