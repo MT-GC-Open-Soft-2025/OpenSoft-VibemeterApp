@@ -108,7 +108,7 @@ const UserPage = () => {
         style={{
           marginLeft: "150px",
           marginTop: "0px",
-          backgroundImage: "linear-gradient(135deg, #74ebd5,#acb6e5)",
+          backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))",
           minHeight: "100vh",
           padding: "20px",
         }}
