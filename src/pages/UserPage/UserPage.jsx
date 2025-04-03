@@ -250,7 +250,7 @@ const UserPage = () => {
                   <div id="rew" className="meet">
                     YOU'VE EARNED <strong>{user.reward_points}</strong> POINTS.
                     YOU'RE AMAZING!
-                    <Badges/>
+                    <Badges />
                   </div>
                 </div>
                 <div className="card">
@@ -332,10 +332,9 @@ const UserPage = () => {
                       />
                     </div>
                   </div>
-                  
                 </div>
               )}
-              {user.leave_days !== undefined && user.leave_days === 0 && (
+              {/* {user.leave_days !== undefined && user.leave_days === 0 && (
                 <div
                   id="fitness"
                   className="row align-items-center my-5 animate__animated animate__fadeInLeft"
@@ -357,63 +356,62 @@ const UserPage = () => {
                       />
                     </div>
                   </div>
-                  
+                </div>
+              )} */}
+              {user.leave_days !== undefined && (
+                <div
+                  id="fitness"
+                  className="row align-items-center my-5 animate__animated animate__fadeInLeft"
+                >
+                  {/* If user has taken 0 leaves, place ancestor2 first, otherwise place card first */}
+                  {user.leave_days === 0 ? (
+                    <>
+                      <div className="card">
+                        <div id="desc">
+                          <h4>Survey Form</h4>
+                        </div>
+                        <div className="image-wrapper">
+                          <img
+                            src="https://media.istockphoto.com/id/1019835506/vector/positive-business-woman-with-a-giant-pencil-on-his-shoulder-nearby-marked-checklist-on-a.jpg?s=612x612&w=0&k=20&c=vIJwRJQh7qTRQ7fGCEbJFebvplS7S7zTZAeVqVDtZ8k="
+                            alt="Performance"
+                            className="responsive-image"
+                          />
+                        </div>
+                      </div>
+                      <div className="ancestor2" id="descrip">
+                        <div id="rew" className="meet">
+                        PLEASE TAKE A MOMENT TO FILL OUT THIS SHORT SURVEY -
+                        YOUR FEEDBACK MATTERS!
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="ancestor2" id="descrip">
+                        <div id="rew" className="meet">
+                          PLEASE TAKE A MOMENT TO FILL OUT THIS SHORT SURVEY -
+                          YOUR FEEDBACK MATTERS!
+                          <button className="nav-link" onClick={handleFeedback}>
+                            Submit Survey
+                          </button>
+                        </div>
+                      </div>
+                      <div className="card">
+                        <div id="desc">
+                          <h4>Survey Form</h4>
+                        </div>
+                        <div className="image-wrapper">
+                          <img
+                            src="https://media.istockphoto.com/id/1019835506/vector/positive-business-woman-with-a-giant-pencil-on-his-shoulder-nearby-marked-checklist-on-a.jpg?s=612x612&w=0&k=20&c=vIJwRJQh7qTRQ7fGCEbJFebvplS7S7zTZAeVqVDtZ8k="
+                            alt="Performance"
+                            className="responsive-image"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
-              {user.leave_days !== undefined && (
-  <div
-    id="fitness"
-    className="row align-items-center my-5 animate__animated animate__fadeInLeft"
-  >
-    {/* If user has taken 0 leaves, place ancestor2 first, otherwise place card first */}
-    {user.leave_days === 0 ? (
-      <>
-        
-        <div className="card">
-          <div id="desc">
-            <h4>Survey Form</h4>
-          </div>
-          <div className="image-wrapper">
-            <img
-              src="https://media.istockphoto.com/id/1019835506/vector/positive-business-woman-with-a-giant-pencil-on-his-shoulder-nearby-marked-checklist-on-a.jpg?s=612x612&w=0&k=20&c=vIJwRJQh7qTRQ7fGCEbJFebvplS7S7zTZAeVqVDtZ8k="
-              alt="Performance"
-              className="responsive-image"
-            />
-          </div>
-        </div>
-        <div className="ancestor2" id="descrip">
-          <div id="rew" className="meet">
-            Wow, you haven’t taken any leaves. You're a rockstar! 🚀
-          </div>
-        </div>
-      </>
-    ) : (
-      <>
-        
-        <div className="ancestor2" id="descrip">
-          <div id="rew" className="meet">
-          PLEASE TAKE A MOMENT TO FILL OUT THIS SHORT SURVEY - YOUR FEEDBACK MATTERS! 
-          <button className="nav-link" onClick={handleFeedback}>Submit Survey</button>
-          </div>
-        </div>
-        <div className="card">
-          <div id="desc">
-            <h4>Survey Form</h4>
-          </div>
-          <div className="image-wrapper">
-            <img
-              src="https://media.istockphoto.com/id/1019835506/vector/positive-business-woman-with-a-giant-pencil-on-his-shoulder-nearby-marked-checklist-on-a.jpg?s=612x612&w=0&k=20&c=vIJwRJQh7qTRQ7fGCEbJFebvplS7S7zTZAeVqVDtZ8k="
-              alt="Performance"
-              className="responsive-image"
-            />
-          </div>
-        </div>
-      </>
-    )}
-  </div>
-)}
-
-              
             </div>
           )}
         </div>
