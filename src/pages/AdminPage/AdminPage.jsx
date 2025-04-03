@@ -69,7 +69,7 @@ const AdminPage = () => {
                 <span className="profile-user">Employee ID: {selectedEmployee}</span>
               </div>
               <Badges employeeId={selectedEmployee} />
-              <button  onClick={handlegetfeedback} > Get </button>
+              <button className="btn btn-success fadeIn fourth getfeedback-button" onClick={handlegetfeedback} > Get Feedback</button>
               <EmojiMeter employeeId={selectedEmployee} />
             </div>
             

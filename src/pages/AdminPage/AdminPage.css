@@ -324,6 +324,7 @@ input[type=text]:placeholder {
 
 /* Align search bar and button in the same row */
 .search-button-container {
+  padding: 0px;
   display: flex;
   align-items: center;
   gap: 10px; /* Space between search bar and button */
