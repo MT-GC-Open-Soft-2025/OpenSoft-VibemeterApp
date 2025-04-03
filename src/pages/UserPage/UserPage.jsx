@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import animationData from "../../Assets/Newanimation.json"; // Bot animation
 import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
-
+import Footer from "../../components/Footer/Footer.jsx";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -366,6 +366,7 @@ const UserPage = () => {
           )} */}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

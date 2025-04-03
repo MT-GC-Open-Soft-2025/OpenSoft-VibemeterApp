@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./AdminPage.css";
-
+import Footer from "../../components/Footer/Footer";
 import PerformanceGraph from "../../components/Admin_page _components/Admin_performance_rewards/PerformanceGraph";
 import Rewards from "../../components/Admin_page _components/Admin_performance_rewards/Rewards";
 import Badges from "../../components/Badges/Badges";
@@ -69,6 +69,7 @@ const AdminPage = () => {
           </div>
         )}
       </div>
+       <Footer/> 
     </>
   );
 };
