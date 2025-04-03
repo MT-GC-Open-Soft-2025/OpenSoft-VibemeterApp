@@ -79,6 +79,9 @@ const Chat = () => {
 
   // Restore conversation state from localStorage on component mount
   useEffect(() => {
+    if (localStorage.getItem("token") === null) {
+      navigate("/");
+    }
     const savedChatMessages = localStorage.getItem("chatMessages");
     const savedConversationId = localStorage.getItem("conversationId");
     const savedChatStarted = localStorage.getItem("chatStarted");
