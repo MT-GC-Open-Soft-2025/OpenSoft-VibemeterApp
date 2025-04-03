@@ -32,34 +32,38 @@ const AdminPage = () => {
     navigate(`/feedback`);
   };
 
+  const handlegetBack = () => {
+    window.location.reload();
+  };
+
   return (
     <>
       <Feedbacknavbar title="Admin Page" />
       <Sidebar />
-      <div style={{
-        marginLeft: '200px',
-        marginTop: '64px',
-        backgroundImage: 'linear-gradient(135deg,rgb(255, 255, 255),rgb(168 241 255))',
-        minHeight: '100vh',
-        padding: '20px'
-      }}>
-        <Navbar setSelectedEmployee={setSelectedEmployee} /> 
+      <div className="admin-container">
+        
+        {/* Container for search bar and button */}
+        <div className="search-button-container">
+          <Navbar setSelectedEmployee={setSelectedEmployee} />
+          {selectedEmployee && (
+              <button className="styled-button" onClick={handlegetBack}>
+                       Back
+              </button>
+          )}
+        </div>
+
         <div className="text-container">
           <h3><b>Hello ADMIN !</b></h3>
         </div>
 
         {selectedEmployee ? (
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "20px" }}>
-            <div className="description">
-              <div className="profile-container">
-                <img src={user} alt="User Icon" className="profile-icon" />
-                <span className="profile-user">Employee ID: {selectedEmployee}</span>
-              </div>
-              <Badges />
-              <button  onClick={handlegetfeedback} > Get </button>
-              <EmojiMeter employeeId={selectedEmployee} />
+          <div className="profile-section">
+            <div className="profile-container">
+              <img src={user} alt="User Icon" className="profile-icon" />
+              <span className="profile-user">Employee ID: {selectedEmployee}</span>
             </div>
-            
+            <Badges />
+            <EmojiMeter employeeId={selectedEmployee} />
             <PerformanceGraph employeeId={selectedEmployee} />
             <Rewards />
           </div>
@@ -74,3 +78,5 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
+
+
