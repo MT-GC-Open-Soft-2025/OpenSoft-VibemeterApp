@@ -7,8 +7,8 @@ const adminOverview = () => {
     <>
       <div className="wrapper fadeInDown">"This is admin page."</div>
       <div className="charts">
-        <EmotionZoneChart />
         <PieChart />
+        <EmotionZoneChart />
       </div>
     </>
   )

@@ -24,6 +24,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  padding: 0px !important;
 }
 
 /* Close button */
@@ -132,8 +133,8 @@
 /* End Chat button at the top-left corner */
 .end-chat-btn {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 35px;
+  right: 20px;
   padding: 10px 20px;
   background-color: #bc3b2d;
   color: white;
@@ -180,6 +181,7 @@
   cursor: pointer;
   transition: background-color 0.3s;
   margin-top: 255px;
+  margin-top: 0px;
 }
 
 .start-chat-btn:hover {

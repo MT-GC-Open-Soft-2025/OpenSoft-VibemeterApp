@@ -1,156 +1,337 @@
-/* UserPage.css */
 .dashboard-container {
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-    background: #f4f7fc;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .sidebar {
-    width: 250px;
-    /* background-color: #343a40; */
-    color: white;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .user-profile {
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-  
-  .user-avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 1rem;
-  }
-  
-  .animated-id span {
-    display: inline-block;
-    animation: fadeIn 0.4s ease forwards;
-  }
-  
-  .nav {
-    width: 100%;
-  }
-  
-  .nav-link {
-    background: none;
-    color: white;
-    border: none;
-    text-align: left;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    width: 100%;
-    font-weight: bold;
-  }
-  
-  .nav-link.logout {
-    color: #ff6b6b;
-  }
-  
-  .main-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 2rem;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .greeting {
-    font-size: 4rem;
-  margin-top: 10rem;
-  margin-bottom: 4rem;
-  line-height: 1.2;
-  word-break: break-word;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  background: #f4f7fc;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
-  
-  
-  .greeting span, .animated-id span {
-    display: inline-block;
-    animation: fadeInUp 0.4s ease forwards;
+
+.sidebar {
+  width: 250px;
+  /* background-color: #343a40; */
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.user-profile {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.animated-id span {
+  display: inline-block;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.nav {
+  width: 100%;
+}
+
+.nav-link1 {
+  background: none;
+  color: white;
+  border: none;
+  text-align: left;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+}
+
+.nav-link1.logout {
+  color: #ff6b6b;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.greeting {
+  font-size: 4rem;
+margin-top: 10rem;
+margin-bottom: 4rem;
+line-height: 1.2;
+word-break: break-word;
+}
+
+
+.greeting span, .animated-id span {
+  display: inline-block;
+  animation: fadeInUp 0.4s ease forwards;
+}
+
+.dashboard-sections {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 1400px;
+}
+
+.card-section {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  width: 320px;
+  text-align: center;
+}
+
+.card-section img {
+  width: 100%;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.badge {
+  background: #ffc107;
+  padding: 0.75rem;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.score {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.low-vibe {
+  border: 2px solid #ff4d4f;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  
-  .dashboard-sections {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5rem;
-    max-width: 1400px;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .card-section {
-    background: white;
-    border-radius: 1rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
-    width: 320px;
-    text-align: center;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
   }
-  
-  .card-section img {
-    width: 100%;
-    border-radius: 0.5rem;
-    margin-top: 1rem;
+  to {
+    opacity: 1;
   }
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  /* background:linear-gradient(135deg, #003366, #009688); */
+
+}
+html {
+  height: 100%;
+  width: 100%;
+  font-family: Arial, sans-serif;
+}
+
+/* Overall page container */
+.wrapper {
+  min-height: 100vh;
+  background-color: #fff;
+  position: relative;
+  padding-top: 60px; /* reserve space for header bar */
+}
+
+/* Header bar*/
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #39ace7; 
+}
+
+/* Profile container: holds the icon and the user id */
+.profile-container {
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  margin: 20px;
+}
+
+/* Profile icon */
+.profile-icon {
+  width: 120px;
+  height: 120px;
+  margin-right: 50px;
+}
+
+/* User ID text */
+.profile-user {
+  font-size: 40px;
+  color: #333;
+}
+
+/* "Let's Chat!" */
+.chat-button {
+  display: block;
+  margin: 50px auto;
+  padding: 15px 30px;
+  font-size: 16px;
+  background-color: #3697aa;;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chat-button:hover {
+  background: linear-gradient(45deg, #008abf, #00c78c);
+}
+.parent {
+  width: 87%;
+  margin-top: 60px;
+  /* display: flex;
+  justify-content: center; */
+}
+h1 {
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: #10526c;
+}
+.welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 100px;
+}
+.para {
+  font-size: 1.25rem;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.meet {
+  color: #10526c;
+  font-weight: 500;
   
-  .badges {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-  }
-  
-  .badge {
-    background: #ffc107;
-    padding: 0.75rem;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  }
-  
-  .score {
-    font-weight: bold;
-    font-size: 1.25rem;
-  }
-  
-  .low-vibe {
-    border: 2px solid #ff4d4f;
-  }
-  
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
-  
-  /* Bot Container - Bottom-Right Aligned */
+}
+.ancestor {
+  /* padding-top: -10rem; */
+  margin-left: 15rem;
+  display: flex;
+  flex-direction: row;
+  width: auto;
+}
+.firstRow{
+  display: flex;
+  margin-left: 15rem;
+
+}
+.description {
+  width: auto;
+  margin-left: 1rem;
+}
+.head {
+  border-bottom: #343a40;
+}
+
+.image-wrapper {
+  width: 350px;  /* Specify the width */
+  height: 250px; /* Specify the height */
+  overflow: hidden; /* Prevent overflow */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+}
+
+.responsive-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image fills the div while maintaining aspect ratio */
+}
+#desc {
+  width: 25rem;
+  padding-left: 3rem;
+  padding-bottom: 1rem
+}
+
+
+#fitness {
+  margin-left: 13rem;
+  /* margin-right: 4rem; */
+  display: flex;
+  flex-direction: row;
+  width: auto;
+}
+#rew {
+  width: 20rem;
+  height: auto;
+}
+.card {
+  width: auto;
+  padding: 2rem;
+  margin-right: 5rem;
+}
+.ancestor2 {
+  /* padding-top: -10rem; */
+  margin-left: 2rem;
+  margin-right: 5rem;
+  display: flex;
+  flex-direction: row;
+  width: auto;
+}
+.nav-link1 {
+  margin-top: 1rem;
+  background-color: #3697aa;;
+  color: white;
+  border: #f4f7fc;
+  text-align: left;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  width: auto;
+  font-weight: bold;
+  border-radius: 0.5rem;
+}
+.nav-link1:hover {
+  color: rgb(237, 224, 224);
+}
 .bot-container {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 0.1rem;
+  
+  
+  margin-right: 1rem;
+  margin-left:40rem;
   display: flex;
   align-items: center;
   flex-direction: row-reverse; /* Keeps bubble on the left */
@@ -158,7 +339,7 @@
 
 /* Bot Animation */
 .bot-animation {
-  width: 180px;
+  width: 220px;
   height: auto;
 }
 
@@ -225,5 +406,3 @@
     transform: translate(-25px, -15px); /* Slightly adjusted for smaller screens */
   }
 }
-
-

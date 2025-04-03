@@ -1,91 +1,157 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import './Feedbackpage.css';
-import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar'; // Update the path
-// Importing FeedbackNavbar component
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Feedbackpage.css";
+import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
 
 const FeedbackPage = () => {
   const navigate = useNavigate();
+  const [employeeId, setEmployeeId] = useState("");
+
+useEffect(() => {
+  const storedId = localStorage.getItem("selectedEmployee");
+  setEmployeeId(storedId);
+}, []);
+
   const [conversations, setConversations] = useState([]);
-  const messagesPerPage = 5;
-  const [currentPage, setCurrentPage] = useState(0);
-  const [selectedFeedback, setSelectedFeedback] = useState('Please select a conversation ID.');
-  const [selectedSummary, setSelectedSummary] = useState('Please select a conversation ID.');
+  const [loadingConversations, setLoadingConversations] = useState(true);
+  const [loadingDetails, setLoadingDetails] = useState(false);
+  const [error, setError] = useState(null);
+  const [selectedFeedback, setSelectedFeedback] = useState("Please select a conversation ID.");
+  const [selectedSummary, setSelectedSummary] = useState("Please select a conversation ID.");
   const [selectedIndex, setSelectedIndex] = useState(null);
 
-  // Fetch feedback data from the backend
   useEffect(() => {
-    const fetchFeedback = async () => {
+    if (!employeeId) {
+      console.error("Error: Employee ID is missing.");
+      return;
+    }
+
+    const fetchConversations = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/admin/get_conversationFeedback/{emp_id}/{convo_id}");
-        setConversations(response.data); 
-      } catch (error) {
-        console.error("Error fetching feedback:", error);
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("No authentication token found. Please log in.");
+          
+        const response = await axios.get(
+          `http://127.0.0.1:8000/admin/get_conversations/${employeeId}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        console.log(response)
+
+        if (!Array.isArray(response.data.ConvoID)) {
+          throw new Error("Invalid API response format!");
+        }
+
+        setConversations(response.data.ConvoID);
+      } catch (err) {
+        console.error("Error fetching conversations:", err.message);
+        setError(err.message);
+      } finally {
+        setLoadingConversations(false);
       }
     };
 
-    fetchFeedback();
-  }, []);
+    fetchConversations();
+  }, [employeeId]);
 
-  // Pagination logic
-  const totalPages = Math.ceil(conversations.length / messagesPerPage);
-  const handleNext = () => {
-    if (currentPage < totalPages - 1) setCurrentPage(currentPage + 1);
-  };
-  const handlePrevious = () => {
-    if (currentPage > 0) setCurrentPage(currentPage - 1);
-  };
-
-  // Handle selection
-  const handleConversationClick = (feedback, summary, index) => {
-    setSelectedFeedback(feedback);
-    setSelectedSummary(summary);
+  const handleConversationClick = async (convId, index) => {
     setSelectedIndex(index);
-  };
+    setSelectedFeedback("Loading feedback...");
+    setSelectedSummary("Loading summary...");
+    setLoadingDetails(true);
 
-  // Slice conversations based on the current page
-  const currentConversations = conversations.slice(
-    currentPage * messagesPerPage,
-    (currentPage + 1) * messagesPerPage
-  );
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No authentication token found. Please log in.");
+
+      const feedbackRes = await axios.get(
+        `http://127.0.0.1:8000/admin/get_conversationFeedback/${employeeId}/${convId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      const summaryRes = await axios.get(
+        `http://127.0.0.1:8000/admin/get_conversationSummary/${employeeId}/${convId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      console.log(feedbackRes)
+      console.log(feedbackRes.data["Feedback "] )
+      console.log(summaryRes.data["Summary "])
+
+
+
+      function parseTextResponse(text) {
+        // Split into lines
+        const lines = text.split("\n");
+        
+        // Initialize an object to store parsed data
+        const parsedData = {};
+        let currentSection = null;
+    
+        lines.forEach(line => {
+            line = line.trim();  // Remove extra spaces
+    
+            // Detect section headers (lines starting and ending with **)
+            if (/^\*\*(.+?)\*\*$/.test(line)) {
+                currentSection = line.replace(/\*\*/g, "").trim(); // Remove **
+                parsedData[currentSection] = "";
+            } else if (currentSection) {
+                parsedData[currentSection] += (parsedData[currentSection] ? " " : "") + line;
+            }
+        });
+        
+        return parsedData;
+    }
+      
+      setSelectedFeedback(feedbackRes.data["Feedback "] || "No feedback available.");
+      setSelectedSummary(JSON.stringify(parseTextResponse(summaryRes.data["Summary "]),null,2) || "No summary available.");
+    } catch (err) {
+      console.error("Error fetching feedback & summary:", err.message);
+      setSelectedFeedback("Error fetching feedback.");
+      setSelectedSummary("Error fetching summary.");
+    } finally {
+      setLoadingDetails(false);
+    }
+  };
 
   return (
-    <div className='feedback-wrapper'>
-      {/* Feedback Navbar */}
-      <Feedbacknavbar title="Admin Feedback" />
+    <div className="feedback-wrapper">
+      <Feedbacknavbar title="Feedback Page" />
 
-      <div className='feedback-container'>
-        <div className='feedback-section'>
-          <h2>Conversation ID</h2>
-          <div className='conversation'>
-            {currentConversations.map((conv, index) => (
-              <div
-                key={conv.id}
-                className={`bubble ${selectedIndex === index + currentPage * messagesPerPage ? 'selected' : ''}`}
-                onClick={() => handleConversationClick(conv.feedback, conv.summary, index + currentPage * messagesPerPage)}
-              >
-                {conv.id}
+      <div className="feedback-container">
+        {loadingConversations ? (
+          <p>Loading conversations...</p>
+        ) : error ? (
+          <p className="text-danger">Error: {error}</p>
+        ) : (
+          <>
+            <div className="feedback-section">
+              <h2>Conversation ID</h2>
+              <div className="conversation">
+                {conversations.map((conv, index) => (
+                  <div
+                    key={conv}
+                    className={`bubble ${selectedIndex === index ? "selected" : ""}`}
+                    onClick={() => handleConversationClick(conv, index)}
+                  >
+                    {conv}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          {conversations.length > messagesPerPage && (
-            <div className='pagination'>
-              <button onClick={handlePrevious} disabled={currentPage === 0} className='page-btn'>Previous</button>
-              <button onClick={handleNext} disabled={currentPage === totalPages - 1} className='page-btn'>Next</button>
             </div>
-          )}
-        </div>
 
-        <div className='feedback-section'>
-          <h2>Feedback</h2>
-          <p>{selectedFeedback}</p>
-        </div>
+            <div className="feedback-section">
+              <h2>Feedback</h2>
+              <p>{loadingDetails ? "Loading..." : selectedFeedback}</p>
+            </div>
 
-        <div className='feedback-section'>
-          <h2>Summary</h2>
-          <p>{selectedSummary}</p>
-        </div>
+            <div className="feedback-section">
+              <h2>Summary</h2>
+              <p>{loadingDetails ? "Loading..." : selectedSummary}</p>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
