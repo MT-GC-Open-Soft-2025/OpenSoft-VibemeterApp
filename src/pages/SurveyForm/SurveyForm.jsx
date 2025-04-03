@@ -67,7 +67,7 @@ const SurveyForm = () => {
   };
 
   return (
-    <div className="feedback-wrapper">
+    <div className="feedback-wrapper" style={{backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))"}}>
       <Feedbacknavbar title="Survey" />
       <div className="survey-container">
         <h2>Survey</h2>

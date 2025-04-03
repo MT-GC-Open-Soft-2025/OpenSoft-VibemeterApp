@@ -328,12 +328,14 @@ h1 {
 .bot-container {
   position: fixed;
   bottom: 0.1rem;
-  
+  right: -2rem;
+  height: 300px;
+  width: 300px;
   
   margin-right: 1rem;
-  margin-left:40rem;
+  margin-left:30rem;
   display: flex;
-  align-items: center;
+  align-items: end;
   flex-direction: row-reverse; /* Keeps bubble on the left */
 }
 
@@ -356,7 +358,7 @@ h1 {
   position: relative;
   margin-right: 0;
   transform: translate(-30px, -20px); /* Moving the bubble lower near the mouth */
-
+  margin-bottom: 4rem;
   /* Apply the up-down animation */
   animation: moveUpDown 1.5s ease-in-out infinite; /* 3s is the speed, you can adjust this */
 }
@@ -393,6 +395,8 @@ h1 {
   .bot-container {
     right: 10px;
     bottom: 10px;
+    /* height: 300px;
+    width: 300px; */
   }
 
   .bot-animation {

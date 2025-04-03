@@ -51,7 +51,7 @@ const ContactForm = () => {
   };
 
   return (
-     <div className='feedback-wrapper'>
+     <div className='feedback-wrapper' style={{backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))"}}>
     {/* //   <nav className='navbar'>
     //     <div className='nav-content'>Contact Us</div>
     //     <button className='go-back-btn' onClick={handleGoBack}>Go Back</button>
