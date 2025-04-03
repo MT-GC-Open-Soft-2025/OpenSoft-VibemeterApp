@@ -161,7 +161,7 @@ async def send_message(user: any, msg: str, convid: str) -> Dict[str, Any]:
 
     dict_user = Message(sender="user", timestamp=datetime.datetime.now(), message=msg)
     chat_record.messages.append(dict_user)
-    prompt = f"This is an ongoing chat. Initial prompt : {chat_record.initial_prompt}The messages or converstaion till now is as follows: {chat_record.messages} Continue the chat. Reply should not be more than 60 words"
+    prompt = f"This is an ongoing chat. Initial prompt : {chat_record.initial_prompt}The messages or converstaion till now is as follows: {chat_record.messages} Continue the chat. Reply should not be more than 100 words"
     print(prompt)
     que = generate_response(prompt, chatObj1)
     dict_bot = Message(sender="bot", timestamp=datetime.datetime.now(), message=que)
