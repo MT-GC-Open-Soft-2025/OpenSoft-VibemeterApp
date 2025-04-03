@@ -44,7 +44,7 @@ const Start = () => {
                   <Link className="nav-link" to="landing" smooth duration={500}>Home</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="login" smooth duration={500}>Sign In</Link>
+                  <Link className="nav-link" to="signin" smooth duration={500}>Sign In</Link>
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="faq" smooth duration={500}>FAQ</Link>
