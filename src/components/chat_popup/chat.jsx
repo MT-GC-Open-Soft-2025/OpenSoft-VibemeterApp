@@ -11,61 +11,89 @@ import Swal from "sweetalert2";
 const Chat = () => {
   const navigate = useNavigate();
 
-  const conversations = [
-    {
-      id: "CHAT001",
-      message: "Hello, how can I help you today?",
-      details: "Details for CHAT001.",
-    },
-    {
-      id: "CHAT002",
-      message: "I have an issue with my account.",
-      details: "Details for CHAT002.",
-    },
-    {
-      id: "CHAT003",
-      message: "Can you assist me with billing?",
-      details: "Details for CHAT003.",
-    },
-    {
-      id: "CHAT004",
-      message: "Thank you for your help!",
-      details: "Details for CHAT004.",
-    },
-    {
-      id: "CHAT005",
-      message: "What are your operating hours?",
-      details: "Details for CHAT005.",
-    },
-    {
-      id: "CHAT006",
-      message: "I need further assistance.",
-      details: "Details for CHAT006.",
-    },
-    {
-      id: "CHAT007",
-      message: "Can you escalate my issue?",
-      details: "Details for CHAT007.",
-    },
-    {
-      id: "CHAT008",
-      message: "I want to know more about your services.",
-      details: "Details for CHAT008.",
-    },
-    { id: "CHAT009", message: "Goodbye!", details: "Details for CHAT009." },
-    {
-      id: "CHAT010",
-      message: "Thank you again!",
-      details: "Details for CHAT010.",
-    },
-  ];
+  const [ convids, setConversationIds ] = useState([])
+  const [ conversations, setConversations ] = useState([])
+
+  // const conversations = [
+  //   {
+  //     id: "CHAT001",
+  //     message: "Hello, how can I help you today?",
+  //     details: "Details for CHAT001.",
+  //   },
+  //   {
+  //     id: "CHAT002",
+  //     message: "I have an issue with my account.",
+  //     details: "Details for CHAT002.",
+  //   },
+  //   {
+  //     id: "CHAT003",
+  //     message: "Can you assist me with billing?",
+  //     details: "Details for CHAT003.",
+  //   },
+  //   {
+  //     id: "CHAT004",
+  //     message: "Thank you for your help!",
+  //     details: "Details for CHAT004.",
+  //   },
+  //   {
+  //     id: "CHAT005",
+  //     message: "What are your operating hours?",
+  //     details: "Details for CHAT005.",
+  //   },
+  //   {
+  //     id: "CHAT006",
+  //     message: "I need further assistance.",
+  //     details: "Details for CHAT006.",
+  //   },
+  //   {
+  //     id: "CHAT007",
+  //     message: "Can you escalate my issue?",
+  //     details: "Details for CHAT007.",
+  //   },
+  //   {
+  //     id: "CHAT008",
+  //     message: "I want to know more about your services.",
+  //     details: "Details for CHAT008.",
+  //   },
+  //   { id: "CHAT009", message: "Goodbye!", details: "Details for CHAT009." },
+  //   {
+  //     id: "CHAT010",
+  //     message: "Thank you again!",
+  //     details: "Details for CHAT010.",
+  //   },
+  // ];
+
+  // Fetch conversations from API on component mount
+  useEffect(() => {
+    const fetchConversations = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/");
+          return;
+        }
+
+        const res = await axios.get("http://127.0.0.1:8000/user/getConvoids", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("Fetched conversations:", res.data);
+        setConversationIds(res.data.convid_list || []); // list of convoids, then use this to fetch from getChat api
+      } catch (err) {
+        console.error("Error fetching conversations:", err);
+        Swal.fire("Error", "Failed to fetch conversations. Please try again.", "error");
+      }
+
+    };
+
+    fetchConversations();
+  }, [navigate]);
 
   const messagesPerPage = 7;
-  const totalPages = Math.ceil(conversations.length / messagesPerPage);
+  const totalPages = Math.ceil(convids.length / messagesPerPage);
   const [currentPage, setCurrentPage] = useState(0);
   const [rating, setRating] = useState(0);
 
-  const [selectedMessage, setSelectedMessage] = useState("Please select a chat.");
+  const [selectedMessage, setSelectedMessage] = useState([]);
   const [selectedDetails, setSelectedDetails] = useState("Please select a chat.");
   const [selectedIndex, setSelectedIndex] = useState(null);
 
@@ -148,13 +176,23 @@ const Chat = () => {
     }
   };
 
-  const handleConversationClick = (message, details, index) => {
-    setSelectedMessage(message);
-    setSelectedDetails(details);
+  const handleConversationClick = async (conv_id, index) => {
+    try {
+      const res = await axios.get(
+        `http://127.0.0.1:8000/chat/chat/${conv_id}`,
+        {},
+      );
+      console.log(res);
+      setSelectedMessage(res.data.chat);
+    } catch (err) {
+      console.error("Error starting chat:", err);
+    }
+    
+    // setSelectedDetails(details);
     setSelectedIndex(index);
   };
 
-  const currentConversations = conversations.slice(
+  const currentConversations = convids.slice(
     currentPage * messagesPerPage,
     (currentPage + 1) * messagesPerPage
   );
@@ -303,9 +341,9 @@ const Chat = () => {
           <div className="chat-left">
             <h5 className="chat-heading fw-bold mt-4">👨 Employee Chats</h5>
             <div className="conversation">
-              {currentConversations.map((conv, index) => (
+              {currentConversations.map((conv_id, index) => (
                 <div
-                  key={conv.id}
+                  key={conv_id}
                   className={`bubble ${
                     selectedIndex === index + currentPage * messagesPerPage
                       ? "selected"
@@ -313,17 +351,17 @@ const Chat = () => {
                   }`}
                   onClick={() =>
                     handleConversationClick(
-                      conv.message,
-                      conv.details,
+                      
+                      conv_id,
                       index + currentPage * messagesPerPage
                     )
                   }
                 >
-                  {conv.id}
+                  {conv_id}
                 </div>
               ))}
             </div>
-            {conversations.length > messagesPerPage && (
+            {convids.length > messagesPerPage && (
               <div className="pagination">
                 <button
                   onClick={handlePrevious}
