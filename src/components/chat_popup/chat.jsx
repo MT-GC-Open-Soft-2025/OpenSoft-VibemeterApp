@@ -215,6 +215,7 @@ const Chat = () => {
       sendFeedback(selectedRating);
     }
   };
+  
 
   const sendFeedback = async (feedback) => {
     setChatStarted(false);
@@ -346,7 +347,7 @@ const Chat = () => {
               </button>
             )}
 
-            <div className="chat-right-content" style={{backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))"}}>
+            <div className="chat-right-content">
               {/* If chat has started (or restored), show the conversation */}
               {chatStarted ? (
                 <>
