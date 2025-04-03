@@ -24,7 +24,14 @@ import {
   LinearScale,
 } from "chart.js";
 
-ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+ChartJS.register(
+  ArcElement,
+  Tooltip,
+  Legend,
+  BarElement,
+  CategoryScale,
+  LinearScale
+);
 
 const UserPage = () => {
   const navigate = useNavigate();
@@ -68,7 +75,8 @@ const UserPage = () => {
 
   const handleDownload = () => {
     // Replace with your PDF file URL
-    const pdfUrl = "https://apps.who.int/iris/bitstream/handle/10665/42823/9241562579.pdf";
+    const pdfUrl =
+      "https://apps.who.int/iris/bitstream/handle/10665/42823/9241562579.pdf";
 
     // Create an invisible anchor element
     const link = document.createElement("a");
@@ -83,7 +91,8 @@ const UserPage = () => {
 
   if (!user) return <div className="p-4">Loading...</div>;
 
-  const vibeEmoji = user.vibe_score >= 4.5 ? "😎" : user.vibe_score >= 3 ? "🙂" : "😕";
+  const vibeEmoji =
+    user.vibe_score >= 4.5 ? "😎" : user.vibe_score >= 3 ? "🙂" : "😕";
   const vibeMessage =
     user.vibe_score >= 4.5
       ? "You're doing great!"
@@ -106,7 +115,8 @@ const UserPage = () => {
       <div
         className="feedback-wrapper"
         style={{
-          marginLeft: "150px",
+          width: "88.8%",
+          marginLeft: "170px",
           marginTop: "0px",
           backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))",
           minHeight: "100vh",
@@ -116,7 +126,8 @@ const UserPage = () => {
         <div className="welcome">
           <h1>Hello Employee!</h1>
           <p className="para">
-            Empowering you at work — support, growth, and motivation for every challenge.
+            Empowering you at work — support, growth, and motivation for every
+            challenge.
           </p>
           <button
             className="nav-link1"
@@ -135,7 +146,9 @@ const UserPage = () => {
           <div className="row align-items-center my-5 animate__animated animate__fadeInLeft">
             <div className="ancestor">
               <div
-                className={`card text-center shadow-lg p-4 box ${user.vibe_score < 3 ? "low-vibe" : ""}`}
+                className={`card text-center shadow-lg p-4 box ${
+                  user.vibe_score < 3 ? "low-vibe" : ""
+                }`}
                 style={{ width: "22rem", marginTop: "2rem" }}
               >
                 <div className="head">
@@ -155,10 +168,21 @@ const UserPage = () => {
             </div>
           </div>
 
-          <div className="row align-items-center my-5 animate__animated animate__fadeInLeft">
+          {/* "Let's Chat!" button */}
+          {/* <button className="chat-button" onClick={openChat}>
+                Let's Chat!
+              </button> */}
+          {/* <button className="feedback-button" onClick={handleFeedback}>
+                Fill Feedback
+              </button> */}
+          <div
+            id="fitness"
+            className="row align-items-center my-5 animate__animated animate__fadeInLeft"
+          >
             <div className="ancestor2" id="descrip">
               <div id="rew" className="meet">
-                YOU'VE EARNED <strong>{user.reward_points}</strong> POINTS. YOU'RE AMAZING!
+                YOU'VE EARNED <strong>{user.reward_points}</strong> POINTS.
+                YOU'RE AMAZING!
                 <Badges />
               </div>
             </div>
@@ -167,6 +191,11 @@ const UserPage = () => {
                 <>
                   <div id="desc">
                     <h4>Your Rewards</h4>
+                    {/* <Badges/> */}
+                    {/* <p>
+                            You've earned <strong>{user.reward_points}</strong>{" "}
+                            points. You're amazing!
+                          </p> */}
                   </div>
                   <div className="image-wrapper">
                     <img
@@ -180,7 +209,8 @@ const UserPage = () => {
                 <>
                   <h4>Don't Worry!</h4>
                   <p>
-                    You haven't earned points yet, but your journey's just beginning. Keep pushing! 💪
+                    You haven't earned points yet, but your journey's just
+                    beginning. Keep pushing! 💪
                   </p>
                   <img
                     src="https://img.freepik.com/free-vector/startup-launch-concept-illustration_114360-6414.jpg"
@@ -190,8 +220,10 @@ const UserPage = () => {
               )}
             </div>
           </div>
-
-          <div className="row align-items-center my-5 animate__animated animate__fadeInLeft">
+          <div
+            id="fitness"
+            className="row align-items-center my-5 animate__animated animate__fadeInLeft"
+          >
             <div className="card">
               <div id="desc">
                 <h4>Performance Overview</h4>
@@ -205,12 +237,17 @@ const UserPage = () => {
               </div>
             </div>
             <div className="ancestor2" id="descrip">
-              <div id="rew" className="meet">{performanceMessage}</div>
+              <div id="rew" className="meet">
+                {performanceMessage}
+              </div>
             </div>
           </div>
 
           {user.leave_days !== undefined && user.leave_days === 0 && (
-            <div className="row align-items-center my-5 animate__animated animate__fadeInLeft">
+            <div
+              id="fitness"
+              className="row align-items-center my-5 animate__animated animate__fadeInLeft"
+            >
               <div className="ancestor2" id="descrip">
                 <div id="rew" className="meet">
                   Wow, you haven’t taken any leaves. You're a rockstar! 🚀
@@ -230,38 +267,103 @@ const UserPage = () => {
               </div>
             </div>
           )}
-
+          {/* {user.leave_days !== undefined && user.leave_days === 0 && (
+                <div
+                  id="fitness"
+                  className="row align-items-center my-5 animate__animated animate__fadeInLeft"
+                >
+                  <div className="ancestor2" id="descrip">
+                    <div id="rew" className="meet">
+                      Wow, you haven’t taken any leaves. You're a rockstar! 🚀
+                    </div>
+                  </div>
+                  <div className="card">
+                    <div id="desc">
+                      <h4>Zero Leaves!</h4>
+                    </div>
+                    <div className="image-wrapper">
+                      <img
+                        src="https://img.freepik.com/free-vector/rocket-launch-concept-illustration_114360-6413.jpg"
+                        alt="Performance"
+                        className="responsive-image"
+                      />
+                    </div>
+                  </div>
+                  
+                </div>
+              )} */}
           {user.leave_days !== undefined && (
-            <div className="row align-items-center my-5 animate__animated animate__fadeInLeft">
-              <div className="ancestor2" id="descrip">
-                <div id="rew" className="meet">
-                  PLEASE TAKE A MOMENT TO FILL OUT THIS SHORT SURVEY - YOUR FEEDBACK MATTERS!
-                  <button className="nav-link1" onClick={handleFeedback}>Submit Survey</button>
-                </div>
-              </div>
-              <div className="card">
-                <div id="desc">
-                  <h4>Survey Form</h4>
-                </div>
-                <div className="image-wrapper">
-                  <img
-                    src="https://media.istockphoto.com/id/1019835506/vector/positive-business-woman-with-a-giant-pencil-on-his-shoulder-nearby-marked-checklist-on-a.jpg?s=612x612&w=0&k=20&c=vIJwRJQh7qTRQ7fGCEbJFebvplS7S7zTZAeVqVDtZ8k="
-                    alt="Performance"
-                    className="responsive-image"
-                  />
-                </div>
-                <div className="bot-container" onClick={handleClick} style={{ cursor: "pointer" }}>
-                  <div className="chat-bubble">Hi! How can I assist you?</div>
-                  <Lottie
-                    animationData={animationData}
-                    loop={true}
-                    className="bot-animation"
-                    style={{ cursor: "pointer" }} // Makes it clear that it's clickable
-                  />
-                </div>
-              </div>
+            <div
+              id="fitness"
+              className="row align-items-center my-5 animate__animated animate__fadeInLeft"
+            >
+              {/* If user has taken 0 leaves, place ancestor2 first, otherwise place card first */}
+              {user.leave_days === 0 ? (
+                <>
+                  <div className="card">
+                    <div id="desc">
+                      <h4>Survey Form</h4>
+                    </div>
+                    <div className="image-wrapper">
+                      <img
+                        src="https://media.istockphoto.com/id/1019835506/vector/positive-business-woman-with-a-giant-pencil-on-his-shoulder-nearby-marked-checklist-on-a.jpg?s=612x612&w=0&k=20&c=vIJwRJQh7qTRQ7fGCEbJFebvplS7S7zTZAeVqVDtZ8k="
+                        alt="Performance"
+                        className="responsive-image"
+                      />
+                    </div>
+                  </div>
+                  <div className="ancestor2" id="descrip">
+                    <div id="rew" className="meet">
+                      Wow, you haven’t taken any leaves. You're a rockstar! 🚀
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="ancestor2" id="descrip">
+                    <div id="rew" className="meet">
+                      PLEASE TAKE A MOMENT TO FILL OUT THIS SHORT SURVEY - YOUR
+                      FEEDBACK MATTERS!
+                      <button className="nav-link1" onClick={handleFeedback}>
+                        Submit Survey
+                      </button>
+                    </div>
+                  </div>
+                  <div className="card">
+                    <div id="desc">
+                      <h4>Survey Form</h4>
+                    </div>
+                    <div className="image-wrapper">
+                      <img
+                        src="https://media.istockphoto.com/id/1019835506/vector/positive-business-woman-with-a-giant-pencil-on-his-shoulder-nearby-marked-checklist-on-a.jpg?s=612x612&w=0&k=20&c=vIJwRJQh7qTRQ7fGCEbJFebvplS7S7zTZAeVqVDtZ8k="
+                        alt="Performance"
+                        className="responsive-image"
+                      />
+                    </div>
+                    
+                  </div>
+                </>
+              )}
             </div>
           )}
+          <div
+                      className="bot-container"
+                      onClick={handleClick}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <div className="chat-bubble">
+                        Hi! How can I assist you?
+                      </div>
+                      <Lottie
+                        animationData={animationData}
+                        loop={true}
+                        className="bot-animation"
+                        style={{ cursor: "pointer" }} // Makes it clear that it's clickable
+                      />
+                    </div>
+
+          {/* </div>
+          )} */}
         </div>
       </div>
     </div>
