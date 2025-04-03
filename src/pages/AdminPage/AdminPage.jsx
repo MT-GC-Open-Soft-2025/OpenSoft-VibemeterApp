@@ -32,6 +32,10 @@ const AdminPage = () => {
     navigate(`/feedback`);
   };
 
+  const handlegetBack = () => {
+    window.location.reload();
+  };
+
   return (
     <>
       <Feedbacknavbar title="Admin Page" />
@@ -43,7 +47,16 @@ const AdminPage = () => {
         minHeight: '100vh',
         padding: '20px'
       }}>
+        <div className="apple">
         <Navbar setSelectedEmployee={setSelectedEmployee} /> 
+        {selectedEmployee && (
+              <button className="styled-button" onClick={handlegetBack}>
+                       Back
+              </button>
+          )}
+        </div>
+        
+        
         <div className="text-container">
           <h3><b>Hello ADMIN !</b></h3>
         </div>
@@ -80,3 +93,4 @@ const AdminPage = () => {
 };
 
 export default AdminPage;
+

@@ -1,89 +1,51 @@
-
-/* BASIC */
-
-html, body {
-  background-color: white !important;  /* Replace with your desired color */
+/* Container styling */
+.admin-container {
+  margin-left: 200px;
+  margin-top: 64px;
+  background-image: linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255));
+  min-height: 100vh;
+  padding: 20px;
 }
 
-
-html {
-  background-color: #56baed;
-}
-
-body {
-  font-family: "Poppins", sans-serif;
-  height: 100vh;
-  /* background: linear-gradient(135deg, #74ebd5, #acb6e5); */
-}
-.Meters-vibe {
+/* Aligning the button to the right */
+.button-container {
   display: flex;
-}
-a {
-  color: #92badd;
-  display:inline-block;
-  text-decoration: none;
-  font-weight: 400;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 10px;
 }
 
-h2 {
-  text-align: center;
+/* Button styling */
+.styled-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
   font-size: 12px;
-  font-weight: 600;
-  display:inline-block;
-  margin: 40px 8px 10px 8px; 
-  color: #cccccc;
+  transition: background-color 0.3s ease-in-out;
 }
 
-/* STRUCTURE */
+.styled-button:hover {
+  background-color: #0056b3;
+}
 
-.wrapper {
-  
+
+
+/* Profile Section */
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.profile-container {
   display: flex;
   align-items: center;
-  flex-direction: column; 
-  justify-content: center;
-  width: 100%;
-  min-height: 100%;
-  /* padding: 20px; */
-}
-
-#formContent {
-  -webkit-border-radius: 10px 10px 10px 10px;
-  border-radius: 10px 10px 10px 10px;
-  background: #fff;
-  padding: 30px;
-  width: 90%;
-  max-width: 450px;
-  position: relative;
-  padding: 0px;
-  -webkit-box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-  box-shadow: 0 30px 60px 0 rgba(0,0,0,0.3);
-  text-align: center;
-}
-#formContent img{
-  height:30%;
-  width:30%;
-}
-#formFooter {
-  background-color: #f6f6f6;
-  border-top: 1px solid #dce8f1;
-  padding: 25px;
-  text-align: center;
-  -webkit-border-radius: 0 0 10px 10px;
-  border-radius: 0 0 10px 10px;
-}
-
-
-
-/* TABS */
-
-h2.inactive {
-  color: #cccccc;
-}
-
-h2.active {
-  color: #0d0d0d;
-  border-bottom: 2px solid #5fbae9;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 /* FORM TYPOGRAPHY*/
@@ -152,6 +114,19 @@ input[type=text]:placeholder {
   color: #cccccc;
 }
 
+
+.profile-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.profile-user {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Centering text */
 .text-container {
   text-align: center;
   font-size: large;
@@ -344,38 +319,42 @@ input[type=text]:placeholder {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: auto;
-}
-/* .profile-container {
-  width: 100vw;
-} */
-/* .profile-container{
-  height: 2rem;
-} */
-
-/* Meters-Vibe */
-
-.Meters-vibe {
-  display: flex;
+  margin-top: 20px;
 }
 
-.description {
+/* Align search bar and button in the same row */
+.search-button-container {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
   align-items: center;
-  height: auto;
+  gap: 10px; /* Space between search bar and button */
+  justify-content: center; /* Centering both elements */
+  margin-bottom: 20px;
 }
-/* .profile-container {
-  width: 100vw;
-} */
-/* .profile-container{
-  height: 2rem;
-} */
+
+/* Button styling */
+.styled-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.styled-button:hover {
+  background-color: #0056b3;
+}
 
 
 
-
+.apple {
+  display: flex;
+  justify-content: center;  /* Aligns items in the center horizontally */
+  align-items: center;      /* Aligns items in the center vertically */
+  gap: 20px;               /* Adds space between the items */
+}
 
   
 
