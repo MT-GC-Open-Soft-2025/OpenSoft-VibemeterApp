@@ -10,7 +10,13 @@ async def get_user_details(emp_id: str):
         return {
             
             "emp_id": user.emp_id,
-            #if emotion score there else dont show
+            "total_work_hours": user.total_work_hours,
+            "leave_days": user.leave_days,
+            "types_of_leave": user.types_of_leaves,
+            "feedback": user.feedback,
+            "weighted_performance": user.weighted_performance,
+            "reward_points": user.reward_points,
+            "award_list": user.award_list,          
             
             "vibe_score" : user.vibe_score,
             "factors_in_sorted_order" : user.factors_in_sorted_order,

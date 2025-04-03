@@ -79,3 +79,9 @@ async def get_aggregate_feedback(admin:dict=Depends(adminauthenticate)) -> Any:
         return {"message":"Admin not found"}
     return await get_aggregate_list()
 
+@admin_router.get("/get_aggregate_feedback")
+async def get_aggregate_feedback(admin:dict=Depends(adminauthenticate)) -> Any:
+    if(not admin):
+        print("Admin not found")
+        return {"message":"Admin not found"}
+    return await get_aggregate_list()

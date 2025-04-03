@@ -92,10 +92,11 @@ async def fetch_employee_conversationSummary_byId(emp_id: str, convo_id: str) ->
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
     
+    
 async def fetch_average_feedback_score() -> Any:
     try:
         feedbacks = await Feedback_ratings.find_all().to_list()
-        scores = [0 for _ in range(5)] # initially score is zero for each of the 5 questions
+        scores = [0 for _ in range(5)] 
         for feedback in feedbacks:
             scores[0] = scores[0] + feedback.Q1
             scores[1] = scores[1] + feedback.Q2
@@ -103,10 +104,11 @@ async def fetch_average_feedback_score() -> Any:
             scores[3] = scores[3] + feedback.Q4
             scores[4] = scores[4] + feedback.Q5
 
-        for score in scores:
-            score = score/len(feedbacks) # find average
+        if feedbacks:  
+            for i in range(5):
+                scores[i] = scores[i] / len(feedbacks)
         
-        return scores # return a list with average scores for each question
+        return scores
     
     except Exception as error:
-        raise HTTPException(status_code=500, detail=str(error))
+        raise HTTPException(status_code=500, detail=str(error))    

@@ -1,16 +1,18 @@
 from beanie import Document
-from typing import List,Optional
+from typing import List,Optional,Dict
 
 class Employee(Document):
-    #id: Optional[PyObjectId] = Field(alias="_id", default=None)
-    emp_id: str 
-    #make all other optional
-    
-    #emotion_score: Optional[float]=None
-    vibe_score: Optional[float]=-1
-    factors_in_sorted_order: Optional[List[str]]=None
-    
-    
+   
+    emp_id: str    
+    vibe_score: Optional[float] = None
+    total_work_hours: Optional[float] = None
+    leave_days: Optional[float] = None
+    types_of_leaves: Optional[Dict[str, int]] = None  
+    feedback: Optional[float] = None
+    weighted_performance: Optional[float] = None
+    reward_points: Optional[int] = None
+    award_list: Optional[List[str]] = None  
+    factors_in_sorted_order: Optional[List[str]] = None
 
     class Settings:
         
