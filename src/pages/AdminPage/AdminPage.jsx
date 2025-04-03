@@ -9,7 +9,7 @@ import Badges from "../../components/Badges/Badges";
 import ButtonComponent from "../../components/ButtonComponent";
 
 import EmotionZoneChart from "./EmotionZone";
-import PieChart from "./PieChart";
+import EmotionZoneChart2 from "./EmotionZone2";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Navbar from "../../components/Search-bar/SearchBar";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
@@ -42,7 +42,7 @@ const AdminPage = () => {
       <Sidebar />
       <div style={{
         marginLeft: '200px',
-        marginTop: '64px',
+        marginTop: '60px',
         backgroundImage: 'linear-gradient(135deg,rgb(255, 255, 255),rgb(168 241 255))',
         minHeight: '100vh',
         padding: '20px'
@@ -77,9 +77,14 @@ const AdminPage = () => {
             <Rewards employeeId={selectedEmployee}/>
           </div>
         ) : (
-          <div className="charts">
-            <EmotionZoneChart />
-          </div>
+          <>
+            <div className="charts">
+              <EmotionZoneChart />
+            </div>
+            <div className="charts">
+              <EmotionZoneChart2 />
+            </div>
+          </>
         )}
       </div>
        <Footer/> 

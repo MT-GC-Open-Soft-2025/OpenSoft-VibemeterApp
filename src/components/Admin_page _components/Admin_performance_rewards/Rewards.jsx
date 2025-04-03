@@ -45,13 +45,13 @@ export default function Rewards({ employeeId }) {
         <div className="alert alert-danger">{error}</div>
       ) : (
         <>
-          <div className="d-flex justify-content-between mb-2">
+          <div className="d-flex justify-content-between mb-7">
             <strong>Reward</strong>
             <span>{rewardPoints} pts</span>
             <span>Max: {maxPoints} pts</span>
           </div>
           
-          <div className="progress" style={{ height: "24px" }}>
+          <div className="progress" style={{ height: "24px", marginBottom: "80px" }}>
             <div
               className="progress-bar bg-info"
               role="progressbar"
