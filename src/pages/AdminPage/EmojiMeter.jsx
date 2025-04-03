@@ -1,30 +1,21 @@
 import React, { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap
-// import "./EmojiMeter.css";
-
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 // Function to determine emoji and styling
 const getEmojiByValue = (value) => {
   switch (value) {
-    case 1:
-      return <span className="display-1 text-danger">😭</span>; // Crying Face (Red)
-    case 2:
-      return <span className="display-1 text-danger">😢</span>; // Sad Face with Tear (Red)
-    case 3:
-      return <span className="display-1 text-warning">🙁</span>; // Slightly Frowning Face (Amber)
-    case 4:
-      return <span className="display-1 text-warning">😐</span>; // Neutral Face (Amber)
-    case 5:
-      return <span className="display-1 text-success">🙂</span>; // Slightly Smiling Face (Green)
-    case 6:
-      return <span className="display-1 text-success">😊</span>; // Smiling Face (Green)
-    default:
-      return <span className="display-1 text-secondary">❓</span>; // Unknown (Gray)
+    case 1: return <span className="display-1 text-danger">😭</span>; // Very Bad
+    case 2: return <span className="display-1 text-danger">😢</span>; // Bad
+    case 3: return <span className="display-1 text-warning">🙁</span>; // Not Good
+    case 4: return <span className="display-1 text-warning">😐</span>; // Average
+    case 5: return <span className="display-1 text-success">🙂</span>; // Happy
+    case 6: return <span className="display-1 text-success">😊</span>; // Very Happy
+    default: return <span className="display-1 text-secondary">❓</span>; // Unknown
   }
 };
 
-
-// Function to determine mood text
+// Function to get mood text
 const getTextByValue = (value) => {
   switch (value) {
     case 1: return "Very Bad";
@@ -37,18 +28,58 @@ const getTextByValue = (value) => {
   }
 };
 
-export default function EmojiMeter() {
-  const [value, setValue] = useState(5);
-
-  const generateRandomValue = () => {
-    const newValue = Math.floor(Math.random() * 6) + 1; // Generates a number between 1 and 6
-    setValue(newValue);
-  };
-
+export default function EmojiMeter({ employeeId }) {
+  const [vibeScore, setVibeScore] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    generateRandomValue();
-  }, []);
+    const fetchVibeScore = async () => {
+      if (!employeeId) {
+        console.warn("No employee ID provided.");
+        setError("Employee ID is missing!");
+        return;
+      }
+
+      console.log(`Fetching vibe score for Employee ID: ${employeeId}`);
+
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No authentication token found. Please log in.");
+        }
+
+        const response = await axios.get(
+          `http://127.0.0.1:8000/admin/get_detail/${employeeId}`,  
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        console.log("Full API Response:", response.data);
+
+        if (!response.data || typeof response.data.user_record.vibe_score === "undefined") {
+          throw new Error("vibe_score not found in API response!");
+        }
+
+        let score = response.data.vibe_score;
+
+        
+        if (score === -1) score = 1; // Very Bad
+        else if (score === 0) score = 2; // Bad
+        else if (score === 1) score = 3; // Not Good
+        else if (score === 2) score = 4; // Average
+        else if ([3, 4, 5].includes(score)) score = 5; // Happy
+        else score = 6; // Very Happy
+
+        setVibeScore(score);
+        setError(""); // Clear any previous error
+      } catch (error) {
+        console.error("Error fetching vibe score:", error.message);
+        setError(error.message);
+        setVibeScore(null);
+      }
+    };
+
+    fetchVibeScore();
+  }, [employeeId]);
 
   return (
     <div className="container d-flex justify-content-center align-items-center min-vh-100">
@@ -57,15 +88,19 @@ export default function EmojiMeter() {
           <h4>Emoji Mood Meter</h4>
         </div>
         <div className="card-body">
-          {getEmojiByValue(value)}
-          <h5 className="mt-3">{getTextByValue(value)}</h5>
-          <p className="text-muted">Mood Value: <strong>{value}</strong></p>
-          <button className="btn btn-primary" onClick={generateRandomValue}>
-            Generate Random Mood
-          </button>
+          {error ? (
+            <p className="text-danger">Error: {error}</p>
+          ) : vibeScore !== null ? (
+            <>
+              {getEmojiByValue(vibeScore)}
+              <h5 className="mt-3">{getTextByValue(vibeScore)}</h5>
+              <p className="text-muted">Vibe Score: <strong>{vibeScore}</strong></p>
+            </>
+          ) : (
+            <p>Loading...</p>
+          )}
         </div>
       </div>
     </div>
   );
 }
-

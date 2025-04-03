@@ -38,7 +38,7 @@
   width: 100%;
 }
 
-.nav-link {
+.nav-link1 {
   background: none;
   color: white;
   border: none;
@@ -49,7 +49,7 @@
   font-weight: bold;
 }
 
-.nav-link.logout {
+.nav-link1.logout {
   color: #ff6b6b;
 }
 
@@ -310,7 +310,7 @@ h1 {
   flex-direction: row;
   width: auto;
 }
-.nav-link {
+.nav-link1 {
   margin-top: 1rem;
   background-color: #3697aa;;
   color: white;
@@ -322,6 +322,91 @@ h1 {
   font-weight: bold;
   border-radius: 0.5rem;
 }
-.nav-link:hover {
+.nav-link1:hover {
   color: rgb(237, 224, 224);
+}
+.bot-container {
+  position: fixed;
+  bottom: 0.1rem;
+  right: -2rem;
+  height: 300px;
+  width: 300px;
+  
+  margin-right: 1rem;
+  margin-left:30rem;
+  display: flex;
+  align-items: end;
+  flex-direction: row-reverse; /* Keeps bubble on the left */
+}
+
+/* Bot Animation */
+.bot-animation {
+  width: 220px;
+  height: auto;
+}
+
+/* Chat Bubble - Adjusted Below Mouth */
+.chat-bubble {
+  background-color: white;
+  color: black;
+  padding: 8px 12px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+  max-width: 120px;
+  text-align: center;
+  position: relative;
+  margin-right: 0;
+  transform: translate(-30px, -20px); /* Moving the bubble lower near the mouth */
+  margin-bottom: 4rem;
+  /* Apply the up-down animation */
+  animation: moveUpDown 1.5s ease-in-out infinite; /* 3s is the speed, you can adjust this */
+}
+
+/* Chat Bubble Tail - Adjusted */
+.chat-bubble::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -6px;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-right: 6px solid white;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+}
+
+/* Keyframes for up and down animation */
+@keyframes moveUpDown {
+  0% {
+    transform: translate(-30px, -20px);
+  }
+  50% {
+    transform: translate(-30px, -30px); /* Moves the bubble 10px higher */
+  }
+  100% {
+    transform: translate(-30px, -20px); /* Back to original position */
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .bot-container {
+    right: 10px;
+    bottom: 10px;
+    /* height: 300px;
+    width: 300px; */
+  }
+
+  .bot-animation {
+    width: 140px;
+  }
+
+  .chat-bubble {
+    font-size: 10px;
+    max-width: 100px;
+    padding: 4px 8px;
+    transform: translate(-25px, -15px); /* Slightly adjusted for smaller screens */
+  }
 }

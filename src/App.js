@@ -12,6 +12,8 @@ import { useEffect } from 'react';
 import {Link, Element } from 'react-scroll';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import Chat from './components/chat_popup/chat';
+
 
 import 'animate.css';
 import AOS from 'aos';
@@ -28,51 +30,26 @@ const App = () => {
   }, []);
 
 
+
+
+
+
   return (
-    <div>
-      {/* <nav className="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
-              <div className="container">
-                <a className="navbar-brand fw-bold" href="#">MindWell</a>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                  <span className="navbar-toggler-icon" />
-                </button>
-                <div className="collapse navbar-collapse" id="navbarNav">
-                  <ul className="navbar-nav ms-auto">
-                    <li className="nav-item">
-                      <Link className="nav-link" to="landing" smooth duration={500}>Home</Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="login" smooth duration={500}>Sign In</Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="faq" smooth duration={500}>FAQ</Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link className="nav-link" to="book-demo" smooth duration={500}>Book a Demo</Link>
-                    </li>
-      
-                    <li className="nav-item">
-                      <Link className="nav-link" to="footer" smooth duration={500}>Footer</Link>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </nav> */}
-            
+    <Router>
+      <Routes>
+        <Route path="/" element={<Start />} />
+        <Route path="/login" element={<Start />} />
+        <Route path="/admin" element={<AdminPage />} />
+        <Route path="/user" element={<UserPage />} />
+        {/* Route for the new single-form survey */}
+        <Route path="/surveyform" element={<SurveyForm />} />
+        {/* The old three-column layout remains on a different route (if still needed) */}
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/feedback" element={<FeedbackPage />} />
+        <Route path="/contact" element={<ContactForm />} /> {/* New Contact Page */}
 
-
-      <Router>
-        <Routes>
-          <Route path="/" element={<Start/>} />
-          <Route path="/login" element={<Start />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/user" element={<UserPage />} />
-          <Route path="/feedback" element={<FeedbackPage />} />
-          <Route path="/surveyform" element={<SurveyForm />} />
-          <Route path="/contact" element={<ContactForm />} /> {/* New Contact Page */}
-        </Routes>
-      </Router>
-    </div>
+      </Routes>
+    </Router>
   );
 };
 

@@ -5,6 +5,7 @@ import { Element, Link } from "react-scroll";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginPage.css";
 import { FaUser, FaUserShield } from "react-icons/fa";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -16,82 +17,54 @@ const LoginPage = () => {
   //   setIsAdmin((prev) => !prev);
   // };
 
-
-
-  // const isValidEmpId = (id) => {
-  //   const regex = /^EMP(\d{4})$/;
-  //   const match = id.match(regex);
-  //   if (!match) return false;
-  //   const num = parseInt(match[1], 10);
-  //   return num >= 1 && num <= 500;
-  // };
-
-  const chkadmin = (value) => {
-    if (value === "admin") {
-      setIsAdmin(true);
-      console.log("admin login");
-    }
-    else{
-      setIsAdmin(false);
-    }
-  };
-  
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setEmpId(value);
-    chkadmin(value);  // Pass the new value directly to chkadmin
+    const handleChange = (e) => {
+    setEmpId(e.target.value);
   };
 
-  const handleLogin = async (e) => {
+    const handleLogin = async (e) => {
+      try{
     e.preventDefault();
     setErrorMessage("");
-   
+
     if (!empId) {
-      alert("Please enter your employee ID.");
+      setErrorMessage("Please enter your employee ID.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops!',
+        text: 'Please enter your employee ID.',
+      });
       return;
     }
-
-    // if (!isValidEmpId(empId)) {
-    //   alert("Invalid Employee ID. Please enter a valid ID in the format EMPXXXX.");
-    //   return;
-    // }
-
-    try {
-      let response;
-      if (isAdmin) {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          alert("No token found. Please log in as a user first.");
-          return;
-        }
-
-        if (empId !== "admin") {
-          alert("Access denied! Only admins can log in.");
-          return;
-        }
-
-        response = await axios.get("http://127.0.0.1:8000/admin/test", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        alert("Admin login successful!");
-        navigate("/admin");
-      } else {
-        response = await axios.post("http://127.0.0.1:8000/auth/signin", {
-          username: empId,
-        });
-
-        localStorage.setItem("token", response.data.access_token);
-
-        alert("Login successful!");
-        navigate("/user");
-      }
-    } catch (error) {
-      alert(error.response?.data?.detail || "Login failed. Please try again.");
+    const response = await axios.post("http://127.0.0.1:8000/auth/signin", {
+       username: empId,
+  });
+     localStorage.setItem("token", response.data.access_token);
+     if (empId === "admin") {
+      Swal.fire({
+        icon: 'success',
+        title: 'Admin login successful!',
+      });
+      navigate("/admin");
+    } else {
+      Swal.fire({
+        icon: 'success',
+        title: 'Login successful!',
+      });
+      navigate("/user");
     }
-  };
+  }
+ catch (error) {
+  Swal.fire({
+    icon: 'error',
+    title: 'Oops!',
+    text: error.response?.data?.detail || "Login failed. Please try again.",
+  });
+}
+    };
+
+
+
+
 
   return (
     <Element name="signin" className="section bg-white d-flex align-items-center">
