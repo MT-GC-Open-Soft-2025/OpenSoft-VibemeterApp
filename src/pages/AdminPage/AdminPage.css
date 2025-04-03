@@ -27,14 +27,12 @@ a {
 
 h2 {
   text-align: center;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: 600;
   display:inline-block;
   margin: 40px 8px 10px 8px; 
   color: #cccccc;
 }
-
-
 
 /* STRUCTURE */
 
@@ -87,8 +85,6 @@ h2.active {
   color: #0d0d0d;
   border-bottom: 2px solid #5fbae9;
 }
-
-
 
 /* FORM TYPOGRAPHY*/
 
@@ -161,22 +157,38 @@ input[type=text]:placeholder {
   font-size: large;
   margin-top: 50px;
   margin-bottom: 50px;
-  margin-right: 60px;
 }
 
 .charts h2 {
   width: 40%; /* Matches the container width */
-  font-size: 18px; /* Adjust font size */
+  font-size: 16px; /* Adjust font size */
   color: rgb(4, 29, 40); /* Dark gray color for readability */
   text-align: center; /* Align text to the left */
   margin-bottom: 15px; /* Add space below before the chart */
   line-height: 1.7; /* Improve readability */
   margin-left: 100px;
-  margin-top: 100px;
+  margin-top: 120px;
   text-decoration: double;
   font-weight:200;
 }
 
+.emotion-image {
+  display: block;  /* Ensures it behaves properly */
+  margin-left: 100px;  /* Adds margin (top/bottom: 20px, left/right: auto to center it) */
+  width: 100%;  /* Prevents overflow */
+  height: auto;  /* Maintains aspect ratio */
+  max-width: 600px;
+  border-radius: 10px;
+}
+
+.Search-button {
+  display: fex;
+  flex-direction: column;
+}
+
+.Search-button .h2 {
+  width: 60%;
+}
 
 /* ANIMATIONS */
 
@@ -294,6 +306,7 @@ input[type=text]:placeholder {
 
   .charts {
     display: flex;
+    padding-bottom: 40px;
     /* width: 60rem; */
   }
   .chartContainingdiv{
@@ -323,7 +336,7 @@ input[type=text]:placeholder {
   }
 .charts {
   display: flex;
-  margin-right: 70px;
+  margin-right: 20px;
 }
 
 .description {
