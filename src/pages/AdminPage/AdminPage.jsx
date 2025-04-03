@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./AdminPage.css";
-
+import Footer from "../../components/Footer/Footer";
 import PerformanceGraph from "../../components/Admin_page _components/Admin_performance_rewards/PerformanceGraph";
 import Rewards from "../../components/Admin_page _components/Admin_performance_rewards/Rewards";
 import Badges from "../../components/Badges/Badges";
@@ -40,32 +40,41 @@ const AdminPage = () => {
     <>
       <Feedbacknavbar title="Admin Page" />
       <Sidebar />
-      <div className="admin-container">
-        
-        {/* Container for search bar and button */}
-        <div className="search-button-container">
-          <Navbar setSelectedEmployee={setSelectedEmployee} />
-          {selectedEmployee && (
+      <div style={{
+        marginLeft: '200px',
+        marginTop: '64px',
+        backgroundImage: 'linear-gradient(135deg,rgb(255, 255, 255),rgb(168 241 255))',
+        minHeight: '100vh',
+        padding: '20px'
+      }}>
+        <div className="apple">
+        <Navbar setSelectedEmployee={setSelectedEmployee} /> 
+        {selectedEmployee && (
               <button className="styled-button" onClick={handlegetBack}>
                        Back
               </button>
           )}
         </div>
-
+        
+        
         <div className="text-container">
           <h3><b>Hello ADMIN !</b></h3>
         </div>
 
         {selectedEmployee ? (
-          <div className="profile-section">
-            <div className="profile-container">
-              <img src={user} alt="User Icon" className="profile-icon" />
-              <span className="profile-user">Employee ID: {selectedEmployee}</span>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "20px" }}>
+            <div className="description">
+              <div className="profile-container">
+                <img src={user} alt="User Icon" className="profile-icon" />
+                <span className="profile-user">Employee ID: {selectedEmployee}</span>
+              </div>
+              <Badges employeeId={selectedEmployee} />
+              <button  onClick={handlegetfeedback} > Get </button>
+              <EmojiMeter employeeId={selectedEmployee} />
             </div>
-            <Badges />
-            <EmojiMeter employeeId={selectedEmployee} />
+            
             <PerformanceGraph employeeId={selectedEmployee} />
-            <Rewards />
+            <Rewards employeeId={selectedEmployee}/>
           </div>
         ) : (
           <div className="charts">
@@ -73,10 +82,10 @@ const AdminPage = () => {
           </div>
         )}
       </div>
+       <Footer/> 
     </>
   );
 };
 
 export default AdminPage;
-
 

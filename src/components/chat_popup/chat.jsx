@@ -346,11 +346,11 @@ const Chat = () => {
               </button>
             )}
 
-            <div className="chat-right-content">
+            <div className="chat-right-content" style={{backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))"}}>
               {/* If chat has started (or restored), show the conversation */}
               {chatStarted ? (
                 <>
-                  <div className="chat-history" ref={chatHistoryRef}>
+                  <div className="chat-history" ref={chatHistoryRef} style={{backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))" }}>
                     {chatMessages.map((msg, idx) => (
                       <div
                         key={idx}
@@ -379,14 +379,14 @@ const Chat = () => {
                   </div>
                 </>
               ) : (
-                <>
+                <div className="animated"> 
                   <div className="animation-container">
                     <Lottie animationData={animationData} loop={true} />
                   </div>
                   <button className="start-chat-btn" onClick={handleStartChat}>
                     Start Chat!
                   </button>
-                </>
+                </div>
               )}
             </div>
           </div>
