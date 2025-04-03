@@ -20,7 +20,7 @@ const Sidebar = () => {
         }).then((result) => {
           if (result.isConfirmed) {
             localStorage.removeItem("token");
-            navigate(-1);
+            navigate('/');
           }
         });
       };
