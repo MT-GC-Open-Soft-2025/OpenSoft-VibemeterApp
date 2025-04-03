@@ -1,6 +1,11 @@
 
 /* BASIC */
 
+html, body {
+  background-color: white !important;  /* Replace with your desired color */
+}
+
+
 html {
   background-color: #56baed;
 }
@@ -10,7 +15,9 @@ body {
   height: 100vh;
   /* background: linear-gradient(135deg, #74ebd5, #acb6e5); */
 }
-
+.Meters-vibe {
+  display: flex;
+}
 a {
   color: #92badd;
   display:inline-block;
@@ -22,7 +29,6 @@ h2 {
   text-align: center;
   font-size: 16px;
   font-weight: 600;
-  text-transform: uppercase;
   display:inline-block;
   margin: 40px 8px 10px 8px; 
   color: #cccccc;
@@ -131,7 +137,7 @@ input[type=text] {
   font-size: 16px;
   margin: 5px;
   width: 85%;
-  border: 2px solid #f6f6f6;
+  border: 2px solid #bfbfbf9f;
   -webkit-transition: all 0.5s ease-in-out;
   -moz-transition: all 0.5s ease-in-out;
   -ms-transition: all 0.5s ease-in-out;
@@ -150,6 +156,26 @@ input[type=text]:placeholder {
   color: #cccccc;
 }
 
+.text-container {
+  text-align: center;
+  font-size: large;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-right: 60px;
+}
+
+.charts h2 {
+  width: 40%; /* Matches the container width */
+  font-size: 18px; /* Adjust font size */
+  color: rgb(4, 29, 40); /* Dark gray color for readability */
+  text-align: center; /* Align text to the left */
+  margin-bottom: 15px; /* Add space below before the chart */
+  line-height: 1.7; /* Improve readability */
+  margin-left: 100px;
+  margin-top: 100px;
+  text-decoration: double;
+  font-weight:200;
+}
 
 
 /* ANIMATIONS */
@@ -256,8 +282,6 @@ input[type=text]:placeholder {
   width: 100%;
 }
 
-
-
 /* OTHERS */
 
 *:focus {
@@ -299,6 +323,7 @@ input[type=text]:placeholder {
   }
 .charts {
   display: flex;
+  margin-right: 70px;
 }
 
 .description {
@@ -314,6 +339,32 @@ input[type=text]:placeholder {
 /* .profile-container{
   height: 2rem;
 } */
+
+/* Meters-Vibe */
+
+.Meters-vibe {
+  display: flex;
+}
+
+.description {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+}
+/* .profile-container {
+  width: 100vw;
+} */
+/* .profile-container{
+  height: 2rem;
+} */
+
+
+
+
+
+  
 
 
 

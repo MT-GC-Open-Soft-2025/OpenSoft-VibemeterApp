@@ -1,0 +1,7 @@
+.landing-section {
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #dbeafe, #f0f9ff); /* light blue to white */
+    padding-top: 80px;
+    scroll-margin-top: 80px;
+  }
+  
