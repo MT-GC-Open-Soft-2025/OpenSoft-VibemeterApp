@@ -1,16 +1,64 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./AdminPage.css";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-
-const emotionData = [
-  { name: "Current Project", count: 2.3 },
-  { name: "Mentor interaction", count: 4 },
-  { name: "Leaves system", count: 3.5 },
-  { name: "Vibemeter app", count: 4.7 },
-  { name: "Work area setup", count: 2.1 },
-];
+import axios from "axios";
 
 const EmotionZoneChart = () => {
+  const [emotionData, setEmotionData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Custom labels for feedback categories
+  const labels = [
+    "Current Project",
+    "Mentor Interaction",
+    "Leaves System",
+    "Vibemeter App",
+    "Work Area Setup",
+  ];
+
+  useEffect(() => {
+    const fetchFeedback = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) throw new Error("No authentication token found. Please log in.");
+
+        // ✅ Fetching feedback data
+        const response = await axios.get("http://127.0.0.1:8000/admin/get_aggregate_feedback", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        console.log("Feedback API Response:", response.data);
+
+        // ✅ Extract the correct list
+        const scoreList = response.data["Average score list"];
+        if (!scoreList || !Array.isArray(scoreList)) {
+          throw new Error("Invalid API response format");
+        }
+
+        // ✅ Display exactly what the API returns
+        const formattedData = scoreList.map((value, index) => ({
+          name: labels[index] || `Category ${index + 1}`,
+          count: value,
+        }));
+
+        console.log("Formatted Data:", formattedData);
+        setEmotionData(formattedData);
+        setLoading(false);
+        setError("");
+      } catch (err) {
+        console.error("Error fetching feedback data:", err.message);
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchFeedback();
+  }, []);
+
+  if (loading) return <div>Loading feedback data...</div>;
+  if (error) return <div className="error">Error: {error}</div>;
+
   return (
     <div className="charts">
       <h2>Some employees need a boost. Check their status!</h2>

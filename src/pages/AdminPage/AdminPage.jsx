@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./AdminPage.css";
-
+import Footer from "../../components/Footer/Footer";
 import PerformanceGraph from "../../components/Admin_page _components/Admin_performance_rewards/PerformanceGraph";
 import Rewards from "../../components/Admin_page _components/Admin_performance_rewards/Rewards";
 import Badges from "../../components/Badges/Badges";
 import ButtonComponent from "../../components/ButtonComponent";
 
 import EmotionZoneChart from "./EmotionZone";
-import PieChart from "./PieChart";
+import EmotionZoneChart2 from "./EmotionZone2";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Navbar from "../../components/Search-bar/SearchBar";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
@@ -32,18 +32,31 @@ const AdminPage = () => {
     navigate(`/feedback`);
   };
 
+  const handlegetBack = () => {
+    window.location.reload();
+  };
+
   return (
     <>
       <Feedbacknavbar title="Admin Page" />
       <Sidebar />
       <div style={{
         marginLeft: '200px',
-        marginTop: '64px',
+        marginTop: '60px',
         backgroundImage: 'linear-gradient(135deg,rgb(255, 255, 255),rgb(168 241 255))',
         minHeight: '100vh',
         padding: '20px'
       }}>
+        <div className="apple">
         <Navbar setSelectedEmployee={setSelectedEmployee} /> 
+        {selectedEmployee && (
+              <button className="styled-button" onClick={handlegetBack}>
+                       Back
+              </button>
+          )}
+        </div>
+        
+        
         <div className="text-container">
           <h3><b>Hello ADMIN !</b></h3>
         </div>
@@ -55,22 +68,29 @@ const AdminPage = () => {
                 <img src={user} alt="User Icon" className="profile-icon" />
                 <span className="profile-user">Employee ID: {selectedEmployee}</span>
               </div>
-              <Badges />
-              <button  onClick={handlegetfeedback} > Get </button>
+              <Badges employeeId={selectedEmployee} />
+              <button className="btn btn-success fadeIn fourth getfeedback-button" onClick={handlegetfeedback} > Get Feedback</button>
               <EmojiMeter employeeId={selectedEmployee} />
             </div>
             
             <PerformanceGraph employeeId={selectedEmployee} />
-            <Rewards />
+            <Rewards employeeId={selectedEmployee}/>
           </div>
         ) : (
-          <div className="charts">
-            <EmotionZoneChart />
-          </div>
+          <>
+            <div className="charts">
+              <EmotionZoneChart />
+            </div>
+            <div className="charts">
+              <EmotionZoneChart2 />
+            </div>
+          </>
         )}
       </div>
+       <Footer/> 
     </>
   );
 };
 
 export default AdminPage;
+

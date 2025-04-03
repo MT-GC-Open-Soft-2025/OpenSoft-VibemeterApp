@@ -82,7 +82,7 @@ export default function EmojiMeter({ employeeId }) {
   }, [employeeId]);
 
   return (
-    <div className="container d-flex justify-content-center align-items-center min-vh-100">
+    <div className="container d-flex justify-content-center align-items-center py-5 container-emoji">
       <div className="card text-center shadow-lg p-4" style={{ width: "22rem" }}>
         <div className="card-header bg-primary text-white">
           <h4>Emoji Mood Meter</h4>
