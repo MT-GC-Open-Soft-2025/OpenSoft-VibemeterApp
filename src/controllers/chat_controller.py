@@ -3,7 +3,7 @@ from src.models.chats import Chat
 from pydantic import BaseModel
 from fastapi import HTTPException, status
 from typing import Optional, Dict, Any
-from src.services.chat_service import initiate_chat_service,end_chat, get_feedback_questions,add_feedback,send_message, get_chat
+from src.services.chat_service import initiate_chat_service,end_chat, get_feedback_questions,add_feedback,send_message, get_chat, get_chat_feedback
 
 
 class Chat_frontend(BaseModel):
@@ -106,3 +106,15 @@ async def getChat_controller(conv_id: str) -> Dict[str, Any]:
 
     response = await get_chat(conv_id)
     return response # return list of messages
+
+async def get_chat_feedback_controller(conv_id: str) -> Dict[str, Any]:
+    try:
+        response = await get_chat_feedback(conv_id)
+        return response 
+    
+    except ValueError as e:
+        
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=str(e)
+        )

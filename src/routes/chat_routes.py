@@ -4,7 +4,7 @@ from typing import Dict, Any, Any
 from src.controllers.chat_controller import initiate_chat_controller,Chat_frontend,response_controller,end_chat_controller,feedback_controller, Feedback, add_feedback_controller
 
 from src.middlewares.authmiddleware import authenticate
-from src.controllers.chat_controller import Chat_frontend, response_controller, getChat_controller, initiate_chat_controller
+from src.controllers.chat_controller import Chat_frontend, response_controller, getChat_controller, initiate_chat_controller,get_chat_feedback_controller
 
 chat_router = APIRouter()
 
@@ -28,6 +28,11 @@ async def get_chat(conv_id:str) -> Dict[str,Any]:
     response = await getChat_controller(conv_id)
     return response
 
+@chat_router.get("/chat_feedback/{conv_id}")
+async def get_chat_feedback(conv_id:str) -> Dict[str,Any]:
+    response = await get_chat_feedback_controller(conv_id)
+    return response
+ 
 @chat_router.get("/feedback")
 async def feedback_route() -> Dict[str, Any]:
     feedback_questions = await feedback_controller()

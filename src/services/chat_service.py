@@ -152,7 +152,17 @@ async def get_chat(conv_id: str) -> Dict[str, Any]: # e.g. /chat?conv_id=123
 
 
 
-
+async def get_chat_feedback(conv_id: str) -> Dict[str, Any]: 
+    chat_record = await Chat.find(Chat.convid == conv_id).first_or_none()
+    if not chat_record:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Chat not found"
+        )
+    
+    return {
+        "feedback": chat_record.feedback,
+    }
 async def send_message(user: any, msg: str, convid: str) -> Dict[str, Any]:
 
     chat_record = await Chat.find(Chat.convid == convid).first_or_none()
