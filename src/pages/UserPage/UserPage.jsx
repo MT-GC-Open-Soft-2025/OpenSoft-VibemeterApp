@@ -49,20 +49,7 @@
 //   );
 // };
 
-// export default UserPage;
-// UserPage.jsx
-// UserPage.jsx
-// UserPage.jsx
-// UserPage.jsx
-// UserPage.jsx
-// UserPage.jsx
-// UserPage.jsx
-// UserPage.jsx
-// UserPage.jsx
-// UserPage.jsx
-// UserPage.jsx
-// UserDashboard.jsx
-// UserPage.jsx
+
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./UserPage.css";
@@ -86,6 +73,10 @@ ChartJS.register(ArcElement, Tooltip, Legend, BarElement, CategoryScale, LinearS
 const UserPage = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+
+  const handleClick = () => {
+    navigate("/chat"); 
+  };
 
   const handleGoBack = () => {
     Swal.fire({
@@ -209,7 +200,7 @@ const UserPage = () => {
             <p>{performanceMessage}</p>
             <img src={performanceImage} alt="Performance" />
           </div>
-          <div className="bot-container">
+          <div className="bot-container" onClick={handleClick} style={{ cursor: "pointer" }}>
             <div className="chat-bubble">Hi! How can I assist you?</div>
             <Lottie animationData={animationData} loop={true} className="bot-animation" />
           </div>
