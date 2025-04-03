@@ -11,57 +11,18 @@ import Swal from "sweetalert2";
 const Chat = () => {
   const navigate = useNavigate();
 
-  const [ convids, setConversationIds ] = useState([])
-  const [ conversations, setConversations ] = useState([])
+  const [convids, setConversationIds] = useState([]);
+  const [conversations, setConversations] = useState([]);
 
-  // const conversations = [
-  //   {
-  //     id: "CHAT001",
-  //     message: "Hello, how can I help you today?",
-  //     details: "Details for CHAT001.",
-  //   },
-  //   {
-  //     id: "CHAT002",
-  //     message: "I have an issue with my account.",
-  //     details: "Details for CHAT002.",
-  //   },
-  //   {
-  //     id: "CHAT003",
-  //     message: "Can you assist me with billing?",
-  //     details: "Details for CHAT003.",
-  //   },
-  //   {
-  //     id: "CHAT004",
-  //     message: "Thank you for your help!",
-  //     details: "Details for CHAT004.",
-  //   },
-  //   {
-  //     id: "CHAT005",
-  //     message: "What are your operating hours?",
-  //     details: "Details for CHAT005.",
-  //   },
-  //   {
-  //     id: "CHAT006",
-  //     message: "I need further assistance.",
-  //     details: "Details for CHAT006.",
-  //   },
-  //   {
-  //     id: "CHAT007",
-  //     message: "Can you escalate my issue?",
-  //     details: "Details for CHAT007.",
-  //   },
-  //   {
-  //     id: "CHAT008",
-  //     message: "I want to know more about your services.",
-  //     details: "Details for CHAT008.",
-  //   },
-  //   { id: "CHAT009", message: "Goodbye!", details: "Details for CHAT009." },
-  //   {
-  //     id: "CHAT010",
-  //     message: "Thank you again!",
-  //     details: "Details for CHAT010.",
-  //   },
-  // ];
+  // Chat state
+  const [chatStarted, setChatStarted] = useState(false);
+  const [conversationId, setConversationId] = useState("");
+  const [chatMessages, setChatMessages] = useState([]);
+  const [inputValue, setInputValue] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(null);
+  const [rating, setRating] = useState(0);
+
+  const chatHistoryRef = useRef(null);
 
   // Fetch conversations from API on component mount
   useEffect(() => {
@@ -72,17 +33,15 @@ const Chat = () => {
           navigate("/");
           return;
         }
-
         const res = await axios.get("http://127.0.0.1:8000/user/getConvoids", {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log("Fetched conversations:", res.data);
-        setConversationIds(res.data.convid_list || []); // list of convoids, then use this to fetch from getChat api
+        setConversationIds(res.data.convid_list || []);
       } catch (err) {
         console.error("Error fetching conversations:", err);
         Swal.fire("Error", "Failed to fetch conversations. Please try again.", "error");
       }
-
     };
 
     fetchConversations();
@@ -91,19 +50,6 @@ const Chat = () => {
   const messagesPerPage = 7;
   const totalPages = Math.ceil(convids.length / messagesPerPage);
   const [currentPage, setCurrentPage] = useState(0);
-  const [rating, setRating] = useState(0);
-
-  const [selectedMessage, setSelectedMessage] = useState([]);
-  const [selectedDetails, setSelectedDetails] = useState("Please select a chat.");
-  const [selectedIndex, setSelectedIndex] = useState(null);
-
-  // Chat state
-  const [chatStarted, setChatStarted] = useState(false);
-  const [conversationId, setConversationId] = useState("");
-  const [chatMessages, setChatMessages] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-
-  const chatHistoryRef = useRef(null);
 
   // Restore conversation state from localStorage on component mount
   useEffect(() => {
@@ -118,17 +64,12 @@ const Chat = () => {
       const parsedMessages = JSON.parse(savedChatMessages);
       if (parsedMessages.length > 0) {
         setChatMessages(parsedMessages);
-        // If there are previous messages, mark chat as started.
         setChatStarted(true);
       }
     }
     if (savedConversationId) {
       setConversationId(savedConversationId);
     }
-    // Optionally, if you want to honor the saved chatStarted flag:
-    // if (savedChatStarted === "true") {
-    //   setChatStarted(true);
-    // }
   }, []);
 
   // Persist chat messages whenever they change
@@ -176,19 +117,23 @@ const Chat = () => {
     }
   };
 
+  // On clicking a conversation, fetch its chat history
   const handleConversationClick = async (conv_id, index) => {
     try {
-      const res = await axios.get(
-        `http://127.0.0.1:8000/chat/chat/${conv_id}`,
-        {},
-      );
-      console.log(res);
-      setSelectedMessage(res.data.chat);
+      const res = await axios.get(`http://127.0.0.1:8000/chat/chat/${conv_id}`);
+      console.log("Fetched chat history:", res.data);
+      // Map the received messages to the expected structure (using "message" as "text")
+      const fetchedMessages = res.data.chat.map((m) => ({
+        sender: m.sender,
+        text: m.message,
+      }));
+      setChatMessages(fetchedMessages);
+      setConversationId(conv_id);
+      setChatStarted(true);
     } catch (err) {
-      console.error("Error starting chat:", err);
+      console.error("Error fetching chat:", err);
+      Swal.fire("Error", "Failed to load chat history. Please try again.", "error");
     }
-    
-    // setSelectedDetails(details);
     setSelectedIndex(index);
   };
 
@@ -201,7 +146,6 @@ const Chat = () => {
     const uniqueId = nanoid(6);
     localStorage.setItem("uniqueId", uniqueId);
     setConversationId(uniqueId);
-    console.log("Unique conversation ID:", uniqueId);
     setChatStarted(true);
     const token = localStorage.getItem("token");
 
@@ -215,7 +159,7 @@ const Chat = () => {
           },
         }
       );
-      console.log(res);
+      console.log("Chat initiated:", res.data);
       setChatMessages([{ sender: "bot", text: res.data.response }]);
     } catch (err) {
       console.error("Error starting chat:", err);
@@ -236,6 +180,7 @@ const Chat = () => {
   };
 
   const openFeedbackPopup = async () => {
+    try{
     const { value: selectedRating } = await Swal.fire({
       title: "Give Your Feedback",
       html: generateStarRatingUI(rating),
@@ -255,11 +200,14 @@ const Chat = () => {
       console.log("User Feedback:", selectedRating);
       sendFeedback(selectedRating);
     }
+  }
+  catch(err){
+    alert ("Feedback already given")
+  }
   };
-  
 
+  // Updated sendFeedback function to update conversation list without refreshing
   const sendFeedback = async (feedback) => {
-    setChatStarted(false);
     const token = localStorage.getItem("token");
     const uniqueId = localStorage.getItem("uniqueId");
 
@@ -273,14 +221,22 @@ const Chat = () => {
           },
         }
       );
-      console.log(res);
+      console.log(res.status)
+      if (res.status==404) alert("fEEDBACK GOIVEN")
+      console.log("Chat ended:", res.data);
+      // Add the new conversation id to the state if it's not already there
+      setConversationIds((prev) =>
+        prev.includes(uniqueId) ? prev : [...prev, uniqueId]
+      );
     } catch (err) {
       console.error("Error ending chat:", err);
+      alert("Feedback has been given")
     }
 
     // Clear conversation data from state and localStorage
     setChatMessages([]);
     setInputValue("");
+    setChatStarted(false);
     localStorage.removeItem("chatMessages");
     localStorage.removeItem("chatStarted");
     localStorage.removeItem("conversationId");
@@ -351,7 +307,6 @@ const Chat = () => {
                   }`}
                   onClick={() =>
                     handleConversationClick(
-                      
                       conv_id,
                       index + currentPage * messagesPerPage
                     )
@@ -389,14 +344,15 @@ const Chat = () => {
             )}
 
             <div className="chat-right-content">
-              {/* If chat has started (or restored), show the conversation */}
               {chatStarted ? (
                 <>
                   <div className="chat-history" ref={chatHistoryRef}>
                     {chatMessages.map((msg, idx) => (
                       <div
                         key={idx}
-                        className={`chat-message ${msg.sender === "bot" ? "bot" : "user"}`}
+                        className={`chat-message ${
+                          msg.sender === "bot" ? "bot" : "user"
+                        }`}
                       >
                         <p>{msg.text}</p>
                       </div>
