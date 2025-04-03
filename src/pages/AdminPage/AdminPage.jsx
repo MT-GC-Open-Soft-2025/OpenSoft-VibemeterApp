@@ -55,13 +55,13 @@ const AdminPage = () => {
                 <img src={user} alt="User Icon" className="profile-icon" />
                 <span className="profile-user">Employee ID: {selectedEmployee}</span>
               </div>
-              <Badges />
+              <Badges employeeId={selectedEmployee} />
               <button  onClick={handlegetfeedback} > Get </button>
               <EmojiMeter employeeId={selectedEmployee} />
             </div>
             
             <PerformanceGraph employeeId={selectedEmployee} />
-            <Rewards />
+            <Rewards employeeId={selectedEmployee}/>
           </div>
         ) : (
           <div className="charts">
