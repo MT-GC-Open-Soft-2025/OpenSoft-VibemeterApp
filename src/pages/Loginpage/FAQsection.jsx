@@ -23,9 +23,9 @@ const FAQPage = () => (
           <h2 className="text-primary fw-bold mb-4">Frequently Asked Questions 🙋‍♀️</h2>
           <Accordion defaultActiveKey="0" flush>
             <Accordion.Item eventKey="0">
-              <Accordion.Header>What is MindWell?</Accordion.Header>
+              <Accordion.Header>What is WellBee?</Accordion.Header>
               <Accordion.Body>
-                MindWell is your mental health companion. We provide tools to improve mood,
+                WellBee is your mental health companion. We provide tools to improve mood,
                 reduce anxiety, and build emotional resilience through guided sessions and support.
               </Accordion.Body>
             </Accordion.Item>
@@ -33,7 +33,7 @@ const FAQPage = () => (
             <Accordion.Item eventKey="1">
               <Accordion.Header>Is it free to use?</Accordion.Header>
               <Accordion.Body>
-                Yes! MindWell offers a wide range of free resources. Some premium features may require a subscription.
+                Yes! WellBee offers a wide range of free resources. Some premium features may require a subscription.
               </Accordion.Body>
             </Accordion.Item>
 
@@ -47,7 +47,7 @@ const FAQPage = () => (
             <Accordion.Item eventKey="3">
               <Accordion.Header>Can I talk to a real therapist?</Accordion.Header>
               <Accordion.Body>
-                While MindWell doesn't offer therapy, we connect you with verified resources if you need professional help.
+                While WellBee doesn't offer therapy, we connect you with verified resources if you need professional help.
               </Accordion.Body>
             </Accordion.Item>
           </Accordion>

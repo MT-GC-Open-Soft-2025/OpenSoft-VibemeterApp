@@ -71,14 +71,14 @@ const LoginPage = () => {
       <div className="container py-5">
         <div className="row align-items-center">
           {/* Left: Mental Wellness Illustration */}
-          <div className="col-md-6 text-center" data-aos="fade-right">
+          <div className="col-md-6 d-flex flex-column align-items-center justify-content-center text-center" data-aos="fade-right">
             <img
               src="https://img.freepik.com/free-vector/mental-health-concept-illustration_114360-2031.jpg"
               alt="Mental health"
-              className="img-fluid mb-4 mb-md-0"
+              className="img-fluid mb-4"
               style={{ maxHeight: "400px" }}
             />
-            <h4 className="space text-primary ">
+            <h4 className="space text-primary">
               Taking care of your mind is a superpower
             </h4>
           </div>
