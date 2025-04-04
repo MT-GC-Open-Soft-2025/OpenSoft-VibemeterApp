@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./AdminPage.css";
@@ -13,13 +13,14 @@ import EmotionZoneChart2 from "./EmotionZone2";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Navbar from "../../components/Search-bar/SearchBar";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
-import user from "../../Assets/user.png";
-import EmojiMeter from "./EmojiMeter";  
+import user1 from "../../Assets/user.png";
+import EmojiMeter from "../../components/Admin_page _components/Admin_performance_rewards/EmojiMeter.jsx";  
 
 const AdminPage = () => {
   const navigate = useNavigate();
   const [selectedEmployee, setSelectedEmployee] = useState(""); 
 
+ 
   const handlegetfeedback = () => {
     if (!selectedEmployee) {
       console.error("❌ Error: No employee selected.");
@@ -36,6 +37,24 @@ const AdminPage = () => {
     window.location.reload();
   };
 
+  // useEffect(() => {
+  //     const token = localStorage.getItem("token");
+  //     if (!token) return;
+  
+  //     fetch("http://localhost:8000/user/getUserDetails", {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     })
+  //       .then((res) => (res.ok ? res.json() : Promise.reject("Failed to fetch")))
+  //       .then(setUser)
+  //       .catch(console.error);
+  //   }, []);
+  
+  //   const truncatedVibeScore =
+  // user && typeof user.vibe_score === "number"
+  //   ? user.vibe_score.toFixed(2)
+  //   : -1;
+    
+ 
   return (
     <>
       <Feedbacknavbar title="Admin Page" />
@@ -65,14 +84,16 @@ const AdminPage = () => {
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", marginTop: "20px" }}>
             <div className="description">
               <div className="profile-container">
-                <img src={user} alt="User Icon" className="profile-icon" />
+                <img src={user1} alt="User Icon" className="profile-icon" />
                 <span className="profile-user">Employee ID: {selectedEmployee}</span>
               </div>
               <Badges employeeId={selectedEmployee} />
               <button className="btn btn-success fadeIn fourth getfeedback-button" onClick={handlegetfeedback} > Get Feedback</button>
-              <EmojiMeter employeeId={selectedEmployee} />
+              {/* <EmojiMeter employeeId={selectedEmployee} /> */}
+              
+
             </div>
-            
+            <EmojiMeter employeeId={selectedEmployee}/>
             <PerformanceGraph employeeId={selectedEmployee} />
             <Rewards employeeId={selectedEmployee}/>
           </div>
