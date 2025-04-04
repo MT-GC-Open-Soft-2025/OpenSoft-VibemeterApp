@@ -33,5 +33,21 @@ pip freeze > requirements.txt
 uvicorn server:app --host 0.0.0.0 --port 8000 --reload
 ```
 
+
+## 4. Install and Run Dockerized image
+```bash
+# Install Docker
+# For Windows: https://docs.docker.com/desktop/install/windows-install/
+# For Linux: https://docs.docker.com/engine/install/
+# For Mac: https://docs.docker.com/desktop/install/mac-install/
+# Install Docker Compose
+# For Windows: https://docs.docker.com/compose/install/
+# For Linux: https://docs.docker.com/compose/install/
+# For Mac: https://docs.docker.com/compose/install/
+# Build the Docker image
+   docker-compose build
+   docker-compose up
+ ```
+ 
 ## 4. Gemini API
 [Docs](https://ai.google.dev/gemini-api/docs/text-generation#multi-turn-conversations)
