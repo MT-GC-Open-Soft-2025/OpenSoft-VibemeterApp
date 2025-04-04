@@ -1,4 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600&family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Meow+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+.wellbee-heading {
+  font-family: 'Pacifico', cursive;
+  font-size: 6rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+.welcome-text {
+  font-family: 'Comfortaa', cursive;
+  color: #333; /* or #4b5563 for soft gray */
+}
+
+.brand-text {
+  color: #7c3aed; /* violet (or match your theme) */
+}
+.lead{
+  font-family: 'Comfortaa', cursive;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.lead1{
+  font-family: "Newsreader", serif;
+  font-optical-sizing: auto;
+  font-size: 1.3rem;
+  font-style: normal;
+  
+}
+.space{
+  font-family: "Space Mono", monospace;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.5rem;
+}
+.spaceh{
+  font-family: "Space Mono", monospace;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 2rem
+}
+
 .landing-section {
+   font-family: 'Pacifico', cursive;
     min-height: 100vh;
     background: linear-gradient(to bottom right, #dbeafe, #f0f9ff); /* light blue to white */
     padding-top: 80px;

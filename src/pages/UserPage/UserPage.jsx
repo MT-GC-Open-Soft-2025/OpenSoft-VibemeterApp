@@ -122,7 +122,7 @@ const UserPage = () => {
           padding: "20px",
         }}
       >
-        <div className="welcome">
+        <div className="spaceh welcome">
           <h1>Hello Employee!</h1>
           <p className="para">
             Empowering you at work — support, growth, and motivation for every

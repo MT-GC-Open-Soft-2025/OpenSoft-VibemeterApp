@@ -41,18 +41,18 @@ const Start = () => {
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav ms-auto" style={{ marginRight: "30px"}}>
                 <li className="nav-item ">
-                <Link to="landing" smooth duration={500} className="nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>Home</Link>
+                <Link to="landing" smooth duration={500} className="lead1 nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>Home</Link>
                 </li>
                 <li className="nav-item">
-                <Link to="signin" smooth duration={500} className="nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>Sign In</Link>
+                <Link to="signin" smooth duration={500} className="lead1 nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>Sign In</Link>
 
                 </li>
                 
                 <li className="nav-item">
-                <Link to="faq" smooth duration={500} className="nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>FAQ</Link>
+                <Link to="faq" smooth duration={500} className="lead1 nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>FAQ</Link>
                 </li>
                 <li className="nav-item">
-                <Link to="book-demo" smooth duration={500} className="nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>Book a Demo</Link>
+                <Link to="book-demo" smooth duration={500} className="lead1 nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>Book a Demo</Link>
               </li>
 
                 {/* <li className="nav-item">
