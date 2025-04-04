@@ -272,8 +272,17 @@ const UserPage = () => {
                     </div>
                   </div>
                   <div className="ancestor2" id="descrip">
-                    <div id="rew" className="meet">
-                      Wow, you haven’t taken any leaves. You're a rockstar! 🚀
+                    <div id="rew1" className="meet">
+                      Please take a moment to fill out this short survey - Your
+                      feedback matters !
+                      <button
+                        className="nav-link1"
+                        id="button2"
+                        onClick={handleFeedback}
+                        style={{fontSize:"22px", width:"13rem"}}
+                      >
+                        Submit Survey
+                      </button>
                     </div>
                   </div>
                 </>

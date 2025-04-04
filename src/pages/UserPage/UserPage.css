@@ -237,7 +237,7 @@ h1 {
 }
 .para {
   font-size: 1.25rem;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: 'Noto Sans', 'Times New Roman', Times, serif;
 }
 .meet {
   color: #10526c;
@@ -259,6 +259,7 @@ h1 {
 .description {
   width: auto;
   margin-left: 1rem;
+  font-size: 25px;
 }
 .head {
   border-bottom: #343a40;
@@ -309,6 +310,7 @@ h1 {
   display: flex;
   flex-direction: row;
   width: auto;
+  font-size: 25px;
 }
 .nav-link1 {
   margin-top: 1rem;
