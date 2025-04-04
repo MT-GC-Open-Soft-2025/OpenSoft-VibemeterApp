@@ -749,25 +749,25 @@
     color: #7c3aed; /* violet (or match your theme) */
   }
   .lead{
-    font-family: 'Comfortaa', cursive;
+    font-family: 'Noto Sans', cursive;
     font-size: 1.5rem;
     font-weight: 800;
   }
   .lead1{
-    font-family: "Newsreader", serif;
+    font-family: "Noto Sans", serif;
     font-optical-sizing: auto;
     font-size: 1.3rem;
     font-style: normal;
     
   }
   .space{
-    font-family: "Space Mono", monospace;
+    font-family: "Noto Sans", monospace;
     font-weight: 400;
     font-style: normal;
     font-size: 1.5rem;
   }
   .spaceh{
-    font-family: "Space Mono", monospace;
+    font-family: 'Montserrat', 'Poppins', 'Raleway', 'Nunito Sans', 'Helvetica Neue', sans-serif;
     font-weight: 700;
     font-style: normal;
     font-size: 2rem

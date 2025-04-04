@@ -74,16 +74,11 @@ const UserPage = () => {
   }, []);
 
   const handleDownload = () => {
-    // Replace with your PDF file URL
     const pdfUrl =
       "https://apps.who.int/iris/bitstream/handle/10665/42823/9241562579.pdf";
-
-    // Create an invisible anchor element
     const link = document.createElement("a");
     link.href = pdfUrl;
-    link.download = "Brochure.pdf"; // Specify the filename
-
-    // Append to the DOM, trigger click, then remove
+    link.download = "Brochure.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -261,13 +256,6 @@ const UserPage = () => {
             </div>
           </div>
 
-          {/* "Let's Chat!" button */}
-          {/* <button className="chat-button" onClick={openChat}>
-                Let's Chat!
-              </button> */}
-          {/* <button className="feedback-button" onClick={handleFeedback}>
-                Fill Feedback
-              </button> */}
           <div
             id="fitness"
             className="row align-items-center my-5 animate__animated animate__fadeInLeft"
@@ -284,11 +272,6 @@ const UserPage = () => {
                 <>
                   <div id="desc">
                     <h4>Your Rewards</h4>
-                    {/* <Badges/> */}
-                    {/* <p>
-                            You've earned <strong>{user.reward_points}</strong>{" "}
-                            points. You're amazing!
-                          </p> */}
                   </div>
                   <div className="image-wrapper">
                     <img
@@ -313,6 +296,7 @@ const UserPage = () => {
               )}
             </div>
           </div>
+
           <div
             id="fitness"
             className="row align-items-center my-5 animate__animated animate__fadeInLeft"
@@ -360,37 +344,12 @@ const UserPage = () => {
               </div>
             </div>
           )}
-          {/* {user.leave_days !== undefined && user.leave_days === 0 && (
-                <div
-                  id="fitness"
-                  className="row align-items-center my-5 animate__animated animate__fadeInLeft"
-                >
-                  <div className="ancestor2" id="descrip">
-                    <div id="rew" className="meet">
-                      Wow, you haven’t taken any leaves. You're a rockstar! 🚀
-                    </div>
-                  </div>
-                  <div className="card">
-                    <div id="desc">
-                      <h4>Zero Leaves!</h4>
-                    </div>
-                    <div className="image-wrapper">
-                      <img
-                        src="https://img.freepik.com/free-vector/rocket-launch-concept-illustration_114360-6413.jpg"
-                        alt="Performance"
-                        className="responsive-image"
-                      />
-                    </div>
-                  </div>
-                  
-                </div>
-              )} */}
+
           {user.leave_days !== undefined && (
             <div
               id="fitness"
               className="row align-items-center my-5 animate__animated animate__fadeInLeft"
             >
-              {/* If user has taken 0 leaves, place ancestor2 first, otherwise place card first */}
               {user.leave_days === 0 ? (
                 <>
                   <div className="card">
@@ -446,6 +405,8 @@ const UserPage = () => {
               )}
             </div>
           )}
+
+          {/*  MODIFIED CHAT BUBBLE SECTION START */}
           <div
             className="bot-container"
             onClick={handleClick}
@@ -464,9 +425,10 @@ const UserPage = () => {
           )} */}
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
 
 export default UserPage;
+

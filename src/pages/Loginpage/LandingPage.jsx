@@ -12,7 +12,7 @@ const LandingPage = () => {
 
   const scrollToLogin = () => {
     scroller.scrollTo("loginSection", {
-      duration: 800,
+      duration: 10,
       delay: 0,
       smooth: "easeInOutQuart",
       offset: -50,
