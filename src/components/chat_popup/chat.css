@@ -285,6 +285,10 @@
   background-color: #e6e6e6;
   color: #333;
 }
+.chat-message.bot.p {
+ padding: 5px;
+ margin-bottom: 1 rem;
+}
 .disabled-send {
   opacity: 0.5;
   cursor: not-allowed;
@@ -330,3 +334,4 @@
 .close-portal-btn:hover {
   background-color: #c0392b;
 }
+
