@@ -18,17 +18,17 @@
 .brand-text {
   color: #7c3aed; /* violet (or match your theme) */
 }
-.lead{
-  font-family: 'Comfortaa', cursive;
-  font-size: 1.5rem;
-  font-weight: 800;
-}
-.lead1{
-  font-family: "Newsreader", serif;
-  font-optical-sizing: auto;
+.lead {
+  font-family: 'Inter', sans-serif;
   font-size: 1.3rem;
-  font-style: normal;
-  
+  font-weight: 500;
+  line-height: 1.6;
+  color: #374151; /* Dark Gray */
+}
+.lead1 {
+  font-family: "Lora", serif;
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 .space{
   font-family: "Space Mono", monospace;
@@ -36,11 +36,11 @@
   font-style: normal;
   font-size: 1.5rem;
 }
-.spaceh{
-  font-family: "Space Mono", monospace;
+.spaceh {
+  font-family: "Lora", serif;
   font-weight: 700;
-  font-style: normal;
-  font-size: 2rem
+  font-size: 2rem;
+  color: #1e40af; /* Deep Blue */
 }
 
 .landing-section {
