@@ -133,7 +133,7 @@
 /* End Chat button at the top-left corner */
 .end-chat-btn {
   position: absolute;
-  top: 35px;
+  top: 40px;
   right: 20px;
   padding: 10px 20px;
   background-color: #bc3b2d;
@@ -284,4 +284,48 @@
   align-self: flex-start;
   background-color: #e6e6e6;
   color: #333;
+}
+.disabled-send {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.readonly-notice {
+  text-align: center;
+  padding: 8px;
+  color: #444;
+  font-style: italic;
+  font-weight: 500;
+}
+.start-chat-sidebar-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.start-chat-sidebar-btn:hover {
+  background-color: #45a049;
+}
+.close-portal-btn {
+  position: absolute;
+  top: 2px;
+  right: 10px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.close-portal-btn:hover {
+  background-color: #c0392b;
 }
