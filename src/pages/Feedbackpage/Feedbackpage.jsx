@@ -147,6 +147,9 @@ useEffect(() => {
             <div className="feedback-section">
               <h2>Feedback</h2>
               <p>{loadingDetails ? "Loading..." : selectedFeedback}</p>
+              {selectedFeedback === '0' && !loadingDetails && (
+                <p>No feedback given.</p>
+              )}
             </div>
 
             <div className="feedback-section">
