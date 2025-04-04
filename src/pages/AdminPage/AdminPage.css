@@ -137,7 +137,7 @@ input[type=text]:placeholder {
 
 .charts h2 {
   width: 40%; /* Matches the container width */
-  font-size: 16px; /* Adjust font size */
+  font-size: 25px; /* Adjust font size */
   color: rgb(4, 29, 40); /* Dark gray color for readability */
   text-align: center; /* Align text to the left */
   margin-bottom: 15px; /* Add space below before the chart */
@@ -146,6 +146,7 @@ input[type=text]:placeholder {
   margin-top: 120px;
   text-decoration: double;
   font-weight:200;
+  font-weight: 500;
 }
 
 .emotion-image {
