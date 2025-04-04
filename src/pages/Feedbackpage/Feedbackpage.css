@@ -11,15 +11,20 @@
 }
 
 p {
-  margin-top: 200px;
+  padding: 50px;
   margin-bottom: 1rem;
 }
 
-
+.new{
+  display:flex;
+  flex-direction: column;
+  width:60%;
+}
 /* Feedback Container */
 .feedback-container {
+  align-items:center;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: stretch;
   gap: 20px;
   width: 90%;
@@ -139,7 +144,13 @@ p {
 }
 
 
-
+.notnew{
+  width:70%;
+  text-align: center;
+  align-items:center;
+  display: flex;
+  margin-left: 6rem;
+}
 
 
 

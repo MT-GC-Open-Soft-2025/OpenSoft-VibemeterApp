@@ -143,15 +143,18 @@ useEffect(() => {
                 ))}
               </div>
             </div>
-
+              <div  className="new">
+                <div className="notnew">
             <div className="feedback-section">
               <h2>Feedback</h2>
-              <p>{loadingDetails ? "Loading..." : selectedFeedback}</p>
+              <p style={{fontSize: '30px'}}>{loadingDetails ? "Loading..." : selectedFeedback}</p>
+            </div>
             </div>
 
             <div className="feedback-section">
               <h2>Summary</h2>
               <p>{loadingDetails ? "Loading..." : <Markdown>{selectedSummary}</Markdown>}</p>
+            </div>
             </div>
           </>
         )}

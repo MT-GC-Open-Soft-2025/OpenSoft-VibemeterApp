@@ -83,49 +83,15 @@ const UserPage = () => {
     link.click();
     document.body.removeChild(link);
   };
-  const truncatedVibeScore = user ? user.vibe_score.toFixed(2) : 0;
 
   if (!user) return <div className="p-4">Loading...</div>;
-  const getMood = () => {
-    if (truncatedVibeScore >= 4.5)
-      return { icon: "bi-emoji-smile-fill", text: "Happy", color: "success" };
-    if (truncatedVibeScore >= 3)
-      return {
-        icon: "bi-emoji-neutral-fill",
-        text: "Neutral",
-        color: "primary",
-      };
 
-    if (truncatedVibeScore < 3 && truncatedVibeScore >= 0)
-      return {
-        icon: "bi-emoji-frown-fill",
-        text: "Sad",
-        color: "danger",
-      };
-    return {
-      icon: "bi-emoji-neutral-fill",
-      text: "Neutral",
-      color: "primary",
-    };
-  };
-  const radius = 90;
-  const circumference = 2 * Math.PI * radius;
-  // const dashOffset = circumference - (user.vibe_score / 5) * circumference;
-  const dashOffset =
-  truncatedVibeScore === -1
-    ? circumference
-    : circumference - (truncatedVibeScore / 5) * circumference;
-
-
-  // {user.vibe_score === -1 ? ( dashOffset = 0) : (dashOffset = circumference - (user.vibe_score / 5) * circumference;)}
-  // const mood = getMood();
-  const mood = getMood();
   const vibeEmoji =
-  truncatedVibeScore >= 4.5 ? "😎" : truncatedVibeScore >= 3 ? "🙂" : "😕";
+    user.vibe_score >= 4.5 ? "😎" : user.vibe_score >= 3 ? "🙂" : "😕";
   const vibeMessage =
-  truncatedVibeScore >= 4.5
+    user.vibe_score >= 4.5
       ? "You're doing great!"
-      : truncatedVibeScore >= 3
+      : user.vibe_score >= 3
       ? "Keep going, you're doing well!"
       : "It's okay to take breaks. You're not alone.";
   const performanceMessage =
@@ -175,77 +141,18 @@ const UserPage = () => {
           <div className="row align-items-center my-5 animate__animated animate__fadeInLeft">
             <div className="ancestor">
               <div
-                className={`card text-center shadow-lg p-2 box ${
-                  truncatedVibeScore === -1
-                    ? "neutral"
-                    : truncatedVibeScore < 3
-                    ? "low-vibe"
-                    : truncatedVibeScore > 4.5
-                    ? "happy"
-                    : "neutral"
+                className={`card text-center shadow-lg p-4 box ${
+                  user.vibe_score < 3 ? "low-vibe" : ""
                 }`}
                 style={{ width: "22rem", marginTop: "2rem" }}
               >
-                <div className="vibe-meter">
-                  <div className="head">
-                    <h4>Emoji Mood Meter</h4>
-                  </div>
-                  <div className={`vibe-circle ${mood.color}`}>
-                    <svg
-                      className="vibe-progress"
-                      width="200"
-                      height="200"
-                      viewBox="0 0 200 200"
-                    >
-                      <circle
-                        className="vibe-progress-bg"
-                        cx="100"
-                        cy="100"
-                        r={radius}
-                        strokeWidth="10"
-                      />
-                      <circle
-                        className={`vibe-progress-fill vibe-${mood.color}`}
-                        cx="100"
-                        cy="100"
-                        r={radius}
-                        strokeWidth="10"
-                        strokeDasharray={circumference}
-                        strokeDashoffset={dashOffset}
-                      />
-                    </svg>
-                    <div className="vibe-content">
-                      <i className={`bi ${mood.icon} vibe-icon`}></i>
-                      {truncatedVibeScore === -1 ? (
-                        <>
-                          <div className="vibe-percentage">0%</div>
-                          <div className="vibe-label">{mood.text}</div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="vibe-percentage">
-                            {(truncatedVibeScore * 100) / 5}%
-                          </div>
-                          <div className="vibe-label">{mood.text}</div>
-                        </>
-                      )}
-                      {/* <div className="vibe-percentage">
-                        {(user.vibe_score * 100) / 5}%
-                      </div> */}
-                      {/* <div className="vibe-label">{mood.text}</div> */}
-                    </div>
-                  </div>
+                <div className="head">
+                  <h4>Emoji Mood Meter</h4>
                 </div>
-
-                {/* <div className="card-body">
+                <div className="card-body">
                   <span className="display-1 text-warning">{vibeEmoji}</span>
-                </div> */}
-                <p className="score">Score: {truncatedVibeScore}</p>
-                {truncatedVibeScore === -1 ? (
-                  <p> No information available yet </p>
-                ) : (
-                  <p> </p>
-                )}
+                </div>
+                <p className="score">Score: {user.vibe_score}</p>
               </div>
             </div>
 
@@ -262,8 +169,8 @@ const UserPage = () => {
           >
             <div className="ancestor2" id="descrip">
               <div id="rew" className="meet">
-                You've earned <strong>{user.reward_points}</strong> points.
-                You're amazing!
+                YOU'VE EARNED <strong>{user.reward_points}</strong> POINTS.
+                YOU'RE AMAZING!
                 <Badges />
               </div>
             </div>
@@ -365,26 +272,18 @@ const UserPage = () => {
                     </div>
                   </div>
                   <div className="ancestor2" id="descrip">
-                    <div id="rew1" className="meet">
-                      Please take a moment to fill out this short survey - Your
-                      feedback matters !
-                      <button
-                        className="nav-link1"
-                        id="button2"
-                        onClick={handleFeedback}
-                      >
-                        Submit Survey
-                      </button>
+                    <div id="rew" className="meet">
+                      Wow, you haven’t taken any leaves. You're a rockstar! 🚀
                     </div>
                   </div>
                 </>
               ) : (
                 <>
                   <div className="ancestor2" id="descrip">
-                    <div id="rew1" className="meet">
-                      Please take a moment to fill out this short survey - Your
-                      feedback matters !
-                      <button className="nav-link1" id="button2" onClick={handleFeedback}>
+                    <div id="rew" className="meet">
+                      PLEASE TAKE A MOMENT TO FILL OUT THIS SHORT SURVEY - YOUR
+                      FEEDBACK MATTERS!
+                      <button className="nav-link1" onClick={handleFeedback}>
                         Submit Survey
                       </button>
                     </div>
@@ -412,17 +311,30 @@ const UserPage = () => {
             onClick={handleClick}
             style={{ cursor: "pointer" }}
           >
-            <div className="chat-bubble">Hi! How can I assist you?</div>
+            <div
+              className={`chat-bubble ${
+                user.vibe_score >= 4.5
+                  ? "high-vibe"
+                  : user.vibe_score >= 3
+                  ? "medium-vibe"
+                  : "low-vibe"
+              }`}
+            >
+              {user.vibe_score >= 4.5
+                ? "You seem in a good mood today.Let's catchup."
+                : user.vibe_score >= 3
+                ? "Hey! Just checking in. Up for a quick chat?"
+                : "Hey, you don’t seem like you’re having the best day. Want to talk?"}
+            </div>
+
             <Lottie
               animationData={animationData}
               loop={true}
               className="bot-animation"
-              style={{ cursor: "pointer" }} // Makes it clear that it's clickable
+              style={{ cursor: "pointer" }}
             />
           </div>
-
-          {/* </div>
-          )} */}
+          {/*  MODIFIED CHAT BUBBLE SECTION END */}
         </div>
       </div>
       <Footer />
