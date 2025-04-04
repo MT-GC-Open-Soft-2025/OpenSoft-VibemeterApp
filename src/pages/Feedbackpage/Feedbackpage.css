@@ -10,7 +10,10 @@
   height: auto; /* Remove full height to prevent centering */
 }
 
-
+p {
+  margin-top: 200px;
+  margin-bottom: 1rem;
+}
 
 
 /* Feedback Container */
