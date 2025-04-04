@@ -92,12 +92,12 @@ const Navbar = ({ setSelectedEmployee }) => {
   };
 
   return (
-    <nav>
+    <>
       <div className="search-container">
         <input
           type="text"
           className="search-bar"
-          placeholder="Search Employee ID..."
+          placeholder="Search Employee ID"
           value={searchTerm}
           onChange={handleSearchChange}
         />
@@ -115,7 +115,7 @@ const Navbar = ({ setSelectedEmployee }) => {
           </ul>
         )}
       </div>
-    </nav>
+    </>
   );
 };
 
