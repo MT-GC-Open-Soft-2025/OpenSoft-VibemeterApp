@@ -133,7 +133,7 @@
 /* End Chat button at the top-left corner */
 .end-chat-btn {
   position: absolute;
-  top: 40px;
+  top: 50px;
   right: 20px;
   padding: 10px 20px;
   background-color: #bc3b2d;
@@ -314,13 +314,14 @@
 }
 .close-portal-btn {
   position: absolute;
-  top: 2px;
-  right: 10px;
+  top: 6px;
+  right: 20px;
   background-color: #e74c3c;
   color: white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
+  height: 28px;
+  padding: 4px 9px;
+  border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
   z-index: 1000;
