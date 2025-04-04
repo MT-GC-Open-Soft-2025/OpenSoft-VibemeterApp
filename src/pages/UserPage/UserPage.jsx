@@ -425,7 +425,7 @@ const UserPage = () => {
                     <div id="rew1" className="meet">
                       Please take a moment to fill out this short survey - Your
                       feedback matters !
-                      <button className="nav-link1" onClick={handleFeedback}>
+                      <button className="nav-link1" id="button2" onClick={handleFeedback}>
                         Submit Survey
                       </button>
                     </div>
