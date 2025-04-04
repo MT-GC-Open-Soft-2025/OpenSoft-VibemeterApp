@@ -2,6 +2,7 @@
 .feedback-wrapper {
   min-height: 100vh;
   background: linear-gradient(135deg, #4a90e2, #50c9c3);
+  font-family: 'Noto Sans',monospace;
   display: flex;
   flex-direction: column;
 }

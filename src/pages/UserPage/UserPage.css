@@ -121,15 +121,9 @@ word-break: break-word;
   font-size: 1.25rem;
 }
 
-.low-vibe {
+/*.low-vibe {
   border: 2px solid #ff4d4f;
-}
-.neutral {
-  border: 2px solid blue;
-}
-.happy {
-  border: 2px solid green;
-}
+}*/
 
 @keyframes fadeInUp {
   from {
@@ -243,7 +237,7 @@ h1 {
 }
 .para {
   font-size: 1.25rem;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: 'Noto Sans', 'Times New Roman', Times, serif;
 }
 .meet {
   color: #10526c;
@@ -265,6 +259,7 @@ h1 {
 .description {
   width: auto;
   margin-left: 1rem;
+  font-size: 25px;
 }
 .head {
   border-bottom: #343a40;
@@ -322,6 +317,7 @@ h1 {
   display: flex;
   flex-direction: row;
   width: auto;
+  font-size: 25px;
 }
 .nav-link1 {
   margin-top: 1rem;
@@ -360,7 +356,7 @@ h1 {
 
 /* Chat Bubble - Adjusted Below Mouth */
 .chat-bubble {
-  background-color: white;
+  
   color: black;
   padding: 8px 12px;
   border-radius: 10px;
@@ -385,7 +381,7 @@ h1 {
   transform: translateY(-50%);
   width: 0;
   height: 0;
-  border-right: 6px solid white;
+  border-right: 6px solid ;
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
 }
@@ -766,4 +762,18 @@ body {
   font-weight: 700;
   font-style: normal;
   font-size: 2rem
+}
+/* Green for vibe_score >= 4.5 */
+.chat-bubble.high-vibe {
+  background-color: rgb(117, 210, 117);
+}
+
+/* Grey for 3 <= vibe_score < 4.5 */
+.chat-bubble.medium-vibe {
+  background-color: rgb(233, 229, 229);
+}
+
+/* Green for vibe_score < 3 */
+.chat-bubble.low-vibe {
+  background-color: rgb(225, 125, 125);
 }
