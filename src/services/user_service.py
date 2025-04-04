@@ -28,16 +28,35 @@ async def get_user_details(emp_id: str):
         )
     
 async def get_all_convoid(emp_id: str):
-    matched_chats = await Chat.find(Chat.empid==emp_id).to_list()
-
-    if matched_chats:
-        convid_list: List[str] = [chat.convid for chat in matched_chats]
-        return {
-           "convid_list": convid_list,
-        }
-
-    else:
+    try:
+       matched_chats = await Chat.find(Chat.empid==emp_id).to_list()
+       if(len(matched_chats)==0):
+           return {
+               "convid_list": []
+           }
+       else:
+              matched_chats = await Chat.find(Chat.empid==emp_id).to_list()
+              convid_list: List[str] = [chat.convid for chat in matched_chats]
+              return {
+                "convid_list": convid_list,
+              } 
+           
+    except:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found."
-        )
+            detail="not found."
+        )       
+    
+    
+
+    # if matched_chats:
+    #     convid_list: List[str] = [chat.convid for chat in matched_chats]
+    #     return {
+    #        "convid_list": convid_list,
+    #     }
+
+    # else:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail="User not found."
+    #     )
