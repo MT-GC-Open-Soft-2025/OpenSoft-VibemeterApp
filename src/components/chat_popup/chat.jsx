@@ -317,7 +317,7 @@ const Chat = () => {
             <h5 className="chat-heading fw-bold mt-4">👨 Employee Chats</h5>
             <div style={{ textAlign: "center", marginBottom: "10px" }}>
               <button className="start-chat-sidebar-btn" onClick={handleStartChat}>
-                {!localStorage.getItem("uniqueId") || localStorage.getItem("conversationId" )=== localStorage.getItem("uniqueId")? "➕ New Chat" : "⬅ Go to Current Chat"}
+                {!localStorage.getItem("uniqueId") || localStorage.getItem("conversationId" )=== localStorage.getItem("uniqueId")? "New Chat" : "⬅ Go to Current Chat"}
               </button>
             </div>
             <div className="conversation" >
@@ -333,12 +333,12 @@ const Chat = () => {
             </div>
           </div>
 
-          <div className="chat-right">
+          <div className="chat-right"> 
             {chatStarted && localStorage.getItem("uniqueId")===localStorage.getItem("conversationId") && (
               <button className="end-chat-btn" onClick={openFeedbackPopup}>End Chat</button>
             )}
 
-            <div className="chat-right-content">
+            <div className="chat-right-content" style={{ backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))" }}>
               {chatStarted ? (
                 <>
                   {!localStorage.getItem("uniqueId")===localStorage.getItem("conversationId") && (
