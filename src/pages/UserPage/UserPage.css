@@ -744,7 +744,7 @@ body {
   color: #7c3aed; /* violet (or match your theme) */
 }
 .lead{
-  font-family: 'Comfortaa', cursive;
+  font-family: 'Noto Sans', cursive;
   font-size: 1.5rem;
   font-weight: 800;
 }
@@ -756,7 +756,7 @@ body {
   
 }
 .space{
-  font-family: "Space Mono", monospace;
+  font-family: "Noto Sans", monospace;
   font-weight: 400;
   font-style: normal;
   font-size: 1.5rem;
