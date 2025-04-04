@@ -133,7 +133,7 @@
 /* End Chat button at the top-left corner */
 .end-chat-btn {
   position: absolute;
-  top: 40px;
+  top: 50px;
   right: 20px;
   padding: 10px 20px;
   background-color: #bc3b2d;
