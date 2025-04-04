@@ -4,13 +4,16 @@
   align-items: center;
   background: linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255)) !important;
   width: 100%;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Noto Sans', sans-serif;
   margin: 0;
   padding-top: 5px; /* Adjust as needed */
   height: auto; /* Remove full height to prevent centering */
 }
 
-
+p {
+  margin-top: 200px;
+  margin-bottom: 1rem;
+}
 
 
 /* Feedback Container */

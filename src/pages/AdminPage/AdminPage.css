@@ -25,6 +25,8 @@
   cursor: pointer;
   font-size: 12px;
   transition: background-color 0.3s ease-in-out;
+  align-items: center;
+
 }
 
 .styled-button:hover {
@@ -131,35 +133,44 @@ input[type=text]:placeholder {
 .text-container {
   text-align: center;
   font-size: large;
-  margin-top: 50px;
-  margin-bottom: 50px;
+  margin-top: 70px;
+  margin-bottom: 30px;
+  height: auto;
+  width: auto;
+  padding-top: 12 rem;
 }
 
+.text-container h3 {
+  font-size: 3rem;
+  color: rgb(36, 32, 66);
+
+}
 .charts h2 {
-  width: 40%; /* Matches the container width */
-  font-size: 16px; /* Adjust font size */
+  width: 80%; /* Matches the container width */
+  font-size: 20px; /* Adjust font size */
   color: rgb(4, 29, 40); /* Dark gray color for readability */
   text-align: center; /* Align text to the left */
   margin-bottom: 15px; /* Add space below before the chart */
   line-height: 1.7; /* Improve readability */
   margin-left: 100px;
-  margin-top: 120px;
+  margin-top: 100px;
   text-decoration: double;
-  font-weight:200;
+  font-weight: 500;
 }
 
 .emotion-image {
   display: block;  /* Ensures it behaves properly */
-  margin-left: 100px;  /* Adds margin (top/bottom: 20px, left/right: auto to center it) */
+  margin-left: 80px;  /* Adds margin (top/bottom: 20px, left/right: auto to center it) */
   width: 100%;  /* Prevents overflow */
-  height: auto;  /* Maintains aspect ratio */
+  height:fit-content;  /* Maintains aspect ratio */
   max-width: 600px;
   border-radius: 10px;
 }
 
 .Search-button {
-  display: fex;
+  display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .Search-button .h2 {
@@ -342,6 +353,8 @@ input[type=text]:placeholder {
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  margin-top: 20px;
+  margin-left: 10px;
   transition: background-color 0.3s ease-in-out;
 }
 
