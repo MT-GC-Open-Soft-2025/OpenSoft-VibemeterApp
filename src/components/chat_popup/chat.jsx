@@ -10,7 +10,6 @@ import Swal from "sweetalert2";
 
 const Chat = () => {
   const navigate = useNavigate();
-
   const [convids, setConversationIds] = useState([]);
   const [chatStarted, setChatStarted] = useState(false);
   const [conversationId, setConversationId] = useState("");
@@ -82,17 +81,43 @@ const Chat = () => {
     }
   }, [chatMessages, isBotTyping]);
 
-  const generateStarRatingUI = (currentRating) => {
-    let starsHtml = "";
-    for (let i = 1; i <= 5; i++) {
-      starsHtml += `
-        <input type="radio" id="star${i}" name="rating" value="${i}" ${
-        i === currentRating ? "checked" : ""
-      }>
-        <label for="star${i}">⭐</label>
-      `;
-    }
-    return `<div style="font-size: 30px; display: flex; gap: 10px; justify-content: center;">${starsHtml}</div>`;
+  const generateStarHTML = () => {
+    return `
+      <style>
+        .star-rating {
+          direction: rtl;
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+        }
+        .star-rating input {
+          display: none;
+        }
+        .star-rating label {
+          font-size: 2.2rem;
+          color: #ccc;
+          cursor: pointer;
+          transition: color 0.2s;
+        }
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+          color: #ffc107;
+        }
+      </style>
+      <div class="star-rating">
+        <input type="radio" id="star5" name="rating" value="5" />
+        <label for="star5">★</label>
+        <input type="radio" id="star4" name="rating" value="4" />
+        <label for="star4">★</label>
+        <input type="radio" id="star3" name="rating" value="3" />
+        <label for="star3">★</label>
+        <input type="radio" id="star2" name="rating" value="2" />
+        <label for="star2">★</label>
+        <input type="radio" id="star1" name="rating" value="1" />
+        <label for="star1">★</label>
+      </div>
+    `;
   };
 
   const openFeedbackPopup = async () => {
@@ -107,12 +132,13 @@ const Chat = () => {
         denyButtonText: "No, thanks",
         cancelButtonText: "Cancel",
         confirmButtonText: "Submit",
-        html: generateStarRatingUI(rating),
+        html: generateStarHTML(),
         preConfirm: () => {
           const selected = document.querySelector('input[name="rating"]:checked');
-          return selected
-            ? parseInt(selected.value)
-            : Swal.showValidationMessage("Please select a rating!");
+          if (!selected) {
+            Swal.showValidationMessage("Please select a rating!");
+          }
+          return selected ? parseInt(selected.value) : null;
         },
       });
 
@@ -168,17 +194,13 @@ const Chat = () => {
     setChatStarted(true);
     setSelectedIndex(null);
     await fetchConversations();
-    const token = localStorage.getItem("token");
 
     try {
+      const token = localStorage.getItem("token");
       const res = await axios.post(
         `http://127.0.0.1:8000/chat/initiate_chat/${uniqueId}`,
         {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setChatMessages([{ sender: "bot", text: res.data.response }]);
     } catch (err) {
@@ -201,7 +223,7 @@ const Chat = () => {
         prev.includes(uniqueId) ? prev : [uniqueId, ...prev]
       );
     } catch (err) {
-      alert("Feedback has been given");
+      console.warn("Feedback already submitted or error occurred.");
     }
 
     setChatMessages([]);
@@ -304,13 +326,9 @@ const Chat = () => {
           <div className="chat-left">
             <h5 className="chat-heading fw-bold mt-4">👨 Employee Chats</h5>
             <div style={{ textAlign: "center", marginBottom: "10px" }}>
-              <button
-                className="start-chat-sidebar-btn"
-                onClick={handleStartChat}
-              >
-                {!localStorage.getItem("uniqueId") ||
-                localStorage.getItem("conversationId") === localStorage.getItem("uniqueId")
-                  ? "➕ New Chat"
+              <button className="start-chat-sidebar-btn" onClick={handleStartChat}>
+                {!localStorage.getItem("uniqueId") || localStorage.getItem("conversationId") === localStorage.getItem("uniqueId")
+                  ? "New Chat"
                   : "⬅ Go to Current Chat"}
               </button>
             </div>
@@ -367,7 +385,6 @@ const Chat = () => {
                       </div>
                     )}
                   </div>
-
                   <div className="chat-input-container">
                     <input
                       type="text"

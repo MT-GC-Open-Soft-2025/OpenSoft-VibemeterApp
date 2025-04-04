@@ -53,7 +53,7 @@ const LandingPage = () => {
               Your friendly mental wellness chatbot, always here to talk, check in,
               and help guide you through daily ups and downs.
             </p>
-            <Link to="chat" smooth duration={500} className="lead btn btn-outline-primary mt-3">
+            <Link to="signin" smooth duration={500} className="lead btn btn-outline-primary mt-3">
               Start Chatting
             </Link>
 
