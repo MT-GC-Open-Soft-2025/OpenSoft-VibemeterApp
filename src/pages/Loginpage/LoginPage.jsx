@@ -78,16 +78,16 @@ const LoginPage = () => {
               className="img-fluid mb-4 mb-md-0"
               style={{ maxHeight: "400px" }}
             />
-            <h4 className="text-primary mt-3">
-              Taking care of your mind is a superpower 💙
+            <h4 className="space text-primary ">
+              Taking care of your mind is a superpower
             </h4>
           </div>
 
           {/* Right: Sign-In Card */}
           <div className="col-md-6" data-aos="fade-left">
             <div className="signin-card ms-md-4 mt-4 mt-md-0">
-              <h2 className="text-primary fw-bold mb-3">Welcome Back 🌱</h2>
-              <p className="text-muted mb-4">
+              <h2 className="text-primary fw-bold mb-3 spaceh">Welcome Back 🌱</h2>
+              <p className="lead1 text-muted mb-4">
                 Let’s continue your journey to mental wellness.
               </p>
 
@@ -107,7 +107,7 @@ const LoginPage = () => {
 
                 <input
                   type="text"
-                  className="form-control mb-3"
+                  className="form-control mb-3 text-align-left"
                   placeholder="Employee ID"
                   value={empId}
                   onChange={handleChange}

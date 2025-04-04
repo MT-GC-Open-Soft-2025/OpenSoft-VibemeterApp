@@ -116,6 +116,8 @@ useEffect(() => {
   };
 
   return (
+    
+    
     <div className="feedback-wrapper">
       <Feedbacknavbar title="Feedback Page" />
 
@@ -154,6 +156,8 @@ useEffect(() => {
         )}
       </div>
     </div>
+    
+    
   );
 };
 

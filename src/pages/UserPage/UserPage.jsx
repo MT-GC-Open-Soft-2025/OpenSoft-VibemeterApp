@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import animationData from "../../Assets/Newanimation.json"; // Bot animation
 import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
-
+import Footer from "../../components/Footer/Footer.jsx";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -149,7 +149,6 @@ const UserPage = () => {
       <div
         className="feedback-wrapper"
         style={{
-          width: "88.8%",
           marginLeft: "170px",
           marginTop: "0px",
           backgroundImage:
@@ -158,7 +157,7 @@ const UserPage = () => {
           padding: "20px",
         }}
       >
-        <div className="welcome">
+        <div className="spaceh welcome">
           <h1>Hello Employee!</h1>
           <p className="para">
             Empowering you at work — support, growth, and motivation for every
@@ -465,6 +464,7 @@ const UserPage = () => {
           )} */}
         </div>
       </div>
+      <Footer/>
     </div>
   );
 };

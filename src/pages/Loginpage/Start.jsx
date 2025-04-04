@@ -40,22 +40,24 @@ const Start = () => {
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav ms-auto" style={{ marginRight: "30px"}}>
-                <li className="nav-item">
-                  <Link className="nav-link" to="landing" smooth duration={500}>Home</Link>
+                <li className="nav-item ">
+                <Link to="landing" smooth duration={500} className="lead1 nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>Home</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="login" smooth duration={500}>Sign In</Link>
+                <Link to="signin" smooth duration={500} className="lead1 nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>Sign In</Link>
+
+                </li>
+                
+                <li className="nav-item">
+                <Link to="faq" smooth duration={500} className="lead1 nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>FAQ</Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="faq" smooth duration={500}>FAQ</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="book-demo" smooth duration={500}>Book a Demo</Link>
+                <Link to="book-demo" smooth duration={500} className="lead1 nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>Book a Demo</Link>
               </li>
 
-                <li className="nav-item">
+                {/* <li className="nav-item">
                   <Link className="nav-link" to="footer" smooth duration={500}>Footer</Link>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
