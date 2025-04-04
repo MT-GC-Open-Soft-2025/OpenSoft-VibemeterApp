@@ -139,7 +139,15 @@ input[type=text]:placeholder {
   width: auto;
   padding-top: 12 rem;
 }
-
+.styled {
+  position: fixed;
+  top: 2rem;
+  left: 1rem;
+  color: white;
+  background-color: #3697aa;
+  height: 5rem;
+  z-index: 5;
+}
 .text-container h3 {
   font-size: 3rem;
   color: rgb(36, 32, 66);
