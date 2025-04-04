@@ -413,6 +413,7 @@ const UserPage = () => {
                         className="nav-link1"
                         id="button2"
                         onClick={handleFeedback}
+                        style={{fontSize:"22px", width:"13rem"}}
                       >
                         Submit Survey
                       </button>

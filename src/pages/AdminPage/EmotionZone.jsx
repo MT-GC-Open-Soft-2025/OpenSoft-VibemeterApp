@@ -61,7 +61,7 @@ const EmotionZoneChart = () => {
 
   return (
     <div className="charts">
-      <h2>Some employees need a boost. Check their status!</h2>
+      <h2 style={{fontFamily:"'Noto Sans', sans-serif"}}>Some employees need a boost. Check their status!</h2>
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={emotionData} margin={{ top: 20, right: 20, left: 0, bottom: 50 }}>
           <XAxis dataKey="name" angle={-30} textAnchor="end" tick={{ fontSize: 12 }} />
