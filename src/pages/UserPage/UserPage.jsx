@@ -326,7 +326,7 @@ const UserPage = () => {
                 ? "You seem in a good mood today.Let's catchup."
                 : user.vibe_score >= 3
                 ? "Hey! Just checking in. Up for a quick chat?"
-                : "Hey, you don’t seem like you’re having the best day. Want to talk?"}
+                : "Hey, you seem off. Want to talk?"}
             </div>
 
             <Lottie
