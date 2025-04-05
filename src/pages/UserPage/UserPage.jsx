@@ -175,8 +175,9 @@ const UserPage = () => {
           >
             <div className="ancestor2" id="descrip">
               <div id="rew" className="meet">
-              {user.reward_points <= 200
-                    ? "On the track, let's go for more"
+                YOU'VE EARNED <strong>{user.reward_points}</strong> POINTS. <br></br>
+                {user.reward_points <= 200
+                    ? "On the track, let's go for more."
                     : "YOU'RE AMAZING!"}
                 <Badges employeeId={ empId }/>
               </div>
