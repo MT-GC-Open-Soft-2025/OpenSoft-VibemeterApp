@@ -72,7 +72,7 @@ const Navbar = ({ setSelectedEmployee }) => {
           icon: "success",
           title: "Employee Found!",
           text: `Redirecting to Employee ID: ${searchTerm}`,
-          confirmButtonColor: "#007bff",
+          confirmButtonColor: "#36ABAA",
         }).then(() => {
           setSelectedEmployee(searchTerm);
           setSearchTerm("");

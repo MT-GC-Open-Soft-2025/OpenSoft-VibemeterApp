@@ -15,6 +15,7 @@ const BookDemoForm = () => {
         icon: 'success',
         title: 'Demo Booked!',
         text: 'We’ll be in touch with you shortly via email.',
+        confirmButtonColor: '#36ABAA'
       });
       form.current.reset();
     }).catch(() => {
@@ -22,6 +23,7 @@ const BookDemoForm = () => {
         icon: 'error',
         title: 'Oops!',
         text: 'Something went wrong. Try again later.',
+        confirmButtonColor: '#d33'
       });
     });
   };
