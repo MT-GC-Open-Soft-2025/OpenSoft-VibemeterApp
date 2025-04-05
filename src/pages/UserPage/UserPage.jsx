@@ -39,7 +39,13 @@ const UserPage = () => {
   const navigate = useNavigate();
   //  const [selectedEmployee, setSelectedEmployee] = useState(""); 
   const [user, setUser] = useState(null);
+  const [empId, setEmpId] = useState();
 
+  useEffect(() => {
+    const storedId = localStorage.getItem("empId");
+    if (storedId) setEmpId(storedId);
+  }, []); 
+  
   const handleClick = () => {
     navigate("/chat");
   };
@@ -69,7 +75,7 @@ const UserPage = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch(`http://api.wellbee.live/user/getUserDetails`, {
+    fetch("http://127.0.0.1:8000/user/getUserDetails", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => (res.ok ? res.json() : Promise.reject("Failed to fetch")))
@@ -163,9 +169,11 @@ const UserPage = () => {
           >
             <div className="ancestor2" id="descrip">
               <div id="rew" className="meet">
-                You've earned <strong>{user.reward_points}</strong> points.
-                You're Amazing!
-                <Badges />
+                YOU'VE EARNED <strong>{user.reward_points}</strong> POINTS. <br></br>
+                {user.reward_points <= 200
+                    ? "On the track, let's go for more."
+                    : "YOU'RE AMAZING!"}
+                <Badges employeeId={ empId }/>
               </div>
             </div>
             <div className="card">

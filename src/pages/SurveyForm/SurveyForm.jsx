@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./SurveyForm.css";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
-import axios from "axios";
 import Swal from 'sweetalert2'
 import baseUrl from "../../Config";
 
@@ -33,12 +32,10 @@ const SurveyForm = () => {
         },
       });
 
-      console.log("API Response Data:", response.data); 
+      console.log("API Response Data:", response.data);
 
-      
       const data = response.data?.response || [];
 
-      
       if (!Array.isArray(data) || data.length === 0) {
         setStatus("No questions available.");
         setQuestions([]);
@@ -47,11 +44,10 @@ const SurveyForm = () => {
 
       setQuestions(data);
 
-      
-      const initial = {};
-      data.forEach((q) => (initial[q.question_id] = 3));
-      setResponses(initial);
-
+      // Initialize responses with default value 3
+      const initialResponses = {};
+      data.forEach((q) => (initialResponses[q.question_id] = 3));
+      setResponses(initialResponses);
     } catch (error) {
       console.error("Error fetching questions:", error.response?.data || error.message);
       setStatus("Failed to load questions.");
@@ -81,7 +77,7 @@ const handleSubmit = async (e) => {
     console.log("Submitting payload:", JSON.stringify(payload, null, 2));
     
 
-    const res = await axios.post(`${baseUrl}/chat/add_feedback`, payload, {
+    const res = await axios.post("http://143.198.49.48/chat/add_feedback", payload, {
   })
     setStatus(res.status);
     console.log(res)
@@ -120,38 +116,30 @@ const handleSubmit = async (e) => {
 };
 
   return (
-    <div
-      className="feedback-wrapper"
-      style={{
-        backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))",
-      }}
-    >
+    <div className="feedback-wrapper" style={{ backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))" }}>
       <Feedbacknavbar title="Survey" />
       <div className="survey-container">
         <h2>Survey</h2>
+        <form className="survey-form" onSubmit={handleSubmit}>
+          {questions.map((q) => (
+            <div key={q.question_id} className="question-block">
+              <p className="question-text">{q.question_text}</p>
 
-        {questions.length === 0 ? (
-          <p className="error-message">{status || "No questions available."}</p>
-        ) : (
-          <form className="survey-form" onSubmit={handleSubmit}>
-            {questions.map((q) => (
-              <div key={q.question_id} className="question-block">
-                <p className="question-text">{q.question_text}</p>
-
-                <div className="slider-row">
-                  <input
-                    type="range"
-                    min="1"
-                    max="5"
-                    step="1"
-                    value={responses[q.question_id]}
-                    onChange={(e) =>
-                      handleRating(q.question_id, parseInt(e.target.value, 10))
-                    }
-                    className="rating-slider"
-                  />
-                  <span className="slider-value">{responses[q.question_id]}</span>
-                </div>
+              {/* SLIDER + CURRENT VALUE */}
+              <div className="slider-row">
+                <input
+                  type="range"
+                  min="1"
+                  max="5"
+                  step="1"
+                  value={responses[q.question_id] || 3}
+                  onChange={(e) =>
+                    handleRating(q.question_id, parseInt(e.target.value, 10))
+                  }
+                  className="rating-slider"
+                />
+                <span className="slider-value">{responses[q.question_id] || 3}</span>
+              </div>
 
                 <div className="slider-labels">
                   <span>1</span>
