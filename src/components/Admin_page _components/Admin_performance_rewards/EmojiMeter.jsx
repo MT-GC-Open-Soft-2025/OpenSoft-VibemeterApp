@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./EmojiMeter.css";
 import axios from "axios";
+import baseUrl from "../../../Config";
 
 export default function EmojiMeter({ employeeId }) {
     const [user, setUser] = useState(null);
@@ -16,7 +17,7 @@ export default function EmojiMeter({ employeeId }) {
                 if (!token) throw new Error("No authentication token found. Please log in.");
 
                 const response = await axios.get(
-                    `http://127.0.0.1:8000/admin/get_detail/${employeeId}`,
+                    `${baseUrl}/admin/get_detail/${employeeId}`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 

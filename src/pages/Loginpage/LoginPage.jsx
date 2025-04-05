@@ -6,12 +6,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginPage.css";
 import { FaUser, FaUserShield } from "react-icons/fa";
 import Swal from "sweetalert2";
+import baseUrl from "../../Config";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [empId, setEmpId] = useState("");
+  console.log(baseUrl)
+  
 
   // const handleToggle = () => {
   //   setIsAdmin((prev) => !prev);
@@ -35,7 +38,7 @@ const LoginPage = () => {
       });
       return;
     }
-    const response = await axios.post("http://127.0.0.1:8000/auth/signin", {
+    const response = await axios.post(baseUrl + "/auth/signin", {
        username: empId,
   });
      localStorage.setItem("token", response.data.access_token);

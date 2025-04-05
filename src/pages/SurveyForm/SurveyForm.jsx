@@ -5,6 +5,7 @@ import "./SurveyForm.css";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
 import axios from "axios";
 import Swal from 'sweetalert2'
+import baseUrl from "../../Config";
 
 
 
@@ -64,7 +65,7 @@ const handleSubmit = async (e) => {
     console.log("Submitting payload:", JSON.stringify(payload, null, 2));
     
 
-    const res = await axios.post("http://127.0.0.1:8000/chat/add_feedback", payload, {
+    const res = await axios.post(`${baseUrl}/chat/add_feedback`, payload, {
   })
     setStatus(res.status);
     console.log(res)

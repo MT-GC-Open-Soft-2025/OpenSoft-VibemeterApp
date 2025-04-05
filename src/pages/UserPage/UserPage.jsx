@@ -15,6 +15,7 @@ import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer/Footer.jsx";
 import EmojiMeter from "../../components/Admin_page _components/Admin_performance_rewards/Emojimeter_user.jsx";
+import baseUrl from "../../Config.js";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -67,7 +68,7 @@ const UserPage = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch("http://localhost:8000/user/getUserDetails", {
+    fetch(`${baseUrl}/user/getUserDetails`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => (res.ok ? res.json() : Promise.reject("Failed to fetch")))
