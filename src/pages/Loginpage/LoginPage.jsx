@@ -39,6 +39,7 @@ const LoginPage = () => {
        username: empId,
   });
      localStorage.setItem("token", response.data.access_token);
+     localStorage.setItem("empId", empId);
      if (empId === "admin") {
       Swal.fire({
         icon: 'success',

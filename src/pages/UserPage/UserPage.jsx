@@ -36,7 +36,13 @@ ChartJS.register(
 const UserPage = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [empId, setEmpId] = useState();
 
+  useEffect(() => {
+    const storedId = localStorage.getItem("empId");
+    if (storedId) setEmpId(storedId);
+  }, []); 
+  
   const handleClick = () => {
     navigate("/chat");
   };
@@ -65,7 +71,7 @@ const UserPage = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch("http://localhost:8000/user/getUserDetails", {
+    fetch("http://127.0.0.1:8000/user/getUserDetails", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => (res.ok ? res.json() : Promise.reject("Failed to fetch")))
@@ -169,9 +175,10 @@ const UserPage = () => {
           >
             <div className="ancestor2" id="descrip">
               <div id="rew" className="meet">
-                YOU'VE EARNED <strong>{user.reward_points}</strong> POINTS.
-                YOU'RE AMAZING!
-                <Badges />
+              {user.reward_points <= 200
+                    ? "On the track, let's go for more"
+                    : "YOU'RE AMAZING!"}
+                <Badges employeeId={ empId }/>
               </div>
             </div>
             <div className="card">
