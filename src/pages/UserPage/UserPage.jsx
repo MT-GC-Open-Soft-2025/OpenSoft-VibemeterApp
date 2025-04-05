@@ -4,7 +4,7 @@ import "./UserPage.css";
 import { useNavigate } from "react-router-dom";
 import userImg from "../../Assets/user.png";
 import Chat from "../../components/chat_popup/chat.jsx";
-import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar.jsx";
+import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar2.jsx";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Badges from "../../components/Badges/Badges";
 // import EmojiMeter from "../AdminPage/EmojiMeter.jsx";
