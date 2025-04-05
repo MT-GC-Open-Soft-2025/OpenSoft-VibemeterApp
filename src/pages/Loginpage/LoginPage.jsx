@@ -89,7 +89,7 @@ const LoginPage = () => {
           {/* Right: Sign-In Card */}
           <div className="col-md-6 " data-aos="fade-left" >
             <div className="signin-card ">
-              <h2 className="text-primary fw-bold mb-5 spaceh">Welcome Back 🌱</h2>
+              <h2 className="text-primary fw-bold mb-5 spaceh" style={{fontFamily:'Comfortaa'}}>Welcome Back</h2>
               <p className="lead1 text-muted mb-3">
                 Let’s continue your journey to mental wellness.
               </p>

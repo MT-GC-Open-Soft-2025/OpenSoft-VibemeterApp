@@ -162,7 +162,7 @@ const Chat = () => {
     console.log(localStorage.getItem("conversationId"));
     const existingId = localStorage.getItem("uniqueId");
     if (existingId) {
-      if (conversationId && conversationId !== existingId) {
+      if (conversationId && (conversationId !== existingId)) {
         // Just switch back to current active chat
         setConversationId(existingId);
         setChatStarted(true);
@@ -328,7 +328,7 @@ const Chat = () => {
             <h5 className="chat-heading fw-bold mt-4">👨 Employee Chats</h5>
             <div style={{ textAlign: "center", marginBottom: "10px" }}>
               <button className="start-chat-sidebar-btn" onClick={handleStartChat}>
-                {!localStorage.getItem("uniqueId") || localStorage.getItem("conversationId") === localStorage.getItem("uniqueId")
+              {!localStorage.getItem("uniqueId") || conversationId === localStorage.getItem("uniqueId")
                   ? "New Chat"
                   : "⬅ Go to Current Chat"}
               </button>
@@ -347,8 +347,7 @@ const Chat = () => {
           </div>
 
           <div className="chat-right">
-            {chatStarted &&
-              localStorage.getItem("uniqueId") === localStorage.getItem("conversationId") && (
+          {chatStarted && localStorage.getItem("uniqueId") === conversationId && (
                 <button className="end-chat-btn" onClick={openFeedbackPopup}>
                   End Chat
                 </button>
@@ -390,31 +389,20 @@ const Chat = () => {
                     <input
                       type="text"
                       className="chat-input"
-                      placeholder={
-                        localStorage.getItem("uniqueId") === localStorage.getItem("conversationId")
+                      placeholder={localStorage.getItem("uniqueId") === conversationId
                           ? "Type your message..."
                           : "Cannot message in past chats"
                       }
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      disabled={
-                        localStorage.getItem("uniqueId") !== localStorage.getItem("conversationId")
-                      }
+                      disabled={localStorage.getItem("uniqueId") !== conversationId}
                     />
                     <img
                       src={photo}
                       alt="Send"
-                      className={`send-photo ${
-                        localStorage.getItem("uniqueId") !== localStorage.getItem("conversationId")
-                          ? "disabled-send"
-                          : ""
-                      }`}
-                      onClick={
-                        localStorage.getItem("uniqueId") === localStorage.getItem("conversationId")
-                          ? handleSendMessage
-                          : undefined
-                      }
+                      className={`send-photo ${localStorage.getItem("uniqueId") !== conversationId ? "disabled-send" : ""}`}
+                      onClick={localStorage.getItem("uniqueId") === conversationId ? handleSendMessage : undefined}
                     />
                   </div>
                 </>

@@ -6,6 +6,9 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.navbar1{
+  z-index: 1000;
+}
 .sidebar {
   width: 250px;
   /* background-color: #343a40; */
