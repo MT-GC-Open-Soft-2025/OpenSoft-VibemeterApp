@@ -26,8 +26,8 @@ export default function Badges({ employeeId }) {
   
         const endpoint =
           empId === "admin"
-            ? `http://127.0.0.1:8000/admin/get_detail/${employeeId}`
-            : `http://127.0.0.1:8000/user/getUserDetails`;
+            ? `https://api.wellbee.live/admin/get_detail/${employeeId}`
+            : `https://api.wellbee.live/user/getUserDetails`;
   
         const response = await axios.get(endpoint, {
           headers: { Authorization: `Bearer ${token}` },
