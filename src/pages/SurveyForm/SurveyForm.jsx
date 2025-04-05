@@ -27,7 +27,7 @@ const SurveyForm = () => {
       }
 
       
-      const response = await axios.get("http://127.0.0.1:8000/chat/feedback", {
+      const response = await axios.get("http://api.wellbee.live/chat/feedback", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

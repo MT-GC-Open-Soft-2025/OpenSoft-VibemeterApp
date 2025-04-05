@@ -23,7 +23,7 @@ const PerformanceGraph = ({ employeeId }) => {
         }
 
         const response = await axios.get(
-          `${baseUrl}/admin/get_detail/${employeeId}`,
+          `http://api.wellbee.live/admin/get_detail/${employeeId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
