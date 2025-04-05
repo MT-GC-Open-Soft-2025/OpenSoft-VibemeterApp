@@ -445,13 +445,13 @@ h1 {
   
 }
 .space{
-  font-family: "Space Mono", monospace;
+  font-family: "Noto Sans", monospace;
   font-weight: 400;
   font-style: normal;
   font-size: 1.5rem;
 }
 .spaceh{
-  font-family: "Space Mono", monospace;
+  font-family: 'Montserrat', 'Poppins', 'Raleway', 'Nunito Sans', 'Helvetica Neue', sans-serif;
   font-weight: 700;
   font-style: normal;
   font-size: 2rem
