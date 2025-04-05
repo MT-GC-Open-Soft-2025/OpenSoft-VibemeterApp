@@ -23,7 +23,14 @@ async def get_employee_detail(employee_id) -> Dict[str, Any]:
 async def get_employee_conversation(employee_id: str) -> Dict[str, Any]:
     try:
         convo_id = await fetch_employee_conversation(employee_id)
-        return {"ConvoID": convo_id}
+        valid_convos = []
+        print("convo_id",convo_id)
+        for convo_id in convo_id:
+            feedback_data = await fetch_employee_conversationFeedback_byId(employee_id, convo_id)
+            feedback = feedback_data
+            if feedback != "-1" and feedback != -1:
+                valid_convos.append(convo_id)
+        return {"ConvoID": valid_convos}
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
     
