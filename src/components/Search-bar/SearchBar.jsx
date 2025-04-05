@@ -92,17 +92,24 @@ const Navbar = ({ setSelectedEmployee }) => {
   };
 
   return (
-    <nav>
+    <>
       <div className="search-container">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="search-icon feather feather-search">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
         <input
           type="text"
-          className="search-bar"
-          placeholder="Search Employee ID..."
+          className="form-control search-input ps-5"
+          placeholder="Search Employee ID"
+          aria-label="Search"
           value={searchTerm}
           onChange={handleSearchChange}
         />
-        <button className="search-icon-btn" onClick={handleSearchClick}>
-          <FaSearch />
+        <button className="btn btn-search ms-2" onClick={handleSearchClick}>
+          Search
         </button>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {showDropdown && (
@@ -115,8 +122,27 @@ const Navbar = ({ setSelectedEmployee }) => {
           </ul>
         )}
       </div>
-    </nav>
+    </>
   );
 };
 
 export default Navbar;
+{/* <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="search-container position-relative">
+                    <form class="d-flex align-items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="search-icon feather feather-search">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input class="form-control search-input ps-5" type="search"
+                               placeholder="Search anything..." aria-label="Search">
+                        <button class="btn btn-search ms-2" type="submit">Search</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> */}

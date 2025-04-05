@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Feedbackpage.css";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
+import Markdown from 'markdown-to-jsx'
 
 const FeedbackPage = () => {
   const navigate = useNavigate();
@@ -105,7 +106,7 @@ useEffect(() => {
     }
       
       setSelectedFeedback(feedbackRes.data["Feedback "] || "No feedback available.");
-      setSelectedSummary(JSON.stringify(parseTextResponse(summaryRes.data["Summary "]),null,2) || "No summary available.");
+      setSelectedSummary(summaryRes.data["Summary "] || "No summary available.");
     } catch (err) {
       console.error("Error fetching feedback & summary:", err.message);
       setSelectedFeedback("Error fetching feedback.");
@@ -142,15 +143,22 @@ useEffect(() => {
                 ))}
               </div>
             </div>
-
+              <div  className="new">
+                <div className="notnew">
             <div className="feedback-section">
               <h2>Feedback</h2>
-              <p>{loadingDetails ? "Loading..." : selectedFeedback}</p>
+              <p style={{fontSize: '30px'}}>{loadingDetails ? "Loading..." : selectedFeedback}</p>
+              {selectedFeedback === '0' && !loadingDetails && (
+                <p>No feedback given.</p>
+              )}
             </div>
 
+            
+            </div>
             <div className="feedback-section">
               <h2>Summary</h2>
-              <p>{loadingDetails ? "Loading..." : selectedSummary}</p>
+              <p>{loadingDetails ? "Loading..." : <Markdown>{selectedSummary}</Markdown>}</p>
+            </div>
             </div>
           </>
         )}

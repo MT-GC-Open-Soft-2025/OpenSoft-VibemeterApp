@@ -1,10 +1,16 @@
 
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import emailjs from "@emailjs/browser";
 import "./ContactForm.css"; // Import the CSS file
 import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar';
+import axios from "axios";
+import { Element, Link } from "react-scroll";
+import "bootstrap/dist/css/bootstrap.min.css";
 
+import { FaUser, FaUserShield } from "react-icons/fa";
+import Swal from "sweetalert2";
 const ContactForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -40,12 +46,20 @@ const ContactForm = () => {
       .then(
         (response) => {
           console.log("SUCCESS!", response.status, response.text);
-          setStatus("Message sent successfully!");
+          // setStatus("Message sent successfully!");
+          Swal.fire({
+            icon: 'success',
+            title: 'Message sent successfully!',
+          });
           setFormData({ name: "", email: "", message: "" });
         },
         (error) => {
           console.log("FAILED...", error);
-          setStatus("Failed to send message.");
+          //setStatus("Failed to send message.");
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed to send message.',
+          });
         }
       );
   };
