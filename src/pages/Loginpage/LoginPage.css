@@ -1,17 +1,25 @@
 .signin-section {
   min-height: 100vh;
   background: linear-gradient(to bottom right, #dbeafe, #f0f9ff);
-  padding-top: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 10%;
+  gap: 50px; /* Ensures proper spacing between elements */
 }
 
 .signin-card {
   width: 100%;
   max-width: 400px;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.9); /* Slightly increased opacity for better readability */
   border-radius: 1rem;
-  backdrop-filter: blur(12px);
-  padding: 2rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(15px);
+  padding: 2.5rem; /* Slightly increased padding for better spacing */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); /* Improved shadow for a more modern look */
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
+
 

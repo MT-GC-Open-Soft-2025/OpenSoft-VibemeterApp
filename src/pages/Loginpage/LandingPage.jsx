@@ -75,10 +75,12 @@ const LandingPage = () => {
               Short guided routines to boost emotional resilience, calm anxiety, and improve sleep —
               tailored just for you.
             </p>
-            <button className="lead1 btn btn-info text-white mt-2">Try a Session</button>
+            <Link to="book-demo" smooth duration={500} className="lead1 btn btn-info text-white mt-2">
+              Try a Session
+            </Link>
           </div>
         </div>
-
+        
       </div>
     </Element>
 

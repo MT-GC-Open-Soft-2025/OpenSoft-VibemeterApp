@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import emailjs from "@emailjs/browser"; // Optional if not using EmailJS
+import axios from "axios";
 import "./SurveyForm.css";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
 
@@ -14,25 +14,37 @@ const SurveyForm = () => {
     fetchQuestions();
   }, []);
 
-  // Simulate or fetch from your real backend
   const fetchQuestions = async () => {
     try {
-      // Example: 5 questions
-      const data = [
-        { id: 1, text: "How satisfied are you with our service?" },
-        { id: 2, text: "How do you rate our product quality?" },
-        { id: 3, text: "How do you rate our customer support?" },
-        { id: 4, text: "How do you rate our website usability?" },
-        { id: 5, text: "How likely are you to recommend us?" },
-      ];
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("You are not logged in.");
+      }
+
+      const response = await axios.get("http://127.0.0.1:8000/chat/feedback", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("API Response Data:", response.data);
+
+      const data = response.data?.response || [];
+
+      if (!Array.isArray(data) || data.length === 0) {
+        setStatus("No questions available.");
+        setQuestions([]);
+        return;
+      }
+
       setQuestions(data);
 
-      // Initialize all ratings to 3
-      const initial = {};
-      data.forEach((q) => (initial[q.id] = 3));
-      setResponses(initial);
+      // Initialize responses with default value 3
+      const initialResponses = {};
+      data.forEach((q) => (initialResponses[q.question_id] = 3));
+      setResponses(initialResponses);
     } catch (error) {
-      console.error("Error fetching questions:", error);
+      console.error("Error fetching questions:", error.response?.data || error.message);
       setStatus("Failed to load questions.");
     }
   };
@@ -47,19 +59,23 @@ const SurveyForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Replace with your actual API endpoint if needed
-      const res = await fetch("/api/submit-survey", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ responses }),
+      const res = await axios.post("http://127.0.0.1:8000/chat/add_feedback", {
+        responses,
+      }, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
       });
-      if (!res.ok) throw new Error("Submission failed");
+
+      if (res.status !== 200) throw new Error("Submission failed");
+
       setStatus("Survey submitted successfully!");
 
-      // Optionally reset responses to 3
-      const reset = {};
-      questions.forEach((q) => (reset[q.id] = 3));
-      setResponses(reset);
+      // Reset responses to default value 3
+      const resetResponses = {};
+      questions.forEach((q) => (resetResponses[q.question_id] = 3));
+      setResponses(resetResponses);
     } catch (error) {
       console.error("Error submitting survey:", error);
       setStatus("Failed to submit survey.");
@@ -67,14 +83,14 @@ const SurveyForm = () => {
   };
 
   return (
-    <div className="feedback-wrapper" style={{backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))"}}>
+    <div className="feedback-wrapper" style={{ backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))" }}>
       <Feedbacknavbar title="Survey" />
       <div className="survey-container">
         <h2>Survey</h2>
         <form className="survey-form" onSubmit={handleSubmit}>
           {questions.map((q) => (
-            <div key={q.id} className="question-block">
-              <p className="question-text">{q.text}</p>
+            <div key={q.question_id} className="question-block">
+              <p className="question-text">{q.question_text}</p>
 
               {/* SLIDER + CURRENT VALUE */}
               <div className="slider-row">
@@ -83,13 +99,13 @@ const SurveyForm = () => {
                   min="1"
                   max="5"
                   step="1"
-                  value={responses[q.id]}
+                  value={responses[q.question_id] || 3}
                   onChange={(e) =>
-                    handleRating(q.id, parseInt(e.target.value, 10))
+                    handleRating(q.question_id, parseInt(e.target.value, 10))
                   }
                   className="rating-slider"
                 />
-                <span className="slider-value">{responses[q.id]}</span>
+                <span className="slider-value">{responses[q.question_id] || 3}</span>
               </div>
 
               {/* LABELS 1–5 UNDERNEATH */}
