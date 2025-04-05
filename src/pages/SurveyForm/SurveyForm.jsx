@@ -3,6 +3,10 @@ import { useNavigate } from "react-router-dom";
 import emailjs from "@emailjs/browser"; // Optional if not using EmailJS
 import "./SurveyForm.css";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
+import axios from "axios";
+import Swal from 'sweetalert2'
+
+
 
 const SurveyForm = () => {
   const navigate = useNavigate();
@@ -43,28 +47,60 @@ const SurveyForm = () => {
       [questionId]: rating,
     }));
   };
+  
+  
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    console.log(responses)
+    
+    
+    const payload = Object.fromEntries(
+      Object.entries(responses).map(([question_id, rating]) => [`Q${question_id}`, rating])
+    );
+    
+    console.log("PAYLOAD",payload)
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // Replace with your actual API endpoint if needed
-      const res = await fetch("/api/submit-survey", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ responses }),
-      });
-      if (!res.ok) throw new Error("Submission failed");
-      setStatus("Survey submitted successfully!");
+    console.log("Submitting payload:", JSON.stringify(payload, null, 2));
+    
 
-      // Optionally reset responses to 3
-      const reset = {};
-      questions.forEach((q) => (reset[q.id] = 3));
-      setResponses(reset);
-    } catch (error) {
-      console.error("Error submitting survey:", error);
-      setStatus("Failed to submit survey.");
-    }
-  };
+    const res = await axios.post("http://127.0.0.1:8000/chat/add_feedback", payload, {
+  })
+    setStatus(res.status);
+    console.log(res)
+
+
+    // Show SweetAlert success
+    Swal.fire({
+      icon: 'success',
+      title: 'Thank you!',
+      text: 'Your feedback has been submitted.',
+      confirmButtonColor: '#36ABAA',
+    }).then(() => {
+      const initialResponses = {};
+      questions.forEach(q => initialResponses[q.id] = 3);
+      setResponses(initialResponses);
+
+      navigate("/user");
+    })
+
+    
+  }
+
+  catch (error) {
+    console.error("Error:", error);
+    setStatus("Failed to take feedback.");
+
+    // Show SweetAlert error
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Failed to submit feedback. Please try again later!',
+      confirmButtonColor: '#d33',
+  })
+
+}
+};
 
   return (
     <div className="feedback-wrapper" style={{backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))"}}>
@@ -107,7 +143,7 @@ const SurveyForm = () => {
           </button>
         </form>
 
-        {status && <p className="success-message">{status}</p>}
+        {status && <p className="success-message ">{status==200?"Added Sucessfully":"Failed to Add"}</p>}
       </div>
     </div>
   );
