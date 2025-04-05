@@ -15,14 +15,13 @@ export default function EmojiMeter({ employeeId }) {
                 const token = localStorage.getItem("token");
                 if (!token) throw new Error("No authentication token found. Please log in.");
 
-                const response = await axios.get(
-                    `http://127.0.0.1:8000/admin/get_detail/${employeeId}`,
+                
+                const response=await axios.get(`http://143.198.49.48/user/getUserDetails`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
-
                 console.log("EmojiMeter API Response:", response.data);
-                setUser(response.data.user_record);  // ✅ Store full user data
+                setUser(response.data);  // ✅ Store full user data
                 setError("");
             } catch (err) {
                 console.error("Error fetching reward points:", err.message);
@@ -122,7 +121,7 @@ export default function EmojiMeter({ employeeId }) {
                     </svg>
                     <div className="vibe-content">
                       <i className={`bi ${mood.icon} vibe-icon`}></i>
-                      {truncatedVibeScore === -1 ? (
+                      {truncatedVibeScore == -1 ? (
                         <>
                           <div className="vibe-percentage">0%</div>
                           <div className="vibe-label">{mood.text}</div>
@@ -146,11 +145,11 @@ export default function EmojiMeter({ employeeId }) {
                 {/* <div className="card-body">
                   <span className="display-1 text-warning">{vibeEmoji}</span>
                 </div> */}
-                <p className="score">Score: {truncatedVibeScore}</p>
-                {truncatedVibeScore === -1 ? (
-                  <p> No information available yet </p>
+              
+                {truncatedVibeScore == -1 ? (
+                  <p> No information available yet. </p>
                 ) : (
-                  <p> </p>
+                    <p className="score">Score: {truncatedVibeScore}</p>
                 )}
               </div>
             </div>
