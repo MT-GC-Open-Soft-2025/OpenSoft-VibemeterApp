@@ -26,7 +26,7 @@ const SurveyForm = () => {
       }
 
       
-      const response = await axios.get("http://api.wellbee.live/chat/feedback", {
+      const response = await axios.get("https://api.wellbee.live/chat/feedback", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -77,7 +77,7 @@ const handleSubmit = async (e) => {
     console.log("Submitting payload:", JSON.stringify(payload, null, 2));
     
 
-    const res = await axios.post("http://api.wellbee.live/chat/add_feedback", payload, {
+    const res = await axios.post("https://api.wellbee.live/chat/add_feedback", payload, {
   })
     setStatus(res.status);
     console.log(res)
