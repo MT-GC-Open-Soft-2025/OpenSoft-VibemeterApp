@@ -20,7 +20,7 @@ const FAQPage = () => (
 
         {/* Right Side: FAQ Content */}
         <div className="col-md-6 text-start" data-aos="fade-left">
-          <h2 className="text-primary fw-bold mb-4">Frequently Asked Questions 🙋‍♀️</h2>
+          <h2 className="text-primary fw-bold mb-4" style={{fontFamily:'Comfortaa'}}>Frequently Asked Questions</h2>
           <Accordion defaultActiveKey="0" flush>
             <Accordion.Item eventKey="0">
               <Accordion.Header>What is WellBee?</Accordion.Header>
