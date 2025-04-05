@@ -7,13 +7,14 @@ import Chat from "../../components/chat_popup/chat.jsx";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar.jsx";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Badges from "../../components/Badges/Badges";
-import EmojiMeter from "../AdminPage/EmojiMeter.jsx";
+// import EmojiMeter from "../AdminPage/EmojiMeter.jsx";
 import Image from "../../Assets/image.png";
 import Swal from "sweetalert2";
 import animationData from "../../Assets/Newanimation.json"; // Bot animation
 import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer/Footer.jsx";
+import EmojiMeter from "../../components/Admin_page _components/Admin_performance_rewards/Emojimeter_user.jsx";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -35,6 +36,7 @@ ChartJS.register(
 
 const UserPage = () => {
   const navigate = useNavigate();
+  //  const [selectedEmployee, setSelectedEmployee] = useState(""); 
   const [user, setUser] = useState(null);
 
   const handleClick = () => {
@@ -85,6 +87,8 @@ const UserPage = () => {
   };
 
   if (!user) return <div className="p-4">Loading...</div>;
+  console.log("user",user)
+  console.log(user.emp_id)
 
   const vibeEmoji =
     user.vibe_score >= 4.5 ? "😎" : user.vibe_score >= 3 ? "🙂" : "😕";
@@ -140,20 +144,7 @@ const UserPage = () => {
         <div className="info">
           <div className="row align-items-center my-5 animate__animated animate__fadeInLeft">
             <div className="ancestor">
-              <div
-                className={`card text-center shadow-lg p-4 box ${
-                  user.vibe_score < 3 ? "low-vibe" : ""
-                }`}
-                style={{ width: "22rem", marginTop: "2rem" }}
-              >
-                <div className="head">
-                  <h4>Emoji Mood Meter</h4>
-                </div>
-                <div className="card-body">
-                  <span className="display-1 text-warning">{vibeEmoji}</span>
-                </div>
-                <p className="score">Score: {user.vibe_score}</p>
-              </div>
+            <EmojiMeter employeeId={user.emp_id}/>
             </div>
 
             <div className="description">
@@ -161,8 +152,9 @@ const UserPage = () => {
                 {vibeMessage}
               </div>
             </div>
+            
           </div>
-
+          {/* <EmojiMeter employeeId={user.emp_id}/> */}
           <div
             id="fitness"
             className="row align-items-center my-5 animate__animated animate__fadeInLeft"
