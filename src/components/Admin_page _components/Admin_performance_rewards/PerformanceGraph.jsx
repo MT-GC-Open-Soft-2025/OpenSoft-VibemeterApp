@@ -3,6 +3,7 @@ import axios from "axios";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import "./PerformanceGraph.css";
+import baseUrl from "../../../Config"; // Adjust the import path as necessary
 
 const PerformanceGraph = ({ employeeId }) => {
   const [performanceData, setPerformanceData] = useState(null);
@@ -22,7 +23,7 @@ const PerformanceGraph = ({ employeeId }) => {
         }
 
         const response = await axios.get(
-          `http://127.0.0.1:8000/admin/get_detail/${employeeId}`,
+          `${baseUrl}/admin/get_detail/${employeeId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

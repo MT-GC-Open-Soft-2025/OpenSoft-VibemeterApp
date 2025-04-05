@@ -7,6 +7,7 @@ import photo from "../../Assets/send.png";
 import axios from "axios";
 import { nanoid } from "nanoid";
 import Swal from "sweetalert2";
+import baseUrl from "../../Config";
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ const Chat = () => {
         navigate("/");
         return;
       }
-      const res = await axios.get("http://127.0.0.1:8000/user/getConvoids", {
+      const res = await axios.get(`${baseUrl}/user/getConvoids`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const all = res.data.convid_list || [];
@@ -161,12 +162,12 @@ const Chat = () => {
     console.log(localStorage.getItem("conversationId"));
     const existingId = localStorage.getItem("uniqueId");
     if (existingId) {
-      if (conversationId && conversationId !== existingId) {
+      if (conversationId && (conversationId !== existingId)) {
         // Just switch back to current active chat
         setConversationId(existingId);
         setChatStarted(true);
         setSelectedIndex(null);
-        const res = await axios.get(`http://127.0.0.1:8000/chat/chat/${existingId}`);
+        const res = await axios.get(`${baseUrl}/chat/chat/${existingId}`);
         const fetchedMessages = res.data.chat.map((m) => ({
           sender: m.sender,
           text: m.message,
@@ -198,7 +199,7 @@ const Chat = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        `http://127.0.0.1:8000/chat/initiate_chat/${uniqueId}`,
+        `${baseUrl}/chat/initiate_chat/${uniqueId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -214,7 +215,7 @@ const Chat = () => {
 
     try {
       await axios.post(
-        `http://127.0.0.1:8000/chat/end_chat/${uniqueId}/${feedback}`,
+        `${baseUrl}chat/end_chat/${uniqueId}/${feedback}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -236,7 +237,7 @@ const Chat = () => {
 
   const handleConversationClick = async (conv_id, index) => {
     try {
-      const res = await axios.get(`http://127.0.0.1:8000/chat/chat/${conv_id}`);
+      const res = await axios.get(`${baseUrl}/chat/chat/${conv_id}`);
       const fetchedMessages = res.data.chat.map((m) => ({
         sender: m.sender,
         text: m.message,
@@ -267,7 +268,7 @@ const Chat = () => {
 
       const convo = String(localStorage.getItem("uniqueId"));
 
-      const response = await fetch("http://127.0.0.1:8000/chat/send", {
+      const response = await fetch(`${baseUrl}chat/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -327,7 +328,7 @@ const Chat = () => {
             <h5 className="chat-heading fw-bold mt-4">👨 Employee Chats</h5>
             <div style={{ textAlign: "center", marginBottom: "10px" }}>
               <button className="start-chat-sidebar-btn" onClick={handleStartChat}>
-                {!localStorage.getItem("uniqueId") || localStorage.getItem("conversationId") === localStorage.getItem("uniqueId")
+              {!localStorage.getItem("uniqueId") || conversationId === localStorage.getItem("uniqueId")
                   ? "New Chat"
                   : "⬅ Go to Current Chat"}
               </button>
@@ -346,8 +347,7 @@ const Chat = () => {
           </div>
 
           <div className="chat-right">
-            {chatStarted &&
-              localStorage.getItem("uniqueId") === localStorage.getItem("conversationId") && (
+          {chatStarted && localStorage.getItem("uniqueId") === conversationId && (
                 <button className="end-chat-btn" onClick={openFeedbackPopup}>
                   End Chat
                 </button>
@@ -389,31 +389,20 @@ const Chat = () => {
                     <input
                       type="text"
                       className="chat-input"
-                      placeholder={
-                        localStorage.getItem("uniqueId") === localStorage.getItem("conversationId")
+                      placeholder={localStorage.getItem("uniqueId") === conversationId
                           ? "Type your message..."
                           : "Cannot message in past chats"
                       }
                       value={inputValue}
                       onChange={(e) => setInputValue(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      disabled={
-                        localStorage.getItem("uniqueId") !== localStorage.getItem("conversationId")
-                      }
+                      disabled={localStorage.getItem("uniqueId") !== conversationId}
                     />
                     <img
                       src={photo}
                       alt="Send"
-                      className={`send-photo ${
-                        localStorage.getItem("uniqueId") !== localStorage.getItem("conversationId")
-                          ? "disabled-send"
-                          : ""
-                      }`}
-                      onClick={
-                        localStorage.getItem("uniqueId") === localStorage.getItem("conversationId")
-                          ? handleSendMessage
-                          : undefined
-                      }
+                      className={`send-photo ${localStorage.getItem("uniqueId") !== conversationId ? "disabled-send" : ""}`}
+                      onClick={localStorage.getItem("uniqueId") === conversationId ? handleSendMessage : undefined}
                     />
                   </div>
                 </>
