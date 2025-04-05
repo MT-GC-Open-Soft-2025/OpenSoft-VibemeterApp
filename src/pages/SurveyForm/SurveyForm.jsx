@@ -77,7 +77,7 @@ const handleSubmit = async (e) => {
     console.log("Submitting payload:", JSON.stringify(payload, null, 2));
     
 
-    const res = await axios.post("http://143.198.49.48/chat/add_feedback", payload, {
+    const res = await axios.post("http://api.wellbee.live/chat/add_feedback", payload, {
   })
     setStatus(res.status);
     console.log(res)
@@ -154,7 +154,7 @@ const handleSubmit = async (e) => {
               Submit Survey
             </button>
           </form>
-        )}
+        
 
         {status && <p className="success-message ">{status==200?"Added Sucessfully":"Failed to Add"}</p>}
       </div>
