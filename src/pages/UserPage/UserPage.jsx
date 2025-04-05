@@ -96,8 +96,8 @@ const UserPage = () => {
       : "It's okay to take breaks. You're not alone.";
   const performanceMessage =
     user.weighted_performance >= 4.5
-      ? "YOU'RE SUCH A DEDICATED WORKER! KEEP SHINING."
-      : "YOU'RE DOING GREAT! KEEP IMPROVING";
+      ? "You're such a dedicated worker! Keep Shining."
+      : "You're doing Good! Keep Improving";
   const performanceImage =
     user.weighted_performance >= 4.5
       ? "https://img.freepik.com/free-vector/successful-businessman-concept-illustration_114360-7387.jpg"
@@ -169,8 +169,8 @@ const UserPage = () => {
           >
             <div className="ancestor2" id="descrip">
               <div id="rew" className="meet">
-                YOU'VE EARNED <strong>{user.reward_points}</strong> POINTS.
-                YOU'RE AMAZING!
+                You've earned <strong>{user.reward_points}</strong> points.
+                You're Amazing!
                 <Badges />
               </div>
             </div>
@@ -279,7 +279,7 @@ const UserPage = () => {
                         className="nav-link1"
                         id="button2"
                         onClick={handleFeedback}
-                        style={{fontSize:"22px", width:"13rem"}}
+                        style={{fontSize:"22px", width:"13rem",paddingLeft:"25px"}}
                       >
                         Submit Survey
                       </button>
@@ -290,8 +290,8 @@ const UserPage = () => {
                 <>
                   <div className="ancestor2" id="descrip">
                     <div id="rew" className="meet">
-                      PLEASE TAKE A MOMENT TO FILL OUT THIS SHORT SURVEY - YOUR
-                      FEEDBACK MATTERS!
+                      Please Take a moment to fill out this Short Survey - your
+                      FEEDBACK matters!
                       <button className="nav-link1" onClick={handleFeedback}>
                         Submit Survey
                       </button>
