@@ -105,7 +105,7 @@ const UserPage = () => {
 
   return (
     <div className="feedback-wrapper">
-      <Feedbacknavbar title="User Page" />
+      <Feedbacknavbar title="User Page" className="navbar1"/>
       <Sidebar />
       <div
         className="feedback-wrapper"
@@ -190,15 +190,16 @@ const UserPage = () => {
                 </>
               ) : (
                 <>
-                  <h4>Don't Worry!</h4>
-                  <p>
-                    You haven't earned points yet, but your journey's just
-                    beginning. Keep pushing! 💪
-                  </p>
-                  <img
-                    src="https://img.freepik.com/free-vector/startup-launch-concept-illustration_114360-6414.jpg"
-                    alt="Start"
-                  />
+                  <div id="desc">
+                  <h4>Your Rewards</h4>
+                  </div>
+                  <div className="image-wrapper">
+                    <img
+                      src="https://img.freepik.com/free-vector/achievements-concept-illustration_114360-4465.jpg"
+                      alt="Start"
+                      className="responsive-image"
+                    />
+                  </div>
                 </>
               )}
             </div>
@@ -291,7 +292,7 @@ const UserPage = () => {
                   <div className="ancestor2" id="descrip">
                     <div id="rew" className="meet">
                       Please Take a moment to fill out this Short Survey - your
-                      FEEDBACK matters!
+                      Feedback matters!
                       <button className="nav-link1" onClick={handleFeedback}>
                         Submit Survey
                       </button>
