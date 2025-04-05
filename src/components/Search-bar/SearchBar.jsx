@@ -3,6 +3,8 @@ import { FaSearch } from "react-icons/fa";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "./SearchBar.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const Navbar = ({ setSelectedEmployee }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -93,7 +95,7 @@ const Navbar = ({ setSelectedEmployee }) => {
 
   return (
     <>
-      <div className="search-container">
+      <div className="search-container" >
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="search-icon feather feather-search">
@@ -103,13 +105,14 @@ const Navbar = ({ setSelectedEmployee }) => {
         <input
           type="text"
           className="form-control search-input ps-5"
+          style={{width: "24rem", borderBottom: "none", paddingRight : "10rem"}}
           placeholder="Search Employee ID"
           aria-label="Search"
           value={searchTerm}
           onChange={handleSearchChange}
         />
-        <button className="btn btn-search ms-2" onClick={handleSearchClick}>
-          Search
+        <button className="btn btn-search ms-2" onClick={handleSearchClick} style = {{ height: "auto"}}>
+        <i class="bi bi-search"></i>
         </button>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {showDropdown && (
