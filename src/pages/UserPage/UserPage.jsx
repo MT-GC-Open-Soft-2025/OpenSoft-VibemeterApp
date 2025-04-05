@@ -4,16 +4,18 @@ import "./UserPage.css";
 import { useNavigate } from "react-router-dom";
 import userImg from "../../Assets/user.png";
 import Chat from "../../components/chat_popup/chat.jsx";
-import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar.jsx";
+import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar2.jsx";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Badges from "../../components/Badges/Badges";
-import EmojiMeter from "../AdminPage/EmojiMeter.jsx";
+// import EmojiMeter from "../AdminPage/EmojiMeter.jsx";
 import Image from "../../Assets/image.png";
 import Swal from "sweetalert2";
 import animationData from "../../Assets/Newanimation.json"; // Bot animation
 import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer/Footer.jsx";
+import EmojiMeter from "../../components/Admin_page _components/Admin_performance_rewards/Emojimeter_user.jsx";
+import baseUrl from "../../Config.js";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -35,6 +37,7 @@ ChartJS.register(
 
 const UserPage = () => {
   const navigate = useNavigate();
+  //  const [selectedEmployee, setSelectedEmployee] = useState(""); 
   const [user, setUser] = useState(null);
 
   const handleClick = () => {
@@ -66,7 +69,7 @@ const UserPage = () => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
-    fetch("http://localhost:8000/user/getUserDetails", {
+    fetch(`${baseUrl}/user/getUserDetails`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => (res.ok ? res.json() : Promise.reject("Failed to fetch")))
@@ -75,69 +78,32 @@ const UserPage = () => {
   }, []);
 
   const handleDownload = () => {
-    // Replace with your PDF file URL
     const pdfUrl =
       "https://apps.who.int/iris/bitstream/handle/10665/42823/9241562579.pdf";
-
-    // Create an invisible anchor element
     const link = document.createElement("a");
     link.href = pdfUrl;
-    link.download = "Brochure.pdf"; // Specify the filename
-
-    // Append to the DOM, trigger click, then remove
+    link.download = "Brochure.pdf";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
-  const truncatedVibeScore = user ? user.vibe_score.toFixed(2) : 0;
 
   if (!user) return <div className="p-4">Loading...</div>;
-  const getMood = () => {
-    if (truncatedVibeScore >= 4.5)
-      return { icon: "bi-emoji-smile-fill", text: "Happy", color: "success" };
-    if (truncatedVibeScore >= 3)
-      return {
-        icon: "bi-emoji-neutral-fill",
-        text: "Neutral",
-        color: "primary",
-      };
+  console.log("user",user)
+  console.log(user.emp_id)
 
-    if (truncatedVibeScore < 3 && truncatedVibeScore >= 0)
-      return {
-        icon: "bi-emoji-frown-fill",
-        text: "Sad",
-        color: "danger",
-      };
-    return {
-      icon: "bi-emoji-neutral-fill",
-      text: "Neutral",
-      color: "primary",
-    };
-  };
-  const radius = 90;
-  const circumference = 2 * Math.PI * radius;
-  // const dashOffset = circumference - (user.vibe_score / 5) * circumference;
-  const dashOffset =
-  truncatedVibeScore === -1
-    ? circumference
-    : circumference - (truncatedVibeScore / 5) * circumference;
-
-
-  // {user.vibe_score === -1 ? ( dashOffset = 0) : (dashOffset = circumference - (user.vibe_score / 5) * circumference;)}
-  // const mood = getMood();
-  const mood = getMood();
   const vibeEmoji =
-  truncatedVibeScore >= 4.5 ? "😎" : truncatedVibeScore >= 3 ? "🙂" : "😕";
+    user.vibe_score >= 4.5 ? "😎" : user.vibe_score >= 3 ? "🙂" : "😕";
   const vibeMessage =
-  truncatedVibeScore >= 4.5
+    user.vibe_score >= 4.5
       ? "You're doing great!"
-      : truncatedVibeScore >= 3
+      : user.vibe_score >= 3
       ? "Keep going, you're doing well!"
       : "It's okay to take breaks. You're not alone.";
   const performanceMessage =
     user.weighted_performance >= 4.5
-      ? "YOU'RE SUCH A DEDICATED WORKER! KEEP SHINING."
-      : "YOU'RE DOING GREAT! KEEP IMPROVING";
+      ? "You're such a dedicated worker! Keep Shining."
+      : "You're doing Good! Keep Improving";
   const performanceImage =
     user.weighted_performance >= 4.5
       ? "https://img.freepik.com/free-vector/successful-businessman-concept-illustration_114360-7387.jpg"
@@ -145,7 +111,7 @@ const UserPage = () => {
 
   return (
     <div className="feedback-wrapper">
-      <Feedbacknavbar title="User Page" />
+      <Feedbacknavbar title="User Page" className="navbar1"/>
       <Sidebar />
       <div
         className="feedback-wrapper"
@@ -180,79 +146,7 @@ const UserPage = () => {
         <div className="info">
           <div className="row align-items-center my-5 animate__animated animate__fadeInLeft">
             <div className="ancestor">
-              <div
-                className={`card text-center shadow-lg p-2 box ${
-                  truncatedVibeScore === -1
-                    ? "neutral"
-                    : truncatedVibeScore < 3
-                    ? "low-vibe"
-                    : truncatedVibeScore > 4.5
-                    ? "happy"
-                    : "neutral"
-                }`}
-                style={{ width: "22rem", marginTop: "2rem" }}
-              >
-                <div className="vibe-meter">
-                  <div className="head">
-                    <h4>Emoji Mood Meter</h4>
-                  </div>
-                  <div className={`vibe-circle ${mood.color}`}>
-                    <svg
-                      className="vibe-progress"
-                      width="200"
-                      height="200"
-                      viewBox="0 0 200 200"
-                    >
-                      <circle
-                        className="vibe-progress-bg"
-                        cx="100"
-                        cy="100"
-                        r={radius}
-                        strokeWidth="10"
-                      />
-                      <circle
-                        className={`vibe-progress-fill vibe-${mood.color}`}
-                        cx="100"
-                        cy="100"
-                        r={radius}
-                        strokeWidth="10"
-                        strokeDasharray={circumference}
-                        strokeDashoffset={dashOffset}
-                      />
-                    </svg>
-                    <div className="vibe-content">
-                      <i className={`bi ${mood.icon} vibe-icon`}></i>
-                      {truncatedVibeScore === -1 ? (
-                        <>
-                          <div className="vibe-percentage">0%</div>
-                          <div className="vibe-label">{mood.text}</div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="vibe-percentage">
-                            {(truncatedVibeScore * 100) / 5}%
-                          </div>
-                          <div className="vibe-label">{mood.text}</div>
-                        </>
-                      )}
-                      {/* <div className="vibe-percentage">
-                        {(user.vibe_score * 100) / 5}%
-                      </div> */}
-                      {/* <div className="vibe-label">{mood.text}</div> */}
-                    </div>
-                  </div>
-                </div>
-
-                {/* <div className="card-body">
-                  <span className="display-1 text-warning">{vibeEmoji}</span>
-                </div> */}
-                <p className="score">Score: {truncatedVibeScore}</p>
-                {truncatedVibeScore === -1 ? (
-                  <p> No information available yet </p>
-                ) : (
-                  <p> </p>
-                )}
-              </div>
+            <EmojiMeter employeeId={user.emp_id}/>
             </div>
 
             <div className="description">
@@ -260,15 +154,9 @@ const UserPage = () => {
                 {vibeMessage}
               </div>
             </div>
+            
           </div>
-
-          {/* "Let's Chat!" button */}
-          {/* <button className="chat-button" onClick={openChat}>
-                Let's Chat!
-              </button> */}
-          {/* <button className="feedback-button" onClick={handleFeedback}>
-                Fill Feedback
-              </button> */}
+          {/* <EmojiMeter employeeId={user.emp_id}/> */}
           <div
             id="fitness"
             className="row align-items-center my-5 animate__animated animate__fadeInLeft"
@@ -276,7 +164,7 @@ const UserPage = () => {
             <div className="ancestor2" id="descrip">
               <div id="rew" className="meet">
                 You've earned <strong>{user.reward_points}</strong> points.
-                You're amazing!
+                You're Amazing!
                 <Badges />
               </div>
             </div>
@@ -285,11 +173,6 @@ const UserPage = () => {
                 <>
                   <div id="desc">
                     <h4>Your Rewards</h4>
-                    {/* <Badges/> */}
-                    {/* <p>
-                            You've earned <strong>{user.reward_points}</strong>{" "}
-                            points. You're amazing!
-                          </p> */}
                   </div>
                   <div className="image-wrapper">
                     <img
@@ -301,19 +184,21 @@ const UserPage = () => {
                 </>
               ) : (
                 <>
-                  <h4>Don't Worry!</h4>
-                  <p>
-                    You haven't earned points yet, but your journey's just
-                    beginning. Keep pushing! 💪
-                  </p>
-                  <img
-                    src="https://img.freepik.com/free-vector/startup-launch-concept-illustration_114360-6414.jpg"
-                    alt="Start"
-                  />
+                  <div id="desc">
+                  <h4>Your Rewards</h4>
+                  </div>
+                  <div className="image-wrapper">
+                    <img
+                      src="https://img.freepik.com/free-vector/achievements-concept-illustration_114360-4465.jpg"
+                      alt="Start"
+                      className="responsive-image"
+                    />
+                  </div>
                 </>
               )}
             </div>
           </div>
+
           <div
             id="fitness"
             className="row align-items-center my-5 animate__animated animate__fadeInLeft"
@@ -361,37 +246,12 @@ const UserPage = () => {
               </div>
             </div>
           )}
-          {/* {user.leave_days !== undefined && user.leave_days === 0 && (
-                <div
-                  id="fitness"
-                  className="row align-items-center my-5 animate__animated animate__fadeInLeft"
-                >
-                  <div className="ancestor2" id="descrip">
-                    <div id="rew" className="meet">
-                      Wow, you haven’t taken any leaves. You're a rockstar! 🚀
-                    </div>
-                  </div>
-                  <div className="card">
-                    <div id="desc">
-                      <h4>Zero Leaves!</h4>
-                    </div>
-                    <div className="image-wrapper">
-                      <img
-                        src="https://img.freepik.com/free-vector/rocket-launch-concept-illustration_114360-6413.jpg"
-                        alt="Performance"
-                        className="responsive-image"
-                      />
-                    </div>
-                  </div>
-                  
-                </div>
-              )} */}
+
           {user.leave_days !== undefined && (
             <div
               id="fitness"
               className="row align-items-center my-5 animate__animated animate__fadeInLeft"
             >
-              {/* If user has taken 0 leaves, place ancestor2 first, otherwise place card first */}
               {user.leave_days === 0 ? (
                 <>
                   <div className="card">
@@ -414,6 +274,7 @@ const UserPage = () => {
                         className="nav-link1"
                         id="button2"
                         onClick={handleFeedback}
+                        style={{fontSize:"22px", width:"13rem",paddingLeft:"25px"}}
                       >
                         Submit Survey
                       </button>
@@ -423,10 +284,10 @@ const UserPage = () => {
               ) : (
                 <>
                   <div className="ancestor2" id="descrip">
-                    <div id="rew1" className="meet">
-                      Please take a moment to fill out this short survey - Your
-                      feedback matters !
-                      <button className="nav-link1" id="button2" onClick={handleFeedback}>
+                    <div id="rew" className="meet">
+                      Please Take a moment to fill out this Short Survey - your
+                      Feedback matters!
+                      <button className="nav-link1" onClick={handleFeedback}>
                         Submit Survey
                       </button>
                     </div>
@@ -447,27 +308,43 @@ const UserPage = () => {
               )}
             </div>
           )}
+
+          {/*  MODIFIED CHAT BUBBLE SECTION START */}
           <div
             className="bot-container"
             onClick={handleClick}
             style={{ cursor: "pointer" }}
           >
-            <div className="chat-bubble">Hi! How can I assist you?</div>
+            <div
+              className={`chat-bubble ${
+                user.vibe_score >= 4.5
+                  ? "high-vibe"
+                  : user.vibe_score >= 3
+                  ? "medium-vibe"
+                  : "low-vibe"
+              }`}
+            >
+              {user.vibe_score >= 4.5
+                ? "You seem in a good mood today.Let's catchup."
+                : user.vibe_score >= 3
+                ? "Hey! Just checking in. Up for a quick chat?"
+                : "Hey, you seem off. Want to talk?"}
+            </div>
+
             <Lottie
               animationData={animationData}
               loop={true}
               className="bot-animation"
-              style={{ cursor: "pointer" }} // Makes it clear that it's clickable
+              style={{ cursor: "pointer" }}
             />
           </div>
-
-          {/* </div>
-          )} */}
+          {/*  MODIFIED CHAT BUBBLE SECTION END */}
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
 
 export default UserPage;
+

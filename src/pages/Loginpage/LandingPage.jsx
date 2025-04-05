@@ -12,7 +12,7 @@ const LandingPage = () => {
 
   const scrollToLogin = () => {
     scroller.scrollTo("loginSection", {
-      duration: 800,
+      duration: 10,
       delay: 0,
       smooth: "easeInOutQuart",
       offset: -50,
@@ -71,11 +71,13 @@ const LandingPage = () => {
           </div>
           <div className="col-md-6 order-md-1 text-start">
             <h2 className="spaceh text-primary">Mental Fitness Routines </h2>
-            <p className="lead text-muted">
+            <p className="lead text-muted" style={{marginLeft:"-10px"}}>
               Short guided routines to boost emotional resilience, calm anxiety, and improve sleep —
               tailored just for you.
             </p>
-            <button className="lead1 btn btn-info text-white mt-2">Try a Session</button>
+            <Link to="bookdemo" smooth duration={500} className="lead btn btn-outline-primary mt-3">
+            Try a Session
+            </Link>
           </div>
         </div>
 

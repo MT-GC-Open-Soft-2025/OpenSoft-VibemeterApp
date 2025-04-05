@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="glass-footer">
       {/* Centered Copyright Text */}
       <div className="text-center">
-        <p className="text-white text-sm">© 2025 MyCompany. All rights reserved.</p>
+        <p className="text-white text-sm">© 2025 wellbee. All rights reserved.</p>
       </div>
 
       {/* Social Media Icons */}

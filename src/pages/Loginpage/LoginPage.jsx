@@ -6,12 +6,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginPage.css";
 import { FaUser, FaUserShield } from "react-icons/fa";
 import Swal from "sweetalert2";
+import baseUrl from "../../Config";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [empId, setEmpId] = useState("");
+  console.log(baseUrl)
+  
 
   // const handleToggle = () => {
   //   setIsAdmin((prev) => !prev);
@@ -35,7 +38,7 @@ const LoginPage = () => {
       });
       return;
     }
-    const response = await axios.post("http://127.0.0.1:8000/auth/signin", {
+    const response = await axios.post(baseUrl + "/auth/signin", {
        username: empId,
   });
      localStorage.setItem("token", response.data.access_token);
@@ -76,7 +79,7 @@ const LoginPage = () => {
               src="https://img.freepik.com/free-vector/mental-health-concept-illustration_114360-2031.jpg"
               alt="Mental health"
               className="img-fluid mb-4"
-              style={{ maxHeight: "400px" }}
+              style={{ maxHeight: "500px" }}
             />
             <h4 className="space text-primary">
               Taking care of your mind is a superpower
@@ -84,17 +87,48 @@ const LoginPage = () => {
           </div>
 
           {/* Right: Sign-In Card */}
-          <div className="col-md-6" data-aos="fade-left">
-            <div className="signin-card ms-md-4 mt-4 mt-md-0">
-              <h2 className="text-primary fw-bold mb-3 spaceh">Welcome Back 🌱</h2>
-              <p className="lead1 text-muted mb-4">
+          <div className="col-md-6 " data-aos="fade-left" >
+            <div className="signin-card ">
+              <h2 className="text-primary fw-bold mb-5 spaceh" style={{fontFamily:'Comfortaa'}}>Welcome Back</h2>
+              <p className="lead1 text-muted mb-3">
                 Let’s continue your journey to mental wellness.
               </p>
 
               {/* Login Form */}
               <form onSubmit={handleLogin} className="w-100">
-                <select
-                  className="form-select mb-3"
+              <div className="mb-4">
+  <select
+    className="form-select w-100"
+    name="company"
+    required
+    defaultValue=""
+  >
+    <option value="" disabled>
+      Select Company
+    </option>
+    <option value="Deloitte">Deloitte</option>
+  </select>
+</div>
+
+<div className="mb-4">
+  <input
+    type="text"
+    className="form-control w-100 input-left-align"
+    placeholder="Employee ID"
+    value={empId}
+    onChange={handleChange}
+    style={{ marginLeft: "0px" }} // try -5px or -10px for fine adjustment
+  />
+</div>
+
+<div className="mb-4">
+  <button type="submit" className="btn btn-primary w-100">
+    Sign In
+  </button>
+</div>
+
+                {/* <select
+                  className="form-select mb-4"
                   name="company"
                   required
                   defaultValue=""
@@ -107,7 +141,7 @@ const LoginPage = () => {
 
                 <input
                   type="text"
-                  className="form-control mb-3 text-align-left"
+                  className="form-control mb-4 text-align-left"
                   placeholder="Employee ID"
                   value={empId}
                   onChange={handleChange}
@@ -115,11 +149,11 @@ const LoginPage = () => {
 
                 <button type="submit" className="btn btn-primary w-100">
                   Sign In
-                </button>
+                </button> */}
               </form>
 
               {errorMessage && (
-                <p className="text-danger mt-3 small">{errorMessage}</p>
+                <p className="text-danger mt-3 small mb-4">{errorMessage}</p>
               )}
 
               <p className="text-muted mt-3 small">

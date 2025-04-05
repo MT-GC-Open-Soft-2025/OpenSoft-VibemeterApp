@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Feedbackpage.css";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
+import Markdown from 'markdown-to-jsx'
+import baseUrl from "../../Config";
 
 const FeedbackPage = () => {
   const navigate = useNavigate();
@@ -33,7 +35,7 @@ useEffect(() => {
         if (!token) throw new Error("No authentication token found. Please log in.");
           
         const response = await axios.get(
-          `http://127.0.0.1:8000/admin/get_conversations/${employeeId}`,
+          `${baseUrl}/admin/get_conversations/${employeeId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -67,12 +69,12 @@ useEffect(() => {
       if (!token) throw new Error("No authentication token found. Please log in.");
 
       const feedbackRes = await axios.get(
-        `http://127.0.0.1:8000/admin/get_conversationFeedback/${employeeId}/${convId}`,
+        `${baseUrl}/admin/get_conversationFeedback/${employeeId}/${convId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       const summaryRes = await axios.get(
-        `http://127.0.0.1:8000/admin/get_conversationSummary/${employeeId}/${convId}`,
+        `${baseUrl}/admin/get_conversationSummary/${employeeId}/${convId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(feedbackRes)
@@ -105,7 +107,7 @@ useEffect(() => {
     }
       
       setSelectedFeedback(feedbackRes.data["Feedback "] || "No feedback available.");
-      setSelectedSummary(JSON.stringify(parseTextResponse(summaryRes.data["Summary "]),null,2) || "No summary available.");
+      setSelectedSummary(summaryRes.data["Summary "] || "No summary available.");
     } catch (err) {
       console.error("Error fetching feedback & summary:", err.message);
       setSelectedFeedback("Error fetching feedback.");
@@ -142,15 +144,22 @@ useEffect(() => {
                 ))}
               </div>
             </div>
-
+              <div  className="new">
+                <div className="notnew">
             <div className="feedback-section">
               <h2>Feedback</h2>
-              <p>{loadingDetails ? "Loading..." : selectedFeedback}</p>
+              <p style={{fontSize: '30px'}}>{loadingDetails ? "Loading..." : selectedFeedback}</p>
+              {selectedFeedback === '0' && !loadingDetails && (
+                <p>No feedback given.</p>
+              )}
             </div>
 
+            
+            </div>
             <div className="feedback-section">
               <h2>Summary</h2>
-              <p>{loadingDetails ? "Loading..." : selectedSummary}</p>
+              <p>{loadingDetails ? "Loading..." : <Markdown>{selectedSummary}</Markdown>}</p>
+            </div>
             </div>
           </>
         )}

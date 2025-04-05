@@ -18,8 +18,14 @@
 .brand-text {
   color: #7c3aed; /* violet (or match your theme) */
 }
-.lead {
-  font-family: 'Inter', sans-serif;
+.lead{
+  font-family: 'Noto Sans', cursive;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.lead1{
+  font-family: "Noto Sans", serif;
+  font-optical-sizing: auto;
   font-size: 1.3rem;
   font-weight: 500;
   line-height: 1.6;
@@ -31,13 +37,13 @@
   font-weight: 700;
 }
 .space{
-  font-family: "Space Mono", monospace;
+  font-family: "Noto Sans", monospace;
   font-weight: 400;
   font-style: normal;
   font-size: 1.5rem;
 }
-.spaceh {
-  font-family: "Lora", serif;
+.spaceh{
+  font-family:'Montserrat', 'Poppins', 'Raleway', 'Nunito Sans', 'Helvetica Neue', sans-serif;
   font-weight: 700;
   font-size: 2rem;
   color: #1e40af; /* Deep Blue */

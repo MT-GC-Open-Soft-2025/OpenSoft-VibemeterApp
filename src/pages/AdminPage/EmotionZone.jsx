@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./AdminPage.css";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import axios from "axios";
-
+import baseUrl from "../../Config";
 const EmotionZoneChart = () => {
   const [emotionData, setEmotionData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +24,7 @@ const EmotionZoneChart = () => {
         if (!token) throw new Error("No authentication token found. Please log in.");
 
         // ✅ Fetching feedback data
-        const response = await axios.get("http://127.0.0.1:8000/admin/get_aggregate_feedback", {
+        const response = await axios.get(`${baseUrl}/admin/get_aggregate_feedback`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -61,7 +61,7 @@ const EmotionZoneChart = () => {
 
   return (
     <div className="charts">
-      <h2>Some employees need a boost. Check their status!</h2>
+      <h2 style={{fontFamily:"'Noto Sans', sans-serif"}}>Some employees need a boost. Check their status!</h2>
       <ResponsiveContainer width="100%" height={400}>
         <LineChart data={emotionData} margin={{ top: 20, right: 20, left: 0, bottom: 50 }}>
           <XAxis dataKey="name" angle={-30} textAnchor="end" tick={{ fontSize: 12 }} />

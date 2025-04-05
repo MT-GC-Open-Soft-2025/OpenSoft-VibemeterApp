@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Badges.css";
+import baseUrl from "../../Config";
 
 import badge1 from "../../Assets/badge1.png";
 import badge2 from "../../Assets/badge2.png";
@@ -21,7 +22,7 @@ export default function Badges({ employeeId }) {
         if (!token) throw new Error("No authentication token found. Please log in.");
 
         const response = await axios.get(
-          `http://127.0.0.1:8000/admin/get_detail/${employeeId}`,
+          `${baseUrl}/admin/get_detail/${employeeId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

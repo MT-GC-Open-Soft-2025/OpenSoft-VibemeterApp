@@ -15,7 +15,7 @@ const EmotionZoneChart2 = () => {
         className="emotion-image" 
       />
       <div className="Search-button">
-        <h2 style={{marginLeft:"0px"}}>Track employees' well-being and emotions with a quick search.</h2>
+        <h2 style={{marginLeft:"0px",fontFamily:"'Noto Sans', sans-serif"}}>Track employees' well-being and emotions with a quick search.</h2>
         {/* ✅ Added the Search for Employee Button */}
         <div style={{ textAlign: "center", marginTop: "30px", marginBottom: "20px", marginLeft: "20px" }}>
             <button 

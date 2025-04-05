@@ -263,29 +263,25 @@
 .brand-text {
   color: #7c3aed;
 }
-
-.lead {
-  font-family: 'Comfortaa', cursive;
+.lead{
+  font-family: 'Noto Sans', cursive;
   font-size: 1.5rem;
   font-weight: 800;
 }
-
-.lead1 {
-  font-family: "Newsreader", serif;
+.lead1{
+  font-family: "Noto Sans", serif;
   font-optical-sizing: auto;
   font-size: 1.3rem;
   font-style: normal;
 }
-
-.space {
-  font-family: "Space Mono", monospace;
+.space{
+  font-family: "Noto Sans", monospace;
   font-weight: 400;
   font-style: normal;
   font-size: 1.5rem;
 }
-
-.spaceh {
-  font-family: "Space Mono", monospace;
+.spaceh{
+  font-family: 'Montserrat', 'Poppins', 'Raleway', 'Nunito Sans', 'Helvetica Neue', sans-serif;
   font-weight: 700;
   font-style: normal;
   font-size: 2rem;

@@ -17,6 +17,7 @@
     "highcharts": "^12.1.2",
     "highcharts-react-official": "^3.2.1",
     "lottie-react": "^2.4.1",
+    "markdown-to-jsx": "^7.7.4",
     "nanoid": "^5.1.5",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.9",
