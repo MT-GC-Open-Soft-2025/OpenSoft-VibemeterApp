@@ -15,29 +15,42 @@ export default function Badges({ employeeId }) {
 
   useEffect(() => {
     if (!employeeId) return;
-
+  
     const fetchAwards = async () => {
       try {
         const token = localStorage.getItem("token");
+        const empId = localStorage.getItem("empId"); 
+  
         if (!token) throw new Error("No authentication token found. Please log in.");
-
-        const response = await axios.get(
-          `${baseUrl}/admin/get_detail/${employeeId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
+        if (!empId) throw new Error("Login info not found. Please log in again.");
+  
+        const endpoint =
+          empId === "admin"
+            ? `http://127.0.0.1:8000/admin/get_detail/${employeeId}`
+            : `http://127.0.0.1:8000/user/getUserDetails`;
+  
+        const response = await axios.get(endpoint, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+  
+        const awardList =
+          empId === "admin"
+            ? response.data.user_record.award_list || []
+            : response.data.award_list || [];
+  
         console.log("Badges API Response:", response.data);
-        setAwardList(response.data.user_record.award_list || []);
+        setAwardList(awardList);
         setError("");
       } catch (err) {
         console.error("Error fetching badges:", err.message);
         setError(err.message);
-        setAwardList([]); 
+        setAwardList([]);
       }
     };
-
+  
     fetchAwards();
   }, [employeeId]);
+  
 
   if (!employeeId) return <div className="no-badges">No employee selected</div>;
   if (error) return <div className="alert alert-danger">{error}</div>;
