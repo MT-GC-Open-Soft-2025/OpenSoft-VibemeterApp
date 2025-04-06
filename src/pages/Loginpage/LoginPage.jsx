@@ -115,10 +115,10 @@ const LoginPage = () => {
   <input
     type="text"
     className="form-control w-100 input-left-align"
-    placeholder="Employee ID"
+    placeholder="  EmployeeID"
     value={empId}
     onChange={handleChange}
-    style={{ marginLeft: "0px" }} // try -5px or -10px for fine adjustment
+    style={{ marginLeft: "0px" }}
   />
 </div>
 
