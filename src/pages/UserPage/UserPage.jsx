@@ -122,7 +122,7 @@ const UserPage = () => {
       <div
         className="feedback-wrapper"
         style={{
-          marginLeft: "170px",
+          marginLeft: "140px",
           marginTop: "0px",
           backgroundImage:
             "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))",
