@@ -484,7 +484,7 @@ const UserPage = () => {
       <div
         className="feedback-wrapper"
         style={{
-          marginLeft: "170px",
+          marginLeft: "140px",
           marginTop: "0px",
           backgroundImage:
             "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))",
@@ -599,7 +599,7 @@ const UserPage = () => {
             >
               <div className="ancestor2" id="descrip">
                 <div id="rew" className="meet">
-                  Wow, you haven’t taken any leaves. You're a rockstar! 🚀
+                  Wow, you haven’t taken any leaves. You're a rockstar! 
                 </div>
               </div>
               <div className="card">
