@@ -11,6 +11,7 @@ domains:
 
 features:
   - buildpack-stack=ubuntu-22
+  
 
 static_sites:
   - name: frontend
