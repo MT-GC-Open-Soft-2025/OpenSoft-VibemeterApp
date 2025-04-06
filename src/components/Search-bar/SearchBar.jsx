@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import "./SearchBar.css";
 import baseUrl from "../../Config";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 const Navbar = ({ setSelectedEmployee }) => {
