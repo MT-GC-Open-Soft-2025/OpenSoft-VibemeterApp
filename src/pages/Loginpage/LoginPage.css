@@ -7,6 +7,10 @@
   padding: 80px 10%;
   gap: 50px; /* Ensures proper spacing between elements */
 }
+.custom-placeholder::placeholder {
+  /* this visually shifts the placeholder right */
+  text-indent: 0px;
+}
 
 .signin-card {
   width: 100%;
