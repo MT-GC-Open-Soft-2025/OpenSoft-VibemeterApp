@@ -27,8 +27,14 @@
   font-family: "Noto Sans", serif;
   font-optical-sizing: auto;
   font-size: 1.3rem;
-  font-style: normal;
-  
+  font-weight: 500;
+  line-height: 1.6;
+  color: #374151; /* Dark Gray */
+}
+.lead1 {
+  font-family: "Lora", serif;
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 .space{
   font-family: "Noto Sans", monospace;
@@ -39,8 +45,8 @@
 .spaceh{
   font-family:'Montserrat', 'Poppins', 'Raleway', 'Nunito Sans', 'Helvetica Neue', sans-serif;
   font-weight: 700;
-  font-style: normal;
-  font-size: 2rem
+  font-size: 2rem;
+  color: #1e40af; /* Deep Blue */
 }
 
 .landing-section {

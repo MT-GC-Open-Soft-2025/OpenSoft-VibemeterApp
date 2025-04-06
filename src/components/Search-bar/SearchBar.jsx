@@ -3,6 +3,9 @@ import { FaSearch } from "react-icons/fa";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "./SearchBar.css";
+import baseUrl from "../../Config";
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const Navbar = ({ setSelectedEmployee }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,7 +17,7 @@ const Navbar = ({ setSelectedEmployee }) => {
     const fetchEmployees = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://127.0.0.1:8000/admin/get_details", {
+        const response = await axios.get(`https://api.wellbee.live/admin/get_details`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -63,7 +66,7 @@ const Navbar = ({ setSelectedEmployee }) => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://127.0.0.1:8000/admin/get_detail/${searchTerm}`, {
+      const response = await axios.get(`https://api.wellbee.live/admin/get_detail/${searchTerm}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -92,26 +95,26 @@ const Navbar = ({ setSelectedEmployee }) => {
   };
 
   return (
-    <>
+    <div className="search-wrapper">
       <div className="search-container">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="search-icon feather feather-search">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          className="search-icon feather feather-search">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
         <input
           type="text"
-          className="form-control search-input ps-5"
+          className="form-control search-input ps-0"
+          style={{width: "24rem", borderBottom: "none", paddingRight : "10rem", paddingLeft : "-2rem"}}
           placeholder="Search Employee ID"
           aria-label="Search"
           value={searchTerm}
           onChange={handleSearchChange}
         />
-        <button className="btn btn-search ms-2" onClick={handleSearchClick}>
-          Search
+        <button className="btn btn-search ms-2" onClick={handleSearchClick} style = {{ height: "auto"}}>
+        <i class="bi bi-search"></i>
         </button>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
         {showDropdown && (
           <ul className="dropdown">
             {employees.filter((emp) => emp.startsWith(searchTerm)).map((emp) => (
@@ -122,7 +125,8 @@ const Navbar = ({ setSelectedEmployee }) => {
           </ul>
         )}
       </div>
-    </>
+      {errorMessage && <p className="error-message mt-2">{errorMessage}</p>}
+    </div>
   );
 };
 

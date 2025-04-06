@@ -1,42 +1,55 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import emailjs from "@emailjs/browser"; // Optional if not using EmailJS
+import axios from "axios";
 import "./SurveyForm.css";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
-import axios from "axios";
 import Swal from 'sweetalert2'
+import baseUrl from "../../Config";
 
 
 
 const SurveyForm = () => {
   const navigate = useNavigate();
-  const [questions, setQuestions] = useState([]);
-  const [responses, setResponses] = useState({});
-  const [status, setStatus] = useState("");
+  const [questions, setQuestions] = useState([]); 
+  const [responses, setResponses] = useState({}); 
+  const [status, setStatus] = useState(""); 
 
   useEffect(() => {
     fetchQuestions();
   }, []);
 
-  // Simulate or fetch from your real backend
   const fetchQuestions = async () => {
     try {
-      // Example: 5 questions
-      const data = [
-        { id: 1, text: "How satisfied are you with our service?" },
-        { id: 2, text: "How do you rate our product quality?" },
-        { id: 3, text: "How do you rate our customer support?" },
-        { id: 4, text: "How do you rate our website usability?" },
-        { id: 5, text: "How likely are you to recommend us?" },
-      ];
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("You are not logged in.");
+      }
+
+      
+      const response = await axios.get("https://api.wellbee.live/chat/feedback", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("API Response Data:", response.data);
+
+      const data = response.data?.response || [];
+
+      if (!Array.isArray(data) || data.length === 0) {
+        setStatus("No questions available.");
+        setQuestions([]);
+        return;
+      }
+
       setQuestions(data);
 
-      // Initialize all ratings to 3
-      const initial = {};
-      data.forEach((q) => (initial[q.id] = 3));
-      setResponses(initial);
+      // Initialize responses with default value 3
+      const initialResponses = {};
+      data.forEach((q) => (initialResponses[q.question_id] = 3));
+      setResponses(initialResponses);
     } catch (error) {
-      console.error("Error fetching questions:", error);
+      console.error("Error fetching questions:", error.response?.data || error.message);
       setStatus("Failed to load questions.");
     }
   };
@@ -56,7 +69,7 @@ const handleSubmit = async (e) => {
     
     
     const payload = Object.fromEntries(
-      Object.entries(responses).map(([question_id, rating]) => [`Q${question_id}`, rating])
+      Object.entries(responses).map(([question_id, rating]) => [`${question_id}`, rating])
     );
     
     console.log("PAYLOAD",payload)
@@ -64,7 +77,7 @@ const handleSubmit = async (e) => {
     console.log("Submitting payload:", JSON.stringify(payload, null, 2));
     
 
-    const res = await axios.post("http://127.0.0.1:8000/chat/add_feedback", payload, {
+    const res = await axios.post("https://api.wellbee.live/chat/add_feedback", payload, {
   })
     setStatus(res.status);
     console.log(res)
@@ -103,14 +116,14 @@ const handleSubmit = async (e) => {
 };
 
   return (
-    <div className="feedback-wrapper" style={{backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))"}}>
+    <div className="feedback-wrapper" style={{ backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))" }}>
       <Feedbacknavbar title="Survey" />
       <div className="survey-container">
         <h2>Survey</h2>
         <form className="survey-form" onSubmit={handleSubmit}>
           {questions.map((q) => (
-            <div key={q.id} className="question-block">
-              <p className="question-text">{q.text}</p>
+            <div key={q.question_id} className="question-block">
+              <p className="question-text">{q.question_text}</p>
 
               {/* SLIDER + CURRENT VALUE */}
               <div className="slider-row">
@@ -119,29 +132,29 @@ const handleSubmit = async (e) => {
                   min="1"
                   max="5"
                   step="1"
-                  value={responses[q.id]}
+                  value={responses[q.question_id] || 3}
                   onChange={(e) =>
-                    handleRating(q.id, parseInt(e.target.value, 10))
+                    handleRating(q.question_id, parseInt(e.target.value, 10))
                   }
                   className="rating-slider"
                 />
-                <span className="slider-value">{responses[q.id]}</span>
+                <span className="slider-value">{responses[q.question_id] || 3}</span>
               </div>
 
-              {/* LABELS 1–5 UNDERNEATH */}
-              <div className="slider-labels">
-                <span>1</span>
-                <span>2</span>
-                <span>3</span>
-                <span>4</span>
-                <span>5</span>
+                <div className="slider-labels">
+                  <span>1</span>
+                  <span>2</span>
+                  <span>3</span>
+                  <span>4</span>
+                  <span>5</span>
+                </div>
               </div>
-            </div>
-          ))}
-          <button type="submit" className="survey-submit">
-            Submit Survey
-          </button>
-        </form>
+            ))}
+            <button type="submit" className="survey-submit">
+              Submit Survey
+            </button>
+          </form>
+       
 
         {status && <p className="success-message ">{status==200?"Added Sucessfully":"Failed to Add"}</p>}
       </div>

@@ -188,12 +188,15 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./LoginPage.css";
 import { FaUser, FaUserShield } from "react-icons/fa";
 import Swal from "sweetalert2";
+import baseUrl from "../../Config";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [empId, setEmpId] = useState("");
+  console.log(baseUrl)
+  
 
   // const handleToggle = () => {
   //   setIsAdmin((prev) => !prev);
@@ -217,7 +220,7 @@ const LoginPage = () => {
       });
       return;
     }
-    const response = await axios.post("http://127.0.0.1:8000/auth/signin", {
+    const response = await axios.post("https://api.wellbee.live/auth/signin", {
        username: empId,
   });
      localStorage.setItem("token", response.data.access_token);
@@ -269,7 +272,7 @@ const LoginPage = () => {
           {/* Right: Sign-In Card */}
           <div className="col-md-6 " data-aos="fade-left" >
             <div className="signin-card ">
-              <h2 className="text-primary fw-bold mb-5 spaceh">Welcome Back 🌱</h2>
+              <h2 className="text-primary fw-bold mb-5 spaceh" style={{fontFamily:'Comfortaa'}}>Welcome Back</h2>
               <p className="lead1 text-muted mb-3">
                 Let’s continue your journey to mental wellness.
               </p>

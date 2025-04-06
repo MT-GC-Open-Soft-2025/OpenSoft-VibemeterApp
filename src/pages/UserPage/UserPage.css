@@ -9,6 +9,9 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+.navbar1{
+  z-index: 1000;
+}
 .sidebar {
   width: 250px;
   /* background-color: #343a40; */
@@ -343,18 +346,19 @@ h1 {
   right: -2rem;
   height: 300px;
   width: 300px;
-  margin-bottom: 15px;
+  margin-bottom: -10px;
   margin-right: 1rem;
   margin-left:30rem;
   display: flex;
   align-items: end;
-  flex-direction: row-reverse; /* Keeps bubble on the left */
+  flex-direction: column; /* Keeps bubble on the left */
 }
 
 /* Bot Animation */
 .bot-animation {
   width: 220px;
   height: auto;
+  margin-bottom: 0px;
 }
 
 /* Chat Bubble - Adjusted Below Mouth */
@@ -368,9 +372,8 @@ h1 {
   max-width: 120px;
   text-align: center;
   position: relative;
-  margin-right: 0;
-  transform: translate(-30px, -20px); /* Moving the bubble lower near the mouth */
-  margin-bottom: 4rem;
+  margin-right: 29px;
+  margin-bottom: -40px;
   /* Apply the up-down animation */
   animation: moveUpDown 1.5s ease-in-out infinite; /* 3s is the speed, you can adjust this */
 }
@@ -379,14 +382,14 @@ h1 {
 .chat-bubble::after {
   content: "";
   position: absolute;
-  top: 50%;
-  left: -6px;
-  transform: translateY(-50%);
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   width: 0;
   height: 0;
-  border-right: 6px solid ;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid black;
 }
 
 /* Keyframes for up and down animation */
@@ -448,7 +451,7 @@ h1 {
   font-weight: 800;
 }
 .lead1{
-  font-family: "Newsreader", serif;
+  font-family: "Noto Sans", serif;
   font-optical-sizing: auto;
   font-size: 1.3rem;
   font-style: normal;

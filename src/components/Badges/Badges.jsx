@@ -77,6 +77,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Badges.css";
+import baseUrl from "../../Config";
 
 import badge1 from "../../Assets/badge1.png";
 import badge2 from "../../Assets/badge2.png";
@@ -100,8 +101,8 @@ export default function Badges({ employeeId }) {
   
         const endpoint =
           empId === "admin"
-            ? `http://127.0.0.1:8000/admin/get_detail/${employeeId}`
-            : `http://127.0.0.1:8000/user/getUserDetails`;
+            ? `https://api.wellbee.live/admin/get_detail/${employeeId}`
+            : `https://api.wellbee.live/user/getUserDetails`;
   
         const response = await axios.get(endpoint, {
           headers: { Authorization: `Bearer ${token}` },

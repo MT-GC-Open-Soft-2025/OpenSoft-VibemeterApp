@@ -40,7 +40,7 @@ const BookDemoForm = () => {
             />
           </div>
           <div className="col-md-6">
-            <h2 className="text-primary mb-4">Book a Free Demo 💬</h2>
+            <h2 className="text-primary mb-4">Book a Free Demo </h2>
             <form ref={form} onSubmit={sendEmail}>
               <div className="mb-3">
                 <input className="form-control" name="user_name" placeholder="Your Company Name" required />

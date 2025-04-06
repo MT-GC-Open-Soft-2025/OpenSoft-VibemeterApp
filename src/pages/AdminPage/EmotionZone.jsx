@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./AdminPage.css";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 import axios from "axios";
-
+import baseUrl from "../../Config";
 const EmotionZoneChart = () => {
   const [emotionData, setEmotionData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -24,7 +24,7 @@ const EmotionZoneChart = () => {
         if (!token) throw new Error("No authentication token found. Please log in.");
 
         // ✅ Fetching feedback data
-        const response = await axios.get("http://127.0.0.1:8000/admin/get_aggregate_feedback", {
+        const response = await axios.get(`https://api.wellbee.live/admin/get_aggregate_feedback`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
