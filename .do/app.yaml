@@ -12,6 +12,15 @@ domains:
 features:
   - buildpack-stack=ubuntu-22
 
+ingress:
+  rules:
+    - component:
+        name: frontend
+      match:
+        path:
+          prefix: /
+      rewrite: /
+  
 static_sites:
   - name: frontend
     github:
@@ -23,7 +32,3 @@ static_sites:
       npm install && npm run build
     output_dir: build
     environment_slug: node-js
-    routes:
-      - path: /*
-        preserve_path_prefix: true
-        rewrite: /
