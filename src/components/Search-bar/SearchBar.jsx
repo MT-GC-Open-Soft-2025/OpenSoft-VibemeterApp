@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "./SearchBar.css";
+import baseUrl from "../../Config";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
@@ -16,7 +17,7 @@ const Navbar = ({ setSelectedEmployee }) => {
     const fetchEmployees = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://127.0.0.1:8000/admin/get_details", {
+        const response = await axios.get(`https://api.wellbee.live/admin/get_details`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -65,7 +66,7 @@ const Navbar = ({ setSelectedEmployee }) => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`http://127.0.0.1:8000/admin/get_detail/${searchTerm}`, {
+      const response = await axios.get(`https://api.wellbee.live/admin/get_detail/${searchTerm}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

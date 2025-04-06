@@ -4,7 +4,7 @@ import "./UserPage.css";
 import { useNavigate } from "react-router-dom";
 import userImg from "../../Assets/user.png";
 import Chat from "../../components/chat_popup/chat.jsx";
-import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar.jsx";
+import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar2.jsx";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Badges from "../../components/Badges/Badges_user.jsx";
 // import EmojiMeter from "../AdminPage/EmojiMeter.jsx";
@@ -15,6 +15,7 @@ import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer/Footer.jsx";
 import EmojiMeter from "../../components/Admin_page _components/Admin_performance_rewards/Emojimeter_user.jsx";
+import baseUrl from "../../Config.js";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -38,7 +39,13 @@ const UserPage = () => {
   const navigate = useNavigate();
   //  const [selectedEmployee, setSelectedEmployee] = useState(""); 
   const [user, setUser] = useState(null);
+  const [empId, setEmpId] = useState();
 
+  useEffect(() => {
+    const storedId = localStorage.getItem("empId");
+    if (storedId) setEmpId(storedId);
+  }, []); 
+  
   const handleClick = () => {
     navigate("/chat");
   };
@@ -61,13 +68,14 @@ const UserPage = () => {
 
   const handleFeedback = () => {
     navigate("/surveyform");
+    
   };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) navigate("/login");
 
-    fetch("http://localhost:8000/user/getUserDetails", {
+    fetch("https://api.wellbee.live/user/getUserDetails", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => (res.ok ? res.json() : Promise.reject("Failed to fetch")))
@@ -161,9 +169,11 @@ const UserPage = () => {
           >
             <div className="ancestor2" id="descrip">
               <div id="rew" className="meet">
-                You've earned <strong>{user.reward_points}</strong> points.
-                You're Amazing!
-                <Badges employeeId={user.emp_id}/>
+                You've earned <strong>{user.reward_points}</strong> points.<br></br> 
+                {user.reward_points <= 200
+                    ? "On the track, let's go for more."
+                    : "YOU'RE AMAZING!"}
+                <Badges employeeId={ empId }/>
               </div>
             </div>
             <div className="card">
@@ -326,7 +336,7 @@ const UserPage = () => {
                 ? "You seem in a good mood today.Let's catchup."
                 : user.vibe_score >= 3
                 ? "Hey! Just checking in. Up for a quick chat?"
-                : "Hey, you don’t seem like you’re having the best day. Want to talk?"}
+                : "Hey, you seem off. Want to talk?"}
             </div>
 
             <Lottie

@@ -1,26 +1,115 @@
 .faq-section {
   min-height: 100vh;
   background: linear-gradient(to bottom right, #e0f2fe, #f0f9ff); /* Soft blue-white gradient */
-  padding-top: 80px;
-  scroll-margin-top: 80px;
-  position: relative;
+  padding: 80px 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 50px; /* Spacing between image and FAQ */
+  flex-wrap: wrap; /* Ensures responsiveness */
   overflow: hidden;
+  position: relative;
 }
 
-/* Optional animated bubbles (very subtle) */
-.faq-section::before {
-  content: "";
-  position: absolute;
-  top: -100px;
-  left: -50px;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.2) 0%, transparent 70%),
-              radial-gradient(circle at 80% 80%, rgba(255,255,255,0.15) 0%, transparent 70%);
-  animation: floatBubbles 15s linear infinite;
-  z-index: 0;
+/* Container styling for layout */
+.faq-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  width: 100%;
 }
 
+/* FAQ Content styling */
+.faq-content {
+  flex: 1;
+  max-width: 600px;
+}
+
+/* Image styling */
+.faq-image {
+  flex: 1;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+}
+
+.faq-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.faq-image img:hover {
+  transform: scale(1.05);
+}
+
+/* FAQ Section Title */
+.faq-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #0077cc;
+  text-align: center;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.faq-title svg {
+  font-size: 1.5rem;
+  color: #ff9800;
+}
+
+/* FAQ Card Styling */
+.faq-item {
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+  border-left: 5px solid #0077cc;
+}
+
+.faq-item:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+.faq-question {
+  font-size: 18px;
+  font-weight: 600;
+  padding: 18px;
+  cursor: pointer;
+  background: #e3f2fd;
+  transition: background 0.3s ease, padding 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.faq-question:hover {
+  background: #bbdefb;
+  padding-left: 20px;
+}
+
+.faq-answer {
+  padding: 18px;
+  font-size: 16px;
+  color: #333;
+  background: #f9f9f9;
+  display: none;
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+/* Animated floating bubbles */
 @keyframes floatBubbles {
   0% {
     transform: translateY(0) rotate(0deg);
@@ -30,12 +119,40 @@
   }
 }
 
+.faq-section::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  left: -50px;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 70%),
+              radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  animation: floatBubbles 15s linear infinite;
+  z-index: 0;
+}
+
 .faq-section .container {
   position: relative;
   z-index: 2;
 }
 
-img.img-fluid {
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+/* Responsive Design */
+@media (max-width: 768px) {
+  .faq-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .faq-image {
+    margin-bottom: 20px;
+  }
+
+  .faq-question {
+    font-size: 16px;
+  }
+
+  .faq-answer {
+    font-size: 14px;
+  }
 }

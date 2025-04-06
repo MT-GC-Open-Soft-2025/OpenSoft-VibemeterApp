@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./EmojiMeter.css";
 import axios from "axios";
+import baseUrl from "../../../Config";
 
 export default function EmojiMeter({ employeeId }) {
     const [user, setUser] = useState(null);
@@ -16,7 +17,7 @@ export default function EmojiMeter({ employeeId }) {
                 if (!token) throw new Error("No authentication token found. Please log in.");
 
                 
-                const response=await axios.get(`http://143.198.49.48/user/getUserDetails`,
+                const response=await axios.get(`https://api.wellbee.live/user/getUserDetails`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 
@@ -149,7 +150,8 @@ export default function EmojiMeter({ employeeId }) {
                 {truncatedVibeScore == -1 ? (
                   <p> No information available yet. </p>
                 ) : (
-                    <p className="score">Score: {truncatedVibeScore}</p>
+                    // <p className="score">Score: {truncatedVibeScore}</p>
+                    <p></p>
                 )}
               </div>
             </div>

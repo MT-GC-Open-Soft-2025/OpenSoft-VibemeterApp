@@ -49,7 +49,7 @@
 //         }
 
 //         const response = await axios.get(
-//           `http://127.0.0.1:8000/admin/get_detail/${employeeId}`,  
+//           `https://api.wellbee.live/admin/get_detail/${employeeId}`,  
 //           { headers: { Authorization: `Bearer ${token}` } }
 //         );
 

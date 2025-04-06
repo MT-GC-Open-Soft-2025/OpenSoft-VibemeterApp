@@ -4,6 +4,7 @@ import axios from "axios";
 import "./Feedbackpage.css";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
 import Markdown from 'markdown-to-jsx'
+import baseUrl from "../../Config";
 
 const FeedbackPage = () => {
   const navigate = useNavigate();
@@ -34,7 +35,7 @@ useEffect(() => {
         if (!token) throw new Error("No authentication token found. Please log in.");
           
         const response = await axios.get(
-          `http://127.0.0.1:8000/admin/get_conversations/${employeeId}`,
+          `https://api.wellbee.live/admin/get_conversations/${employeeId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -68,12 +69,12 @@ useEffect(() => {
       if (!token) throw new Error("No authentication token found. Please log in.");
 
       const feedbackRes = await axios.get(
-        `http://127.0.0.1:8000/admin/get_conversationFeedback/${employeeId}/${convId}`,
+        `https://api.wellbee.live/admin/get_conversationFeedback/${employeeId}/${convId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       const summaryRes = await axios.get(
-        `http://127.0.0.1:8000/admin/get_conversationSummary/${employeeId}/${convId}`,
+        `https://api.wellbee.live/admin/get_conversationSummary/${employeeId}/${convId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(feedbackRes)
