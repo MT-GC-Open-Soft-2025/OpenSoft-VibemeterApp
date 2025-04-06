@@ -45,7 +45,7 @@ The application includes several routes, each serving different content:
 
 ### Chatbot Integration
 
-  - The chatbot delivers dynamic and context-aware responses, focusing on the key factors that are most significantly impacting an employee's mood.
+  - The chatbot delivers dynamic and context-aware responses, focusing on the key factors that are most significantly impacting the logged in employee's mood.
 
   - If the user shows disinterest or disengagement with a topic, the chatbot seamlessly transitions to the next relevant factor, ensuring the interaction remains engaging and personalized.
 
