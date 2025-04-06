@@ -73,9 +73,9 @@ const UserPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) navigate("/login");
 
-    fetch("http://127.0.0.1:8000/user/getUserDetails", {
+    fetch("https://api.wellbee.live/user/getUserDetails", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => (res.ok ? res.json() : Promise.reject("Failed to fetch")))
