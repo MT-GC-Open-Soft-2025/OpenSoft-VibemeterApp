@@ -326,7 +326,7 @@ const Chat = () => {
         </button>
         <div className="chat-container">
           <div className="chat-left">
-            <h5 className="chat-heading fw-bold mt-4">👨 Employee Chats</h5>
+            <h5 className="chat-heading fw-bold mt-4">Employee Chats</h5>
             <div style={{ textAlign: "center", marginBottom: "10px" }}>
               <button className="start-chat-sidebar-btn" onClick={handleStartChat}>
               {!localStorage.getItem("uniqueId") || conversationId === localStorage.getItem("uniqueId")
