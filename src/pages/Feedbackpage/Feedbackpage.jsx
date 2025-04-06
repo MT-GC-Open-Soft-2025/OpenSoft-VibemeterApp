@@ -133,7 +133,10 @@ useEffect(() => {
             <div className="feedback-section">
               <h2>Conversation ID</h2>
               <div className="conversation">
-                {conversations.map((conv, index) => (
+              {conversations.length === 0 ? (
+                <div className="no-conversations">No past Conversations</div>
+              ) : (
+                conversations.map((conv, index) => (
                   <div
                     key={conv}
                     className={`bubble ${selectedIndex === index ? "selected" : ""}`}
@@ -141,8 +144,10 @@ useEffect(() => {
                   >
                     {conv}
                   </div>
-                ))}
-              </div>
+                ))
+              )}
+            </div>
+
             </div>
               <div  className="new">
                 <div className="notnew">

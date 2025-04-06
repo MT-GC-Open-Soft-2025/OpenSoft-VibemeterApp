@@ -62,7 +62,10 @@ p {
   gap: 8px;
   margin-top: 10px;
 }
-
+.no-conversations{
+  font-size: 22px;
+  margin-top: 25px;
+}
 .bubble {
   background-color: #cccccc;
   color: white;
