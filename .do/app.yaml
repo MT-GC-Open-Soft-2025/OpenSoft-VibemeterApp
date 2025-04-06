@@ -11,7 +11,6 @@ domains:
 
 features:
   - buildpack-stack=ubuntu-22
-  
 
 static_sites:
   - name: frontend
@@ -25,9 +24,6 @@ static_sites:
     output_dir: build
     environment_slug: node-js
     routes:
-      - path: /
+      - path: /*
         preserve_path_prefix: true
-        redirect:
-          condition:
-            status: 404
-          destination: /
+        rewrite: /
