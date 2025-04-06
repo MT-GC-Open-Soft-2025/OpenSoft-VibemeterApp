@@ -73,7 +73,7 @@ const UserPage = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) navigate("/login");
 
     fetch("https://api.wellbee.live/user/getUserDetails", {
       headers: { Authorization: `Bearer ${token}` },
