@@ -360,3 +360,15 @@
 /* .btn {
   background-color: #007bff;
 } */
+
+.search-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  padding-left: 5.8rem;
+}
