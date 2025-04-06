@@ -104,8 +104,8 @@ const Navbar = ({ setSelectedEmployee }) => {
                         </svg>
         <input
           type="text"
-          className="form-control search-input ps-5"
-          style={{width: "24rem", borderBottom: "none", paddingRight : "10rem"}}
+          className="form-control search-input ps-0"
+          style={{width: "24rem", borderBottom: "none", paddingRight : "10rem", paddingLeft : "-2rem"}}
           placeholder="Search Employee ID"
           aria-label="Search"
           value={searchTerm}
