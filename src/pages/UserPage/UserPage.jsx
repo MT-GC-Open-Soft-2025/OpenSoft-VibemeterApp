@@ -237,7 +237,7 @@ const UserPage = () => {
             >
               <div className="ancestor2" id="descrip">
                 <div id="rew" className="meet">
-                  Wow, you haven’t taken any leaves. You're a rockstar! 🚀
+                  Wow, you haven’t taken any leaves. You're a rockstar! 
                 </div>
               </div>
               <div className="card">
