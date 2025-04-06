@@ -6,7 +6,7 @@ import userImg from "../../Assets/user.png";
 import Chat from "../../components/chat_popup/chat.jsx";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar2.jsx";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
-import Badges from "../../components/Badges/Badges";
+import Badges from "../../components/Badges/Badges_user.jsx";
 // import EmojiMeter from "../AdminPage/EmojiMeter.jsx";
 import Image from "../../Assets/image.png";
 import Swal from "sweetalert2";
@@ -169,7 +169,7 @@ const UserPage = () => {
           >
             <div className="ancestor2" id="descrip">
               <div id="rew" className="meet">
-                YOU'VE EARNED <strong>{user.reward_points}</strong> POINTS. <br></br>
+                You've earned <strong>{user.reward_points}</strong> points.<br></br> 
                 {user.reward_points <= 200
                     ? "On the track, let's go for more."
                     : "YOU'RE AMAZING!"}

@@ -150,7 +150,8 @@ export default function EmojiMeter({ employeeId }) {
                 {truncatedVibeScore == -1 ? (
                   <p> No information available yet. </p>
                 ) : (
-                    <p className="score">Score: {truncatedVibeScore}</p>
+                    // <p className="score">Score: {truncatedVibeScore}</p>
+                    <p></p>
                 )}
               </div>
             </div>

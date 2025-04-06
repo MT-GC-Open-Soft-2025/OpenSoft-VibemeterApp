@@ -4,6 +4,8 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import "./SearchBar.css";
 import baseUrl from "../../Config";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const Navbar = ({ setSelectedEmployee }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -103,14 +105,15 @@ const Navbar = ({ setSelectedEmployee }) => {
         </svg>
         <input
           type="text"
-          className="form-control search-input ps-5"
+          className="form-control search-input ps-0"
+          style={{width: "24rem", borderBottom: "none", paddingRight : "10rem", paddingLeft : "-2rem"}}
           placeholder="Search Employee ID"
           aria-label="Search"
           value={searchTerm}
           onChange={handleSearchChange}
         />
-        <button className="btn btn-search ms-2" onClick={handleSearchClick}>
-          Search
+        <button className="btn btn-search ms-2" onClick={handleSearchClick} style = {{ height: "auto"}}>
+        <i class="bi bi-search"></i>
         </button>
         {showDropdown && (
           <ul className="dropdown">

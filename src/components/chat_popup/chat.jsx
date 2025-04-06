@@ -246,6 +246,7 @@ const Chat = () => {
       setConversationId(conv_id);
       setChatStarted(true);
       setSelectedIndex(index);
+      
     } catch (err) {
       Swal.fire("Error", "Failed to load chat history. Please try again.", "error");
     }
@@ -325,7 +326,7 @@ const Chat = () => {
         </button>
         <div className="chat-container">
           <div className="chat-left">
-            <h5 className="chat-heading fw-bold mt-4">👨 Employee Chats</h5>
+            <h5 className="chat-heading fw-bold mt-4">Employee Chats</h5>
             <div style={{ textAlign: "center", marginBottom: "10px" }}>
               <button className="start-chat-sidebar-btn" onClick={handleStartChat}>
               {!localStorage.getItem("uniqueId") || conversationId === localStorage.getItem("uniqueId")
@@ -340,7 +341,7 @@ const Chat = () => {
                   className={`bubble ${selectedIndex === index ? "selected" : ""}`}
                   onClick={() => handleConversationClick(conv_id, index)}
                 >
-                  {conv_id}
+                  {`Chat ${index}`}
                 </div>
               ))}
             </div>
