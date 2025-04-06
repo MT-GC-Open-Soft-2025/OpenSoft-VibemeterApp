@@ -95,7 +95,7 @@ export default function EmojiMeter({ employeeId }) {
               >
                 <div className="vibe-meter">
                   <div className="head">
-                    <h4>Emoji Mood Meter</h4>
+                    <h4 >Emoji Mood Meter</h4>
                   </div>
                   <div className={`vibe-circle ${mood.color}`}>
                     <svg
