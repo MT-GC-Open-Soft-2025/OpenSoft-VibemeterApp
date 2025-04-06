@@ -12,7 +12,7 @@ import EmotionZoneChart from "./EmotionZone";
 import EmotionZoneChart2 from "./EmotionZone2";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Navbar from "../../components/Search-bar/SearchBar";
-import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
+import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar2";
 import user1 from "../../Assets/user.png";
 import EmojiMeter from "../../components/Admin_page _components/Admin_performance_rewards/EmojiMeter.jsx";  
 

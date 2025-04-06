@@ -71,16 +71,16 @@ const LandingPage = () => {
           </div>
           <div className="col-md-6 order-md-1 text-start">
             <h2 className="spaceh text-primary">Mental Fitness Routines </h2>
-            <p className="lead text-muted">
+            <p className="lead text-muted" style={{marginLeft:"-10px"}}>
               Short guided routines to boost emotional resilience, calm anxiety, and improve sleep —
               tailored just for you.
             </p>
-            <Link to="bookdemo" smooth duration={500} className="lead1 btn btn-info text-white mt-2">
-            Try a Session
+            <Link to="book-demo" smooth duration={500} className="lead1 btn btn-info text-white mt-2">
+              Try a Session
             </Link>
           </div>
         </div>
-
+        
       </div>
     </Element>
 

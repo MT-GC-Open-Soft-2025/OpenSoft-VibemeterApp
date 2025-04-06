@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
+import baseUrl from "../../../Config";
 
 export default function Rewards({ employeeId }) {
   const [rewardPoints, setRewardPoints] = useState(0);
@@ -15,7 +16,7 @@ export default function Rewards({ employeeId }) {
         if (!token) throw new Error("No authentication token found. Please log in.");
 
         const response = await axios.get(
-          `http://127.0.0.1:8000/admin/get_detail/${employeeId}`,
+          `https://api.wellbee.live/admin/get_detail/${employeeId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

@@ -4,16 +4,18 @@ import "./UserPage.css";
 import { useNavigate } from "react-router-dom";
 import userImg from "../../Assets/user.png";
 import Chat from "../../components/chat_popup/chat.jsx";
-import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar.jsx";
+import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar2.jsx";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Badges from "../../components/Badges/Badges";
-import EmojiMeter from "../AdminPage/EmojiMeter.jsx";
+// import EmojiMeter from "../AdminPage/EmojiMeter.jsx";
 import Image from "../../Assets/image.png";
 import Swal from "sweetalert2";
 import animationData from "../../Assets/Newanimation.json"; // Bot animation
 import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
 import Footer from "../../components/Footer/Footer.jsx";
+import EmojiMeter from "../../components/Admin_page _components/Admin_performance_rewards/Emojimeter_user.jsx";
+import baseUrl from "../../Config.js";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -35,8 +37,15 @@ ChartJS.register(
 
 const UserPage = () => {
   const navigate = useNavigate();
+  //  const [selectedEmployee, setSelectedEmployee] = useState(""); 
   const [user, setUser] = useState(null);
+  const [empId, setEmpId] = useState();
 
+  useEffect(() => {
+    const storedId = localStorage.getItem("empId");
+    if (storedId) setEmpId(storedId);
+  }, []); 
+  
   const handleClick = () => {
     navigate("/chat");
   };
@@ -59,13 +68,14 @@ const UserPage = () => {
 
   const handleFeedback = () => {
     navigate("/surveyform");
+    
   };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) return;
+    if (!token) navigate("/login");
 
-    fetch("http://localhost:8000/user/getUserDetails", {
+    fetch("https://api.wellbee.live/user/getUserDetails", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => (res.ok ? res.json() : Promise.reject("Failed to fetch")))
@@ -85,6 +95,8 @@ const UserPage = () => {
   };
 
   if (!user) return <div className="p-4">Loading...</div>;
+  console.log("user",user)
+  console.log(user.emp_id)
 
   const vibeEmoji =
     user.vibe_score >= 4.5 ? "😎" : user.vibe_score >= 3 ? "🙂" : "😕";
@@ -96,8 +108,8 @@ const UserPage = () => {
       : "It's okay to take breaks. You're not alone.";
   const performanceMessage =
     user.weighted_performance >= 4.5
-      ? "YOU'RE SUCH A DEDICATED WORKER! KEEP SHINING."
-      : "YOU'RE DOING GREAT! KEEP IMPROVING";
+      ? "You're such a dedicated worker! Keep Shining."
+      : "You're doing Good! Keep Improving";
   const performanceImage =
     user.weighted_performance >= 4.5
       ? "https://img.freepik.com/free-vector/successful-businessman-concept-illustration_114360-7387.jpg"
@@ -105,7 +117,7 @@ const UserPage = () => {
 
   return (
     <div className="feedback-wrapper">
-      <Feedbacknavbar title="User Page" />
+      <Feedbacknavbar title="User Page" className="navbar1"/>
       <Sidebar />
       <div
         className="feedback-wrapper"
@@ -140,20 +152,7 @@ const UserPage = () => {
         <div className="info">
           <div className="row align-items-center my-5 animate__animated animate__fadeInLeft">
             <div className="ancestor">
-              <div
-                className={`card text-center shadow-lg p-4 box ${
-                  user.vibe_score < 3 ? "low-vibe" : ""
-                }`}
-                style={{ width: "22rem", marginTop: "2rem" }}
-              >
-                <div className="head">
-                  <h4>Emoji Mood Meter</h4>
-                </div>
-                <div className="card-body">
-                  <span className="display-1 text-warning">{vibeEmoji}</span>
-                </div>
-                <p className="score">Score: {user.vibe_score}</p>
-              </div>
+            <EmojiMeter employeeId={user.emp_id}/>
             </div>
 
             <div className="description">
@@ -161,17 +160,20 @@ const UserPage = () => {
                 {vibeMessage}
               </div>
             </div>
+            
           </div>
-
+          {/* <EmojiMeter employeeId={user.emp_id}/> */}
           <div
             id="fitness"
             className="row align-items-center my-5 animate__animated animate__fadeInLeft"
           >
             <div className="ancestor2" id="descrip">
               <div id="rew" className="meet">
-                YOU'VE EARNED <strong>{user.reward_points}</strong> POINTS.
-                YOU'RE AMAZING!
-                <Badges />
+                YOU'VE EARNED <strong>{user.reward_points}</strong> POINTS. <br></br>
+                {user.reward_points <= 200
+                    ? "On the track, let's go for more."
+                    : "YOU'RE AMAZING!"}
+                <Badges employeeId={ empId }/>
               </div>
             </div>
             <div className="card">
@@ -190,15 +192,16 @@ const UserPage = () => {
                 </>
               ) : (
                 <>
-                  <h4>Don't Worry!</h4>
-                  <p>
-                    You haven't earned points yet, but your journey's just
-                    beginning. Keep pushing! 💪
-                  </p>
-                  <img
-                    src="https://img.freepik.com/free-vector/startup-launch-concept-illustration_114360-6414.jpg"
-                    alt="Start"
-                  />
+                  <div id="desc">
+                  <h4>Your Rewards</h4>
+                  </div>
+                  <div className="image-wrapper">
+                    <img
+                      src="https://img.freepik.com/free-vector/achievements-concept-illustration_114360-4465.jpg"
+                      alt="Start"
+                      className="responsive-image"
+                    />
+                  </div>
                 </>
               )}
             </div>
@@ -279,7 +282,7 @@ const UserPage = () => {
                         className="nav-link1"
                         id="button2"
                         onClick={handleFeedback}
-                        style={{fontSize:"22px", width:"13rem"}}
+                        style={{fontSize:"22px", width:"13rem",paddingLeft:"25px"}}
                       >
                         Submit Survey
                       </button>
@@ -290,8 +293,8 @@ const UserPage = () => {
                 <>
                   <div className="ancestor2" id="descrip">
                     <div id="rew" className="meet">
-                      PLEASE TAKE A MOMENT TO FILL OUT THIS SHORT SURVEY - YOUR
-                      FEEDBACK MATTERS!
+                      Please Take a moment to fill out this Short Survey - your
+                      Feedback matters!
                       <button className="nav-link1" onClick={handleFeedback}>
                         Submit Survey
                       </button>
@@ -333,7 +336,7 @@ const UserPage = () => {
                 ? "You seem in a good mood today.Let's catchup."
                 : user.vibe_score >= 3
                 ? "Hey! Just checking in. Up for a quick chat?"
-                : "Hey, you don’t seem like you’re having the best day. Want to talk?"}
+                : "Hey, you seem off. Want to talk?"}
             </div>
 
             <Lottie

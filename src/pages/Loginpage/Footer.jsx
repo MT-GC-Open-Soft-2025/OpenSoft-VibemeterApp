@@ -44,7 +44,7 @@ const Footerpage = () => (
     <div className="container flex justify-between items-center mx-auto max-w-5xl px-4">
       
       {/* Copyright Text on the Left */}
-      <p className="text-white text-sm">© 2025 MyCompany. All rights reserved.</p>
+      <p className="text-white text-sm">© 2025 Wellbee. All rights reserved.</p>
 
       {/* Social Media Icons on the Right */}
       <div className="flex gap-10">
