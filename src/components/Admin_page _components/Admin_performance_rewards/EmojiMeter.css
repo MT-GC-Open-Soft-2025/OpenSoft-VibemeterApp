@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Delius&family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+
 .dashboard-container {
     display: flex;
     height: 100vh;
@@ -772,3 +775,10 @@
     font-style: normal;
     font-size: 2rem
   }
+
+  .h4, h4 {
+    font-weight: bold;
+    font-family: 'Delius', cursive;
+    font-size: 2rem;
+}
+  

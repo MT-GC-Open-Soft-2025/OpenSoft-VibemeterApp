@@ -49,9 +49,9 @@ const LandingPage = () => {
           </div>
           <div className="col-md-6 text-start">
             <h2 className="spaceh text-primary">Meet Vibey </h2>
-            <p className="lead text-muted">
-              Your friendly mental wellness chatbot, always here to talk, check in,
-              and help guide you through daily ups and downs.
+            <p className="lead text-muted" style={{marginLeft:"-10px"}}>
+             Your friendly mental wellness chatbot, always here to talk, check in,
+             and help guide you through daily ups and downs.
             </p>
             <Link to="signin" smooth duration={500} className="lead btn btn-outline-primary mt-3">
               Start Chatting
@@ -75,7 +75,7 @@ const LandingPage = () => {
               Short guided routines to boost emotional resilience, calm anxiety, and improve sleep —
               tailored just for you.
             </p>
-            <Link to="book-demo" smooth duration={500} className="lead1 btn btn-info text-white mt-2">
+            <Link to="book-demo" smooth duration={500} className="lead btn btn-outline-primary mt-2">
               Try a Session
             </Link>
           </div>

@@ -50,6 +50,7 @@ const ContactForm = () => {
           Swal.fire({
             icon: 'success',
             title: 'Message sent successfully!',
+            confirmButtonColor: '#36ABAA'
           });
           setFormData({ name: "", email: "", message: "" });
         },
@@ -59,6 +60,7 @@ const ContactForm = () => {
           Swal.fire({
             icon: 'error',
             title: 'Failed to send message.',
+            confirmButtonColor : '#d33'
           });
         }
       );

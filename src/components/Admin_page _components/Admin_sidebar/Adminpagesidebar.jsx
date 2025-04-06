@@ -17,6 +17,7 @@ const Sidebar = () => {
           showCancelButton: true,
           confirmButtonText: "Yes, log out",
           cancelButtonText: "No, stay",
+          confirmButtonColor: '#36ABAA'
         }).then((result) => {
           if (result.isConfirmed) {
             localStorage.removeItem("token");

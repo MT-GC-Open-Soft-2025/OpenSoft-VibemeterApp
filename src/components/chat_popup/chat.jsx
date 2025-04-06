@@ -40,7 +40,13 @@ const Chat = () => {
           : all;
       setConversationIds(reordered);
     } catch (err) {
-      Swal.fire("Error", "Failed to fetch conversations. Please try again", "error");
+      // Swal.fire({"Error", "Failed to fetch conversations. Please try again", "error", confirmButtonColor: '#36ABAA'});
+      Swal.fire({
+        title: "Error",
+        text: "Failed to fetch conversations. Please try again",
+        icon: "error",
+        confirmButtonColor: '#36ABAA'
+      });
     }
   };
 
@@ -171,10 +177,14 @@ const Chat = () => {
         cancelButtonText: "Cancel",
         confirmButtonText: "Submit",
         html: generateStarHTML(),
+        confirmButtonColor: '#36ABAA',
         preConfirm: () => {
           const selected = document.querySelector('input[name="rating"]:checked');
           if (!selected) {
-            Swal.showValidationMessage("Please select a rating!");
+            Swal.showValidationMessage({
+              text: "Please select a rating!",
+              confirmButtonColor: '#d33',
+            });
           }
           return selected ? parseInt(selected.value) : null;
         },
@@ -182,7 +192,13 @@ const Chat = () => {
   
       if (isDenied) {
         await sendFeedback(0);
-        Swal.fire("No problem!", "Feedback skipped 👍", "info");
+        Swal.fire({
+          title: "No problem!", 
+          text: "Feedback skipped 👍", 
+          icon: "info",
+          confirmButtonColor: '#36ABAA'
+        }
+        );
       } else if (isConfirmed && selectedRating) {
         setRating(selectedRating);
   
@@ -196,9 +212,13 @@ const Chat = () => {
         });
   
         await sendFeedback(selectedRating);
-  
-        // ✅ Replace loader with thank you
-        Swal.fire("Thank You!", `You rated: ${selectedRating} ⭐`, "success");
+        Swal.fire({
+          title: "Thank You!", 
+          text: `You rated: ${selectedRating} ⭐`, 
+          icon: "success",
+          confirmButtonColor: '#36ABAA'
+        }
+        );
       }
   
       localStorage.removeItem("uniqueId");
@@ -231,6 +251,7 @@ const Chat = () => {
           showCancelButton: true,
           confirmButtonText: "Yes, start new",
           cancelButtonText: "No, stay here",
+          confirmButtonColor: '#36ABAA'
         });
         if (!result.isConfirmed) return;
         await openFeedbackPopup();
@@ -294,8 +315,14 @@ const Chat = () => {
       setConversationId(conv_id);
       setChatStarted(true);
       setSelectedIndex(index);
+      
     } catch (err) {
-      Swal.fire("Error", "Failed to load chat history. Please try again.", "error");
+      Swal.fire({
+        title: "Error", 
+        text: "Failed to load chat history. Please try again.", 
+        icon: "error",
+        confirmButtonColor: '#d33'
+    });
     }
   };
 

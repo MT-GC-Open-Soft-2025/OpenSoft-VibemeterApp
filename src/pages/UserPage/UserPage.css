@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Delius&family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 .dashboard-container {
   display: flex;
   height: 100vh;
@@ -159,6 +162,7 @@ body{
   /* background:linear-gradient(135deg, #003366, #009688); */
 
 }
+
 html {
   height: 100%;
   width: 100%;
@@ -249,7 +253,7 @@ h1 {
 }
 .ancestor {
   /* padding-top: -10rem; */
-  margin-left: 15rem;
+  margin-left: 10rem;
   display: flex;
   flex-direction: row;
   width: auto;
@@ -266,6 +270,7 @@ h1 {
 }
 .head {
   border-bottom: #343a40;
+  font-family: "Delius", cursive;
 }
 
 .image-wrapper {
@@ -286,7 +291,8 @@ h1 {
 #desc {
   width: 25rem;
   padding-left: 3rem;
-  padding-bottom: 1rem
+  padding-bottom: 1rem;
+  
 }
 
 
@@ -306,6 +312,10 @@ h1 {
   padding: 2rem;
   margin-right: 5rem;
 }
+.card.h4{
+  font-family: "Delius", cursive;
+}
+
 .ancestor2 {
   /* padding-top: -10rem; */
   margin-left: 2rem;
@@ -455,6 +465,12 @@ h1 {
 }
 .spaceh{
   font-family: 'Montserrat', 'Poppins', 'Raleway', 'Nunito Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 2rem
+}
+.spaceh2{
+  font-family: 'Noto Sans', sans-serif;
   font-weight: 700;
   font-style: normal;
   font-size: 2rem
