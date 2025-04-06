@@ -21,7 +21,7 @@ export default function Badges({ employeeId }) {
         if (!token) throw new Error("No authentication token found. Please log in.");
 
         const response = await axios.get(
-          `http://143.198.49.48/user/getUserDetails`,
+          `https://api.wellbee.live/user/getUserDetails`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

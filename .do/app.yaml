@@ -1,0 +1,32 @@
+name: open-soft-front
+region: blr
+
+alerts:
+  - rule: DEPLOYMENT_FAILED
+  - rule: DOMAIN_FAILED
+
+domains:
+  - domain: www.wellbee.live
+    type: PRIMARY
+
+features:
+  - buildpack-stack=ubuntu-22
+
+static_sites:
+  - name: frontend
+    github:
+      repo: MT-GC-Open-Soft-2025/frontend
+      branch: main
+      deploy_on_push: true
+    source_dir: /
+    build_command: |
+      npm install && npm run build
+    output_dir: build
+    environment_slug: node-js
+    routes:
+      - path: /
+        preserve_path_prefix: true
+        redirect:
+          condition:
+            status: 404
+          destination: /

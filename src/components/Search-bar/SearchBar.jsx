@@ -75,7 +75,7 @@ const Navbar = ({ setSelectedEmployee }) => {
           icon: "success",
           title: "Employee Found!",
           text: `Redirecting to Employee ID: ${searchTerm}`,
-          confirmButtonColor: "#007bff",
+          confirmButtonColor: "#36ABAA",
         }).then(() => {
           setSelectedEmployee(searchTerm);
           setSearchTerm("");
@@ -95,14 +95,14 @@ const Navbar = ({ setSelectedEmployee }) => {
   };
 
   return (
-    <>
-      <div className="search-container" >
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="search-icon feather feather-search">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                        </svg>
+    <div className="search-wrapper">
+      <div className="search-container">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+          className="search-icon feather feather-search">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
         <input
           type="text"
           className="form-control search-input ps-0"
@@ -115,7 +115,6 @@ const Navbar = ({ setSelectedEmployee }) => {
         <button className="btn btn-search ms-2" onClick={handleSearchClick} style = {{ height: "auto"}}>
         <i class="bi bi-search"></i>
         </button>
-        {errorMessage && <p className="error-message">{errorMessage}</p>}
         {showDropdown && (
           <ul className="dropdown">
             {employees.filter((emp) => emp.startsWith(searchTerm)).map((emp) => (
@@ -126,7 +125,8 @@ const Navbar = ({ setSelectedEmployee }) => {
           </ul>
         )}
       </div>
-    </>
+      {errorMessage && <p className="error-message mt-2">{errorMessage}</p>}
+    </div>
   );
 };
 
