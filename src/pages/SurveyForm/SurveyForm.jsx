@@ -69,7 +69,7 @@ const handleSubmit = async (e) => {
     
     
     const payload = Object.fromEntries(
-      Object.entries(responses).map(([question_id, rating]) => [`Q${question_id}`, rating])
+      Object.entries(responses).map(([question_id, rating]) => [`${question_id}`, rating])
     );
     
     console.log("PAYLOAD",payload)
