@@ -18,9 +18,9 @@ const Chat = () => {
   const [inputValue, setInputValue] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [rating, setRating] = useState(0);
-  const [isBotTyping, setIsBotTyping] = useState(false); // state for typing indicator
-
+  const [isBotTyping, setIsBotTyping] = useState(false); // typing indicator
   const chatHistoryRef = useRef(null);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
 
   const fetchConversations = async () => {
     try {
@@ -121,6 +121,43 @@ const Chat = () => {
     `;
   };
 
+  // const openFeedbackPopup = async () => {
+  //   try {
+  //     const { isConfirmed, isDenied, value: selectedRating } = await Swal.fire({
+  //       title: "Do you want to give feedback?",
+  //       text: "Rate your experience with this chat",
+  //       icon: "question",
+  //       showCloseButton: true,
+  //       showDenyButton: true,
+  //       showCancelButton: true,
+  //       denyButtonText: "No, thanks",
+  //       cancelButtonText: "Cancel",
+  //       confirmButtonText: "Submit",
+  //       html: generateStarHTML(),
+  //       preConfirm: () => {
+  //         const selected = document.querySelector('input[name="rating"]:checked');
+  //         if (!selected) {
+  //           Swal.showValidationMessage("Please select a rating!");
+  //         }
+  //         return selected ? parseInt(selected.value) : null;
+  //       },
+  //     });
+
+  //     if (isDenied) {
+  //       await sendFeedback(0);
+  //       Swal.fire("No problem!", "Feedback skipped 👍", "info");
+  //     } else if (isConfirmed && selectedRating) {
+  //       setRating(selectedRating);
+  //       await sendFeedback(selectedRating);
+
+  //       Swal.fire("Thank You!", `You rated: ${selectedRating} ⭐`, "success");
+  //     }
+
+  //     localStorage.removeItem("uniqueId");
+  //   } catch (err) {
+  //     alert("Feedback already given");
+  //   }
+  // };
   const openFeedbackPopup = async () => {
     try {
       const { isConfirmed, isDenied, value: selectedRating } = await Swal.fire({
@@ -142,28 +179,39 @@ const Chat = () => {
           return selected ? parseInt(selected.value) : null;
         },
       });
-
+  
       if (isDenied) {
         await sendFeedback(0);
         Swal.fire("No problem!", "Feedback skipped 👍", "info");
       } else if (isConfirmed && selectedRating) {
         setRating(selectedRating);
+  
+        // ✅ Show loader while sending feedback
+        Swal.fire({
+          title: "Submitting your feedback...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+  
         await sendFeedback(selectedRating);
+  
+        // ✅ Replace loader with thank you
         Swal.fire("Thank You!", `You rated: ${selectedRating} ⭐`, "success");
       }
+  
       localStorage.removeItem("uniqueId");
     } catch (err) {
       alert("Feedback already given");
     }
   };
+  
 
   const handleStartChat = async () => {
-    console.log("localStorage.getItem('uniqueId')", localStorage.getItem("uniqueId"));
-    console.log(localStorage.getItem("conversationId"));
     const existingId = localStorage.getItem("uniqueId");
     if (existingId) {
       if (conversationId && (conversationId !== existingId)) {
-        // Just switch back to current active chat
         setConversationId(existingId);
         setChatStarted(true);
         setSelectedIndex(null);
@@ -256,14 +304,11 @@ const Chat = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const messageToSend = inputValue; // capture the current input value
+      const messageToSend = inputValue;
 
-      // Append user message and clear input immediately
       const newUserMessage = { sender: "user", text: messageToSend };
       setChatMessages((prev) => [...prev, newUserMessage]);
       setInputValue("");
-
-      // Show typing indicator
       setIsBotTyping(true);
 
       const convo = String(localStorage.getItem("uniqueId"));
@@ -325,10 +370,10 @@ const Chat = () => {
         </button>
         <div className="chat-container">
           <div className="chat-left">
-            <h5 className="chat-heading fw-bold mt-4">👨 Employee Chats</h5>
+            <h5 className="chat-heading fw-bold mt-4">Employee Chats</h5>
             <div style={{ textAlign: "center", marginBottom: "10px" }}>
               <button className="start-chat-sidebar-btn" onClick={handleStartChat}>
-              {!localStorage.getItem("uniqueId") || conversationId === localStorage.getItem("uniqueId")
+                {!localStorage.getItem("uniqueId") || conversationId === localStorage.getItem("uniqueId")
                   ? "New Chat"
                   : "⬅ Go to Current Chat"}
               </button>
@@ -340,18 +385,18 @@ const Chat = () => {
                   className={`bubble ${selectedIndex === index ? "selected" : ""}`}
                   onClick={() => handleConversationClick(conv_id, index)}
                 >
-                  {conv_id}
+                  {`Chat ${index}`}
                 </div>
               ))}
             </div>
           </div>
 
           <div className="chat-right">
-          {chatStarted && localStorage.getItem("uniqueId") === conversationId && (
-                <button className="end-chat-btn" onClick={openFeedbackPopup}>
-                  End Chat
-                </button>
-              )}
+            {chatStarted && localStorage.getItem("uniqueId") === conversationId && (
+              <button className="end-chat-btn" onClick={openFeedbackPopup}>
+                End Chat
+              </button>
+            )}
 
             <div className="chat-right-content">
               {chatStarted ? (
@@ -389,7 +434,8 @@ const Chat = () => {
                     <input
                       type="text"
                       className="chat-input"
-                      placeholder={localStorage.getItem("uniqueId") === conversationId
+                      placeholder={
+                        localStorage.getItem("uniqueId") === conversationId
                           ? "Type your message..."
                           : "Cannot message in past chats"
                       }
