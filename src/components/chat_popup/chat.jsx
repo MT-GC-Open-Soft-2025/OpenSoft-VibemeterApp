@@ -246,6 +246,7 @@ const Chat = () => {
       setConversationId(conv_id);
       setChatStarted(true);
       setSelectedIndex(index);
+      
     } catch (err) {
       Swal.fire("Error", "Failed to load chat history. Please try again.", "error");
     }
@@ -340,7 +341,7 @@ const Chat = () => {
                   className={`bubble ${selectedIndex === index ? "selected" : ""}`}
                   onClick={() => handleConversationClick(conv_id, index)}
                 >
-                  {conv_id}
+                  {`Chat ${index}`}
                 </div>
               ))}
             </div>

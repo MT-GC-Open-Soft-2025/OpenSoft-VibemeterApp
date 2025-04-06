@@ -67,7 +67,7 @@
 /* Conversation list in left partition */
 .conversation {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 0.1px;
   overflow-y: auto;
   flex: 1;
