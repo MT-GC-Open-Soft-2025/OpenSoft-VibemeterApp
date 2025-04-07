@@ -398,6 +398,7 @@ ChartJS.register(
 );
 
 const UserPage = () => {
+
   const navigate = useNavigate();
   //  const [selectedEmployee, setSelectedEmployee] = useState(""); 
   const [user, setUser] = useState(null);
@@ -406,6 +407,7 @@ const UserPage = () => {
   useEffect(() => {
     const storedId = localStorage.getItem("empId");
     if (storedId) setEmpId(storedId);
+    console.log("empId", storedId);
   }, []); 
   
   const handleClick = () => {
@@ -443,6 +445,7 @@ const UserPage = () => {
       .then((res) => (res.ok ? res.json() : Promise.reject("Failed to fetch")))
       .then(setUser)
       .catch(console.error);
+      console.log("user",user)
   }, []);
 
   const handleDownload = () => {
