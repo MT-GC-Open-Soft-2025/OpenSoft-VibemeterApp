@@ -49,16 +49,31 @@ uvicorn server:app --host 0.0.0.0 --port 8000 --reload
 
 ### 4. Install and Run Dockerized image
 ```bash
-# Install Docker
-# For Windows: https://docs.docker.com/desktop/install/windows-install/
-# For Linux: https://docs.docker.com/engine/install/
-# For Mac: https://docs.docker.com/desktop/install/mac-install/
-# Install Docker Compose
-# For Windows: https://docs.docker.com/compose/install/
-# For Linux: https://docs.docker.com/compose/install/
-# For Mac: https://docs.docker.com/compose/install/
-# Build the Docker image
    docker-compose build
    docker-compose up
- ```
+```
  
+## Endpoints
+### Authentication API (`/auth`)
+- **POST /signin** – Authenticate user and return a JWT token.
+
+### Chat API (`/chat`) - Requires authenticate middleware
+- **POST /initiate_chat/{convo_id}** – Start a new chat session with a given conversation ID.
+- **POST /send** – Send a message in an active conversation.
+- **GET /feedback** – Get feedback questions for the chat.
+- **POST /end_chat/{convo_id}/{feedback}** – End the conversation and record overall feedback.
+- **POST /add_feedback** – Submit detailed feedback ratings for a conversation.
+
+### User API (`/user`) - Requires authenticate middleware
+- **GET /getUserDetails** – Retrieve details of the currently logged-in user.
+- **GET /getConvoids** – Fetch all conversation IDs associated with the user.
+
+### Admin API (`/admin`) -  Requires adminauthenticate middleware
+- **GET /get_details** – Get a list of all registered employees.
+- **GET /get_detail/{employee_id}** – Get detailed info of a specific employee.
+- **GET /get_conversations/{employee_id}** – Get all conversations of a specific employee.
+- **GET /get_conversation/{employee_id}/{convo_id}** – Get details of a specific conversation.
+- **GET /get_conversationFeedback/{emp_id}/{convo_id}** – Get feedback for a specific conversation.
+- **GET /get_conversationSummary/{emp_id}/{convo_id}** – Get summary of a specific conversation.
+- **GET /get_aggregate_feedback** – Get the average feedback score across conversations.
+
