@@ -49,7 +49,7 @@ const BookDemoForm = () => {
                 <input className="form-control" type="email" name="user_email" placeholder="Your Company Email" required />
               </div>
               <div className="mb-3">
-                <textarea className="form-control" name="message" placeholder="Tell us more about your comapny" rows="4" />
+                <textarea className="form-control" name="message" placeholder="Tell us more about your company" rows="4" />
               </div>
               <button type="submit" className="btn btn-primary w-100">Submit</button>
             </form>
