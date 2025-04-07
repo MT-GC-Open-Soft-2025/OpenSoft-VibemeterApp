@@ -147,7 +147,7 @@ export default function EmojiMeter({ employeeId }) {
                 {/* <div className="card-body">
                   <span className="display-1 text-warning">{vibeEmoji}</span>
                 </div> */}
-                <p className="score">Score: {truncatedVibeScore}</p>
+                {/* <p className="score">Score: {truncatedVibeScore}</p> */}
                 {truncatedVibeScore === -1 ? (
                   <p> No information available yet </p>
                 ) : (

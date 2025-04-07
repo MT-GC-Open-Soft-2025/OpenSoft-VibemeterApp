@@ -8,6 +8,7 @@ import axios from "axios";
 import { nanoid } from "nanoid";
 import Swal from "sweetalert2";
 import baseUrl from "../../Config";
+import Markdown from 'markdown-to-jsx'
 
 const Chat = () => {
   const navigate = useNavigate();
@@ -127,43 +128,7 @@ const Chat = () => {
     `;
   };
 
-  // const openFeedbackPopup = async () => {
-  //   try {
-  //     const { isConfirmed, isDenied, value: selectedRating } = await Swal.fire({
-  //       title: "Do you want to give feedback?",
-  //       text: "Rate your experience with this chat",
-  //       icon: "question",
-  //       showCloseButton: true,
-  //       showDenyButton: true,
-  //       showCancelButton: true,
-  //       denyButtonText: "No, thanks",
-  //       cancelButtonText: "Cancel",
-  //       confirmButtonText: "Submit",
-  //       html: generateStarHTML(),
-  //       preConfirm: () => {
-  //         const selected = document.querySelector('input[name="rating"]:checked');
-  //         if (!selected) {
-  //           Swal.showValidationMessage("Please select a rating!");
-  //         }
-  //         return selected ? parseInt(selected.value) : null;
-  //       },
-  //     });
 
-  //     if (isDenied) {
-  //       await sendFeedback(0);
-  //       Swal.fire("No problem!", "Feedback skipped 👍", "info");
-  //     } else if (isConfirmed && selectedRating) {
-  //       setRating(selectedRating);
-  //       await sendFeedback(selectedRating);
-
-  //       Swal.fire("Thank You!", `You rated: ${selectedRating} ⭐`, "success");
-  //     }
-
-  //     localStorage.removeItem("uniqueId");
-  //   } catch (err) {
-  //     alert("Feedback already given");
-  //   }
-  // };
   const openFeedbackPopup = async () => {
     try {
       const { isConfirmed, isDenied, value: selectedRating } = await Swal.fire({
@@ -446,7 +411,7 @@ const Chat = () => {
                         key={idx}
                         className={`chat-message ${msg.sender === "bot" ? "bot" : "user"}`}
                       >
-                        <p>{msg.text}</p>
+                        <p><Markdown>{msg.text}</Markdown></p>
                       </div>
                     ))}
                     {isBotTyping && (
