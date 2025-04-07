@@ -1,3 +1,8 @@
+## Backend up at https://api.wellbee.live
+
+## Steps to run the project locally
+
+
 ##  1. Clone the Repository
 First, **open VS Code**, **open the terminal**  and run:
 ```bash
@@ -27,12 +32,20 @@ In case you install a new package, make sure to update the requirements.txt file
 pip freeze > requirements.txt
 ```
 
+### 4. Make .env file at root directory
+```bash
+MONGO_URI=
+JWT_SECRET= 
+JWT_ALGORITHM= 
+TOKEN_EXPIRY_SECONDS= 
+DB_NAME= 
+GEMINI_KEY= 
+```
 
-## 3. Run the FastAPI server
+## 5. Run the FastAPI server in local
 ```bash
 uvicorn server:app --host 0.0.0.0 --port 8000 --reload
 ```
-
 
 ## 4. Install and Run Dockerized image
 ```bash
@@ -49,5 +62,3 @@ uvicorn server:app --host 0.0.0.0 --port 8000 --reload
    docker-compose up
  ```
  
-## 4. Gemini API
-[Docs](https://ai.google.dev/gemini-api/docs/text-generation#multi-turn-conversations)
