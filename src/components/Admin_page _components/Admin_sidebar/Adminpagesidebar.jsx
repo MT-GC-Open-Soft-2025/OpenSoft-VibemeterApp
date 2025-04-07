@@ -35,7 +35,10 @@ const Sidebar = () => {
                 <ul className="sidebar-menu">
                     <li 
                         className={`sidebar-item ${activeItem === 'Overview' ? 'active' : ''}`}
-                        onClick={() => handleItemClick('Overview')}
+                        onClick={() => {
+                            setActiveItem('Overview');
+                            navigate("/admin");
+                        }}
                     >
                         Overview
                     </li>
