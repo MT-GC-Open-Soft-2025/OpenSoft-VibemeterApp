@@ -37,7 +37,7 @@ const Sidebar = () => {
                         className={`sidebar-item ${activeItem === 'Overview' ? 'active' : ''}`}
                         onClick={() => {
                             setActiveItem('Overview');
-                            navigate("/admin");
+                            
                         }}
                     >
                         Overview
