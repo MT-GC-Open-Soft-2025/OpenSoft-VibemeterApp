@@ -1,5 +1,7 @@
 # Open Soft 2025 Frontend
 
+The website is live at [wellbee](https://www.wellbee.live)
+
 ### Setup
 
 - Clone the frontend repository `frontend` to your local machine.
