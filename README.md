@@ -1,6 +1,6 @@
 # Open Soft 2025 Frontend
 
-The website is live at [wellbee](https://www.wellbee.live)
+The website is live at [www.wellbee.live](https://www.wellbee.live)
 
 ### Setup
 
