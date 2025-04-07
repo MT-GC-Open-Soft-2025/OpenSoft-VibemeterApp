@@ -3,7 +3,7 @@
 ## Steps to run the project locally
 
 
-##  1. Clone the Repository
+### 1. Clone the Repository
 First, **open VS Code**, **open the terminal**  and run:
 ```bash
 git clone https://github.com/MT-GC-Open-Soft-2025/Backend.git
@@ -15,7 +15,7 @@ Create your own branch and start working on it
 git checkout -b <branch-name>
 ```
 
-## 2. Set up the virtual environment
+### 2. Set up the virtual environment
 ```bash
 python -m venv venv
 venv\Scripts\activate (for windows)
@@ -23,7 +23,7 @@ source venv/bin/activate (for linux/mac)
 ```
    
 
-## 3. Install the required dependencies
+### 3. Install the required dependencies
 ```bash
 pip install -r requirements.txt
 ```
@@ -42,12 +42,12 @@ DB_NAME=
 GEMINI_KEY= 
 ```
 
-## 5. Run the FastAPI server in local
+### 5. Run the FastAPI server in local
 ```bash
 uvicorn server:app --host 0.0.0.0 --port 8000 --reload
 ```
 
-## 4. Install and Run Dockerized image
+### 4. Install and Run Dockerized image
 ```bash
 # Install Docker
 # For Windows: https://docs.docker.com/desktop/install/windows-install/
