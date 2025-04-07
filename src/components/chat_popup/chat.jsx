@@ -156,6 +156,13 @@ const Chat = () => {
       });
   
       if (isDenied) {
+        Swal.fire({
+          title: "Submitting your feedback...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
         await sendFeedback(0);
         Swal.fire({
           title: "No problem!", 
