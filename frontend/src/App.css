@@ -1,0 +1,155 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+.bg-white {
+  background: linear-gradient(to bottom right, #e0f2fe, #f8fbff) !important;
+}
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px; /* for navbar space */
+}
+
+.navbar {
+  z-index: 999;
+}
+/* Dark mode root */
+.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+/* Override Bootstrap light backgrounds */
+.dark-mode .bg-white {
+  background-color: #1e1e1e !important;
+}
+
+.dark-mode .navbar-light {
+  background-color: #1e1e1e !important;
+}
+
+.dark-mode input,
+.dark-mode textarea,
+.dark-mode select,
+.dark-mode .form-control {
+  background-color: #2a2a2a;
+  color: #fff;
+  border-color: #444;
+}
+
+.dark-mode .btn-primary {
+  background-color: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.dark-mode .btn-dark {
+  background-color: #fff;
+  color: #121212;
+}
+
+/* Chat specific overrides */
+.dark-mode .chat-container {
+  background-color: #181818;
+}
+
+.dark-mode .chat-window {
+  background-color: #1e1e1e;
+}
+
+.dark-mode .chat-bubble.bot {
+  background-color: #2d3748;
+  color: #f0f0f0;
+}
+
+.dark-mode .chat-bubble.user {
+  background-color: #4f46e5;
+  color: #fff;
+}
+
+.dark-mode .chat-sidebar {
+  background-color: #111827;
+}
+
+.dark-mode .chat-thread {
+  background-color: #1f2937;
+}
+
+.dark-mode .chat-thread.active,
+.dark-mode .chat-thread:hover {
+  background-color: #374151;
+}

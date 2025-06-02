@@ -1,0 +1,368 @@
+/* Full-screen overlay */
+.chat-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  background-color: #f9fafb;
+}
+
+/* Chat window container */
+.chat-window {
+  position: relative;
+  width: 100%;
+  max-width: 10000px;
+  height: 100%;
+  border-radius: 0px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0px !important;
+}
+
+/* Close button */
+.chat-close {
+  position: absolute;
+  top: 0px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+/* Container for left and right partitions */
+.chat-container {
+  display: flex;
+  flex: 1;
+}
+
+/* Left Partition */
+.chat-left {
+  width: 260px;
+  background-color: #2a7f91;
+  padding-top: 5px !important;
+  padding: 15px;
+  display: flex;
+  color: #ffffff;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.chat-heading {
+  color: #ffffff;
+  text-align:center;
+  font-size: 18px;
+}
+
+/* Conversation list in left partition */
+.conversation {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.1px;
+  overflow-y: auto;
+  flex: 1;
+  margin-top: 10px;
+}
+
+/* Conversation bubble */
+.bubble {
+  background-color: #67a2aeab;
+  color: white;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 10px;
+  font-weight:500;
+}
+
+.bubble.selected {
+  background-color: #3697aa;
+}
+
+/* Pagination controls */
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.page-btn {
+  padding: 8px 12px;
+  background-color: #3697aa;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.page-btn:hover {
+  background-color: #2a7f91;
+}
+
+.page-btn:disabled {
+  background-color: #47cce6;
+  cursor: not-allowed;
+}
+
+/* Right Partition */
+.chat-right {
+  width: 100%;
+  padding: 0px;
+  box-sizing: border-box;
+  /* overflow-y: auto; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative; /* enables absolute positioning inside */
+  background-color: #edebeb;
+}
+
+/* End Chat button at the top-left corner */
+.end-chat-btn {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #bc3b2d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.end-chat-btn:hover {
+  background-color: #973025;
+}
+
+
+/* Right partition content container */
+.chat-right-content {
+  /* display: flex; */
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: center; */
+  width: 100%;
+  height: 95%;
+  background-color: #edebeb;
+}
+.animated{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20%;
+}
+/* Animation container: centers the bot animation */
+.animation-container {
+  width: 250px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+ 
+}
+
+/* Start Chat Button styling */
+.start-chat-btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #3697aa;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 255px;
+  margin-top: 0px;
+}
+
+.start-chat-btn:hover {
+  background-color: #2a7f91;
+}
+
+/* Chat input container */
+.chat-input-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: #2a7f91;
+  border-radius: 10px;
+  margin-top: 10px;
+  border-width: 1px;
+  padding: 1px;
+  bottom: 0;
+}
+
+
+/* Chat history container with fixed size and scroll */
+.chat-history {
+  width: 100%;
+  height: 90%; /* Set a fixed height */
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fafafa;
+}
+
+
+/* Chat input */
+.chat-input {
+  flex: 1;
+  padding: 8px;
+  background-color: #2a7f91;
+  border-width: 1px;
+  border-radius: 10px;
+  color: #fff;
+}
+
+
+/* Send photo styling */
+.send-photo {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  margin-left: 2px;
+  margin-right: 3px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .chat-container {
+    flex-direction: column;
+  }
+  .chat-left, .chat-right {
+    width: 100%;
+  }
+  .pagination {
+    flex-direction: row;
+    justify-content: space-around;
+  }
+}
+
+.chat-message {
+  max-width: 70%;
+  padding: 2px 8px;
+  padding-top: 9px;
+  border-radius: 10px;
+  font-size: 1rem;
+  line-height: 1.2;
+  white-space: pre-wrap;
+  word-break: break-word;
+  display: flex;
+  align-items: center;
+}
+
+/* Different styling for user vs. bot messages */
+.chat-message.user {
+  margin-top: 30px;
+  align-self: flex-end;
+  background-color: #2a7f91;
+  color: #fff;
+}
+
+.chat-message.bot {
+  margin-top: 40px;
+  align-self: flex-start;
+  background-color: #e6e6e6;
+  color: #333;
+}
+.disabled-send {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.readonly-notice {
+  margin-top:2px;
+  text-align: center;
+  padding: 1px;
+  color: #444;
+  font-style: italic;
+  font-weight: 500;
+}
+.start-chat-sidebar-btn {
+  background-color: #4caf50;
+  color: white;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.start-chat-sidebar-btn:hover {
+  background-color: #45a049;
+}
+.close-portal-btn {
+  position: absolute;
+  top: 6px;
+  right: 20px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  height: 28px;
+  padding: 4px 9px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.close-portal-btn:hover {
+  background-color: #c0392b;
+}
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.typing-dot {
+  width: 8px;
+  height: 8px;
+  background-color: #888;
+  border-radius: 50%;
+  animation: blink 1.2s infinite ease-in-out both;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0%, 80%, 100% {
+    opacity: 0.2;
+    transform: scale(1);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.4);
+  }
+}
+

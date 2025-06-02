@@ -1,0 +1,27 @@
+name: Deploy to DO App Platform
+
+on:
+  push:
+    branches:
+      - main  
+
+jobs:
+  deploy:
+    name: Deploy to DigitalOcean
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install doctl (DigitalOcean CLI)
+        run: |
+          sudo snap install doctl
+
+      - name: Authenticate doctl
+        run: |
+          doctl auth init --access-token ${{ secrets.DO_API_TOKEN }}
+
+      - name: Deploy to App Platform
+        run: |
+          doctl apps update 0d932220-a81b-42c9-861f-adee2e1f25ce --spec .do/app.yaml

@@ -1,0 +1,288 @@
+/* --- Global Styles --- */
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+      animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.bg-white {
+  background: linear-gradient(to bottom right, #e0f2fe, #f8fbff) !important;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+      transform: rotate(0deg);
+  }
+  to {
+      transform: rotate(360deg);
+  }
+}
+
+.section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 80px; /* for navbar space */
+}
+
+.container-fluid, .container {
+  margin: 0;
+  padding: 0;
+}
+
+/* --- Updated Navbar Styling --- */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo Styling */
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-img {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+.navbar-brand {
+  font-family: "Pacifico", cursive;
+  font-size: 1.8rem;
+  color: #4f46e5 !important;
+}
+
+/* Navbar Links */
+.navbar-nav {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-link {
+  font-family: "Comfortaa", sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  color: #374151 !important;
+  text-decoration: none;
+  padding: 10px 15px;
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover Effect */
+.nav-link:hover {
+  color: #7c3aed !important;
+  transform: scale(1.1);
+}
+
+/* Underline Animation on Hover */
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -5px;
+  width: 0%;
+  height: 2px;
+  background-color: #7c3aed;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Active Link */
+.nav-link.active {
+  color: #7c3aed !important;
+  font-weight: bold;
+}
+
+.nav-link.active::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Navbar Toggle Button */
+.navbar-toggler {
+  border: none;
+  outline: none;
+  padding: 6px 10px;
+  background-color: #4f46e5;
+  color: #ffffff;
+  border-radius: 6px;
+  transition: all 0.3s ease-in-out;
+}
+
+.navbar-toggler:hover {
+  background-color: #4338ca;
+}
+
+/* Sign In Button */
+.sign-in-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: #7c3aed;
+  color: white;
+  font-weight: 600;
+  transition: all 0.3s ease-in-out;
+  border: none;
+  cursor: pointer;
+}
+
+.sign-in-btn:hover {
+  background: #5b21b6;
+  transform: scale(1.1);
+}
+
+/* Dark Mode Styles */
+.dark-mode {
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+.dark-mode .bg-white {
+  background-color: #1e1e1e !important;
+}
+
+.dark-mode .navbar-light {
+  background-color: #1e1e1e !important;
+}
+
+.dark-mode .navbar-nav .nav-link {
+  color: #e2e8f0 !important;
+}
+
+.dark-mode .navbar-nav .nav-link:hover {
+  background-color: #6366f1;
+  color: #ffffff !important;
+}
+
+/* Form Elements in Dark Mode */
+.dark-mode input,
+.dark-mode textarea,
+.dark-mode select,
+.dark-mode .form-control {
+  background-color: #2a2a2a;
+  color: #fff;
+  border-color: #444;
+}
+
+.dark-mode .btn-primary {
+  background-color: #4f46e5;
+  border-color: #4f46e5;
+}
+
+.dark-mode .btn-dark {
+  background-color: #fff;
+  color: #121212;
+}
+
+/* Chat Styling */
+.dark-mode .chat-container {
+  background-color: #181818;
+}
+
+.dark-mode .chat-window {
+  background-color: #1e1e1e;
+}
+
+.dark-mode .chat-bubble.bot {
+  background-color: #2d3748;
+  color: #f0f0f0;
+}
+
+.dark-mode .chat-bubble.user {
+  background-color: #4f46e5;
+  color: #fff;
+}
+
+.dark-mode .chat-sidebar {
+  background-color: #111827;
+}
+
+.dark-mode .chat-thread {
+  background-color: #1f2937;
+}
+
+.dark-mode .chat-thread.active,
+.dark-mode .chat-thread:hover {
+  background-color: #374151;
+}
+
+/* --- Typography --- */
+.wellbee-heading {
+  font-family: 'Pacifico', cursive;
+  font-size: 6rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.welcome-text {
+  font-family: 'Comfortaa', cursive;
+  color: #333;
+}
+
+.brand-text {
+  color: #7c3aed;
+}
+.lead{
+  font-family: 'Noto Sans', cursive;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+.lead1{
+  font-family: "Noto Sans", serif;
+  font-optical-sizing: auto;
+  font-size: 1.3rem;
+  font-style: normal;
+}
+.space{
+  font-family: "Noto Sans", monospace;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.5rem;
+}
+.spaceh{
+  font-family: 'Montserrat', 'Poppins', 'Raleway', 'Nunito Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 2rem;
+}
