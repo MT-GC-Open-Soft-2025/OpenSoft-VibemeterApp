@@ -17,7 +17,7 @@ export default function EmojiMeter({ employeeId }) {
                 if (!token) throw new Error("No authentication token found. Please log in.");
 
                 const response = await axios.get(
-                    `https://api.wellbee.live/admin/get_detail/${employeeId}`,
+                    `${baseUrl}/admin/get_detail/${employeeId}`,
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
 

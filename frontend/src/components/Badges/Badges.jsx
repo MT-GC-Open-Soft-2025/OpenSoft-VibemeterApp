@@ -101,8 +101,8 @@ export default function Badges({ employeeId }) {
   
         const endpoint =
           empId === "admin"
-            ? `https://api.wellbee.live/admin/get_detail/${employeeId}`
-            : `https://api.wellbee.live/user/getUserDetails`;
+            ? `${baseUrl}/admin/get_detail/${employeeId}`
+            : `${baseUrl}/user/getUserDetails`;
   
         const response = await axios.get(endpoint, {
           headers: { Authorization: `Bearer ${token}` },

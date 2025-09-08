@@ -7,6 +7,7 @@ import badge1 from "../../Assets/badge1.png";
 import badge2 from "../../Assets/badge2.png";
 import badge3 from "../../Assets/badge3.png";
 import badge4 from "../../Assets/badge4.png";
+import baseUrl from "../../Config";
 
 export default function Badges({ employeeId }) {
   const [awardList, setAwardList] = useState([]);
@@ -21,7 +22,7 @@ export default function Badges({ employeeId }) {
         if (!token) throw new Error("No authentication token found. Please log in.");
 
         const response = await axios.get(
-          `https://api.wellbee.live/user/getUserDetails`,
+          `${baseUrl}/user/getUserDetails`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

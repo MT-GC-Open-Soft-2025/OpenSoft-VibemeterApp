@@ -35,7 +35,7 @@ useEffect(() => {
         if (!token) throw new Error("No authentication token found. Please log in.");
           
         const response = await axios.get(
-          `https://api.wellbee.live/admin/get_conversations/${employeeId}`,
+          `${baseUrl}/admin/get_conversations/${employeeId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -69,12 +69,12 @@ useEffect(() => {
       if (!token) throw new Error("No authentication token found. Please log in.");
 
       const feedbackRes = await axios.get(
-        `https://api.wellbee.live/admin/get_conversationFeedback/${employeeId}/${convId}`,
+        `${baseUrl}/admin/get_conversationFeedback/${employeeId}/${convId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
       const summaryRes = await axios.get(
-        `https://api.wellbee.live/admin/get_conversationSummary/${employeeId}/${convId}`,
+        `${baseUrl}/admin/get_conversationSummary/${employeeId}/${convId}`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       console.log(feedbackRes)

@@ -17,7 +17,7 @@ const Navbar = ({ setSelectedEmployee }) => {
     const fetchEmployees = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(`https://api.wellbee.live/admin/get_details`, {
+        const response = await axios.get(`${baseUrl}/admin/get_details`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         
@@ -66,7 +66,7 @@ const Navbar = ({ setSelectedEmployee }) => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`https://api.wellbee.live/admin/get_detail/${searchTerm}`, {
+      const response = await axios.get(`${baseUrl}/admin/get_detail/${searchTerm}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

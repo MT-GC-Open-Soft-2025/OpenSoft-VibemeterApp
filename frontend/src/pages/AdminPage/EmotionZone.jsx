@@ -24,7 +24,7 @@ const EmotionZoneChart = () => {
         if (!token) throw new Error("No authentication token found. Please log in.");
 
         // ✅ Fetching feedback data
-        const response = await axios.get(`https://api.wellbee.live/admin/get_aggregate_feedback`, {
+        const response = await axios.get(`${baseUrl}/admin/get_aggregate_feedback`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

@@ -30,7 +30,7 @@ const Chat = () => {
         navigate("/");
         return;
       }
-      const res = await axios.get(`https://api.wellbee.live/user/getConvoids`, {
+      const res = await axios.get(`${baseUrl}/user/getConvoids`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       const all = res.data.convid_list || [];
@@ -207,7 +207,7 @@ const Chat = () => {
         setConversationId(existingId);
         setChatStarted(true);
         setSelectedIndex(null);
-        const res = await axios.get(`https://api.wellbee.live/chat/chat/${existingId}`);
+        const res = await axios.get(`${baseUrl}/chat/chat/${existingId}`);
         const fetchedMessages = res.data.chat.map((m) => ({
           sender: m.sender,
           text: m.message,
@@ -240,7 +240,7 @@ const Chat = () => {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        `https://api.wellbee.live/chat/initiate_chat/${uniqueId}`,
+        `${baseUrl}/chat/initiate_chat/${uniqueId}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -256,7 +256,7 @@ const Chat = () => {
 
     try {
       await axios.post(
-        `https://api.wellbee.live/chat/end_chat/${uniqueId}/${feedback}`,
+        `${baseUrl}/chat/end_chat/${uniqueId}/${feedback}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -278,7 +278,7 @@ const Chat = () => {
 
   const handleConversationClick = async (conv_id, index) => {
     try {
-      const res = await axios.get(`https://api.wellbee.live/chat/chat/${conv_id}`);
+      const res = await axios.get(`${baseUrl}/chat/chat/${conv_id}`);
       const fetchedMessages = res.data.chat.map((m) => ({
         sender: m.sender,
         text: m.message,
@@ -312,7 +312,7 @@ const Chat = () => {
 
       const convo = String(localStorage.getItem("uniqueId"));
 
-      const response = await fetch(`https://api.wellbee.live/chat/send`, {
+      const response = await fetch(`${baseUrl}/chat/send`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

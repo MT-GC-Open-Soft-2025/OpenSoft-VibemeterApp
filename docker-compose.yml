@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: vibemeter-backend
+    env_file:
+      - .env
+    environment:
+      # Required: point to your externally hosted MongoDB
+      MONGO_URI: ${MONGO_URI}
+      # Recommended: provide the rest of backend secrets
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
+      TOKEN_EXPIRY_SECONDS: ${TOKEN_EXPIRY_SECONDS:-3600}
+      DB_NAME: ${DB_NAME}
+      GEMINI_KEY: ${GEMINI_KEY}
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: vibemeter-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  default:
+    name: vibemeter-net

@@ -38,7 +38,14 @@ async def lifespan(app: FastAPI):
     print("Shutting down")
 
 
-origins=["http://localhost:3000", "https://open-soft-front-fngps.ondigitalocean.app","https://www.wellbee.live"]  
+# Include common local origins for dockerized frontend (nginx on :80)
+origins=[
+    "http://localhost",
+    "http://localhost:80",
+    "http://localhost:3000",
+    "https://open-soft-front-fngps.ondigitalocean.app",
+    "https://www.wellbee.live",
+]
 
 app = FastAPI(lifespan=lifespan)
 

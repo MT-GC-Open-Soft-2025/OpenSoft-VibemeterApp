@@ -439,7 +439,7 @@ const UserPage = () => {
     const token = localStorage.getItem("token");
     if (!token) navigate("/login");
 
-    fetch("https://api.wellbee.live/user/getUserDetails", {
+    fetch(`${baseUrl}/user/getUserDetails`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => (res.ok ? res.json() : Promise.reject("Failed to fetch")))
