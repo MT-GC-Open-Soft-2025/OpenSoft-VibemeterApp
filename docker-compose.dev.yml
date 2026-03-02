@@ -1,0 +1,32 @@
+# Development overrides — build from source with hot-reload
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+
+services:
+  backend:
+    build:
+      context: ./backend
+    image: ""
+    volumes:
+      - ./backend:/app
+    command: >
+      sh -c "uvicorn server:app --host 0.0.0.0 --port 8000 --reload"
+    # healthcheck start_period is lower in dev so the frontend starts faster
+    healthcheck:
+      start_period: 5s
+
+  frontend:
+    build:
+      context: ./frontend
+      target: build
+    image: ""
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    command: ["bun", "run", "dev", "--host"]
+    environment:
+      VITE_API_BASE_URL: "http://localhost:8000"
+    # frontend in dev mode doesn't need to wait for a healthy backend
+    depends_on:
+      - backend

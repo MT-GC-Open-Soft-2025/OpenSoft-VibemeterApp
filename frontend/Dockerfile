@@ -1,19 +1,19 @@
-# Stage 1: Build the React app
-FROM node:20-alpine AS build
+# Stage 1: Build with Bun
+FROM oven/bun:1-alpine AS build
 WORKDIR /app
 
 # Install dependencies first (better layer caching)
-COPY package.json package-lock.json ./
-RUN npm ci --no-audit --no-fund
+COPY package.json bun.lockb* ./
+RUN bun install --frozen-lockfile
 
 # Copy source and build
 COPY . .
 
-# Build-time API base URL (optional). CRA only exposes REACT_APP_*
-ARG REACT_APP_API_BASE_URL
-ENV REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL}
+# Build-time API base URL (optional). Vite only exposes VITE_* vars.
+ARG VITE_API_BASE_URL
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
-RUN npm run build
+RUN bun run build
 
 # Stage 2: Serve with nginx
 FROM nginx:alpine AS runtime
@@ -21,8 +21,8 @@ FROM nginx:alpine AS runtime
 # Copy custom nginx config for SPA routing
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy build output
-COPY --from=build /app/build /usr/share/nginx/html
+# Copy Vite build output (dist/, not build/)
+COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
