@@ -4,8 +4,7 @@ from dotenv import load_dotenv
 #from transformers import pipeline
 from transformers import BartForConditionalGeneration, BartTokenizer
 
-import google.generativeai as genai
-from google import genai
+import google.genai as genai
 
 
 load_dotenv()

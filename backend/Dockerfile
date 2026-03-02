@@ -14,7 +14,8 @@ RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt .
 
 # Install any dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application source code
 COPY . .
@@ -28,7 +29,7 @@ ENV UVICORN_PORT=8000
 ENV UVICORN_WORKERS=5
 
 # Run the application
-CMD uvicorn server:app --host $UVICORN_HOST --port $UVICORN_PORT --workers $UVICORN_WORKERS
+CMD ["sh", "-c", "uvicorn server:app --host $UVICORN_HOST --port $UVICORN_PORT --workers $UVICORN_WORKERS"]
 
 
 # Optional: Add a health check (check every 30s with a timeout of 5s, starting after 5s)
