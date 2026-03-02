@@ -1,9 +1,12 @@
 name: Deploy to DO App Platform
 
+# This workflow was previously located at frontend/.github/workflows/deploy.yml
+# and was not being picked up by GitHub. Moved to the repository root.
+
 on:
   push:
     branches:
-      - main  
+      - main
 
 jobs:
   deploy:
@@ -12,15 +15,12 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install doctl (DigitalOcean CLI)
-        run: |
-          sudo snap install doctl
-
-      - name: Authenticate doctl
-        run: |
-          doctl auth init --access-token ${{ secrets.DO_API_TOKEN }}
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DO_API_TOKEN }}
 
       - name: Deploy to App Platform
         run: |

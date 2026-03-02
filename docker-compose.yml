@@ -1,6 +1,6 @@
 services:
   backend:
-    image: ${BACKEND_IMAGE:-docker.io/lurkingryuu/vibemeter-backend}:${TAG:-latest}
+    image: ${BACKEND_IMAGE:-ghcr.io/mt-gc-open-soft-2025/vibemeter-backend}:${TAG:-latest}
     container_name: vibemeter-backend
     env_file:
       - .env
@@ -18,7 +18,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: ${FRONTEND_IMAGE:-docker.io/lurkingryuu/vibemeter-frontend}:${TAG:-latest}
+    image: ${FRONTEND_IMAGE:-ghcr.io/mt-gc-open-soft-2025/vibemeter-frontend}:${TAG:-latest}
     container_name: vibemeter-frontend
     ports:
       - "3000:80"

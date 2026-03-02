@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Build and push images using values from .env when present.
+# Local build-and-push helper.
+# Images are normally published automatically by GitHub Actions on every push
+# to main (or on a semver tag).  Use this script only when you need to build
+# and push from your local machine.
+#
+# Prerequisites (ghcr.io):
+#   echo $CR_PAT | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
+#   (CR_PAT = a GitHub Personal Access Token with `write:packages` scope)
+
 if [[ -f .env ]]; then
   set -a
   # shellcheck disable=SC1091
@@ -10,14 +18,14 @@ if [[ -f .env ]]; then
 fi
 
 TAG="${TAG:-latest}"
-REGISTRY="${REGISTRY:-docker.io/lurkingryuu}"
+REGISTRY="${REGISTRY:-ghcr.io/mt-gc-open-soft-2025}"
 BACKEND_IMAGE="${BACKEND_IMAGE:-${REGISTRY}/vibemeter-backend}"
 FRONTEND_IMAGE="${FRONTEND_IMAGE:-${REGISTRY}/vibemeter-frontend}"
 
-echo "Building backend image..."
+echo "Building backend image → ${BACKEND_IMAGE}:${TAG}"
 docker buildx build --load -t "${BACKEND_IMAGE}:${TAG}" ./backend
 
-echo "Building frontend image..."
+echo "Building frontend image → ${FRONTEND_IMAGE}:${TAG}"
 docker buildx build \
   --load \
   -t "${FRONTEND_IMAGE}:${TAG}" \
