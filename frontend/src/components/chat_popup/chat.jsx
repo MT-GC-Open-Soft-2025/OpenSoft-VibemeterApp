@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Modal, Button } from "react-bootstrap";
 import "./chat.css";
 import Lottie from "lottie-react";
 import animationData from "../../Assets/animation.json";
 import photo from "../../Assets/send.png";
 import axios from "axios";
 import { nanoid } from "nanoid";
-import Swal from "sweetalert2";
 import baseUrl from "../../Config";
 import Markdown from 'markdown-to-jsx'
 
-const Chat = () => {
+const Chat = ({ onClose }) => {
   const navigate = useNavigate();
   const [convids, setConversationIds] = useState([]);
   const [chatStarted, setChatStarted] = useState(false);
@@ -18,10 +18,17 @@ const Chat = () => {
   const [chatMessages, setChatMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [rating, setRating] = useState(0);
-  const [isBotTyping, setIsBotTyping] = useState(false); // typing indicator
+  const [isBotTyping, setIsBotTyping] = useState(false);
   const chatHistoryRef = useRef(null);
-  const [feedbackLoading, setFeedbackLoading] = useState(false);
+
+  // Layout states
+  const [showHistory, setShowHistory] = useState(false);
+
+  // Modal states
+  const [modalConfig, setModalConfig] = useState({ isOpen: false, type: "" });
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [modalLoading, setModalLoading] = useState(false);
 
   const fetchConversations = async () => {
     try {
@@ -41,13 +48,7 @@ const Chat = () => {
           : all;
       setConversationIds(reordered);
     } catch (err) {
-      // Swal.fire({"Error", "Failed to fetch conversations. Please try again", "error", confirmButtonColor: '#36ABAA'});
-      Swal.fire({
-        title: "Error",
-        text: "Failed to fetch conversations. Please try again",
-        icon: "error",
-        confirmButtonColor: '#36ABAA'
-      });
+      showErrorModal("Failed to fetch conversations. Please try again.");
     }
   };
 
@@ -89,152 +90,52 @@ const Chat = () => {
     }
   }, [chatMessages, isBotTyping]);
 
-  const generateStarHTML = () => {
-    return `
-      <style>
-        .star-rating {
-          direction: rtl;
-          display: flex;
-          justify-content: center;
-          gap: 8px;
-        }
-        .star-rating input {
-          display: none;
-        }
-        .star-rating label {
-          font-size: 2.2rem;
-          color: #ccc;
-          cursor: pointer;
-          transition: color 0.2s;
-        }
-        .star-rating input:checked ~ label,
-        .star-rating label:hover,
-        .star-rating label:hover ~ label {
-          color: #ffc107;
-        }
-      </style>
-      <div class="star-rating">
-        <input type="radio" id="star5" name="rating" value="5" />
-        <label for="star5">★</label>
-        <input type="radio" id="star4" name="rating" value="4" />
-        <label for="star4">★</label>
-        <input type="radio" id="star3" name="rating" value="3" />
-        <label for="star3">★</label>
-        <input type="radio" id="star2" name="rating" value="2" />
-        <label for="star2">★</label>
-        <input type="radio" id="star1" name="rating" value="1" />
-        <label for="star1">★</label>
-      </div>
-    `;
+  const showErrorModal = (message) => {
+    setModalConfig({ isOpen: true, type: "error", message });
   };
 
-
-  const openFeedbackPopup = async () => {
-    try {
-      const { isConfirmed, isDenied, value: selectedRating } = await Swal.fire({
-        title: "Do you want to give feedback?",
-        text: "Rate your experience with this chat",
-        icon: "question",
-        showCloseButton: true,
-        showDenyButton: true,
-        showCancelButton: true,
-        denyButtonText: "No, thanks",
-        cancelButtonText: "Cancel",
-        confirmButtonText: "Submit",
-        html: generateStarHTML(),
-        confirmButtonColor: '#36ABAA',
-        preConfirm: () => {
-          const selected = document.querySelector('input[name="rating"]:checked');
-          if (!selected) {
-            Swal.showValidationMessage({
-              text: "Please select a rating!",
-              confirmButtonColor: '#d33',
-            });
-          }
-          return selected ? parseInt(selected.value) : null;
-        },
-      });
-  
-      if (isDenied) {
-        Swal.fire({
-          title: "Submitting your feedback...",
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-        await sendFeedback(0);
-        Swal.fire({
-          title: "No problem!", 
-          text: "Feedback skipped 👍", 
-          icon: "info",
-          confirmButtonColor: '#36ABAA'
-        }
-        );
-      } else if (isConfirmed && selectedRating) {
-        setRating(selectedRating);
-  
-        // ✅ Show loader while sending feedback
-        Swal.fire({
-          title: "Submitting your feedback...",
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
-  
-        await sendFeedback(selectedRating);
-        Swal.fire({
-          title: "Thank You!", 
-          text: `You rated: ${selectedRating} ⭐`, 
-          icon: "success",
-          confirmButtonColor: '#36ABAA'
-        }
-        );
-      }
-  
-      localStorage.removeItem("uniqueId");
-    } catch (err) {
-      alert("Feedback already given");
-    }
+  const openFeedbackPopup = () => {
+    setRating(0);
+    setHoverRating(0);
+    setModalConfig({ isOpen: true, type: "feedback" });
   };
-  
 
   const handleStartChat = async () => {
     const existingId = localStorage.getItem("uniqueId");
     if (existingId) {
-      if (conversationId && (conversationId !== existingId)) {
+      if (conversationId && conversationId !== existingId) {
         setConversationId(existingId);
         setChatStarted(true);
         setSelectedIndex(null);
-        const res = await axios.get(`${baseUrl}/chat/chat/${existingId}`);
-        const fetchedMessages = res.data.chat.map((m) => ({
-          sender: m.sender,
-          text: m.message,
-        }));
-        setChatMessages(fetchedMessages);
+        setShowHistory(false);
+        try {
+          const res = await axios.get(`${baseUrl}/chat/chat/${existingId}`);
+          const fetchedMessages = res.data.chat.map((m) => ({
+            sender: m.sender,
+            text: m.message,
+          }));
+          setChatMessages(fetchedMessages);
+        } catch (err) {
+          showErrorModal("Failed to load chat history.");
+        }
         return;
       }
       if (existingId && conversationId === existingId) {
-        const result = await Swal.fire({
-          title: "You already have a chat",
-          text: "Do you really want to start a new one? You won’t be able to text here after this.",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Yes, start new",
-          cancelButtonText: "No, stay here",
-          confirmButtonColor: '#36ABAA'
-        });
-        if (!result.isConfirmed) return;
-        await openFeedbackPopup();
+        setModalConfig({ isOpen: true, type: "confirmNewChat" });
+        return;
       }
     }
 
+    startNewChatProcess();
+  };
+
+  const startNewChatProcess = async () => {
     const uniqueId = nanoid(6);
     localStorage.setItem("uniqueId", uniqueId);
     setConversationId(uniqueId);
     setChatStarted(true);
     setSelectedIndex(null);
+    setShowHistory(false);
     await fetchConversations();
 
     try {
@@ -247,16 +148,18 @@ const Chat = () => {
       setChatMessages([{ sender: "bot", text: res.data.response }]);
     } catch (err) {
       console.error("Error starting chat:", err);
+      showErrorModal("Failed to start a new chat.");
     }
   };
 
-  const sendFeedback = async (feedback) => {
+  const sendFeedback = async (feedbackValue) => {
+    setModalLoading(true);
     const token = localStorage.getItem("token");
     const uniqueId = localStorage.getItem("uniqueId");
 
     try {
       await axios.post(
-        `${baseUrl}/chat/end_chat/${uniqueId}/${feedback}`,
+        `${baseUrl}/chat/end_chat/${uniqueId}/${feedbackValue}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -268,6 +171,10 @@ const Chat = () => {
       console.warn("Feedback already submitted or error occurred.");
     }
 
+    setModalLoading(false);
+    setModalConfig({ isOpen: false, type: "" });
+    localStorage.removeItem("uniqueId");
+    
     setChatMessages([]);
     setInputValue("");
     setChatStarted(false);
@@ -287,14 +194,9 @@ const Chat = () => {
       setConversationId(conv_id);
       setChatStarted(true);
       setSelectedIndex(index);
-      
+      setShowHistory(false); // return to chat view
     } catch (err) {
-      Swal.fire({
-        title: "Error", 
-        text: "Failed to load chat history. Please try again.", 
-        icon: "error",
-        confirmButtonColor: '#d33'
-    });
+      showErrorModal("Failed to load chat history. Please try again.");
     }
   };
 
@@ -331,27 +233,16 @@ const Chat = () => {
     } catch (err) {
       console.error(err);
       setIsBotTyping(false);
+      showErrorModal("Failed to send message.");
     }
   };
 
   const handleClosePortal = () => {
-    const id = localStorage.getItem("uniqueId");
-    if (id) {
-      sendFeedback(0);
+    if (onClose) {
+      onClose();
+    } else {
+      navigate("/user");
     }
-    localStorage.removeItem("chatMessages");
-    localStorage.removeItem("chatStarted");
-    localStorage.removeItem("conversationId");
-    localStorage.removeItem("uniqueId");
-
-    setConversationIds([]);
-    setChatMessages([]);
-    setChatStarted(false);
-    setConversationId("");
-    setSelectedIndex(null);
-    setInputValue("");
-
-    navigate("/user");
   };
 
   const handleKeyPress = (e) => {
@@ -361,121 +252,199 @@ const Chat = () => {
     }
   };
 
-  return (
-    <div className="chat-overlay">
-      <div className="chat-window">
-        <button className="close-portal-btn" onClick={handleClosePortal}>
-          X
-        </button>
-        <div className="chat-container">
-          <div className="chat-left">
-            <h5 className="chat-heading fw-bold mt-4">Employee Chats</h5>
-            <div style={{ textAlign: "center", marginBottom: "10px" }}>
-              <button className="start-chat-sidebar-btn" onClick={handleStartChat}>
-                {!localStorage.getItem("uniqueId") || conversationId === localStorage.getItem("uniqueId")
-                  ? "New Chat"
-                  : "⬅ Go to Current Chat"}
-              </button>
-            </div>
-            <div className="conversation">
-              {convids.map((conv_id, index) => (
-                <div
-                  key={conv_id}
-                  className={`bubble ${selectedIndex === index ? "selected" : ""}`}
-                  onClick={() => handleConversationClick(conv_id, index)}
+  // Render modal content based on state
+  const renderModalContent = () => {
+    if (modalConfig.type === "error") {
+      return (
+        <>
+          <Modal.Header closeButton>
+            <Modal.Title>Error</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{modalConfig.message}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setModalConfig({ isOpen: false, type: "" })}>Close</Button>
+          </Modal.Footer>
+        </>
+      );
+    }
+
+    if (modalConfig.type === "confirmNewChat") {
+      return (
+        <>
+          <Modal.Header closeButton>
+            <Modal.Title>You already have a chat</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Do you really want to start a new one? You won’t be able to text here after this.</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setModalConfig({ isOpen: false, type: "" })}>No, stay here</Button>
+            <Button variant="primary" onClick={() => {
+              setModalConfig({ isOpen: false, type: "" });
+              openFeedbackPopup();
+            }}>Yes, start new</Button>
+          </Modal.Footer>
+        </>
+      );
+    }
+
+    if (modalConfig.type === "feedback") {
+      return (
+        <>
+          <Modal.Header closeButton>
+            <Modal.Title>Do you want to give feedback?</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="text-center">
+            <p>Rate your experience with this chat</p>
+            <div className="star-rating d-flex justify-content-center gap-2 mb-3">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <span
+                  key={star}
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "2.5rem",
+                    color: star <= (hoverRating || rating) ? "#ffc107" : "#e4e5e9",
+                    transition: "color 0.2s"
+                  }}
+                  onMouseEnter={() => setHoverRating(star)}
+                  onMouseLeave={() => setHoverRating(0)}
+                  onClick={() => setRating(star)}
                 >
-                  {`Chat ${index}`}
-                </div>
+                  ★
+                </span>
               ))}
             </div>
-          </div>
+            {modalLoading && <p className="text-muted">Submitting feedback...</p>}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setModalConfig({ isOpen: false, type: "" })} disabled={modalLoading}>Cancel</Button>
+            <Button variant="outline-danger" onClick={() => sendFeedback(0)} disabled={modalLoading}>No, thanks</Button>
+            <Button variant="primary" onClick={() => sendFeedback(rating)} disabled={modalLoading || rating === 0}>Submit</Button>
+          </Modal.Footer>
+        </>
+      );
+    }
 
-          <div className="chat-right">
-            {chatStarted && localStorage.getItem("uniqueId") === conversationId && (
-              <button className="end-chat-btn" onClick={openFeedbackPopup}>
-                End Chat
-              </button>
+    return null;
+  };
+
+  const isReadonly = localStorage.getItem("uniqueId") !== conversationId;
+
+  return (
+    <>
+      <div className="chat-floating-widget bg-white shadow-lg rounded-4 overflow-hidden border">
+        {/* Header */}
+        <div className="chat-header d-flex justify-content-between align-items-center p-3 text-white">
+          <div className="d-flex align-items-center gap-2">
+            <h6 className="mb-0 fw-bold">WellBee Chat</h6>
+            {showHistory ? (
+              <button className="btn btn-sm btn-light py-0 px-2 rounded-pill" onClick={() => setShowHistory(false)}>Back to Chat</button>
+            ) : (
+              <button className="btn btn-sm btn-light py-0 px-2 rounded-pill" onClick={() => setShowHistory(true)}>History</button>
             )}
+          </div>
+          <button className="btn-close btn-close-white" onClick={handleClosePortal} aria-label="Close"></button>
+        </div>
 
+        {/* Content Area */}
+        <div className="chat-content-area">
+          {showHistory ? (
+            <div className="chat-history-list p-3 h-100 overflow-y-auto bg-light">
+              <button className="btn btn-success w-100 mb-3 rounded-pill fw-bold" onClick={handleStartChat}>
+                ➕ Start New Chat
+              </button>
+              <h6 className="text-muted mb-2">Past Conversations</h6>
+              <div className="d-flex flex-column gap-2">
+                {convids.map((conv_id, index) => (
+                  <div
+                    key={conv_id}
+                    className={`p-2 rounded-3 border cursor-pointer history-item ${selectedIndex === index ? "bg-primary text-white" : "bg-white text-dark"}`}
+                    onClick={() => handleConversationClick(conv_id, index)}
+                    style={{ cursor: "pointer", transition: "all 0.2s" }}
+                  >
+                    Chat Session {convids.length - index}
+                  </div>
+                ))}
+                {convids.length === 0 && <p className="text-center text-muted mt-3">No past chats found.</p>}
+              </div>
+            </div>
+          ) : (
             <div className="chat-right-content">
+              {chatStarted && !isReadonly && (
+                <div className="p-2 bg-light border-bottom text-center">
+                  <button className="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold" onClick={openFeedbackPopup}>
+                    End Chat
+                  </button>
+                </div>
+              )}
+
               {chatStarted ? (
                 <>
-                  {localStorage.getItem("uniqueId") !== localStorage.getItem("conversationId") && (
-                    <div className="readonly-notice">
-                      🔒 <em>This is a read-only chat.</em>
+                  {isReadonly && (
+                    <div className="readonly-notice bg-warning text-dark py-1 text-center" style={{ fontSize: "14px" }}>
+                      🔒 <em>This is a read-only past chat.</em>
                     </div>
                   )}
 
-                  <div
-                    className="chat-history"
-                    ref={chatHistoryRef}
-                    style={{
-                      backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))",
-                    }}
-                  >
+                  <div className="chat-history p-3" ref={chatHistoryRef}>
                     {chatMessages.map((msg, idx) => (
-                      <div
-                        key={idx}
-                        className={`chat-message ${msg.sender === "bot" ? "bot" : "user"}`}
-                      >
-                        <p><Markdown>{msg.text}</Markdown></p>
+                      <div key={idx} className={`chat-message ${msg.sender === "bot" ? "bot" : "user"}`}>
+                        <div className="message-bubble">
+                          <Markdown>{msg.text}</Markdown>
+                        </div>
                       </div>
                     ))}
                     {isBotTyping && (
-                      <div className="chat-message bot typing-indicator">
-                        <span className="typing-dot"></span>
-                        <span className="typing-dot"></span>
-                        <span className="typing-dot"></span>
+                      <div className="chat-message bot">
+                        <div className="message-bubble typing-indicator m-0">
+                          <span className="typing-dot"></span>
+                          <span className="typing-dot"></span>
+                          <span className="typing-dot"></span>
+                        </div>
                       </div>
                     )}
                   </div>
-                  <div className="chat-input-container">
-                    <input
-                      type="text"
-                      className="chat-input"
-                      placeholder={
-                        localStorage.getItem("uniqueId") === conversationId
-                          ? "Type your message..."
-                          : "Cannot message in past chats"
-                      }
-                      value={inputValue}
-                      onChange={(e) => setInputValue(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      disabled={
-                        localStorage.getItem("uniqueId") !== localStorage.getItem("conversationId")
-                      }
-                    />
-                    <img
-                      src={photo}
-                      alt="Send"
-                      className={`send-photo ${
-                        localStorage.getItem("uniqueId") !== localStorage.getItem("conversationId")
-                          ? "disabled-send"
-                          : ""
-                      }`}
-                      onClick={
-                        localStorage.getItem("uniqueId") === localStorage.getItem("conversationId")
-                          ? handleSendMessage
-                          : undefined
-                      }
-                    />
+                  
+                  <div className="chat-input-wrapper p-2 bg-white border-top">
+                    <div className="chat-input-container rounded-pill border d-flex align-items-center pe-2">
+                      <input
+                        type="text"
+                        className="chat-input flex-grow-1 border-0 rounded-pill px-3 py-2 bg-transparent"
+                        placeholder={!isReadonly ? "Type your message..." : "Cannot message in past chats"}
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        disabled={isReadonly}
+                        style={{ outline: "none" }}
+                      />
+                      <img
+                        src={photo}
+                        alt="Send"
+                        className={`send-photo ${isReadonly ? "opacity-50" : "cursor-pointer"}`}
+                        style={{ width: "24px", height: "24px", cursor: isReadonly ? "not-allowed" : "pointer" }}
+                        onClick={!isReadonly ? handleSendMessage : undefined}
+                      />
+                    </div>
                   </div>
                 </>
               ) : (
-                <div className="animated">
-                  <div className="animation-container">
+                <div className="d-flex flex-column align-items-center justify-content-center h-100 p-4 text-center">
+                  <div className="animation-container mb-4" style={{ width: "200px" }}>
                     <Lottie animationData={animationData} loop={true} />
                   </div>
-                  <button className="start-chat-btn" onClick={handleStartChat}>
+                  <h5 className="fw-bold mb-3 text-dark">Ready to chat?</h5>
+                  <button className="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm" onClick={handleStartChat}>
                     Start Chat!
                   </button>
                 </div>
               )}
             </div>
-          </div>
+          )}
         </div>
       </div>
-    </div>
+
+      <Modal show={modalConfig.isOpen} onHide={() => setModalConfig({ isOpen: false, type: "" })} centered>
+        {renderModalContent()}
+      </Modal>
+    </>
   );
 };
 

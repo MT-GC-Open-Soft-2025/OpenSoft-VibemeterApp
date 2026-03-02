@@ -78,88 +78,54 @@ export default function EmojiMeter({ employeeId }) {
     //         : "https://img.freepik.com/free-vector/personal-goal-setting-concept-illustration_114360-3873.jpg";
 
     return (
-        <div className="row align-items-center my-5 animate__animated animate__fadeInLeft">
-            <div className="ancestor" id="hey">
-              <div
-                className={`card text-center shadow-lg p-2 box ${
-                  truncatedVibeScore === -1
-                    ? "neutral"
-                    : truncatedVibeScore < 3
-                    ? "low-vibe"
-                    : truncatedVibeScore > 4.5
-                    ? "happy"
-                    : "neutral"
-                }`}
-                style={{ width: "22rem", marginTop: "2rem" }}
-              >
-                <div className="vibe-meter">
-                  <div className="head">
-                    <h4>Emoji Mood Meter</h4>
-                  </div>
-                  <div className={`vibe-circle ${mood.color}`}>
+        <div className="d-flex flex-column align-items-center justify-content-center w-100 h-100">
+            <div className="vibe-meter p-0 m-0">
+                <div className={`vibe-circle ${mood.color} mx-auto m-0`}>
                     <svg
-                      className="vibe-progress"
-                      width="200"
-                      height="200"
-                      viewBox="0 0 200 200"
+                        className="vibe-progress"
+                        width="180"
+                        height="180"
+                        viewBox="0 0 200 200"
                     >
-                      <circle
-                        className="vibe-progress-bg"
-                        cx="100"
-                        cy="100"
-                        r={radius}
-                        strokeWidth="10"
-                      />
-                      <circle
-                        className={`vibe-progress-fill vibe-${mood.color}`}
-                        cx="100"
-                        cy="100"
-                        r={radius}
-                        strokeWidth="10"
-                        strokeDasharray={circumference}
-                        strokeDashoffset={dashOffset}
-                      />
+                        <circle
+                            className="vibe-progress-bg"
+                            cx="100"
+                            cy="100"
+                            r={radius}
+                            strokeWidth="10"
+                        />
+                        <circle
+                            className={`vibe-progress-fill vibe-${mood.color}`}
+                            cx="100"
+                            cy="100"
+                            r={radius}
+                            strokeWidth="10"
+                            strokeDasharray={circumference}
+                            strokeDashoffset={dashOffset}
+                        />
                     </svg>
                     <div className="vibe-content">
-                      <i className={`bi ${mood.icon} vibe-icon`}></i>
-                      {truncatedVibeScore == -1 ? (
-                        <>
-                          <div className="vibe-percentage">0%</div>
-                          <div className="vibe-label">{mood.text}</div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="vibe-percentage">
-                            {(truncatedVibeScore * 100) / 5}%
-                          </div>
-                          <div className="vibe-label">{mood.text}</div>
-                        </>
-                      )}
-                      {/* <div className="vibe-percentage">
-                        {(user.vibe_score * 100) / 5}%
-                      </div> */}
-                      {/* <div className="vibe-label">{mood.text}</div> */}
+                        <i className={`bi ${mood.icon} vibe-icon`}></i>
+                        {truncatedVibeScore == -1 ? (
+                            <>
+                                <div className="vibe-percentage">0%</div>
+                                <div className="vibe-label">{mood.text}</div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="vibe-percentage">
+                                    {Math.round((truncatedVibeScore * 100) / 5)}%
+                                </div>
+                                <div className="vibe-label">{mood.text}</div>
+                            </>
+                        )}
                     </div>
-                  </div>
                 </div>
-
-                {/* <div className="card-body">
-                  <span className="display-1 text-warning">{vibeEmoji}</span>
-                </div> */}
-              
-                {truncatedVibeScore == -1 ? (
-                  <p> No information available yet. </p>
-                ) : (
-                    // <p className="score">Score: {truncatedVibeScore}</p>
-                    <p></p>
-                )}
-              </div>
             </div>
-            {/* <div className="description">
-              <div id="rew" className="meet">
-                {vibeMessage}
-              </div>
-            </div> */}
-          </div>
+
+            {truncatedVibeScore == -1 && (
+                <p className="text-muted mt-2 text-center">No information available yet.</p>
+            )}
+        </div>
     );
 }

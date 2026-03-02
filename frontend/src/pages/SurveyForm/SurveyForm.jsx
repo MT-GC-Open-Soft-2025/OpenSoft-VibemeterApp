@@ -11,7 +11,7 @@ import baseUrl from "../../Config";
 const SurveyForm = () => {
   const navigate = useNavigate();
   const [questions, setQuestions] = useState([]); 
-  const [responses, setResponses] = useState({}); 
+  const [answers, setAnswers] = useState({}); 
   const [status, setStatus] = useState(""); 
 
   useEffect(() => {
@@ -44,10 +44,10 @@ const SurveyForm = () => {
 
       setQuestions(data);
 
-      // Initialize responses with default value 3
-      const initialResponses = {};
-      data.forEach((q) => (initialResponses[q.question_id] = 3));
-      setResponses(initialResponses);
+      // Initialize answers with default value 3
+      const initialAnswers = {};
+      data.forEach((q) => (initialAnswers[q.question_id] = 3));
+      setAnswers(initialAnswers);
     } catch (error) {
       console.error("Error fetching questions:", error.response?.data || error.message);
       setStatus("Failed to load questions.");
@@ -55,7 +55,7 @@ const SurveyForm = () => {
   };
 
   const handleRating = (questionId, rating) => {
-    setResponses((prev) => ({
+    setAnswers((prev) => ({
       ...prev,
       [questionId]: rating,
     }));
@@ -65,11 +65,11 @@ const SurveyForm = () => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    console.log(responses)
+    console.log(answers)
     
     
     const payload = Object.fromEntries(
-      Object.entries(responses).map(([question_id, rating]) => [`${question_id}`, rating])
+      Object.entries(answers).map(([question_id, rating]) => [`${question_id}`, rating])
     );
     
     console.log("PAYLOAD",payload)
@@ -90,9 +90,9 @@ const handleSubmit = async (e) => {
       text: 'Your feedback has been submitted.',
       confirmButtonColor: '#36ABAA',
     }).then(() => {
-      const initialResponses = {};
-      questions.forEach(q => initialResponses[q.id] = 3);
-      setResponses(initialResponses);
+      const initialAnswers = {};
+      questions.forEach(q => initialAnswers[q.id] = 3);
+      setAnswers(initialAnswers);
 
       navigate("/user");
     })
@@ -116,47 +116,39 @@ const handleSubmit = async (e) => {
 };
 
   return (
-    <div className="feedback-wrapper" style={{ backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))" }}>
+    <div className="feedback-wrapper">
       <Feedbacknavbar title="Survey" />
-      <div className="survey-container">
-        <h2>Survey</h2>
+      <div className="survey-container bg-white shadow-sm rounded-4 p-4 p-md-5 mx-auto">
+        <h2 className="mb-4 text-center text-dark">Survey</h2>
         <form className="survey-form" onSubmit={handleSubmit}>
           {questions.map((q) => (
-            <div key={q.question_id} className="question-block">
-              <p className="question-text">{q.question_text}</p>
+            <div key={q.question_id} className="question-block mb-5">
+              <p className="question-text fw-semibold fs-5 text-dark mb-3">{q.question_text}</p>
 
-              {/* SLIDER + CURRENT VALUE */}
-              <div className="slider-row">
-                <input
-                  type="range"
-                  min="1"
-                  max="5"
-                  step="1"
-                  value={responses[q.question_id] || 3}
-                  onChange={(e) =>
-                    handleRating(q.question_id, parseInt(e.target.value, 10))
-                  }
-                  className="rating-slider"
-                />
-                <span className="slider-value">{responses[q.question_id] || 3}</span>
+              <div className="segmented-pill-control d-flex gap-2">
+                {[1, 2, 3, 4, 5].map((score) => {
+                  const currentResponse = answers[q.question_id] !== undefined ? answers[q.question_id] : 3;
+                  const isSelected = currentResponse === score;
+                  return (
+                    <button
+                      key={score}
+                      type="button"
+                      className={`pill-btn flex-fill py-2 rounded-pill fw-medium transition-all ${isSelected ? 'selected' : ''}`}
+                      onClick={() => handleRating(q.question_id, score)}
+                    >
+                      {score}
+                    </button>
+                  );
+                })}
               </div>
+            </div>
+          ))}
+          <button type="submit" className="survey-submit mt-4 rounded-pill fw-bold text-white w-100 py-3 border-0 transition-all">
+            Submit Survey
+          </button>
+        </form>
 
-                <div className="slider-labels">
-                  <span>1</span>
-                  <span>2</span>
-                  <span>3</span>
-                  <span>4</span>
-                  <span>5</span>
-                </div>
-              </div>
-            ))}
-            <button type="submit" className="survey-submit">
-              Submit Survey
-            </button>
-          </form>
-       
-
-        {status && <p className="success-message ">{status==200?"Added Sucessfully":"Failed to Add"}</p>}
+        {status && <p className="success-message text-center mt-3">{status == 200 ? "Added Successfully" : "Failed to Add"}</p>}
       </div>
     </div>
   );

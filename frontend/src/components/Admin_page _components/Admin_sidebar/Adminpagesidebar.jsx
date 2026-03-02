@@ -11,13 +11,18 @@ const Sidebar = () => {
 
     const handleItemClick = () => {
         Swal.fire({
-          title: "Are you sure?",
-          text: "You will be logged out.",
-          icon: "warning",
+          title: "Ready to leave?",
+          text: "You will be logged out of your session.",
+          icon: "question",
           showCancelButton: true,
           confirmButtonText: "Yes, log out",
-          cancelButtonText: "No, stay",
-          confirmButtonColor: '#36ABAA'
+          cancelButtonText: "Cancel",
+          customClass: {
+            popup: "rounded-4 shadow-sm border-0",
+            confirmButton: "btn btn-danger rounded-pill px-4 mx-2 fw-bold",
+            cancelButton: "btn btn-light rounded-pill px-4 mx-2 fw-bold border"
+          },
+          buttonsStyling: false
         }).then((result) => {
           if (result.isConfirmed) {
             localStorage.removeItem("token");
@@ -34,7 +39,7 @@ const Sidebar = () => {
                 </div>
                 <ul className="sidebar-menu">
                     <li 
-                        className={`sidebar-item ${activeItem === 'Overview' ? 'active' : ''}`}
+                        className={`sidebar-item d-flex align-items-center ${activeItem === 'Overview' ? 'active' : ''}`}
                         onClick={() => {
                             setActiveItem('Overview');
                             
@@ -48,11 +53,11 @@ const Sidebar = () => {
                     >
                         Contact Us       
                     </li> */}
-                     <li className="sidebar-item" onClick={() =>navigate("/contact")}>
+                     <li className="sidebar-item d-flex align-items-center" onClick={() =>navigate("/contact")}>
           Contact Us
         </li>
                     <li 
-                        className="sidebar-item logout-item"
+                        className="sidebar-item logout-item d-flex align-items-center"
                         onClick={() => handleItemClick('Log Out')}
                     >
                         <span className="logout-text">Log Out</span>

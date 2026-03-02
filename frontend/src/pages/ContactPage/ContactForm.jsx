@@ -76,33 +76,49 @@ const ContactForm = () => {
     <Feedbacknavbar title="Contact Us" />
 
       
-    <div className="contact-form-container">
+    <div className="contact-form-container bg-white shadow-sm rounded-4 p-4 p-md-5 mx-auto mt-5 mb-5" style={{ maxWidth: "500px", width: "90%" }}>
       <h2>Contact Us</h2>
       <form className="contact-form" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Your Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <textarea
-          name="message"
-          placeholder="Your Message"
-          value={formData.message}
-          onChange={handleChange}
-          required
-        ></textarea>
-        <button type="submit">Send Message</button>
+        <div className="form-floating mb-3">
+          <input
+            type="text"
+            className="form-control"
+            id="floatingName"
+            name="name"
+            placeholder="Your Name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
+          <label htmlFor="floatingName">Your Name</label>
+        </div>
+        <div className="form-floating mb-3">
+          <input
+            type="email"
+            className="form-control"
+            id="floatingEmail"
+            name="email"
+            placeholder="name@example.com"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
+          <label htmlFor="floatingEmail">Your Email</label>
+        </div>
+        <div className="form-floating mb-4">
+          <textarea
+            className="form-control"
+            id="floatingMessage"
+            name="message"
+            placeholder="Your Message"
+            style={{ height: "120px" }}
+            value={formData.message}
+            onChange={handleChange}
+            required
+          ></textarea>
+          <label htmlFor="floatingMessage">Your Message</label>
+        </div>
+        <button type="submit" className="submit-btn">Send Message</button>
       </form>
       {status && <p className="success-message">{status}</p>}
     </div>
