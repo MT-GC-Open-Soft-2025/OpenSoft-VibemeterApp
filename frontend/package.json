@@ -26,7 +26,8 @@
     "react-tsparticles": "^2.12.2",
     "recharts": "^2.15.1",
     "sweetalert2": "^11.17.2",
-    "tsparticles": "^3.8.1"
+    "tsparticles": "^3.8.1",
+    "web-vitals": "^5.1.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",

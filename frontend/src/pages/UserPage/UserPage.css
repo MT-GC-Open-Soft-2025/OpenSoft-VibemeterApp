@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Delius&family=Edu+AU+VIC+WA+NT+Hand:wght@400..700&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600&family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Meow+Script&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 .dashboard-container {
   display: flex;
@@ -9,9 +14,10 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.navbar1{
+.navbar1 {
   z-index: 1000;
 }
+
 .sidebar {
   width: 250px;
   /* background-color: #343a40; */
@@ -72,14 +78,15 @@
 
 .greeting {
   font-size: 4rem;
-margin-top: 10rem;
-margin-bottom: 4rem;
-line-height: 1.2;
-word-break: break-word;
+  margin-top: 10rem;
+  margin-bottom: 4rem;
+  line-height: 1.2;
+  word-break: break-word;
 }
 
 
-.greeting span, .animated-id span {
+.greeting span,
+.animated-id span {
   display: inline-block;
   animation: fadeInUp 0.4s ease forwards;
 }
@@ -136,6 +143,7 @@ word-break: break-word;
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -146,6 +154,7 @@ word-break: break-word;
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -158,10 +167,6 @@ word-break: break-word;
   box-sizing: border-box;
 }
 
-body{
-  /* background:linear-gradient(135deg, #003366, #009688); */
-
-}
 
 html {
   height: 100%;
@@ -174,7 +179,8 @@ html {
   min-height: 100vh;
   background-color: #fff;
   position: relative;
-  padding-top: 60px; /* reserve space for header bar */
+  padding-top: 60px;
+  /* reserve space for header bar */
 }
 
 /* Header bar*/
@@ -184,7 +190,7 @@ html {
   left: 0;
   width: 100%;
   height: 60px;
-  background-color: #39ace7; 
+  background-color: #39ace7;
 }
 
 /* Profile container: holds the icon and the user id */
@@ -214,7 +220,8 @@ html {
   margin: 50px auto;
   padding: 15px 30px;
   font-size: 16px;
-  background-color: #3697aa;;
+  background-color: #3697aa;
+  ;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -225,32 +232,38 @@ html {
 .chat-button:hover {
   background: linear-gradient(45deg, #008abf, #00c78c);
 }
+
 .parent {
   width: 87%;
   margin-top: 60px;
   /* display: flex;
   justify-content: center; */
 }
+
 h1 {
   font-size: 3.5rem;
   font-weight: 600;
   color: #10526c;
 }
+
 .welcome {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 100px;
 }
+
 .para {
   font-size: 1.25rem;
   font-family: 'Noto Sans', 'Times New Roman', Times, serif;
 }
+
 .meet {
   color: #10526c;
   font-weight: 500;
-  
+
 }
+
 .ancestor {
   /* padding-top: -10rem; */
   margin-left: 10rem;
@@ -258,25 +271,31 @@ h1 {
   flex-direction: row;
   width: auto;
 }
-.firstRow{
+
+.firstRow {
   display: flex;
   margin-left: 15rem;
 
 }
+
 .description {
   width: auto;
   margin-left: 1rem;
   font-size: 25px;
 }
+
 .head {
   border-bottom: #343a40;
   font-family: "Delius", cursive;
 }
 
 .image-wrapper {
-  width: 350px;  /* Specify the width */
-  height: 250px; /* Specify the height */
-  overflow: hidden; /* Prevent overflow */
+  width: 350px;
+  /* Specify the width */
+  height: 250px;
+  /* Specify the height */
+  overflow: hidden;
+  /* Prevent overflow */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -286,13 +305,15 @@ h1 {
 .responsive-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures the image fills the div while maintaining aspect ratio */
+  object-fit: cover;
+  /* Ensures the image fills the div while maintaining aspect ratio */
 }
+
 #desc {
   width: 25rem;
   padding-left: 3rem;
   padding-bottom: 1rem;
-  
+
 }
 
 
@@ -303,16 +324,19 @@ h1 {
   flex-direction: row;
   width: auto;
 }
+
 #rew {
   width: 20rem;
   height: auto;
 }
+
 .card {
   width: auto;
   padding: 2rem;
   margin-right: 5rem;
 }
-.card.h4{
+
+.card.h4 {
   font-family: "Delius", cursive;
 }
 
@@ -325,9 +349,11 @@ h1 {
   width: auto;
   font-size: 25px;
 }
+
 .nav-link1 {
   margin-top: 1rem;
-  background-color: #3697aa;;
+  background-color: #3697aa;
+  ;
   color: white;
   border: #f4f7fc;
   text-align: left;
@@ -337,9 +363,11 @@ h1 {
   font-weight: bold;
   border-radius: 0.5rem;
 }
+
 .nav-link1:hover {
   color: rgb(237, 224, 224);
 }
+
 .bot-container {
   position: fixed;
   bottom: 0.1rem;
@@ -348,10 +376,11 @@ h1 {
   width: 300px;
   margin-bottom: -10px;
   margin-right: 1rem;
-  margin-left:30rem;
+  margin-left: 30rem;
   display: flex;
   align-items: end;
-  flex-direction: column; /* Keeps bubble on the left */
+  flex-direction: column;
+  /* Keeps bubble on the left */
 }
 
 /* Bot Animation */
@@ -363,7 +392,7 @@ h1 {
 
 /* Chat Bubble - Adjusted Below Mouth */
 .chat-bubble {
-  
+
   color: black;
   padding: 8px 12px;
   border-radius: 10px;
@@ -375,7 +404,8 @@ h1 {
   margin-right: 29px;
   margin-bottom: -40px;
   /* Apply the up-down animation */
-  animation: moveUpDown 1.5s ease-in-out infinite; /* 3s is the speed, you can adjust this */
+  animation: moveUpDown 1.5s ease-in-out infinite;
+  /* 3s is the speed, you can adjust this */
 }
 
 /* Chat Bubble Tail - Adjusted */
@@ -397,11 +427,15 @@ h1 {
   0% {
     transform: translate(-30px, -20px);
   }
+
   50% {
-    transform: translate(-30px, -30px); /* Moves the bubble 10px higher */
+    transform: translate(-30px, -30px);
+    /* Moves the bubble 10px higher */
   }
+
   100% {
-    transform: translate(-30px, -20px); /* Back to original position */
+    transform: translate(-30px, -20px);
+    /* Back to original position */
   }
 }
 
@@ -422,14 +456,11 @@ h1 {
     font-size: 10px;
     max-width: 100px;
     padding: 4px 8px;
-    transform: translate(-25px, -15px); /* Slightly adjusted for smaller screens */
+    transform: translate(-25px, -15px);
+    /* Slightly adjusted for smaller screens */
   }
 }
-@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;600&family=Pacifico&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Meow+Script&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 
 .wellbee-heading {
   font-family: 'Pacifico', cursive;
@@ -437,44 +468,53 @@ h1 {
   color: #333;
   margin-bottom: 20px;
 }
+
 .welcome-text {
   font-family: 'Comfortaa', cursive;
-  color: #333; /* or #4b5563 for soft gray */
+  color: #333;
+  /* or #4b5563 for soft gray */
 }
 
 .brand-text {
-  color: #7c3aed; /* violet (or match your theme) */
+  color: #7c3aed;
+  /* violet (or match your theme) */
 }
-.lead{
+
+.lead {
   font-family: 'Comfortaa', cursive;
   font-size: 1.5rem;
   font-weight: 800;
 }
-.lead1{
+
+.lead1 {
   font-family: "Noto Sans", serif;
   font-optical-sizing: auto;
   font-size: 1.3rem;
   font-style: normal;
-  
+
 }
-.space{
+
+.space {
   font-family: "Noto Sans", monospace;
   font-weight: 400;
   font-style: normal;
   font-size: 1.5rem;
 }
-.spaceh{
+
+.spaceh {
   font-family: 'Montserrat', 'Poppins', 'Raleway', 'Nunito Sans', 'Helvetica Neue', sans-serif;
   font-weight: 700;
   font-style: normal;
   font-size: 2rem
 }
-.spaceh2{
+
+.spaceh2 {
   font-family: 'Noto Sans', sans-serif;
   font-weight: 700;
   font-style: normal;
   font-size: 2rem
 }
+
 /* Green for vibe_score >= 4.5 */
 .chat-bubble.high-vibe {
   background-color: rgb(117, 210, 117);
