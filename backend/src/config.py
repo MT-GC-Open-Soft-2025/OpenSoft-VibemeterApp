@@ -1,6 +1,11 @@
 from functools import lru_cache
+from pathlib import Path
 
 from pydantic_settings import BaseSettings
+
+# Project root (where .env lives when running via make dev)
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+_ENV_FILE = _PROJECT_ROOT / ".env"
 
 
 class Settings(BaseSettings):
@@ -17,7 +22,11 @@ class Settings(BaseSettings):
     gemini_temperature: float = 0.7
     gemini_max_output_tokens: int = 1024
 
-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+    model_config = {
+        "env_file": str(_ENV_FILE),
+        "env_file_encoding": "utf-8",
+        "extra": "ignore",  # Ignore extra vars (VITE_*, REGISTRY, etc.) used by frontend/docker
+    }
 
 
 @lru_cache
