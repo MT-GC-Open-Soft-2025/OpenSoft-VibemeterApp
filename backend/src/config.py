@@ -12,6 +12,11 @@ class Settings(BaseSettings):
     gemini_key: str = ""
     cors_origins: str = "http://localhost,http://localhost:80,http://localhost:3000"
 
+    # AI model config (optional overrides)
+    gemini_model: str = "gemini-2.0-flash"
+    gemini_temperature: float = 0.7
+    gemini_max_output_tokens: int = 1024
+
     model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
 
 

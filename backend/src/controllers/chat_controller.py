@@ -12,6 +12,7 @@ from src.services.chat_service import (
     get_feedback_questions,
     initiate_chat_service,
     send_message,
+    send_message_stream,
 )
 
 logger = logging.getLogger(__name__)
@@ -51,6 +52,21 @@ async def response_controller(payload: Chat_frontend, user: Any) -> dict[str, An
         raise
     except Exception as error:
         logger.error("Error sending message: %s", error)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(error))
+
+
+async def response_stream_controller(payload: Chat_frontend, user: Any):
+    """StreamingResponse generator. Yields SSE chunks."""
+    if not payload.convid or not payload.message:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing payload")
+
+    try:
+        async for chunk in send_message_stream(user, payload.message, payload.convid):
+            yield chunk
+    except HTTPException:
+        raise
+    except Exception as error:
+        logger.error("Error streaming message: %s", error)
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(error))
 
 

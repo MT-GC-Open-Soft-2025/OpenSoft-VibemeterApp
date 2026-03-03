@@ -1,6 +1,7 @@
 from typing import Any
 
 from fastapi import APIRouter, Depends
+from fastapi.responses import StreamingResponse
 
 from src.controllers.chat_controller import (
     Chat_frontend,
@@ -11,6 +12,7 @@ from src.controllers.chat_controller import (
     getChat_controller,
     initiate_chat_controller,
     response_controller,
+    response_stream_controller,
 )
 from src.middlewares.authmiddleware import authenticate
 
@@ -29,6 +31,21 @@ async def send_chat(
     payload: Chat_frontend, user: dict[str, Any] = Depends(authenticate)
 ):
     return await response_controller(payload, user)
+
+
+@chat_router.post("/send_stream")
+async def send_chat_stream(
+    payload: Chat_frontend, user: dict[str, Any] = Depends(authenticate)
+):
+    return StreamingResponse(
+        response_stream_controller(payload, user),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
 
 
 @chat_router.get("/chat/{conv_id}")

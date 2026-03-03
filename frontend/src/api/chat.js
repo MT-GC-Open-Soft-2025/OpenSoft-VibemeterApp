@@ -1,4 +1,5 @@
 import apiClient from "./client";
+import baseUrl from "../Config";
 
 export async function initiateChat(convoId) {
   const response = await apiClient.post(`/chat/initiate_chat/${convoId}`, {});
@@ -8,6 +9,72 @@ export async function initiateChat(convoId) {
 export async function sendMessage(convid, message) {
   const response = await apiClient.post("/chat/send", { convid, message });
   return response.data;
+}
+
+/**
+ * Send a message and stream the AI response via SSE.
+ * @param {string} convid - Conversation ID
+ * @param {string} message - User message
+ * @param {function(string): void} onChunk - Called with each text chunk as it arrives
+ * @param {function(Error): void} onError - Called on error
+ * @param {function(): void} [onDone] - Called when stream completes successfully
+ * @returns {AbortController} Controller to abort the request
+ */
+export function sendMessageStream(convid, message, onChunk, onError, onDone) {
+  const token = localStorage.getItem("token");
+  const url = `${baseUrl}/chat/send_stream`;
+  const controller = new AbortController();
+
+  (async () => {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+        body: JSON.stringify({ convid, message }),
+        signal: controller.signal,
+      });
+
+      if (!res.ok) {
+        const errBody = await res.text();
+        throw new Error(res.status === 401 ? "Unauthorized" : errBody || res.statusText);
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              if (data.text) onChunk(data.text);
+              if (data.error) onError(new Error(data.error));
+              if (data.done && onDone) onDone();
+            } catch {
+              // skip malformed
+            }
+          }
+        }
+      }
+      if (onDone) onDone();
+    } catch (err) {
+      if (err.name !== "AbortError") {
+        onError(err);
+      }
+    }
+  })();
+
+  return controller;
 }
 
 export async function getChat(convId) {

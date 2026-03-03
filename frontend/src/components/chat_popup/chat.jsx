@@ -11,6 +11,7 @@ import { getConvoids } from "../../api/user";
 import {
   initiateChat,
   sendMessage as sendMessageApi,
+  sendMessageStream,
   getChat,
   endChat,
 } from "../../api/chat";
@@ -31,6 +32,7 @@ const Chat = ({ onClose }) => {
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [modalLoading, setModalLoading] = useState(false);
+  const streamAbortRef = useRef(null);
 
   const fetchConversations = async () => {
     try {
@@ -190,25 +192,58 @@ const Chat = ({ onClose }) => {
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
-    try {
-      const messageToSend = inputValue;
-      const newUserMessage = { sender: "user", text: messageToSend };
-      setChatMessages((prev) => [...prev, newUserMessage]);
-      setInputValue("");
-      setIsBotTyping(true);
+    const messageToSend = inputValue;
+    const newUserMessage = { sender: "user", text: messageToSend };
+    setChatMessages((prev) => [...prev, newUserMessage]);
+    setInputValue("");
+    setIsBotTyping(true);
 
-      const convo = String(localStorage.getItem("uniqueId"));
-      const data = await sendMessageApi(convo, messageToSend);
-      const newBotMessage = { sender: "bot", text: data.response };
+    const convo = String(localStorage.getItem("uniqueId"));
 
-      setTimeout(() => {
-        setIsBotTyping(false);
-        setChatMessages((prev) => [...prev, newBotMessage]);
-      }, 800);
-    } catch {
-      setIsBotTyping(false);
-      showErrorModal("Failed to send message.");
+    // Abort any in-flight stream
+    if (streamAbortRef.current) {
+      streamAbortRef.current.abort();
     }
+
+    // Placeholder bot message so first chunk appends to it
+    setChatMessages((prev) => [...prev, { sender: "bot", text: "" }]);
+
+    const controller = sendMessageStream(
+      convo,
+      messageToSend,
+      (chunk) => {
+        setChatMessages((prev) => {
+          const last = prev[prev.length - 1];
+          if (last?.sender === "bot") {
+            return [
+              ...prev.slice(0, -1),
+              { ...last, text: last.text + chunk },
+            ];
+          }
+          return [...prev, { sender: "bot", text: chunk }];
+        });
+      },
+      (err) => {
+        setIsBotTyping(false);
+        streamAbortRef.current = null;
+        setChatMessages((prev) => {
+          const last = prev[prev.length - 1];
+          if (last?.sender === "bot" && !last?.text) {
+            return prev.slice(0, -1);
+          }
+          return prev;
+        });
+        if (err.name !== "AbortError") {
+          showErrorModal("Failed to send message.");
+        }
+      },
+      () => {
+        setIsBotTyping(false);
+        streamAbortRef.current = null;
+      }
+    );
+
+    streamAbortRef.current = controller;
   };
 
   const handleClosePortal = () => {
@@ -488,6 +523,16 @@ const Chat = ({ onClose }) => {
                         style={{ outline: "none" }}
                         aria-label="Message input"
                       />
+                      {isBotTyping && streamAbortRef.current && (
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-outline-danger me-1 rounded-pill"
+                          onClick={() => streamAbortRef.current?.abort()}
+                          aria-label="Stop generating"
+                        >
+                          Stop
+                        </button>
+                      )}
                       <button
                         className={`btn btn-link p-0 ${
                           isReadonly ? "opacity-50" : ""
