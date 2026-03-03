@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { FaSearch } from "react-icons/fa";
 import Swal from "sweetalert2";
-import axios from "axios";
 import "./SearchBar.css";
-import baseUrl from "../../Config";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import { getAllEmployees, getEmployeeDetail } from "../../api/admin";
 
 const Navbar = ({ setSelectedEmployee }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -16,13 +12,10 @@ const Navbar = ({ setSelectedEmployee }) => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const response = await axios.get(`${baseUrl}/admin/get_details`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        
-        console.log("API Response:", response.data);
-        setEmployees(Array.isArray(response.data) ? response.data : []);
+        const response = await getAllEmployees();
+        const empList = response.employees || [];
+        const empIds = empList.map((e) => (typeof e === "string" ? e : e.emp_id));
+        setEmployees(Array.isArray(empIds) ? empIds : []);
       } catch (error) {
         console.error("Error fetching employee data:", error);
         setEmployees([]);
@@ -65,12 +58,9 @@ const Navbar = ({ setSelectedEmployee }) => {
     }
 
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(`${baseUrl}/admin/get_detail/${searchTerm}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await getEmployeeDetail(searchTerm);
 
-      if (response.data && Object.keys(response.data).length > 0) {
+      if (response && Object.keys(response).length > 0) {
         Swal.fire({
           icon: "success",
           title: "Employee Found!",

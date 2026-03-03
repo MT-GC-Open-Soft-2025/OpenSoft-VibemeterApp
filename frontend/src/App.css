@@ -2,6 +2,22 @@
   text-align: center;
 }
 
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  z-index: 10000;
+  padding: 0.5rem 1rem;
+  background: var(--wb-primary, #4A7C59);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -37,64 +53,27 @@
   }
 }
 
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 .bg-white {
   background: linear-gradient(to bottom right, #e0f2fe, #f8fbff) !important;
 }
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
 .section {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-top: 80px; /* for navbar space */
+  padding-top: 80px;
 }
 
 .navbar {
   z-index: 999;
 }
-/* Dark mode root */
+
 .dark-mode {
   background-color: #121212;
   color: #e0e0e0;
 }
 
-/* Override Bootstrap light backgrounds */
 .dark-mode .bg-white {
   background-color: #1e1e1e !important;
 }
@@ -122,7 +101,6 @@
   color: #121212;
 }
 
-/* Chat specific overrides */
 .dark-mode .chat-container {
   background-color: #181818;
 }

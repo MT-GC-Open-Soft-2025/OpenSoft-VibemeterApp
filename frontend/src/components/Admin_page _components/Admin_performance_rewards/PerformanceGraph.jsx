@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+  Legend,
+} from "recharts";
 import "./PerformanceGraph.css";
-import baseUrl from "../../../Config"; // Adjust the import path as necessary
+import { getEmployeeDetail } from "../../../api/admin";
 
 const PerformanceGraph = ({ employeeId }) => {
   const [performanceData, setPerformanceData] = useState(null);
@@ -17,19 +24,8 @@ const PerformanceGraph = ({ employeeId }) => {
 
     const fetchPerformanceData = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) {
-          throw new Error("No authentication token found. Please log in.");
-        }
-
-        const response = await axios.get(
-          `${baseUrl}/admin/get_detail/${employeeId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
-        console.log("Performance Data Response:", response.data);
-        
-        setPerformanceData(response.data);
+        const response = await getEmployeeDetail(employeeId);
+        setPerformanceData(response);
         setError("");
       } catch (err) {
         console.error("Error fetching performance data:", err.message);
@@ -42,108 +38,40 @@ const PerformanceGraph = ({ employeeId }) => {
   }, [employeeId]);
 
   if (!performanceData) {
-    return <div className="empty-graph">Loading performance data...</div>;
+    return (
+      <div className="empty-graph d-flex align-items-center justify-content-center p-4">
+        <div className="spinner-border text-primary spinner-border-sm me-2" role="status" />
+        Loading performance data...
+      </div>
+    );
   }
 
-  const options = {
-    chart: {
-      type: "column",
-      backgroundColor: "#fff",
-      borderRadius: 10,
-    },
-    title: {
-      text: "Performance Graph",
-      align: "center",
-      style: { fontSize: "18px", fontWeight: "bold" },
-    },
-    xAxis: {
-      categories: ["Work Hours", "Leaves", "Onboarding", "Performance"],
-      labels: {
-        style: { fontSize: "14px", fontWeight: "bold" },
-        y: 25,
-      },
-    },
-    yAxis: {
-      title: { text: "Count" },
-      allowDecimals: false,
-      min: 0,
-    },
-    tooltip: {
-      shared: false,
-      formatter: function () {
-        return `<b>${this.series.name}</b><br/>${this.y}`;
-      },
-    },
-    legend: {
-      layout: "horizontal",
-      align: "center",
-      verticalAlign: "bottom",
-    },
-    plotOptions: {
-      column: {
-        borderRadius: 5,
-        pointPadding: 0.1,
-        pointWidth: 50,
-        groupPadding: 0.5,
-        stacking: "normal",
-      },
-    },
-    series: [
-      {
-        name: "Work Hours",
-        data: [performanceData.user_record.total_work_hours || 0, 0, 0, 0],
-        color: "#50aad7",
-        stack: "work",
-      },
-      {
-        name: "Sick Leave",
-        data: [0, performanceData.user_record.types_of_leaves?.["Sick Leave"] || 0, 0, 0],
-        color: "#92badd",
-        stack: "leave",
-      },
-      {
-        name: "Casual Leave",
-        data: [0, performanceData.user_record.types_of_leaves?.["Casual Leave"] || 0, 0, 0],
-        color: "#08ddcb",
-        stack: "leave",
-      },
-      {
-        name: "Unpaid Leave",
-        data: [0, performanceData.user_record.types_of_leaves?.["Unpaid Leave"] || 0, 0, 0],
-        color: "#c1dcf3",
-        stack: "leave",
-      },
-      {
-        name: "Annual Leave",
-        data: [0, performanceData.user_record.types_of_leaves?.["Annual Leave"] || 0, 0, 0],
-        color: "#1E90FF",
-        stack: "leave",
-      },
-      {
-        name: "Onboarding Performance",
-        data: [0, 0, performanceData.user_record.feedback || 0, 0],
-        color: "#7fd7d0",
-        stack: "onboarding",
-      },
-      {
-        name: "Performance Rating",
-        data: [
-          0,
-          0,
-          0,
-          performanceData.user_record.weighted_performance > 0
-            ? performanceData.user_record.weighted_performance
-            : 0,
-        ],
-        color: "#7fe5ff",
-        stack: "performance",
-      },
-    ],
-  };
+  const rec = performanceData.user_record;
+  const leaves = rec.types_of_leaves || {};
+
+  const chartData = [
+    { name: "Work Hours", value: rec.total_work_hours || 0 },
+    { name: "Sick Leave", value: leaves["Sick Leave"] || 0 },
+    { name: "Casual Leave", value: leaves["Casual Leave"] || 0 },
+    { name: "Unpaid Leave", value: leaves["Unpaid Leave"] || 0 },
+    { name: "Annual Leave", value: leaves["Annual Leave"] || 0 },
+    { name: "Onboarding", value: rec.feedback || 0 },
+    { name: "Performance", value: rec.weighted_performance > 0 ? rec.weighted_performance : 0 },
+  ];
 
   return (
     <div className="chart-container">
-      <HighchartsReact highcharts={Highcharts} options={options} />
+      <h5 className="fw-bold mb-3 text-dark">Performance Graph</h5>
+      <ResponsiveContainer width="100%" height={350}>
+        <BarChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 30 }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" angle={-25} textAnchor="end" tick={{ fontSize: 12 }} />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="value" fill="#50aad7" radius={[5, 5, 0, 0]} name="Score" />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 };

@@ -1,22 +1,21 @@
+from typing import Any, Dict
 
 from fastapi import HTTPException, status
-from typing import Dict, Any
-from pydantic import BaseModel
-
+from pydantic import BaseModel, Field
 
 from src.services.auth_service import signin as signin_service
 
+
 class SignInRequest(BaseModel):
-     username: str
+    username: str = Field(..., min_length=1)
+    password: str = Field(..., min_length=1)
+
 
 async def signin_controller(payload: SignInRequest) -> Dict[str, Any]:
-    
-    if not payload.username:
+    if not payload.username or not payload.password:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Missing username"
+            detail="Missing username or password",
         )
 
-   
-    result = await signin_service(payload.username)
-    return result
+    return await signin_service(payload.username, payload.password)

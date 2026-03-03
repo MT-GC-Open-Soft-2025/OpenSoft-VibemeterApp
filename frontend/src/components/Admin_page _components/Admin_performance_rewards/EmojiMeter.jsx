@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./EmojiMeter.css";
-import axios from "axios";
-import baseUrl from "../../../Config";
+import { getEmployeeDetail } from "../../../api/admin";
 
 export default function EmojiMeter({ employeeId }) {
     const [user, setUser] = useState(null);
@@ -13,20 +12,11 @@ export default function EmojiMeter({ employeeId }) {
 
         const fetchEmojiMeter = async () => {
             try {
-                const token = localStorage.getItem("token");
-                if (!token) throw new Error("No authentication token found. Please log in.");
-
-                const response = await axios.get(
-                    `${baseUrl}/admin/get_detail/${employeeId}`,
-                    { headers: { Authorization: `Bearer ${token}` } }
-                );
-
-
-                console.log("EmojiMeter API Response:", response.data);
-                setUser(response.data.user_record);  // ✅ Store full user data
+                const response = await getEmployeeDetail(employeeId);
+                setUser(response.user_record);
                 setError("");
             } catch (err) {
-                console.error("Error fetching reward points:", err.message);
+                console.error("Error fetching emoji meter:", err.message);
                 setError(err.message);
                 setUser(null);
             }
@@ -34,7 +24,6 @@ export default function EmojiMeter({ employeeId }) {
 
         fetchEmojiMeter();
     }, [employeeId]);
-    console.log("user received:",user)
 
     if (!user) return <div className="p-4">Loading...</div>;
 

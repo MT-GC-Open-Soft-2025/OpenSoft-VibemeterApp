@@ -6,24 +6,19 @@ import Chat from "../../components/chat_popup/chat.jsx";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar2.jsx";
 import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Adminpagesidebar";
 import Badges from "../../components/Badges/Badges_user.jsx";
-import Image from "../../Assets/image.png";
 import Swal from "sweetalert2";
 import animationData from "../../Assets/Newanimation.json";
 import Lottie from "lottie-react";
 import Footer from "../../components/Footer/Footer.jsx";
 import EmojiMeter from "../../components/Admin_page _components/Admin_performance_rewards/Emojimeter_user.jsx";
-import baseUrl from "../../Config.js";
+import { useAuth } from "../../context/AuthContext.jsx";
 
 const UserPage = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [empId, setEmpId] = useState("");
+  const { user, logout } = useAuth();
   const [isChatOpen, setIsChatOpen] = useState(false);
 
-  useEffect(() => {
-    const storedId = localStorage.getItem("empId");
-    if (storedId) setEmpId(storedId);
-  }, []);
+  const empId = user?.emp_id || localStorage.getItem("empId") || "";
 
   const handleClick = () => {
     setIsChatOpen((prev) => !prev);
@@ -39,8 +34,8 @@ const UserPage = () => {
       cancelButtonText: "No, stay",
     }).then((result) => {
       if (result.isConfirmed) {
-        localStorage.removeItem("token");
-        navigate(-1);
+        logout();
+        navigate("/login");
       }
     });
   };
@@ -48,18 +43,6 @@ const UserPage = () => {
   const handleFeedback = () => {
     navigate("/surveyform");
   };
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) navigate("/login");
-
-    fetch(`${baseUrl}/user/getUserDetails`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => (res.ok ? res.json() : Promise.reject("Failed to fetch")))
-      .then(setUser)
-      .catch(console.error);
-  }, [navigate]);
 
   const handleDownload = () => {
     const pdfUrl =
@@ -72,7 +55,15 @@ const UserPage = () => {
     document.body.removeChild(link);
   };
 
-  if (!user) return <div className="p-4 text-center">Loading...</div>;
+  if (!user) {
+    return (
+      <div className="d-flex justify-content-center align-items-center min-vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading user data...</span>
+        </div>
+      </div>
+    );
+  }
 
   const vibeMessage =
     user.vibe_score >= 4.5
@@ -123,7 +114,6 @@ const UserPage = () => {
 
           <div className="container-fluid p-0">
             <div className="row g-4">
-              {/* TOP ROW */}
               <div className="col-md-6 col-lg-4 d-flex">
                 <div className="card bg-white shadow-sm border-0 rounded-4 p-4 w-100 d-flex flex-column align-items-center justify-content-center">
                   <EmojiMeter employeeId={user.emp_id} />
@@ -138,12 +128,12 @@ const UserPage = () => {
                     <>
                       <img
                         src="https://img.freepik.com/free-vector/rocket-launch-concept-illustration_114360-6413.jpg"
-                        alt="Zero Leaves"
+                        alt="Zero leaves celebration"
                         className="img-fluid rounded-4 mb-3"
                         style={{ maxHeight: "180px", objectFit: "cover" }}
                       />
                       <p className="text-success fw-bold fs-5 mb-0">
-                        Zero Leaves! You're a rockstar! 🚀
+                        Zero Leaves! You're a rockstar!
                       </p>
                     </>
                   ) : (
@@ -160,7 +150,7 @@ const UserPage = () => {
                   <h4 className="fw-bold mb-3 text-dark">Survey Form</h4>
                   <img
                     src="https://media.istockphoto.com/id/1019835506/vector/positive-business-woman-with-a-giant-pencil-on-his-shoulder-nearby-marked-checklist-on-a.jpg?s=612x612&w=0&k=20&c=vIJwRJQh7qTRQ7fGCEbJFebvplS7S7zTZAeVqVDtZ8k="
-                    alt="Survey"
+                    alt="Survey illustration"
                     className="img-fluid rounded-4 mb-3"
                     style={{ maxHeight: "150px", objectFit: "cover" }}
                   />
@@ -176,14 +166,13 @@ const UserPage = () => {
                 </div>
               </div>
 
-              {/* BOTTOM ROW */}
               <div className="col-lg-8 d-flex">
                 <div className="card bg-white shadow-sm border-0 rounded-4 p-4 w-100">
                   <h4 className="fw-bold mb-4 text-dark">Performance Overview</h4>
                   <div className="d-flex flex-column flex-md-row align-items-center justify-content-center gap-4 h-100">
                     <img
                       src={performanceImage}
-                      alt="Performance"
+                      alt="Performance overview"
                       className="img-fluid rounded-4"
                       style={{ maxHeight: "250px", objectFit: "cover" }}
                     />
@@ -200,7 +189,7 @@ const UserPage = () => {
                   <h4 className="fw-bold mb-3 text-dark">Your Rewards</h4>
                   <img
                     src="https://img.freepik.com/free-vector/achievements-concept-illustration_114360-4465.jpg"
-                    alt="Rewards"
+                    alt="Rewards illustration"
                     className="img-fluid rounded-4 mb-3"
                     style={{ maxHeight: "150px", objectFit: "cover" }}
                   />
@@ -218,11 +207,14 @@ const UserPage = () => {
             </div>
           </div>
 
-          {/* CHAT BUBBLE SECTION */}
           {!isChatOpen && (
             <div
               className="bot-container position-fixed"
               onClick={handleClick}
+              onKeyDown={(e) => { if (e.key === "Enter") handleClick(); }}
+              role="button"
+              tabIndex={0}
+              aria-label="Open chat"
               style={{ cursor: "pointer", bottom: "2rem", right: "2rem", zIndex: 1000 }}
             >
               <div
@@ -249,7 +241,7 @@ const UserPage = () => {
                   borderLeft: "10px solid transparent",
                   borderRight: "10px solid transparent",
                   borderTop: `10px solid ${user.vibe_score >= 4.5 ? '#198754' : user.vibe_score >= 3 ? '#f8f9fa' : '#dc3545'}`
-                }}></div>
+                }} />
               </div>
 
               <Lottie

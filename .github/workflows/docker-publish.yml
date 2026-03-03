@@ -19,9 +19,48 @@ env:
 
 jobs:
   # ─────────────────────────────────────────────
+  # Lint & Test
+  # ─────────────────────────────────────────────
+  test:
+    name: Lint & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: |
+          pip install -r requirements.txt
+          pip install ruff pytest pytest-asyncio httpx
+
+      - name: Lint backend
+        working-directory: ./backend
+        run: ruff check .
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Run frontend tests
+        working-directory: ./frontend
+        run: npm test
+
+  # ─────────────────────────────────────────────
   # Backend: Python / FastAPI image
   # ─────────────────────────────────────────────
   build-backend:
+    needs: test
     name: Build & Push Backend
     runs-on: ubuntu-latest
 
@@ -88,6 +127,7 @@ jobs:
   # Frontend: React → Nginx image
   # ─────────────────────────────────────────────
   build-frontend:
+    needs: test
     name: Build & Push Frontend
     runs-on: ubuntu-latest
 

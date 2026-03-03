@@ -1,20 +1,15 @@
 import motor.motor_asyncio
 from beanie import init_beanie
 
-from .employee import Employee
+from src.config import get_settings
+
 from .chats import Chat
+from .employee import Employee
 from .feedback_ratings import Feedback_ratings
-from dotenv import load_dotenv
-load_dotenv()
-import os
-MONGO_URI = os.getenv("MONGO_URI")
-DB_NAME = os.getenv("DB_NAME")
 
 
 async def init_db():
-   
-    client = motor.motor_asyncio.AsyncIOMotorClient(MONGO_URI)
-    db = client[DB_NAME]
-
-   
+    settings = get_settings()
+    client = motor.motor_asyncio.AsyncIOMotorClient(settings.mongo_uri)
+    db = client[settings.db_name]
     await init_beanie(database=db, document_models=[Employee, Chat, Feedback_ratings])

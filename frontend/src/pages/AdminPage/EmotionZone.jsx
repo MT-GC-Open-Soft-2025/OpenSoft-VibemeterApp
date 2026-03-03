@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./AdminPage.css";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
-import axios from "axios";
-import baseUrl from "../../Config";
+import { getAggregateFeedback } from "../../api/admin";
+
 const EmotionZoneChart = () => {
   const [emotionData, setEmotionData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,18 +20,8 @@ const EmotionZoneChart = () => {
   useEffect(() => {
     const fetchFeedback = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) throw new Error("No authentication token found. Please log in.");
-
-        // ✅ Fetching feedback data
-        const response = await axios.get(`${baseUrl}/admin/get_aggregate_feedback`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        console.log("Feedback API Response:", response.data);
-
-        // ✅ Extract the correct list
-        const scoreList = response.data["Average score list"];
+        const response = await getAggregateFeedback();
+        const scoreList = response["Average score list"];
         if (!scoreList || !Array.isArray(scoreList)) {
           throw new Error("Invalid API response format");
         }

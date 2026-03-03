@@ -1,46 +1,54 @@
+import logging
 import time
+from typing import Dict
+
 import jwt
 from fastapi import HTTPException, status
-from typing import Dict
-import os
-from dotenv import load_dotenv
+from passlib.hash import bcrypt
+
+from src.config import get_settings
 from src.models.employee import Employee
-load_dotenv()
-JWT_SECRET = os.getenv("JWT_SECRET")
-JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
-TOKEN_EXPIRY_SECONDS = os.getenv("TOKEN_EXPIRY_SECONDS")
+
+logger = logging.getLogger(__name__)
 
 
-async def signin(username:str) -> Dict[str, str]:
-   
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return bcrypt.verify(plain_password, hashed_password)
+
+
+def hash_password(password: str) -> str:
+    return bcrypt.hash(password)
+
+
+async def signin(username: str, password: str) -> Dict[str, str]:
+    settings = get_settings()
+
     user_record = await Employee.find(Employee.emp_id == username).first_or_none()
     if not user_record:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid username"
+            detail="Invalid credentials",
         )
 
-    
+    if user_record.password_hash:
+        if not verify_password(password, user_record.password_hash):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid credentials",
+            )
+    else:
+        # First login: set the password for this employee
+        user_record.password_hash = hash_password(password)
+        await user_record.save()
+        logger.info("Password set for employee %s on first login", username)
+
     payload = {
-        "emp_id": user_record.emp_id, 
-        "total_work_hours": user_record.total_work_hours,
-        "leave_days": user_record.leave_days,
-        "types_of_leave": user_record.types_of_leaves,
-        "feedback": user_record.feedback,
-        "weighted_performance": user_record.weighted_performance,
-        "reward_points": user_record.reward_points,
-        "award_list": user_record.award_list,        
-        "vibe_score" : user_record.vibe_score,
-        "factors_in_sorted_order" : user_record.factors_in_sorted_order,
+        "emp_id": user_record.emp_id,
+        "role": user_record.role,
         "iat": int(time.time()),
-        "exp": int(time.time()) + int(TOKEN_EXPIRY_SECONDS)
+        "exp": int(time.time()) + int(settings.token_expiry_seconds),
     }
 
-    
-    token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
-    print("token", token)
+    token = jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 
-    return {
-        "access_token": token,
-        "token_type": "Bearer"
-    }
+    return {"access_token": token, "token_type": "Bearer"}

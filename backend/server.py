@@ -1,70 +1,91 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware  #Import CORS middleware
-from pymongo.mongo_client import MongoClient
-from pymongo.server_api import ServerApi
-from dotenv import load_dotenv
-from src.models.database import init_db
-from src.models.chats import Chat, Message
-from datetime import datetime, timezone
-from src.routes.auth_routes import auth_router
-from src.routes.user_routes import user_router  
-from src.routes.chat_routes import chat_router
+import logging
+import sys
 
-#enable cors
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from slowapi import Limiter
+from slowapi.errors import RateLimitExceeded
+from slowapi.util import get_remote_address
 
-
-
+from src.config import get_settings
+from src.models.database import init_db
 from src.routes.admin_routes import admin_router
-import os
+from src.routes.auth_routes import auth_router
+from src.routes.chat_routes import chat_router
+from src.routes.user_routes import user_router
 
-load_dotenv()
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)],
+)
+logger = logging.getLogger(__name__)
 
-uri = os.getenv("MONGO_URI")
-
-client = MongoClient(uri, server_api=ServerApi("1"))
-
-try:
-    client.admin.command("ping")
-    print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
+limiter = Limiter(key_func=get_remote_address)
 
 
 async def lifespan(app: FastAPI):
-    print("Starting up")
+    logger.info("Starting up — initialising database")
     await init_db()
     yield
-    print("Shutting down")
+    logger.info("Shutting down")
 
 
-# Include common local origins for dockerized frontend (nginx on :80)
-origins=[
-    "http://localhost",
-    "http://localhost:80",
-    "http://localhost:3000",
-    "https://open-soft-front-fngps.ondigitalocean.app",
-    "https://www.wellbee.live",
-]
+settings = get_settings()
 
-app = FastAPI(lifespan=lifespan)
+origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
+
+app = FastAPI(lifespan=lifespan, title="WellBee API", version="1.0.0")
+app.state.limiter = limiter
+
+
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={"detail": "Too many requests. Please try again later."},
+    )
 
 
 app.add_middleware(
     CORSMiddleware,
-    #allow_origins=["http://localhost:3000"],  
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(auth_router, prefix="/auth", tags=["Auth"])
-app.include_router(user_router, prefix="/user", tags=["User"])
-app.include_router(admin_router, prefix="/admin", tags=["Admin"])
-app.include_router(chat_router, prefix="/chat", tags=["Chat"])
+app.include_router(auth_router, prefix="/api/v1/auth", tags=["Auth"])
+app.include_router(user_router, prefix="/api/v1/user", tags=["User"])
+app.include_router(admin_router, prefix="/api/v1/admin", tags=["Admin"])
+app.include_router(chat_router, prefix="/api/v1/chat", tags=["Chat"])
+
+# Backward-compatible prefixes (can be removed after frontend migration)
+app.include_router(auth_router, prefix="/auth", tags=["Auth"], include_in_schema=False)
+app.include_router(user_router, prefix="/user", tags=["User"], include_in_schema=False)
+app.include_router(admin_router, prefix="/admin", tags=["Admin"], include_in_schema=False)
+app.include_router(chat_router, prefix="/chat", tags=["Chat"], include_in_schema=False)
 
 
 @app.get("/")
 def home():
     return {"message": "Backend Running"}
+
+
+@app.get("/health")
+async def health():
+    from motor.motor_asyncio import AsyncIOMotorClient
+
+    try:
+        client = AsyncIOMotorClient(settings.mongo_uri, serverSelectionTimeoutMS=3000)
+        await client.admin.command("ping")
+        db_status = "connected"
+    except Exception:
+        db_status = "disconnected"
+
+    return {
+        "status": "healthy" if db_status == "connected" else "degraded",
+        "version": "1.0.0",
+        "database": db_status,
+    }

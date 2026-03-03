@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./Badges.css";
+import { getUserDetails } from "../../api/user";
 
 import badge1 from "../../Assets/badge1.png";
 import badge2 from "../../Assets/badge2.png";
 import badge3 from "../../Assets/badge3.png";
 import badge4 from "../../Assets/badge4.png";
-import baseUrl from "../../Config";
 
 export default function Badges({ employeeId }) {
   const [awardList, setAwardList] = useState([]);
@@ -18,21 +17,13 @@ export default function Badges({ employeeId }) {
 
     const fetchAwards = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) throw new Error("No authentication token found. Please log in.");
-
-        const response = await axios.get(
-          `${baseUrl}/user/getUserDetails`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
-        console.log("Badges API Response:", response.data);
-        setAwardList(response.data.award_list || []);
+        const response = await getUserDetails();
+        setAwardList(response.award_list || []);
         setError("");
       } catch (err) {
         console.error("Error fetching badges:", err.message);
         setError(err.message);
-        setAwardList([]); 
+        setAwardList([]);
       }
     };
 
@@ -55,11 +46,7 @@ export default function Badges({ employeeId }) {
       <div className="employee-awards">
         {awardList.map((award, i) => (
           <div key={i} className="badge-img-container">
-            <img
-              src={awardBadgeMap[award] || ""}
-              alt={award}
-              className="badge-img"
-            />
+            <img src={awardBadgeMap[award] || ""} alt={award} className="badge-img" />
             <span className="badge-tooltip">{award}</span>
           </div>
         ))}

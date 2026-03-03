@@ -1,25 +1,23 @@
-# models/chat_model.py
-from beanie import Document
-from pydantic import BaseModel
-from typing import List
 from datetime import datetime
-from pymongo import ASCENDING
+from typing import List
+
+from beanie import Document, Indexed
+from pydantic import BaseModel
 
 
 class Message(BaseModel):
-    sender: str         
+    sender: str
     timestamp: datetime
     message: str
 
+
 class Chat(Document):
-    #hw to make convid unique
-    
-    convid: str 
-    empid: str
+    convid: Indexed(str, unique=True)
+    empid: Indexed(str)
     initial_prompt: str
-    messages: List[Message]  
-    feedback:str
-    summary:str
+    messages: List[Message]
+    feedback: str
+    summary: str
+
     class Settings:
         name = "chats"
-        

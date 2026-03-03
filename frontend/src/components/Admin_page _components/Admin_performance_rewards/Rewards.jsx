@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
-import baseUrl from "../../../Config";
+import { getEmployeeDetail } from "../../../api/admin";
 
 export default function Rewards({ employeeId }) {
   const [rewardPoints, setRewardPoints] = useState(0);
@@ -12,21 +11,13 @@ export default function Rewards({ employeeId }) {
 
     const fetchRewards = async () => {
       try {
-        const token = localStorage.getItem("token");
-        if (!token) throw new Error("No authentication token found. Please log in.");
-
-        const response = await axios.get(
-          `${baseUrl}/admin/get_detail/${employeeId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-
-        console.log("Rewards API Response:", response.data);
-        setRewardPoints(response.data.user_record.reward_points || 0);
+        const response = await getEmployeeDetail(employeeId);
+        setRewardPoints(response.user_record.reward_points || 0);
         setError("");
       } catch (err) {
         console.error("Error fetching reward points:", err.message);
         setError(err.message);
-        setRewardPoints(0); // Set to 0 instead of null to prevent UI breaking
+        setRewardPoints(0);
       }
     };
 

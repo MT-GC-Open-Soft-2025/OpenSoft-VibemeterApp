@@ -1,120 +1,125 @@
-from src.models.employee import Employee
-from src.models.chats import Chat
-from pydantic import BaseModel
+import logging
+from typing import Any, Dict
+
 from fastapi import HTTPException, status
-from typing import Optional, Dict, Any
-from src.services.chat_service import initiate_chat_service,end_chat, get_feedback_questions,add_feedback,send_message, get_chat, get_chat_feedback
+from pydantic import BaseModel, Field
+
+from src.services.chat_service import (
+    add_feedback,
+    end_chat,
+    get_chat,
+    get_chat_feedback,
+    get_feedback_questions,
+    initiate_chat_service,
+    send_message,
+)
+
+logger = logging.getLogger(__name__)
 
 
 class Chat_frontend(BaseModel):
     convid: str
-    message: str
-    
+    message: str = Field(..., min_length=1, max_length=5000)
+
+
 class Feedback(BaseModel):
-    feedback: Dict[str,int]    
-    
+    feedback: Dict[str, int]
 
 
-async def initiate_chat_controller(convo_id: str, user:Any) -> Dict[str, Any]:
-    
+async def initiate_chat_controller(convo_id: str, user: Any) -> Dict[str, Any]:
     try:
-        new_chat = await initiate_chat_service(convo_id, user)
-        return new_chat
+        return await initiate_chat_service(convo_id, user)
+    except HTTPException:
+        raise
     except ValueError as e:
-        
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     except Exception as e:
-        
+        logger.error("Error initiating chat: %s", e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error initiating chat"
+            detail="Error initiating chat",
         )
 
-async def response_controller(payload,user) -> Dict[str, Any]:
-    convid= payload.convid
-    message= payload.message
-    
-    try:       
 
-        if not convid or not message:
-            raise HTTPException(
-                status_code=404,
-                detail="Could not get payload"
-            )
-        
-        response = await send_message(user, message, convid)
-        return response
-        
+async def response_controller(payload: Chat_frontend, user: Any) -> Dict[str, Any]:
+    if not payload.convid or not payload.message:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing payload")
+
+    try:
+        return await send_message(user, payload.message, payload.convid)
+    except HTTPException:
+        raise
     except Exception as error:
-            raise HTTPException(status_code=400, detail=str(error))
-        
+        logger.error("Error sending message: %s", error)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(error))
+
+
 async def feedback_controller() -> Dict[str, Any]:
     try:
-        feedback_questions = await get_feedback_questions()
-        return feedback_questions
+        return await get_feedback_questions()
     except ValueError as e:
-        
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e)
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     except Exception as e:
-        
+        logger.error("Error getting feedback questions: %s", e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error getting feedback questions"
-        )  
-
-async def add_feedback_controller(feedback:Dict[str,int]) -> Dict[str, Any]:
-    try:
-        feedback_data = await add_feedback(feedback)
-        return feedback_data
-    except ValueError as e:
-        
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e)
+            detail="Error getting feedback questions",
         )
+
+
+async def add_feedback_controller(
+    feedback: Dict[str, int], user: Any
+) -> Dict[str, Any]:
+    try:
+        emp_id = user.get("emp_id") if user else None
+        return await add_feedback(feedback, emp_id=emp_id)
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     except Exception as e:
-        
+        logger.error("Error adding feedback: %s", e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error adding feedback"
-        )              
-
-async def end_chat_controller(convo_id: str, feedback: str) -> Dict[str, Any]:
-    try:
-        end_chat_data = await end_chat(convo_id, feedback)
-        return end_chat_data
-    except ValueError as e:
-        
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e)
+            detail="Error adding feedback",
         )
+
+
+async def end_chat_controller(
+    convo_id: str, feedback: str, user: Any
+) -> Dict[str, Any]:
+    try:
+        emp_id = user.get("emp_id")
+        return await end_chat(convo_id, feedback, emp_id)
+    except HTTPException:
+        raise
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
     except Exception as e:
-        
+        logger.error("Error ending chat: %s", e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Error ending chat"
+            detail="Error ending chat",
         )
 
-async def getChat_controller(conv_id: str) -> Dict[str, Any]:
 
-    response = await get_chat(conv_id)
-    return response # return list of messages
-
-async def get_chat_feedback_controller(conv_id: str) -> Dict[str, Any]:
+async def getChat_controller(conv_id: str, user: Any) -> Dict[str, Any]:
     try:
-        response = await get_chat_feedback(conv_id)
-        return response 
-    
-    except ValueError as e:
-        
+        emp_id = user.get("emp_id")
+        return await get_chat(conv_id, emp_id)
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error("Error getting chat: %s", e)
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=str(e)
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error getting chat",
         )
+
+
+async def get_chat_feedback_controller(conv_id: str, user: Any) -> Dict[str, Any]:
+    try:
+        emp_id = user.get("emp_id")
+        return await get_chat_feedback(conv_id, emp_id)
+    except HTTPException:
+        raise
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))

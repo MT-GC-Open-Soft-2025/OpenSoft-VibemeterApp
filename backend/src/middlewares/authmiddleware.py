@@ -1,54 +1,49 @@
-import jwt
-from fastapi import Depends, HTTPException, status, Request
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from typing import Optional, Dict
-from dotenv import load_dotenv
-import os
 import logging
-import sys
+from typing import Dict
 
-load_dotenv()
-JWT_SECRET = os.getenv("JWT_SECRET")
-JWT_ALGORITHM = os.getenv("JWT_ALGORITHM")
+import jwt
+from fastapi import Depends, HTTPException, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+
+from src.config import get_settings
+
+logger = logging.getLogger(__name__)
 
 bearer_scheme = HTTPBearer()
 
 
 def authenticate(
-    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)
+    credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
 ) -> Dict:
-   
-    token = credentials.credentials  
-   
+    settings = get_settings()
+    token = credentials.credentials
+
     try:
-        
-        user = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-       
+        user = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
         if not user:
-            
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid token payload."
+                detail="Invalid token payload.",
             )
-        return user  
+        return user
     except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token has expired."
+            detail="Token has expired.",
         )
     except jwt.InvalidTokenError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="#Invalid token."
+            detail="Invalid token.",
         )
+
 
 def adminauthenticate(
     user: dict = Depends(authenticate),
 ) -> dict:
-   
-    if user["emp_id"]!= "admin":
+    if user.get("role") != "admin":
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Access denied. Admin only."
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access denied. Admin only.",
         )
     return user
