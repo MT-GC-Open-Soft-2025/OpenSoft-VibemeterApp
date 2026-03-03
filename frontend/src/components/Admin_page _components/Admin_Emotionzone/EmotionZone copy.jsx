@@ -28,4 +28,3 @@ const EmotionZoneChart = () => {
 };
 
 export default EmotionZoneChart;
-

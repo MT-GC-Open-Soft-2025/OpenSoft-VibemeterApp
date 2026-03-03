@@ -34,7 +34,7 @@ const Start = () => {
           <div className="logo-container" style={{ marginLeft: "20px"}}>
               <img src={logo} alt="WellBee Logo" className="logo-img" />
             </div>
-          
+
             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
               <span className="navbar-toggler-icon" />
             </button>
@@ -47,7 +47,7 @@ const Start = () => {
                 <Link to="signin" smooth duration={500} className="lead1 nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>Sign In</Link>
 
                 </li>
-                
+
                 <li className="nav-item">
                 <Link to="faq" smooth duration={500} className="lead1 nav-link hover:text-gray-300" style={{ cursor: 'pointer' }}>FAQ</Link>
                 </li>
@@ -64,7 +64,7 @@ const Start = () => {
         </nav>
 
         {/* Page Sections */}
-        
+
         <LandingPage />
         <LoginPage />
         <FAQPage />
@@ -72,7 +72,7 @@ const Start = () => {
           <BookDemoForm />
         </Element>
         <Footer />
-      
+
       </div>
   );
 };

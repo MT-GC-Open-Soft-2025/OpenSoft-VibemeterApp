@@ -33,9 +33,7 @@ async def test_initiate_chat_unauthorized(client):
 @pytest.mark.asyncio
 async def test_send_message_success(client, user_token):
     """POST /send returns bot response."""
-    with patch(
-        "src.controllers.chat_controller.send_message", new_callable=AsyncMock
-    ) as m:
+    with patch("src.controllers.chat_controller.send_message", new_callable=AsyncMock) as m:
         m.return_value = {"response": "I understand. Let me help."}
 
         response = await client.post(
@@ -62,9 +60,7 @@ async def test_send_message_missing_payload(client, user_token):
 @pytest.mark.asyncio
 async def test_get_chat_success(client, user_token):
     """GET /chat/{conv_id} returns chat messages."""
-    with patch(
-        "src.controllers.chat_controller.get_chat", new_callable=AsyncMock
-    ) as m:
+    with patch("src.controllers.chat_controller.get_chat", new_callable=AsyncMock) as m:
         m.return_value = {
             "chat": [
                 {"sender": "bot", "message": "Hello", "timestamp": "2024-01-01T00:00:00"},
@@ -83,9 +79,7 @@ async def test_get_chat_success(client, user_token):
 @pytest.mark.asyncio
 async def test_get_chat_feedback_success(client, user_token):
     """GET /chat_feedback/{conv_id} returns feedback."""
-    with patch(
-        "src.controllers.chat_controller.get_chat_feedback", new_callable=AsyncMock
-    ) as m:
+    with patch("src.controllers.chat_controller.get_chat_feedback", new_callable=AsyncMock) as m:
         m.return_value = {"feedback": "Great session!"}
 
         response = await client.get(
@@ -110,9 +104,7 @@ async def test_feedback_route_no_auth(client):
 @pytest.mark.asyncio
 async def test_end_chat_success(client, user_token):
     """POST /end_chat/{convo_id} returns summary."""
-    with patch(
-        "src.controllers.chat_controller.end_chat", new_callable=AsyncMock
-    ) as m:
+    with patch("src.controllers.chat_controller.end_chat", new_callable=AsyncMock) as m:
         m.return_value = {"response": "Summary of the conversation."}
 
         response = await client.post(
@@ -128,9 +120,7 @@ async def test_end_chat_success(client, user_token):
 @pytest.mark.asyncio
 async def test_add_feedback_success(client, user_token):
     """POST /add_feedback adds feedback."""
-    with patch(
-        "src.controllers.chat_controller.add_feedback", new_callable=AsyncMock
-    ) as m:
+    with patch("src.controllers.chat_controller.add_feedback", new_callable=AsyncMock) as m:
         m.return_value = {"response": "Feedback added successfully"}
 
         response = await client.post(

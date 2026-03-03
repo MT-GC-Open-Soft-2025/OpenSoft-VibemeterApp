@@ -21,4 +21,3 @@ const ButtonComponent = ({ label }) => {
 };
 
 export default ButtonComponent;
-

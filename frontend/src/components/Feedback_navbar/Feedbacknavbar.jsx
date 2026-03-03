@@ -18,5 +18,3 @@ const Feedbacknavbar = ({ title }) => {
 };
 
 export default Feedbacknavbar;
-
-

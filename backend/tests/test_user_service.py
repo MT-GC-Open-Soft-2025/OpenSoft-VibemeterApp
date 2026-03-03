@@ -63,9 +63,7 @@ class TestGetAllConvoid:
             chat1.convid = "conv-001"
             chat2 = MagicMock()
             chat2.convid = "conv-002"
-            mock_chat.find.return_value.to_list = AsyncMock(
-                return_value=[chat1, chat2]
-            )
+            mock_chat.find.return_value.to_list = AsyncMock(return_value=[chat1, chat2])
 
             result = await get_all_convoid("emp001")
 

@@ -26,7 +26,7 @@ export default function Rewards({ employeeId }) {
 
   if (!employeeId) return <div className="no-rewards">No reward data available</div>;
 
-  const maxPoints = 1500; 
+  const maxPoints = 1500;
   const percentage = ((rewardPoints / maxPoints) * 100).toFixed(1);
 
   return (
@@ -42,7 +42,7 @@ export default function Rewards({ employeeId }) {
             <span>{rewardPoints} pts</span>
             <span>Max: {maxPoints} pts</span>
           </div>
-          
+
           <div className="progress" style={{ height: "24px", marginBottom: "80px" }}>
             <div
               className="progress-bar bg-info"

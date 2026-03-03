@@ -36,7 +36,7 @@ The application includes several routes, each serving different content:
 - `/user` - User/Employee Page
 - `/chat` - Chatbot Page
 - `/admin` - Admin/HR Page
-- `/feedback` - Chat feedback Page 
+- `/feedback` - Chat feedback Page
 - `/surveyform` - Anonymous survey form Page
 - `/contact` - Contact us Page
 - `/login` - Landing Page
@@ -57,6 +57,6 @@ The application includes several routes, each serving different content:
 
 ### Analysis of employees through anonymous survey response
 
-  - An anonymous survey form is created in user page which will capture the features that are contributing to the low vibescore of most of the employees.   
+  - An anonymous survey form is created in user page which will capture the features that are contributing to the low vibescore of most of the employees.
 
   - The aggregated survey results are visualized in the admin dashboard as interactive graphs, enabling quick identification of common stressors or dissatisfaction triggers among employees.

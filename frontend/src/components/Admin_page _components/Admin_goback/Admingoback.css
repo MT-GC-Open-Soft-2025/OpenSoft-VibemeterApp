@@ -1,24 +1,24 @@
 .goback {
     display: flex;
     align-items: center;
-    gap: 8px; 
-    cursor: pointer; 
+    gap: 8px;
+    cursor: pointer;
     font-size: 16px;
     transition: color 0.3s ease-in-out;
-    width: fit-content; 
+    width: fit-content;
 }
 
 .goback:hover {
-    color: #56BAED; 
+    color: #56BAED;
 }
 
 .gobackicon {
-    height: 16px; 
+    height: 16px;
     transition: transform 0.2s ease-in-out;
 }
 
 .goback:hover .gobackicon {
-    transform: translateX(-3px); 
+    transform: translateX(-3px);
 }
 
 .goback p {

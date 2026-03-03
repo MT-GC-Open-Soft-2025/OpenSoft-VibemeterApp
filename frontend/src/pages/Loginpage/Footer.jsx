@@ -5,9 +5,9 @@
 
 // const Footerpage = () => (
 //   <Element name="footer" className="bg-dark text-white text-center py-4">
-    
-//     <div className="container flex flex-col items-center"> 
-      
+
+//     <div className="container flex flex-col items-center">
+
 //       {/* Social Media Icons - Now ABOVE the copyright */}
 //       <div className="social_media_icons flex justify-center gap-4 ">
 //         <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
@@ -28,9 +28,9 @@
 //       <div className="text-center">
 //         <p className="text-white text-sm">© 2025 MyCompany. All rights reserved.</p>
 //       </div>
-      
+
 //     </div>
-   
+
 //   </Element>
 // );
 
@@ -42,7 +42,7 @@ import { FaFacebook, FaInstagram, FaTwitter, FaGithub } from "react-icons/fa";
 const Footerpage = () => (
   <Element name="footer" className="bg-dark text-white text-center py-4">
     <div className="container flex justify-between items-center mx-auto max-w-5xl px-4">
-      
+
       {/* Copyright Text on the Left */}
       <p className="text-white text-sm">© 2025 Wellbee. All rights reserved.</p>
 
@@ -61,7 +61,7 @@ const Footerpage = () => (
           <FaGithub className="text-white hover:text-gray-400 mx-4" size={32} />
         </a>
       </div>
-      
+
     </div>
   </Element>
 );

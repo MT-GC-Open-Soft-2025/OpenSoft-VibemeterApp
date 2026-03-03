@@ -14,13 +14,13 @@ import Sidebar from "../../components/Admin_page _components/Admin_sidebar/Admin
 import Navbar from "../../components/Search-bar/SearchBar";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar2";
 import user1 from "../../Assets/user.png";
-import EmojiMeter from "../../components/Admin_page _components/Admin_performance_rewards/EmojiMeter.jsx";  
+import EmojiMeter from "../../components/Admin_page _components/Admin_performance_rewards/EmojiMeter.jsx";
 
 const AdminPage = () => {
   const navigate = useNavigate();
-  const [selectedEmployee, setSelectedEmployee] = useState(""); 
+  const [selectedEmployee, setSelectedEmployee] = useState("");
 
- 
+
   const handlegetfeedback = () => {
     if (!selectedEmployee) {
       console.error("❌ Error: No employee selected.");
@@ -40,7 +40,7 @@ const AdminPage = () => {
   // useEffect(() => {
   //     const token = localStorage.getItem("token");
   //     if (!token) return;
-  
+
   //     fetch("http://localhost:8000/user/getUserDetails", {
   //       headers: { Authorization: `Bearer ${token}` },
   //     })
@@ -48,13 +48,13 @@ const AdminPage = () => {
   //       .then(setUser)
   //       .catch(console.error);
   //   }, []);
-  
+
   //   const truncatedVibeScore =
   // user && typeof user.vibe_score === "number"
   //   ? user.vibe_score.toFixed(2)
   //   : -1;
-    
- 
+
+
   return (
     <>
       <Feedbacknavbar title="Admin Page" />
@@ -65,15 +65,15 @@ const AdminPage = () => {
           boxSizing: 'border-box'
         }}>
           <div className="d-flex justify-content-between align-items-center mb-4">
-            <Navbar setSelectedEmployee={setSelectedEmployee} /> 
+            <Navbar setSelectedEmployee={setSelectedEmployee} />
             {selectedEmployee && (
                   <button className="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold" onClick={handlegetBack}>
                            <i className="bi bi-arrow-left me-2"></i>Back
                   </button>
               )}
           </div>
-          
-          
+
+
           <div className="text-container text-start mb-4 mt-2">
             <h3 className="fw-bold mb-1" style={{ color: 'var(--wb-text-main, #212529)' }}>Admin Dashboard</h3>
             <p className="text-muted">Overview of employee performance, moods, and feedback.</p>
@@ -124,10 +124,9 @@ const AdminPage = () => {
           )}
         </div>
       </div>
-       <Footer/> 
+       <Footer/>
     </>
   );
 };
 
 export default AdminPage;
-

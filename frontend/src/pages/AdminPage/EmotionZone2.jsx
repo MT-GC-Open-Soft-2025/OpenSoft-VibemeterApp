@@ -6,20 +6,20 @@ const EmotionZoneChart2 = () => {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
-  
+
   return (
     <div className="charts">
-      <img 
-        src="https://img.freepik.com/premium-vector/team-employees-office-discussing-work-issues-brainstorming-finding-new-ideas-cartoon-vector-illustration_87771-25461.jpg" 
-        alt="Employee Emotion Status" 
-        className="emotion-image" 
+      <img
+        src="https://img.freepik.com/premium-vector/team-employees-office-discussing-work-issues-brainstorming-finding-new-ideas-cartoon-vector-illustration_87771-25461.jpg"
+        alt="Employee Emotion Status"
+        className="emotion-image"
       />
       <div className="Search-button">
         <h2 style={{marginLeft:"0px",fontFamily:"'Noto Sans', sans-serif"}}>Track employees' well-being and emotions with a quick search.</h2>
         {/* ✅ Added the Search for Employee Button */}
         <div style={{ textAlign: "center", marginTop: "30px", marginBottom: "20px", marginLeft: "20px" }}>
-            <button 
-              onClick={scrollToTop} 
+            <button
+              onClick={scrollToTop}
               style={{
                 padding: "10px 20px",
                 fontSize: "16px",

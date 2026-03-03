@@ -21,7 +21,7 @@ python -m venv venv
 venv\Scripts\activate (for windows)
 source venv/bin/activate (for linux/mac)
 ```
-   
+
 
 ### 3. Install the required dependencies
 ```bash
@@ -35,11 +35,11 @@ pip freeze > requirements.txt
 ### 4. Make .env file at root directory
 ```bash
 MONGO_URI=
-JWT_SECRET= 
-JWT_ALGORITHM= 
-TOKEN_EXPIRY_SECONDS= 
-DB_NAME= 
-GEMINI_KEY= 
+JWT_SECRET=
+JWT_ALGORITHM=
+TOKEN_EXPIRY_SECONDS=
+DB_NAME=
+GEMINI_KEY=
 ```
 
 ### 5. Run the FastAPI server in local
@@ -52,7 +52,7 @@ uvicorn server:app --host 0.0.0.0 --port 8000 --reload
    docker-compose build
    docker-compose up
 ```
- 
+
 ## Endpoints
 ### Authentication API (`/auth`)
 - **POST /signin** – Authenticate user and return a JWT token.
@@ -76,4 +76,3 @@ uvicorn server:app --host 0.0.0.0 --port 8000 --reload
 - **GET /get_conversationFeedback/{emp_id}/{convo_id}** – Get feedback for a specific conversation.
 - **GET /get_conversationSummary/{emp_id}/{convo_id}** – Get summary of a specific conversation.
 - **GET /get_aggregate_feedback** – Get the average feedback score across conversations.
-

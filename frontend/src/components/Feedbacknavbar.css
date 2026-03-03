@@ -2,7 +2,7 @@
   width: 100%;
   position: fixed;
   z-index: 1000;
-  
+
   background-color: #3697aa;;
   padding: 1rem;
   top: 0;
@@ -15,8 +15,8 @@
 }
 
 .nav-content {
-  color: white; 
-  font-size: 18px; 
+  color: white;
+  font-size: 18px;
   font-weight: bold;
   padding-left: 10px;
 }
@@ -44,9 +44,3 @@
   outline: none !important;
   border: none !important;
 }
-
-
-  
-  
-  
-  

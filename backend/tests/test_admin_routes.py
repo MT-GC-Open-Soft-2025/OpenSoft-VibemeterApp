@@ -16,9 +16,7 @@ async def test_admin_test_route_no_auth(client):
 @pytest.mark.asyncio
 async def test_get_details_requires_admin(client, admin_token):
     """GET /get_details requires admin token."""
-    with patch(
-        "src.controllers.admin_controller.get_all_employees", new_callable=AsyncMock
-    ) as m:
+    with patch("src.controllers.admin_controller.get_all_employees", new_callable=AsyncMock) as m:
         m.return_value = [{"emp_id": "emp001"}]
 
         response = await client.get(
@@ -43,9 +41,7 @@ async def test_get_details_rejects_employee(client, user_token):
 @pytest.mark.asyncio
 async def test_get_detail_employee_success(client, admin_token):
     """GET /get_detail/{employee_id} returns employee data."""
-    with patch(
-        "src.controllers.admin_controller.fetch_employee_data", new_callable=AsyncMock
-    ) as m:
+    with patch("src.controllers.admin_controller.fetch_employee_data", new_callable=AsyncMock) as m:
         m.return_value = {"user_record": {"emp_id": "emp001"}}
 
         response = await client.get(

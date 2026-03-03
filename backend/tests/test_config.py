@@ -1,9 +1,5 @@
 """Tests for src.config."""
 
-import os
-
-import pytest
-
 from src.config import Settings, get_settings
 
 

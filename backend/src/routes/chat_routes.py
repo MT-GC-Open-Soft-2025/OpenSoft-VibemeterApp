@@ -27,16 +27,12 @@ async def initiate_chat_route(
 
 
 @chat_router.post("/send")
-async def send_chat(
-    payload: Chat_frontend, user: dict[str, Any] = Depends(authenticate)
-):
+async def send_chat(payload: Chat_frontend, user: dict[str, Any] = Depends(authenticate)):
     return await response_controller(payload, user)
 
 
 @chat_router.post("/send_stream")
-async def send_chat_stream(
-    payload: Chat_frontend, user: dict[str, Any] = Depends(authenticate)
-):
+async def send_chat_stream(payload: Chat_frontend, user: dict[str, Any] = Depends(authenticate)):
     return StreamingResponse(
         response_stream_controller(payload, user),
         media_type="text/event-stream",
@@ -49,9 +45,7 @@ async def send_chat_stream(
 
 
 @chat_router.get("/chat/{conv_id}")
-async def get_chat(
-    conv_id: str, current_user: dict = Depends(authenticate)
-) -> dict[str, Any]:
+async def get_chat(conv_id: str, current_user: dict = Depends(authenticate)) -> dict[str, Any]:
     return await getChat_controller(conv_id, current_user)
 
 

@@ -56,9 +56,9 @@ const VibeMeter = () => {
   </div>
 </div>
 
-      <button 
-        className="vibe-button" 
-        onClick={refreshHappiness} 
+      <button
+        className="vibe-button"
+        onClick={refreshHappiness}
         disabled={loading}
       >
         <i className={`bi ${loading ? 'bi-arrow-repeat spin' : 'bi-arrow-clockwise'}`}></i>

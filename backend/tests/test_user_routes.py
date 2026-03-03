@@ -8,9 +8,7 @@ import pytest
 @pytest.mark.asyncio
 async def test_get_user_details_success(client, user_token):
     """GET /getUserDetails with valid token returns user data."""
-    with patch(
-        "src.controllers.user_controller.get_user_details", new_callable=AsyncMock
-    ) as m:
+    with patch("src.controllers.user_controller.get_user_details", new_callable=AsyncMock) as m:
         m.return_value = {
             "emp_id": "emp001",
             "role": "employee",
@@ -49,9 +47,7 @@ async def test_get_user_details_invalid_token(client):
 @pytest.mark.asyncio
 async def test_get_convoids_success(client, user_token):
     """GET /getConvoids with valid token returns convoid list."""
-    with patch(
-        "src.controllers.user_controller.get_all_convoid", new_callable=AsyncMock
-    ) as m:
+    with patch("src.controllers.user_controller.get_all_convoid", new_callable=AsyncMock) as m:
         m.return_value = {"convid_list": ["conv-001", "conv-002"]}
 
         response = await client.get(

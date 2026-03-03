@@ -1,16 +1,16 @@
 import React from "react";
 import "./Adminpagesearchbar.css";
-import searchIcon from './Adminpagesearchicon.png';  
+import searchIcon from './Adminpagesearchicon.png';
 
 const Searchbar = () => {
     return(
         <div className="search-container">
             <div className="search-input-wrapper">
-                <input 
-                    type="text" 
-                    className="search-bar" 
+                <input
+                    type="text"
+                    className="search-bar"
                     placeholder="Search..."
-                    style={{ 
+                    style={{
                         backgroundImage: `url(${searchIcon})`,
                         backgroundPosition: 'right 12px center',
                         backgroundRepeat: 'no-repeat',

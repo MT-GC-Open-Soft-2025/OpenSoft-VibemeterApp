@@ -83,9 +83,7 @@ async def feedback_controller() -> dict[str, Any]:
         )
 
 
-async def add_feedback_controller(
-    feedback: dict[str, int], user: Any
-) -> dict[str, Any]:
+async def add_feedback_controller(feedback: dict[str, int], user: Any) -> dict[str, Any]:
     try:
         emp_id = user.get("emp_id") if user else None
         return await add_feedback(feedback, emp_id=emp_id)
@@ -99,9 +97,7 @@ async def add_feedback_controller(
         )
 
 
-async def end_chat_controller(
-    convo_id: str, feedback: str, user: Any
-) -> dict[str, Any]:
+async def end_chat_controller(convo_id: str, feedback: str, user: Any) -> dict[str, Any]:
     try:
         emp_id = user.get("emp_id")
         return await end_chat(convo_id, feedback, emp_id)

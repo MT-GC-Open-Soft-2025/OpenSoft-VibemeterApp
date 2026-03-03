@@ -34,8 +34,8 @@ const ContactForm = () => {
 
     emailjs
       .send(
-        "service_a4qj7tr",  
-        "template_dmmicgj", 
+        "service_a4qj7tr",
+        "template_dmmicgj",
         {
           from_name: formData.name,
           from_email: formData.email,
@@ -75,7 +75,7 @@ const ContactForm = () => {
      */}
     <Feedbacknavbar title="Contact Us" />
 
-      
+
     <div className="contact-form-container bg-white shadow-sm rounded-4 p-4 p-md-5 mx-auto mt-5 mb-5" style={{ maxWidth: "500px", width: "90%" }}>
       <h2>Contact Us</h2>
       <form className="contact-form" onSubmit={handleSubmit}>
@@ -123,7 +123,7 @@ const ContactForm = () => {
       {status && <p className="success-message">{status}</p>}
     </div>
     </div>
-    
+
   );
 };
 

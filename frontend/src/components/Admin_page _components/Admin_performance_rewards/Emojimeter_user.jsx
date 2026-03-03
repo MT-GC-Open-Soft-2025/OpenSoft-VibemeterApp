@@ -38,7 +38,7 @@ export default function EmojiMeter({ employeeId }) {
             text: "Neutral",
             color: "primary",
           };
-    
+
         if (truncatedVibeScore < 3 && truncatedVibeScore >= 0)
           return {
             icon: "bi-emoji-frown-fill",

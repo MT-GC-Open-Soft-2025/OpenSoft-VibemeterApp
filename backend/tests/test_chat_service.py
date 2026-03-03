@@ -6,7 +6,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from fastapi import HTTPException
 
-from src.models.chats import Chat, Message
+from src.models.chats import Message
 from src.services.chat_service import (
     _verify_chat_ownership,
     add_feedback,
@@ -15,7 +15,6 @@ from src.services.chat_service import (
     get_chat_feedback,
     get_feedback_questions,
     initiate_chat_service,
-    send_message,
 )
 
 
@@ -111,9 +110,7 @@ class TestAddFeedback:
     @pytest.mark.asyncio
     async def test_add_feedback_success(self):
         """add_feedback inserts and returns success."""
-        with patch(
-            "src.services.chat_service.Feedback_ratings", MagicMock()
-        ) as mock_fb:
+        with patch("src.services.chat_service.Feedback_ratings", MagicMock()) as mock_fb:
             mock_instance = MagicMock()
             mock_instance.insert = AsyncMock(return_value=None)
             mock_fb.return_value = mock_instance
@@ -145,9 +142,7 @@ class TestInitiateChatService:
     async def test_ai_init_failure_raises_503(self, mock_employee):
         """initiate_chat_service when AI init fails raises 503."""
         with patch("src.services.chat_service.Employee") as mock_emp_cls:
-            mock_emp_cls.find.return_value.first_or_none = AsyncMock(
-                return_value=mock_employee
-            )
+            mock_emp_cls.find.return_value.first_or_none = AsyncMock(return_value=mock_employee)
             with patch("src.services.chat_service.initi") as mock_init:
                 mock_init.return_value = {"error": "API key invalid"}
 

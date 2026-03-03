@@ -80,7 +80,7 @@ const LandingPage = () => {
             </Link>
           </div>
         </div>
-        
+
       </div>
     </Element>
 

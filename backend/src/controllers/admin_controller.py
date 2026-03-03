@@ -62,9 +62,7 @@ async def get_convo(employee_id: str, convo_id: str) -> dict[str, Any]:
         raise HTTPException(status_code=500, detail=str(error))
 
 
-async def get_employee_conversationFeedback_byId(
-    emp_id: str, convo_id: str
-) -> dict[str, Any]:
+async def get_employee_conversationFeedback_byId(emp_id: str, convo_id: str) -> dict[str, Any]:
     try:
         convo = await fetch_employee_conversationFeedback_byId(emp_id, convo_id)
         return {"Feedback": convo}
@@ -73,9 +71,7 @@ async def get_employee_conversationFeedback_byId(
         raise HTTPException(status_code=500, detail=str(error))
 
 
-async def get_employee_conversationSummary_byId(
-    emp_id: str, convo_id: str
-) -> dict[str, Any]:
+async def get_employee_conversationSummary_byId(emp_id: str, convo_id: str) -> dict[str, Any]:
     try:
         convo = await fetch_employee_conversationSummary_byId(emp_id, convo_id)
         return {"Summary": convo}

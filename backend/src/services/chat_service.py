@@ -11,9 +11,11 @@ from src.models.employee import Employee
 from src.models.feedback_ratings import Feedback_ratings
 from src.services.ai_services import (
     generate_response,
-    initialize as initi,
     stream_response_sse,
     summarize_text,
+)
+from src.services.ai_services import (
+    initialize as initi,
 )
 from src.services.prompts import (
     build_prompt_happy,
@@ -77,9 +79,7 @@ async def initiate_chat_service(convo_id: str, user: Any) -> dict[str, Any]:
 
     bot_message_text = generate_response(prompt, chatObj)
 
-    bot_message = Message(
-        sender="bot", timestamp=datetime.datetime.now(), message=bot_message_text
-    )
+    bot_message = Message(sender="bot", timestamp=datetime.datetime.now(), message=bot_message_text)
 
     new_chat_doc = Chat(
         convid=convo_id,
@@ -191,9 +191,7 @@ async def send_message_stream(user: Any, msg: str, convid: str):
     full_response = "".join(full_text)
     if stream_error:
         logger.warning("AI stream error (partial response saved): %s", stream_error)
-    dict_bot = Message(
-        sender="bot", timestamp=datetime.datetime.now(), message=full_response
-    )
+    dict_bot = Message(sender="bot", timestamp=datetime.datetime.now(), message=full_response)
     chat_record.messages.append(dict_bot)
     await chat_record.save()
 
@@ -257,9 +255,7 @@ async def end_chat(convid: str, feedback: str, emp_id: str) -> dict[str, Any]:
         try:
             employee_record.vibe_score = float(resp.text.strip())
         except (ValueError, TypeError):
-            logger.warning(
-                "Could not parse vibe score from AI response: %r", resp.text
-            )
+            logger.warning("Could not parse vibe score from AI response: %r", resp.text)
         await employee_record.save()
 
     await chat_record.save()

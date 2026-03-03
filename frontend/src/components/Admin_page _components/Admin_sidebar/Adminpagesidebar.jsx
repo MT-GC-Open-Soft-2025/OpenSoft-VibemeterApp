@@ -38,25 +38,25 @@ const Sidebar = () => {
                     <img src={Profilepic} alt="profile" className="profile-icon" />
                 </div>
                 <ul className="sidebar-menu">
-                    <li 
+                    <li
                         className={`sidebar-item d-flex align-items-center ${activeItem === 'Overview' ? 'active' : ''}`}
                         onClick={() => {
                             setActiveItem('Overview');
-                            
+
                         }}
                     >
                         Overview
                     </li>
-                    {/* <li 
+                    {/* <li
                         className={`sidebar-item ${activeItem === 'Contact Us' ? 'active' : ''}`}
                         onClick={() => handleItemClick('Contact Us')}
                     >
-                        Contact Us       
+                        Contact Us
                     </li> */}
                      <li className="sidebar-item d-flex align-items-center" onClick={() =>navigate("/contact")}>
           Contact Us
         </li>
-                    <li 
+                    <li
                         className="sidebar-item logout-item d-flex align-items-center"
                         onClick={() => handleItemClick('Log Out')}
                     >

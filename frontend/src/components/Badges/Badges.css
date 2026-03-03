@@ -30,25 +30,25 @@ h2 {
 
 /* Wrap badge in container to hold the tooltip */
 .badge-img-container {
-  position: relative; 
-  display: inline-block; 
+  position: relative;
+  display: inline-block;
 }
 
 /* The hidden tooltip text */
 .badge-tooltip {
-  visibility: hidden;        
-  opacity: 0;               
+  visibility: hidden;
+  opacity: 0;
   position: absolute;
-  bottom: 0;                
-  left: 50%;              
-  transform: translate(-50%, 110%); 
-  background-color: grey; 
-  color: black; 
-  text-align: center; 
-  padding: 5px 10px;           
-  border-radius: 4px; 
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 110%);
+  background-color: grey;
+  color: black;
+  text-align: center;
+  padding: 5px 10px;
+  border-radius: 4px;
   font-size: 0.8rem;
-  min-width: 100px;            
+  min-width: 100px;
   transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
 }
 
@@ -56,6 +56,6 @@ h2 {
 /* Show the tooltip on hover */
 .badge-img-container:hover .badge-tooltip {
   visibility: visible;
-  opacity: 1; 
-  transform: translateY(100%); 
+  opacity: 1;
+  transform: translateY(100%);
 }

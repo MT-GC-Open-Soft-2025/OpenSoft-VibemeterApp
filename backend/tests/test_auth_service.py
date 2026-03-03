@@ -1,6 +1,6 @@
 """Tests for src.services.auth_service."""
 
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, patch
 
 import pytest
 from fastapi import HTTPException

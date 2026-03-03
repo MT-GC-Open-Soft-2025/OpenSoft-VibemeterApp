@@ -2,7 +2,7 @@
 
 import os
 from contextlib import asynccontextmanager
-from unittest.mock import AsyncMock, MagicMock, patch
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from httpx import ASGITransport, AsyncClient
@@ -28,16 +28,16 @@ def clear_settings_cache():
 @pytest.fixture
 def test_app():
     """Create FastAPI app with mocked database init for unit tests."""
+    from fastapi import FastAPI
+    from fastapi.middleware.cors import CORSMiddleware
+    from slowapi import Limiter
+    from slowapi.util import get_remote_address
+
     from src.config import get_settings
     from src.routes.admin_routes import admin_router
     from src.routes.auth_routes import auth_router
     from src.routes.chat_routes import chat_router
     from src.routes.user_routes import user_router
-
-    from fastapi import FastAPI
-    from fastapi.middleware.cors import CORSMiddleware
-    from slowapi import Limiter
-    from slowapi.util import get_remote_address
 
     limiter = Limiter(key_func=get_remote_address)
     settings = get_settings()
@@ -114,8 +114,9 @@ def mock_employee_with_password(mock_employee):
 @pytest.fixture
 def admin_token():
     """Generate a valid JWT for admin user."""
-    import jwt
     import time
+
+    import jwt
 
     from src.config import get_settings
 
@@ -132,8 +133,9 @@ def admin_token():
 @pytest.fixture
 def user_token():
     """Generate a valid JWT for regular user."""
-    import jwt
     import time
+
+    import jwt
 
     from src.config import get_settings
 

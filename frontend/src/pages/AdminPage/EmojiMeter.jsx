@@ -49,7 +49,7 @@
 //         }
 
 //         const response = await axios.get(
-//           `${baseUrl}/admin/get_detail/${employeeId}`,  
+//           `${baseUrl}/admin/get_detail/${employeeId}`,
 //           { headers: { Authorization: `Bearer ${token}` } }
 //         );
 
@@ -61,7 +61,7 @@
 
 //         let score = response.data.vibe_score;
 
-        
+
 //         if (score === -1) score = 1; // Very Bad
 //         else if (score === 0) score = 2; // Bad
 //         else if (score === 1) score = 3; // Not Good
@@ -124,7 +124,7 @@
 //   useEffect(() => {
 //       const token = localStorage.getItem("token");
 //       if (!token) return;
-  
+
 //       fetch("http://localhost:8000/user/getUserDetails", {
 //         headers: { Authorization: `Bearer ${token}` },
 //       })
@@ -144,7 +144,7 @@
 //           text: "Neutral",
 //           color: "primary",
 //         };
-  
+
 //       if (truncatedVibeScore < 3 && truncatedVibeScore >= 0)
 //         return {
 //           icon: "bi-emoji-frown-fill",

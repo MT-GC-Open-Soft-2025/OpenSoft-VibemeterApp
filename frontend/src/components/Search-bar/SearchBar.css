@@ -1,6 +1,6 @@
 /* .navbar {
   background-color: #56BAED;
-  
+
   padding: 1rem;
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
@@ -115,8 +115,8 @@
   align-items: center;
 
   border-radius: 8px;
- 
-  overflow: hidden; 
+
+  overflow: hidden;
 }
 .search-bar::placeholder {
   text-align: left;
@@ -136,7 +136,7 @@
 
 
 .search-icon-btn {
-  background: #007bff; 
+  background: #007bff;
   border: none;
   padding: 10px 14px;
   cursor: pointer;
@@ -151,7 +151,7 @@
 }
 
 .search-icon-btn:hover {
-  background: #0056b3; 
+  background: #0056b3;
 }
 
 .dropdown {
@@ -286,7 +286,7 @@
   .search-wrapper {
     max-width: 90%;
   }
-  
+
   .search-input {
     font-size: 14px;
     padding: 10px;
@@ -346,8 +346,8 @@
 }
 
 .btn-search:hover {
-  
-  
+
+
   transform: scale(1.1);
 }
 

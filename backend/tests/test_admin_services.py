@@ -23,9 +23,7 @@ class TestGetAllEmployees:
     async def test_returns_employee_list(self, mock_employee):
         """get_all_employees returns list of employees."""
         with patch("src.services.admin_services.Employee") as mock_emp:
-            mock_emp.find_all.return_value.to_list = AsyncMock(
-                return_value=[mock_employee]
-            )
+            mock_emp.find_all.return_value.to_list = AsyncMock(return_value=[mock_employee])
 
             result = await get_all_employees()
 
@@ -52,9 +50,7 @@ class TestFetchEmployeeData:
     async def test_returns_user_record(self, mock_employee):
         """fetch_employee_data returns user_record dict."""
         with patch("src.services.admin_services.Employee") as mock_emp:
-            mock_emp.find.return_value.first_or_none = AsyncMock(
-                return_value=mock_employee
-            )
+            mock_emp.find.return_value.first_or_none = AsyncMock(return_value=mock_employee)
 
             result = await fetch_employee_data("emp001")
 
@@ -83,9 +79,7 @@ class TestFetchEmployeeConversation:
         chat2 = MagicMock()
         chat2.convid = "conv-002"
         with patch("src.services.admin_services.Chat") as mock_chat:
-            mock_chat.find.return_value.to_list = AsyncMock(
-                return_value=[chat1, chat2]
-            )
+            mock_chat.find.return_value.to_list = AsyncMock(return_value=[chat1, chat2])
 
             result = await fetch_employee_conversation("emp001")
 
@@ -159,9 +153,7 @@ class TestFetchAverageFeedbackScore:
         fb2 = MagicMock()
         fb2.Q1, fb2.Q2, fb2.Q3, fb2.Q4, fb2.Q5 = 2, 2, 2, 2, 2
         with patch("src.services.admin_services.Feedback_ratings") as mock_fb:
-            mock_fb.find_all.return_value.to_list = AsyncMock(
-                return_value=[fb1, fb2]
-            )
+            mock_fb.find_all.return_value.to_list = AsyncMock(return_value=[fb1, fb2])
 
             result = await fetch_average_feedback_score()
 

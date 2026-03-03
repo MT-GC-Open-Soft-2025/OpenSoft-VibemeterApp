@@ -1,4 +1,3 @@
-
 from fastapi import HTTPException, status
 
 from src.models.chats import Chat

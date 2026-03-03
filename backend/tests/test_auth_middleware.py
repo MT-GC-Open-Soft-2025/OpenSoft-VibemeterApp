@@ -1,7 +1,6 @@
 """Tests for src.middlewares.authmiddleware."""
 
 import time
-from unittest.mock import patch
 
 import jwt
 import pytest
@@ -27,9 +26,7 @@ class TestAuthenticate:
         """Invalid token raises 401."""
         from fastapi.security import HTTPAuthorizationCredentials
 
-        creds = HTTPAuthorizationCredentials(
-            scheme="Bearer", credentials="invalid.jwt.token"
-        )
+        creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials="invalid.jwt.token")
         with pytest.raises(HTTPException) as exc_info:
             authenticate(creds)
         assert exc_info.value.status_code == 401
@@ -46,9 +43,7 @@ class TestAuthenticate:
             "iat": int(time.time()) - 7200,
             "exp": int(time.time()) - 3600,
         }
-        expired_token = jwt.encode(
-            payload, settings.jwt_secret, algorithm=settings.jwt_algorithm
-        )
+        expired_token = jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
         creds = HTTPAuthorizationCredentials(scheme="Bearer", credentials=expired_token)
         with pytest.raises(HTTPException) as exc_info:
             authenticate(creds)
