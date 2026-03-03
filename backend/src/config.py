@@ -21,6 +21,9 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-2.0-flash"
     gemini_temperature: float = 0.7
     gemini_max_output_tokens: int = 1024
+    # Redis configuration (used for streaming queues / caching)
+    redis_url: str = ""
+    redis_db: int = 0
 
     model_config = {
         "env_file": str(_ENV_FILE),

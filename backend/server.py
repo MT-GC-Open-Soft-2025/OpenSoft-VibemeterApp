@@ -10,6 +10,7 @@ from slowapi.util import get_remote_address
 
 from src.config import get_settings
 from src.models.database import init_db
+from src.models.redis_client import close_redis, init_redis
 from src.routes.admin_routes import admin_router
 from src.routes.auth_routes import auth_router
 from src.routes.chat_routes import chat_router
@@ -28,8 +29,23 @@ limiter = Limiter(key_func=get_remote_address)
 async def lifespan(app: FastAPI):
     logger.info("Starting up — initialising database")
     await init_db()
+    # Initialise Redis (optional; requires REDIS_URL in env/.env)
+    try:
+        redis_client = await init_redis()
+        if redis_client is not None:
+            app.state.redis = redis_client
+            logger.info("Redis initialised")
+        else:
+            logger.info("Redis not configured (no redis_url provided)")
+    except Exception:
+        logger.exception("Failed to initialise Redis")
     yield
     logger.info("Shutting down")
+    try:
+        await close_redis()
+        logger.info("Redis connection closed")
+    except Exception:
+        logger.exception("Error while closing Redis")
 
 
 settings = get_settings()
@@ -77,6 +93,8 @@ def home():
 async def health():
     from motor.motor_asyncio import AsyncIOMotorClient
 
+    from src.models.redis_client import get_redis
+
     try:
         client = AsyncIOMotorClient(settings.mongo_uri, serverSelectionTimeoutMS=3000)
         await client.admin.command("ping")
@@ -84,8 +102,20 @@ async def health():
     except Exception:
         db_status = "disconnected"
 
+    redis_client = get_redis()
+    if redis_client is None:
+        redis_status = "not_configured"
+    else:
+        try:
+            await redis_client.ping()
+            redis_status = "connected"
+        except Exception:
+            redis_status = "disconnected"
+
+    all_ok = db_status == "connected" and redis_status in ("connected", "not_configured")
     return {
-        "status": "healthy" if db_status == "connected" else "degraded",
+        "status": "healthy" if all_ok else "degraded",
         "version": "1.0.0",
         "database": db_status,
+        "redis": redis_status,
     }
