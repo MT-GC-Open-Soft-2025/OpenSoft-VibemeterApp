@@ -1,3 +1,4 @@
+# ruff: noqa: E501
 COMMON_RULES = """
 **Always**:
 - Use formal, respectful language.

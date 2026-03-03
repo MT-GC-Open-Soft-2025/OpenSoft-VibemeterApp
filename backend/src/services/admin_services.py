@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from fastapi import HTTPException
 
@@ -10,7 +10,7 @@ from src.models.feedback_ratings import Feedback_ratings
 logger = logging.getLogger(__name__)
 
 
-async def get_all_employees() -> List[Dict[str, Any]]:
+async def get_all_employees() -> list[dict[str, Any]]:
     try:
         return await Employee.find_all().to_list()
     except Exception as error:
@@ -18,14 +18,14 @@ async def get_all_employees() -> List[Dict[str, Any]]:
         raise HTTPException(status_code=500, detail=str(error))
 
 
-async def fetch_employee_data(employee_id: str) -> Dict[str, Any]:
+async def fetch_employee_data(employee_id: str) -> dict[str, Any]:
     user_record = await Employee.find(Employee.emp_id == employee_id).first_or_none()
     if not user_record:
         raise HTTPException(status_code=404, detail="Employee not found")
     return {"user_record": user_record}
 
 
-async def fetch_employee_conversation(employee_id: str) -> List[str]:
+async def fetch_employee_conversation(employee_id: str) -> list[str]:
     try:
         chats = await Chat.find(Chat.empid == employee_id).to_list()
         if not chats:
@@ -36,7 +36,7 @@ async def fetch_employee_conversation(employee_id: str) -> List[str]:
         raise HTTPException(status_code=500, detail=str(e))
 
 
-async def specific_conversation(employee_id: str, convo_id: str) -> Dict[str, Any]:
+async def specific_conversation(employee_id: str, convo_id: str) -> dict[str, Any]:
     conversation = await Chat.find_one(Chat.convid == convo_id)
     if not conversation:
         raise HTTPException(status_code=404, detail="Conversation not found")

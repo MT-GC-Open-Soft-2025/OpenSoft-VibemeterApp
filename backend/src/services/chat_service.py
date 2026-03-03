@@ -2,14 +2,15 @@ import datetime
 import json
 import logging
 import os
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import HTTPException, status
 
 from src.models.chats import Chat, Message
 from src.models.employee import Employee
 from src.models.feedback_ratings import Feedback_ratings
-from src.services.ai_services import generate_response, initialize as initi, summarize_text
+from src.services.ai_services import generate_response, summarize_text
+from src.services.ai_services import initialize as initi
 from src.services.prompts import (
     build_prompt_happy,
     build_prompt_neutral,
@@ -35,7 +36,7 @@ async def _verify_chat_ownership(chat: Chat, emp_id: str) -> None:
         )
 
 
-async def initiate_chat_service(convo_id: str, user: Any) -> Dict[str, Any]:
+async def initiate_chat_service(convo_id: str, user: Any) -> dict[str, Any]:
     emp_id = user.get("emp_id")
     employee = await _get_employee(emp_id)
 
@@ -89,7 +90,7 @@ async def initiate_chat_service(convo_id: str, user: Any) -> Dict[str, Any]:
     return {"response": bot_message_text}
 
 
-async def get_chat(conv_id: str, emp_id: str | None = None) -> Dict[str, Any]:
+async def get_chat(conv_id: str, emp_id: str | None = None) -> dict[str, Any]:
     chat_record = await Chat.find(Chat.convid == conv_id).first_or_none()
     if not chat_record:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Chat not found")
@@ -100,7 +101,7 @@ async def get_chat(conv_id: str, emp_id: str | None = None) -> Dict[str, Any]:
     return {"chat": chat_record.messages}
 
 
-async def get_chat_feedback(conv_id: str, emp_id: str | None = None) -> Dict[str, Any]:
+async def get_chat_feedback(conv_id: str, emp_id: str | None = None) -> dict[str, Any]:
     chat_record = await Chat.find(Chat.convid == conv_id).first_or_none()
     if not chat_record:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Chat not found")
@@ -111,7 +112,7 @@ async def get_chat_feedback(conv_id: str, emp_id: str | None = None) -> Dict[str
     return {"feedback": chat_record.feedback}
 
 
-async def send_message(user: Any, msg: str, convid: str) -> Dict[str, Any]:
+async def send_message(user: Any, msg: str, convid: str) -> dict[str, Any]:
     emp_id = user.get("emp_id")
     chat_record = await Chat.find(Chat.convid == convid).first_or_none()
 
@@ -155,8 +156,8 @@ async def get_feedback_questions():
 
 
 async def add_feedback(
-    feedback: Dict[str, int], emp_id: str | None = None, conv_id: str | None = None
-) -> Dict[str, Any]:
+    feedback: dict[str, int], emp_id: str | None = None, conv_id: str | None = None
+) -> dict[str, Any]:
     try:
         feedback_record = Feedback_ratings(emp_id=emp_id, conv_id=conv_id, **feedback)
         await feedback_record.insert()
@@ -166,7 +167,7 @@ async def add_feedback(
         raise ValueError(str(e))
 
 
-async def end_chat(convid: str, feedback: str, emp_id: str) -> Dict[str, Any]:
+async def end_chat(convid: str, feedback: str, emp_id: str) -> dict[str, Any]:
     chat_record = await Chat.find(Chat.convid == convid).first_or_none()
     if not chat_record:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Chat not found")

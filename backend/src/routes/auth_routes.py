@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import APIRouter
 
@@ -8,5 +8,5 @@ auth_router = APIRouter()
 
 
 @auth_router.post("/signin")
-async def signin_route(payload: SignInRequest) -> Dict[str, Any]:
+async def signin_route(payload: SignInRequest) -> dict[str, Any]:
     return await signin_controller(payload)

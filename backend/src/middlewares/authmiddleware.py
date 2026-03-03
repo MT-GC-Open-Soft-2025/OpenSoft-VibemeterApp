@@ -1,5 +1,4 @@
 import logging
-from typing import Dict
 
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -14,7 +13,7 @@ bearer_scheme = HTTPBearer()
 
 def authenticate(
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
-) -> Dict:
+) -> dict:
     settings = get_settings()
     token = credentials.credentials
 

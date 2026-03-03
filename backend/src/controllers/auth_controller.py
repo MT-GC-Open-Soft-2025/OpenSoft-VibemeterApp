@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import HTTPException, status
 from pydantic import BaseModel, Field
@@ -11,7 +11,7 @@ class SignInRequest(BaseModel):
     password: str = Field(..., min_length=1)
 
 
-async def signin_controller(payload: SignInRequest) -> Dict[str, Any]:
+async def signin_controller(payload: SignInRequest) -> dict[str, Any]:
     if not payload.username or not payload.password:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

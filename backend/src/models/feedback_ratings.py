@@ -1,11 +1,10 @@
-from typing import Optional
 
 from beanie import Document
 
 
 class Feedback_ratings(Document):
-    emp_id: Optional[str] = None
-    conv_id: Optional[str] = None
+    emp_id: str | None = None
+    conv_id: str | None = None
     Q1: int
     Q2: int
     Q3: int

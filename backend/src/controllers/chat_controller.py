@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import HTTPException, status
 from pydantic import BaseModel, Field
@@ -23,10 +23,10 @@ class Chat_frontend(BaseModel):
 
 
 class Feedback(BaseModel):
-    feedback: Dict[str, int]
+    feedback: dict[str, int]
 
 
-async def initiate_chat_controller(convo_id: str, user: Any) -> Dict[str, Any]:
+async def initiate_chat_controller(convo_id: str, user: Any) -> dict[str, Any]:
     try:
         return await initiate_chat_service(convo_id, user)
     except HTTPException:
@@ -41,7 +41,7 @@ async def initiate_chat_controller(convo_id: str, user: Any) -> Dict[str, Any]:
         )
 
 
-async def response_controller(payload: Chat_frontend, user: Any) -> Dict[str, Any]:
+async def response_controller(payload: Chat_frontend, user: Any) -> dict[str, Any]:
     if not payload.convid or not payload.message:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing payload")
 
@@ -54,7 +54,7 @@ async def response_controller(payload: Chat_frontend, user: Any) -> Dict[str, An
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(error))
 
 
-async def feedback_controller() -> Dict[str, Any]:
+async def feedback_controller() -> dict[str, Any]:
     try:
         return await get_feedback_questions()
     except ValueError as e:
@@ -68,8 +68,8 @@ async def feedback_controller() -> Dict[str, Any]:
 
 
 async def add_feedback_controller(
-    feedback: Dict[str, int], user: Any
-) -> Dict[str, Any]:
+    feedback: dict[str, int], user: Any
+) -> dict[str, Any]:
     try:
         emp_id = user.get("emp_id") if user else None
         return await add_feedback(feedback, emp_id=emp_id)
@@ -85,7 +85,7 @@ async def add_feedback_controller(
 
 async def end_chat_controller(
     convo_id: str, feedback: str, user: Any
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     try:
         emp_id = user.get("emp_id")
         return await end_chat(convo_id, feedback, emp_id)
@@ -101,7 +101,7 @@ async def end_chat_controller(
         )
 
 
-async def getChat_controller(conv_id: str, user: Any) -> Dict[str, Any]:
+async def getChat_controller(conv_id: str, user: Any) -> dict[str, Any]:
     try:
         emp_id = user.get("emp_id")
         return await get_chat(conv_id, emp_id)
@@ -115,7 +115,7 @@ async def getChat_controller(conv_id: str, user: Any) -> Dict[str, Any]:
         )
 
 
-async def get_chat_feedback_controller(conv_id: str, user: Any) -> Dict[str, Any]:
+async def get_chat_feedback_controller(conv_id: str, user: Any) -> dict[str, Any]:
     try:
         emp_id = user.get("emp_id")
         return await get_chat_feedback(conv_id, emp_id)

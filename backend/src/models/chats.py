@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import List
 
 from beanie import Document, Indexed
 from pydantic import BaseModel
@@ -15,7 +14,7 @@ class Chat(Document):
     convid: Indexed(str, unique=True)
     empid: Indexed(str)
     initial_prompt: str
-    messages: List[Message]
+    messages: list[Message]
     feedback: str
     summary: str
 

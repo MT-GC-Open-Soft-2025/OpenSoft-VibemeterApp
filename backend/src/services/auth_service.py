@@ -1,6 +1,5 @@
 import logging
 import time
-from typing import Dict
 
 import jwt
 from fastapi import HTTPException, status
@@ -20,7 +19,7 @@ def hash_password(password: str) -> str:
     return bcrypt.hash(password)
 
 
-async def signin(username: str, password: str) -> Dict[str, str]:
+async def signin(username: str, password: str) -> dict[str, str]:
     settings = get_settings()
 
     user_record = await Employee.find(Employee.emp_id == username).first_or_none()

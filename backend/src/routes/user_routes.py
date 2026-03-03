@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import APIRouter, Depends
 
@@ -9,10 +9,10 @@ user_router = APIRouter()
 
 
 @user_router.get("/getUserDetails")
-async def get_user_route(user: Dict[str, Any] = Depends(authenticate)):
+async def get_user_route(user: dict[str, Any] = Depends(authenticate)):
     return await user_controller(user)
 
 
 @user_router.get("/getConvoids")
-async def get_convoids_route(user: Dict[str, Any] = Depends(authenticate)):
+async def get_convoids_route(user: dict[str, Any] = Depends(authenticate)):
     return await convoid_controller(user)

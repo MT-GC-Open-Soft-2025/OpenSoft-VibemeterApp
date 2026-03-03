@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import HTTPException
 
@@ -16,7 +16,7 @@ from src.services.admin_services import (
 logger = logging.getLogger(__name__)
 
 
-async def get_all_employees_controller() -> Dict[str, Any]:
+async def get_all_employees_controller() -> dict[str, Any]:
     try:
         employees = await get_all_employees()
         return {"employees": employees}
@@ -25,7 +25,7 @@ async def get_all_employees_controller() -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail=str(error))
 
 
-async def get_employee_detail(employee_id: str) -> Dict[str, Any]:
+async def get_employee_detail(employee_id: str) -> dict[str, Any]:
     try:
         employee = await fetch_employee_data(employee_id)
         if not employee:
@@ -38,7 +38,7 @@ async def get_employee_detail(employee_id: str) -> Dict[str, Any]:
         raise HTTPException(status_code=400, detail=str(error))
 
 
-async def get_employee_conversation(employee_id: str) -> Dict[str, Any]:
+async def get_employee_conversation(employee_id: str) -> dict[str, Any]:
     try:
         convo_ids = await fetch_employee_conversation(employee_id)
         valid_convos = []
@@ -52,7 +52,7 @@ async def get_employee_conversation(employee_id: str) -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail=str(error))
 
 
-async def get_convo(employee_id: str, convo_id: str) -> Dict[str, Any]:
+async def get_convo(employee_id: str, convo_id: str) -> dict[str, Any]:
     try:
         return await specific_conversation(employee_id, convo_id)
     except HTTPException:
@@ -64,7 +64,7 @@ async def get_convo(employee_id: str, convo_id: str) -> Dict[str, Any]:
 
 async def get_employee_conversationFeedback_byId(
     emp_id: str, convo_id: str
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     try:
         convo = await fetch_employee_conversationFeedback_byId(emp_id, convo_id)
         return {"Feedback": convo}
@@ -75,7 +75,7 @@ async def get_employee_conversationFeedback_byId(
 
 async def get_employee_conversationSummary_byId(
     emp_id: str, convo_id: str
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     try:
         convo = await fetch_employee_conversationSummary_byId(emp_id, convo_id)
         return {"Summary": convo}
