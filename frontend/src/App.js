@@ -14,7 +14,7 @@ const Start = lazy(() => import('./pages/Loginpage/Start'));
 const AdminPage = lazy(() => import('./pages/AdminPage/AdminPage'));
 const UserPage = lazy(() => import('./pages/UserPage/UserPage'));
 const SurveyForm = lazy(() => import('./pages/SurveyForm/SurveyForm'));
-const Chat = lazy(() => import('./components/chat_popup/chat'));
+const ChatPage = lazy(() => import('./pages/ChatPage/ChatPage'));
 const FeedbackPage = lazy(() => import('./pages/Feedbackpage/Feedbackpage'));
 const ContactForm = lazy(() => import('./pages/ContactPage/ContactForm'));
 
@@ -78,7 +78,7 @@ const App = () => {
                   path="/chat"
                   element={
                     <ProtectedRoute>
-                      <Chat />
+                      <ChatPage />
                     </ProtectedRoute>
                   }
                 />

@@ -9,6 +9,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   const fetchUser = useCallback(async () => {
+    setLoading(true);
     if (!token) {
       setUser(null);
       setLoading(false);
@@ -34,6 +35,7 @@ export function AuthProvider({ children }) {
   const login = (accessToken, empId) => {
     localStorage.setItem("token", accessToken);
     localStorage.setItem("empId", empId);
+    setLoading(true); // ensure ProtectedRoute shows spinner before fetchUser completes
     setToken(accessToken);
   };
 

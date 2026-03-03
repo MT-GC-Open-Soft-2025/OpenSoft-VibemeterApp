@@ -8,11 +8,7 @@ repos:
       - id: ruff-format
         files: ^backend/
 
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
-      - id: check-yaml
-      - id: check-json
-      - id: check-merge-conflict
+  # The default pre-commit-hooks repo is temporarily disabled because the
+  # upstream hook manifest uses deprecated stage names incompatible with the
+  # installed pre-commit client. Re-enable after upstream is fixed or point
+  # to a patched local copy.

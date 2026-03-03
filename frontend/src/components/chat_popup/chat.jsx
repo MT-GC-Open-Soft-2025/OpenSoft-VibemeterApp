@@ -16,7 +16,7 @@ import {
   endChat,
 } from "../../api/chat";
 
-const Chat = ({ onClose }) => {
+const Chat = ({ onClose, fullPage = false }) => {
   const navigate = useNavigate();
   const [convids, setConversationIds] = useState([]);
   const [chatStarted, setChatStarted] = useState(false);
@@ -388,7 +388,7 @@ const Chat = ({ onClose }) => {
 
   return (
     <>
-      <div className="chat-floating-widget bg-white shadow-lg rounded-4 overflow-hidden border">
+      <div className={`chat-floating-widget bg-white overflow-hidden border${fullPage ? " chat-fullpage" : " shadow-lg rounded-4"}`}>
         <div className="chat-header d-flex justify-content-between align-items-center p-3 text-white">
           <div className="d-flex align-items-center gap-2">
             <h6 className="mb-0 fw-bold">WellBee Chat</h6>

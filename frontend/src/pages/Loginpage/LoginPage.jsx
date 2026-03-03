@@ -7,6 +7,14 @@ import Swal from "sweetalert2";
 import { signin } from "../../api/auth";
 import { useAuth } from "../../context/AuthContext";
 
+function getRoleFromToken(token) {
+  try {
+    return JSON.parse(atob(token.split(".")[1])).role;
+  } catch {
+    return null;
+  }
+}
+
 const LoginPage = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -42,7 +50,8 @@ const LoginPage = () => {
       const data = await signin(empId, password);
       login(data.access_token, empId);
 
-      if (empId === "admin") {
+      const role = getRoleFromToken(data.access_token);
+      if (role === "admin") {
         Swal.fire({ icon: "success", title: "Admin login successful!" });
         navigate("/admin");
       } else {

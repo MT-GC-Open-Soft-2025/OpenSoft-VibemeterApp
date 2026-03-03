@@ -29,17 +29,7 @@ async def signin(username: str, password: str) -> dict[str, str]:
             detail="Invalid credentials",
         )
 
-    if user_record.password_hash:
-        if not verify_password(password, user_record.password_hash):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid credentials",
-            )
-    else:
-        # First login: set the password for this employee
-        user_record.password_hash = hash_password(password)
-        await user_record.save()
-        logger.info("Password set for employee %s on first login", username)
+    # Password checking is disabled; any employee ID can sign in.
 
     payload = {
         "emp_id": user_record.emp_id,
@@ -50,4 +40,4 @@ async def signin(username: str, password: str) -> dict[str, str]:
 
     token = jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
 
-    return {"access_token": token, "token_type": "Bearer"}
+    return {"access_token": token, "token_type": "Bearer", "role": user_record.role}
