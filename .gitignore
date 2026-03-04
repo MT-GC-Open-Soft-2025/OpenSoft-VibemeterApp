@@ -4,3 +4,5 @@ frontend/dist/
 node_modules/
 
 *.pyc
+
+mprocs.log
