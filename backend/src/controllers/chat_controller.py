@@ -16,7 +16,7 @@ from src.services.chat_service import (
     send_message_stream,
     send_message_stream_redis,
 )
-from src.services.redis_stream_service import consume_stream_sse
+from src.services.redis_stream_service import consume_stream_sse, make_stream_key
 
 logger = logging.getLogger(__name__)
 
@@ -73,12 +73,72 @@ async def response_stream_controller(payload: Chat_frontend, user: Any):
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(error))
 
 
-async def response_stream_redis_controller(payload: Chat_frontend, user: Any):
-    """StreamingResponse generator backed by Redis Streams.
+async def start_stream_redis_controller(payload: Chat_frontend, user: Any) -> None:
+    """Validate the request, start the Redis producer background task, and return.
 
-    Launches the AI producer as a background task (decoupled from the HTTP
-    connection), then consumes the Redis Stream and forwards SSE chunks.
-    Returns 503 if Redis is not configured.
+    The route handler issues a 303 redirect to GET /consume_stream/{convid} after
+    this returns.  The consumer endpoint is an SSE stream that actively flushes
+    every entry added to the Redis stream by the producer.
+    """
+    if not payload.convid or not payload.message:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing payload")
+
+    redis = get_redis()
+    if redis is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Redis is not configured. Set REDIS_URL to use this endpoint.",
+        )
+
+    try:
+        stream_key = await send_message_stream_redis(user, payload.message, payload.convid)
+        logger.info(
+            "start_stream_redis_controller: producer started for conv=%s, stream_key=%s",
+            payload.convid,
+            stream_key,
+        )
+    except HTTPException:
+        raise
+    except Exception as error:
+        logger.error("Error starting Redis stream producer: %s", error)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(error))
+
+
+async def consume_stream_redis_controller(conv_id: str, user: Any):
+    """SSE generator: reads from the Redis stream identified by *conv_id*.
+
+    The stream key is deterministic (``stream:chat:{conv_id}``) so the client
+    only needs to know the conversation ID.  The consumer always starts from
+    entry id="0", ensuring no chunks are missed even when the producer has
+    already written some entries.
+    """
+    redis = get_redis()
+    if redis is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Redis is not configured. Set REDIS_URL to use this endpoint.",
+        )
+
+    stream_key = make_stream_key(conv_id)
+    logger.info(
+        "consume_stream_redis_controller: consumer connecting for conv=%s, stream_key=%s",
+        conv_id,
+        stream_key,
+    )
+
+    try:
+        async for chunk in consume_stream_sse(stream_key):
+            yield chunk
+    except Exception as error:
+        logger.error("Error consuming Redis stream [%s]: %s", stream_key, error)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(error))
+
+
+async def response_stream_redis_controller(payload: Chat_frontend, user: Any):
+    """Deprecated: single-request combined producer+consumer kept for backwards compat.
+
+    Prefer calling POST /send_stream_redis (start producer) followed by
+    GET /consume_stream/{convid} (SSE consumer) instead.
     """
     if not payload.convid or not payload.message:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing payload")

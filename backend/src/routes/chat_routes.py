@@ -1,11 +1,12 @@
 from typing import Any
 
 from fastapi import APIRouter, Depends
-from fastapi.responses import StreamingResponse
+from fastapi.responses import RedirectResponse, StreamingResponse
 
 from src.controllers.chat_controller import (
     Chat_frontend,
     add_feedback_controller,
+    consume_stream_redis_controller,
     end_chat_controller,
     feedback_controller,
     get_chat_feedback_controller,
@@ -13,7 +14,7 @@ from src.controllers.chat_controller import (
     initiate_chat_controller,
     response_controller,
     response_stream_controller,
-    response_stream_redis_controller,
+    start_stream_redis_controller,
 )
 from src.middlewares.authmiddleware import authenticate
 
@@ -46,17 +47,42 @@ async def send_chat_stream(payload: Chat_frontend, user: dict[str, Any] = Depend
 
 
 @chat_router.post("/send_stream_redis")
-async def send_chat_stream_redis(
+async def send_chat_stream_redis_start(
     payload: Chat_frontend, user: dict[str, Any] = Depends(authenticate)
 ):
-    """Stream AI response via Redis Streams (producer/consumer decoupled).
+    """Start the Redis-backed AI producer then 303-redirect to the SSE consumer.
+
+    The background producer begins writing chunks to the Redis stream immediately.
+    The 303 redirect points the client to GET /consume_stream/{convid} which
+    is an SSE endpoint that actively listens to the stream and flushes each
+    entry as soon as it is written.
+
+    fetch follows the redirect transparently (redirect="follow" default), so
+    the caller receives the SSE stream body as if it had called the GET endpoint
+    directly.
 
     Requires REDIS_URL to be configured; returns 503 otherwise.
-    SSE format is identical to /send_stream so the frontend can switch
-    with a single import change.
+    """
+    await start_stream_redis_controller(payload, user)
+    return RedirectResponse(
+        url=f"/chat/consume_stream/{payload.convid}",
+        status_code=303,
+    )
+
+
+@chat_router.get("/consume_stream/{conv_id}")
+async def consume_chat_stream_redis(conv_id: str, user: dict[str, Any] = Depends(authenticate)):
+    """Consume the Redis-backed AI response for *conv_id* as a Server-Sent Events stream.
+
+    Connect here immediately after POST /send_stream_redis returns.
+    Reads from entry id="0" so all chunks are delivered regardless of when
+    the client connects relative to the producer.
+
+    SSE format is identical to /send_stream so the frontend only needs to
+    change the URL and split the request into two calls.
     """
     return StreamingResponse(
-        response_stream_redis_controller(payload, user),
+        consume_stream_redis_controller(conv_id, user),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
