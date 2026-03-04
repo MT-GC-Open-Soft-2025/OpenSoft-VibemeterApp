@@ -1,0 +1,25 @@
+hide_keymap_window: false
+scrollback: 5000
+proc_list_width: 28
+log_dir: <CONFIG_DIR>/.mprocs-logs
+
+procs:
+  backend:
+    shell: ./scripts/dev/backend.sh
+    cwd: <CONFIG_DIR>
+
+  frontend:
+    shell: ./scripts/dev/frontend.sh
+    cwd: <CONFIG_DIR>
+
+  agent-anchor:
+    shell: ./scripts/dev/agent.sh anchor 8101 Anchor anchor
+    cwd: <CONFIG_DIR>
+
+  agent-spark:
+    shell: ./scripts/dev/agent.sh spark 8102 Spark spark
+    cwd: <CONFIG_DIR>
+
+  agent-sage:
+    shell: ./scripts/dev/agent.sh sage 8103 Sage sage
+    cwd: <CONFIG_DIR>

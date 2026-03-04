@@ -1,0 +1,29 @@
+hide_keymap_window: false
+scrollback: 5000
+proc_list_width: 28
+log_dir: <CONFIG_DIR>/.mprocs-logs
+
+procs:
+  infra:
+    shell: ./scripts/dev/infra.sh up
+    cwd: <CONFIG_DIR>
+
+  backend:
+    shell: DEV_DATA_SERVICES=local ./scripts/dev/backend.sh
+    cwd: <CONFIG_DIR>
+
+  frontend:
+    shell: DEV_DATA_SERVICES=local ./scripts/dev/frontend.sh
+    cwd: <CONFIG_DIR>
+
+  agent-anchor:
+    shell: DEV_DATA_SERVICES=local ./scripts/dev/agent.sh anchor 8101 Anchor anchor
+    cwd: <CONFIG_DIR>
+
+  agent-spark:
+    shell: DEV_DATA_SERVICES=local ./scripts/dev/agent.sh spark 8102 Spark spark
+    cwd: <CONFIG_DIR>
+
+  agent-sage:
+    shell: DEV_DATA_SERVICES=local ./scripts/dev/agent.sh sage 8103 Sage sage
+    cwd: <CONFIG_DIR>

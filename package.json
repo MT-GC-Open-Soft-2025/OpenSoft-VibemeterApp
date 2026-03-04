@@ -1,0 +1,13 @@
+{
+  "name": "wellbee-dev-tools",
+  "private": true,
+  "devDependencies": {
+    "mprocs": "^0.7.2"
+  },
+  "scripts": {
+    "dev": "mprocs",
+    "dev:doctor": "./scripts/dev/doctor.sh",
+    "dev:infra:up": "./scripts/dev/infra.sh up",
+    "dev:infra:down": "./scripts/dev/infra.sh down"
+  }
+}

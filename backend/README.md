@@ -1,5 +1,23 @@
 ## Backend up at https://api.wellbee.live
 
+The primary local development workflow now lives at the repository root.
+
+Use:
+
+```bash
+make dev
+```
+
+from `/Users/karthik/work/cdc/somu/wellbee` to start backend, frontend, and all three agent runtimes together in `mprocs` against the hosted MongoDB/Redis values from `.env`.
+
+If you explicitly want local Docker MongoDB + Redis instead, use:
+
+```bash
+make dev-local
+```
+
+Use `make dev-doctor` separately for validation; it is not part of the persistent `mprocs` process list.
+
 ## Steps to run the project locally
 
 
@@ -42,7 +60,7 @@ DB_NAME=
 GEMINI_KEY=
 ```
 
-### 5. Run the FastAPI server in local
+### 5. Run only the FastAPI server locally
 ```bash
 uvicorn server:app --host 0.0.0.0 --port 8000 --reload
 ```

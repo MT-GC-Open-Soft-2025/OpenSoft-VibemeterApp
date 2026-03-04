@@ -1,2 +1,6 @@
 .env
 frontend/dist/
+.mprocs-logs/
+node_modules/
+
+*.pyc

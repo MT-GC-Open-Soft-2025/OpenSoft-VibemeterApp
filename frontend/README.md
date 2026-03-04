@@ -4,6 +4,24 @@ The website is live at [www.wellbee.live](https://www.wellbee.live) [Currently n
 
 ### Setup
 
+The recommended local workflow now starts from the repository root so the frontend runs together with backend, MongoDB, Redis, and all three agent runtimes:
+
+```bash
+make dev
+```
+
+Run that from `/Users/karthik/work/cdc/somu/wellbee`.
+
+That default workflow uses the hosted MongoDB/Redis URLs from the repo root `.env`.
+
+If you want the local Docker MongoDB + Redis variant instead, run:
+
+```bash
+make dev-local
+```
+
+Use `make dev-doctor` separately when you want environment validation before starting the stack.
+
 - Clone the frontend repository `frontend` to your local machine.
 - Change your current directory to the cloned repository.
 - Run the backend server on your local machine.
@@ -18,7 +36,7 @@ Run the following command in your terminal to install the necessary dependencies
 npm install
 ```
 
-### Run the Application
+### Run only the frontend
 
 To start the application, execute:
 
