@@ -4,6 +4,7 @@ from typing import Any
 from fastapi import HTTPException, status
 from pydantic import BaseModel, Field
 
+from src.models.redis_client import get_redis
 from src.services.chat_service import (
     add_feedback,
     end_chat,
@@ -13,7 +14,9 @@ from src.services.chat_service import (
     initiate_chat_service,
     send_message,
     send_message_stream,
+    send_message_stream_redis,
 )
+from src.services.redis_stream_service import consume_stream_sse
 
 logger = logging.getLogger(__name__)
 
@@ -68,6 +71,39 @@ async def response_stream_controller(payload: Chat_frontend, user: Any):
     except Exception as error:
         logger.error("Error streaming message: %s", error)
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(error))
+
+
+async def response_stream_redis_controller(payload: Chat_frontend, user: Any):
+    """StreamingResponse generator backed by Redis Streams.
+
+    Launches the AI producer as a background task (decoupled from the HTTP
+    connection), then consumes the Redis Stream and forwards SSE chunks.
+    Returns 503 if Redis is not configured.
+    """
+    if not payload.convid or not payload.message:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing payload")
+
+    redis = get_redis()
+    if redis is None:
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Redis is not configured. Set REDIS_URL to use this endpoint.",
+        )
+
+    try:
+        stream_key = await send_message_stream_redis(user, payload.message, payload.convid)
+    except HTTPException:
+        raise
+    except Exception as error:
+        logger.error("Error starting Redis stream: %s", error)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(error))
+
+    try:
+        async for chunk in consume_stream_sse(stream_key):
+            yield chunk
+    except Exception as error:
+        logger.error("Error consuming Redis stream: %s", error)
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(error))
 
 
 async def feedback_controller() -> dict[str, Any]:

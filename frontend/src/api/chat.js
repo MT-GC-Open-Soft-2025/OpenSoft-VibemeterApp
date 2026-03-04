@@ -77,6 +77,75 @@ export function sendMessageStream(convid, message, onChunk, onError, onDone) {
   return controller;
 }
 
+/**
+ * Send a message and stream the AI response via Redis Streams–backed SSE.
+ * Identical signature to sendMessageStream — switch with one import change.
+ * Requires REDIS_URL to be configured on the backend (returns an onError call otherwise).
+ *
+ * @param {string} convid
+ * @param {string} message
+ * @param {function(string): void} onChunk
+ * @param {function(Error): void} onError
+ * @param {function(): void} [onDone]
+ * @returns {AbortController}
+ */
+export function sendMessageStreamRedis(convid, message, onChunk, onError, onDone) {
+  const token = localStorage.getItem("token");
+  const url = `${baseUrl}/chat/send_stream_redis`;
+  const controller = new AbortController();
+
+  (async () => {
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: token ? `Bearer ${token}` : "",
+        },
+        body: JSON.stringify({ convid, message }),
+        signal: controller.signal,
+      });
+
+      if (!res.ok) {
+        const errBody = await res.text();
+        throw new Error(res.status === 401 ? "Unauthorized" : errBody || res.statusText);
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              if (data.text) onChunk(data.text);
+              if (data.error) onError(new Error(data.error));
+              if (data.done && onDone) onDone();
+            } catch {
+              // skip malformed
+            }
+          }
+        }
+      }
+      if (onDone) onDone();
+    } catch (err) {
+      if (err.name !== "AbortError") {
+        onError(err);
+      }
+    }
+  })();
+
+  return controller;
+}
+
 export async function getChat(convId) {
   const response = await apiClient.get(`/chat/chat/${convId}`);
   return response.data;

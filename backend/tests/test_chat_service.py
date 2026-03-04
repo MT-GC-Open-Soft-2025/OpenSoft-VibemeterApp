@@ -15,6 +15,7 @@ from src.services.chat_service import (
     get_chat_feedback,
     get_feedback_questions,
     initiate_chat_service,
+    send_message_stream_redis,
 )
 
 
@@ -182,3 +183,81 @@ class TestEndChat:
                 await end_chat("conv-001", "New feedback", "emp001")
 
             assert "Feedback already given" in str(exc_info.value)
+
+
+class TestSendMessageStreamRedis:
+    """Tests for send_message_stream_redis."""
+
+    @pytest.mark.asyncio
+    async def test_raises_404_when_chat_not_found(self):
+        """send_message_stream_redis raises 404 if the chat does not exist."""
+        with patch("src.services.chat_service.Chat") as mock_chat:
+            mock_chat.find.return_value.first_or_none = AsyncMock(return_value=None)
+
+            with pytest.raises(HTTPException) as exc_info:
+                await send_message_stream_redis({"emp_id": "emp001"}, "Hello", "conv-001")
+
+            assert exc_info.value.status_code == 404
+
+    @pytest.mark.asyncio
+    async def test_raises_403_for_wrong_owner(self):
+        """send_message_stream_redis raises 403 when user does not own the chat."""
+        chat = MagicMock()
+        chat.empid = "emp-other"
+        chat.messages = []
+
+        with patch("src.services.chat_service.Chat") as mock_chat:
+            mock_chat.find.return_value.first_or_none = AsyncMock(return_value=chat)
+
+            with pytest.raises(HTTPException) as exc_info:
+                await send_message_stream_redis({"emp_id": "emp001"}, "Hello", "conv-001")
+
+            assert exc_info.value.status_code == 403
+
+    @pytest.mark.asyncio
+    async def test_raises_503_when_ai_unavailable(self):
+        """send_message_stream_redis raises 503 when AI initialisation fails."""
+        chat = MagicMock()
+        chat.empid = "emp001"
+        chat.messages = []
+        chat.initial_prompt = "system prompt"
+        chat.save = AsyncMock()
+
+        with (
+            patch("src.services.chat_service.Chat") as mock_chat,
+            patch("src.services.chat_service.initi") as mock_initi,
+        ):
+            mock_chat.find.return_value.first_or_none = AsyncMock(return_value=chat)
+            mock_initi.return_value = {"error": "API key invalid"}
+
+            with pytest.raises(HTTPException) as exc_info:
+                await send_message_stream_redis({"emp_id": "emp001"}, "Hello", "conv-001")
+
+            assert exc_info.value.status_code == 503
+
+    @pytest.mark.asyncio
+    async def test_returns_stream_key_string(self):
+        """send_message_stream_redis returns a non-empty stream key on success."""
+        chat = MagicMock()
+        chat.empid = "emp001"
+        chat.messages = []
+        chat.initial_prompt = "system prompt"
+        chat.save = AsyncMock()
+
+        chat_obj = MagicMock()
+
+        with (
+            patch("src.services.chat_service.Chat") as mock_chat,
+            patch("src.services.chat_service.initi", return_value=chat_obj),
+            patch(
+                "src.services.chat_service.make_stream_key",
+                return_value="stream:chat:conv-001:abc12345",
+            ),
+            patch("asyncio.create_task"),  # prevent background task from actually running
+        ):
+            mock_chat.find.return_value.first_or_none = AsyncMock(return_value=chat)
+
+            result = await send_message_stream_redis({"emp_id": "emp001"}, "Hello", "conv-001")
+
+        assert result == "stream:chat:conv-001:abc12345"
+        chat.save.assert_called_once()  # user message persisted immediately

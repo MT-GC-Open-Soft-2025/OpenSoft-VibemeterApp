@@ -1,3 +1,4 @@
+import asyncio
 import datetime
 import json
 import logging
@@ -23,6 +24,7 @@ from src.services.prompts import (
     build_prompt_sad,
     build_prompt_unknown,
 )
+from src.services.redis_stream_service import make_stream_key
 
 logger = logging.getLogger(__name__)
 
@@ -194,6 +196,125 @@ async def send_message_stream(user: Any, msg: str, convid: str):
     dict_bot = Message(sender="bot", timestamp=datetime.datetime.now(), message=full_response)
     chat_record.messages.append(dict_bot)
     await chat_record.save()
+
+
+async def send_message_stream_redis(user: Any, msg: str, convid: str) -> str:
+    """Validate the request, append the user message, start a background producer,
+    and return the Redis Stream key for the caller to consume.
+
+    The caller is responsible for reading from the returned stream key via
+    `consume_stream_sse` and forwarding the SSE chunks to the client.
+    """
+    emp_id = user.get("emp_id")
+    chat_record = await Chat.find(Chat.convid == convid).first_or_none()
+
+    if not chat_record:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Chat not found")
+
+    await _verify_chat_ownership(chat_record, emp_id)
+
+    chatObj = initi()
+    if isinstance(chatObj, dict) and "error" in chatObj:
+        logger.error("AI Service initialization failed: %s", chatObj["error"])
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="AI service is currently unavailable.",
+        )
+
+    # Persist the user message immediately so it is visible before the bot replies.
+    dict_user = Message(sender="user", timestamp=datetime.datetime.now(), message=msg)
+    chat_record.messages.append(dict_user)
+    await chat_record.save()
+
+    prompt = _build_continuation_prompt(chat_record)
+    stream_key = make_stream_key(convid)
+
+    async def _produce_and_persist():
+        """Background task: produce chunks to Redis, then persist the full bot reply to DB."""
+        full_text: list[str] = []
+        from src.models.redis_client import get_redis
+
+        redis = get_redis()
+
+        # Re-fetch chat record inside the background task to avoid stale state.
+        record = await Chat.find(Chat.convid == convid).first_or_none()
+        if record is None:
+            logger.error("Background producer: chat %s not found", convid)
+            return
+
+        # Collect chunks during production so we can persist the full response.
+        try:
+            async for sse_chunk in stream_response_sse(prompt, chatObj):
+                if sse_chunk.startswith("data: "):
+                    try:
+                        data = json.loads(sse_chunk[6:].strip())
+                        if "text" in data:
+                            full_text.append(data["text"])
+                    except json.JSONDecodeError:
+                        pass
+
+                # Also write to Redis Stream for the consumer.
+                if redis is not None:
+                    if sse_chunk.startswith("data: "):
+                        try:
+                            payload = json.loads(sse_chunk[6:].strip())
+                        except json.JSONDecodeError:
+                            continue
+                        entry: dict[str, str] = {}
+                        if "text" in payload:
+                            entry = {"type": "chunk", "text": payload["text"]}
+                        elif "done" in payload:
+                            entry = {"type": "done"}
+                        elif "error" in payload:
+                            entry = {"type": "error", "message": payload["error"]}
+                        if entry:
+                            from src.services.redis_stream_service import (
+                                STREAM_MAXLEN,
+                                STREAM_TTL_SECONDS,
+                            )
+
+                            await redis.xadd(
+                                stream_key, entry, maxlen=STREAM_MAXLEN, approximate=True
+                            )
+                            if entry["type"] in ("done", "error"):
+                                await redis.expire(stream_key, STREAM_TTL_SECONDS)
+                                break
+            else:
+                # Ensure a "done" sentinel is always written.
+                if redis is not None:
+                    from src.services.redis_stream_service import STREAM_MAXLEN, STREAM_TTL_SECONDS
+
+                    await redis.xadd(
+                        stream_key, {"type": "done"}, maxlen=STREAM_MAXLEN, approximate=True
+                    )
+                    await redis.expire(stream_key, STREAM_TTL_SECONDS)
+        except Exception as exc:
+            logger.exception("Background producer error on stream %s: %s", stream_key, exc)
+            if redis is not None:
+                from src.services.redis_stream_service import STREAM_MAXLEN, STREAM_TTL_SECONDS
+
+                try:
+                    await redis.xadd(
+                        stream_key,
+                        {"type": "error", "message": str(exc)},
+                        maxlen=STREAM_MAXLEN,
+                        approximate=True,
+                    )
+                    await redis.expire(stream_key, STREAM_TTL_SECONDS)
+                except Exception:
+                    pass
+
+        # Persist final bot reply to MongoDB.
+        full_response = "".join(full_text)
+        if full_response:
+            dict_bot = Message(
+                sender="bot", timestamp=datetime.datetime.now(), message=full_response
+            )
+            record.messages.append(dict_bot)
+            await record.save()
+
+    asyncio.create_task(_produce_and_persist())
+    return stream_key
 
 
 async def get_feedback_questions():

@@ -13,6 +13,7 @@ from src.controllers.chat_controller import (
     initiate_chat_controller,
     response_controller,
     response_stream_controller,
+    response_stream_redis_controller,
 )
 from src.middlewares.authmiddleware import authenticate
 
@@ -35,6 +36,27 @@ async def send_chat(payload: Chat_frontend, user: dict[str, Any] = Depends(authe
 async def send_chat_stream(payload: Chat_frontend, user: dict[str, Any] = Depends(authenticate)):
     return StreamingResponse(
         response_stream_controller(payload, user),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
+@chat_router.post("/send_stream_redis")
+async def send_chat_stream_redis(
+    payload: Chat_frontend, user: dict[str, Any] = Depends(authenticate)
+):
+    """Stream AI response via Redis Streams (producer/consumer decoupled).
+
+    Requires REDIS_URL to be configured; returns 503 otherwise.
+    SSE format is identical to /send_stream so the frontend can switch
+    with a single import change.
+    """
+    return StreamingResponse(
+        response_stream_redis_controller(payload, user),
         media_type="text/event-stream",
         headers={
             "Cache-Control": "no-cache",
