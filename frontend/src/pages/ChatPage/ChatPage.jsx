@@ -10,7 +10,7 @@ import Markdown from "markdown-to-jsx";
 import { getConvoids } from "../../api/user";
 import {
   initiateChat,
-  sendMessageStream,
+  sendMessageStreamRedis as sendMessageStream,
   getChat,
   endChat,
 } from "../../api/chat";
@@ -449,14 +449,19 @@ const ChatPage = () => {
             </div>
           ) : (
             <>
-              {chatMessages.map((msg, idx) => (
+            {chatMessages.map((msg, idx) => {
+              // While the bot is still streaming, skip the empty placeholder
+              // bubble — the typing indicator already provides visual feedback.
+              if (msg.sender === "bot" && !msg.text.trim() && isBotTyping) return null;
+              return (
                 <div key={idx} className={`cp-msg-row ${msg.sender === "bot" ? "cp-msg-bot" : "cp-msg-user"}`}>
                   {msg.sender === "bot" && <div className="cp-avatar">W</div>}
                   <div className={`cp-bubble ${msg.sender === "bot" ? "cp-bubble-bot" : "cp-bubble-user"}`}>
-                    <Markdown>{msg.text || " "}</Markdown>
+                    <Markdown>{msg.text}</Markdown>
                   </div>
                 </div>
-              ))}
+              );
+            })}
               {isBotTyping && (
                 <div className="cp-msg-row cp-msg-bot">
                   <div className="cp-avatar">W</div>

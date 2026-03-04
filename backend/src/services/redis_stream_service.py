@@ -34,7 +34,7 @@ STREAM_TTL_SECONDS = 300
 STREAM_MAXLEN = 500
 
 # How long (ms) to block on XREAD when no new entries are available.
-XREAD_BLOCK_MS = 1000
+XREAD_BLOCK_MS = 100
 
 # How many entries to fetch per XREAD call.
 XREAD_COUNT = 20

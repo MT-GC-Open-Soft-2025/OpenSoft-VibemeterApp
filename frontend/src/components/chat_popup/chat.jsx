@@ -11,7 +11,7 @@ import { getConvoids } from "../../api/user";
 import {
   initiateChat,
   sendMessage as sendMessageApi,
-  sendMessageStream,
+  sendMessageStreamRedis as sendMessageStream,
   getChat,
   endChat,
 } from "../../api/chat";
@@ -483,18 +483,23 @@ const Chat = ({ onClose, fullPage = false }) => {
                     aria-live="polite"
                     aria-label="Chat messages"
                   >
-                    {chatMessages.map((msg, idx) => (
-                      <div
-                        key={idx}
-                        className={`chat-message ${
-                          msg.sender === "bot" ? "bot" : "user"
-                        }`}
-                      >
-                        <div className="message-bubble">
-                          <Markdown>{msg.text}</Markdown>
+                    {chatMessages.map((msg, idx) => {
+                      // While streaming, hide the empty bot placeholder — the
+                      // typing indicator already shows that a reply is coming.
+                      if (msg.sender === "bot" && !msg.text && isBotTyping) return null;
+                      return (
+                        <div
+                          key={idx}
+                          className={`chat-message ${
+                            msg.sender === "bot" ? "bot" : "user"
+                          }`}
+                        >
+                          <div className="message-bubble">
+                            <Markdown>{msg.text}</Markdown>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                     {isBotTyping && (
                       <div className="chat-message bot">
                         <div className="message-bubble typing-indicator m-0">
