@@ -156,6 +156,7 @@ class TestInitiateChatService:
                         chat_cls.return_value = chat_instance
                         agent_loc.return_value = MagicMock(
                             agent_id="anchor",
+                            slug="anchor",
                             display_name="Anchor",
                             public_base_url="http://localhost:8101",
                             persona_key="anchor",

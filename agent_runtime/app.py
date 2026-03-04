@@ -7,6 +7,7 @@ from uuid import uuid4
 
 import httpx
 from fastapi import FastAPI, Header, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from jwt import InvalidTokenError
 from pydantic import BaseModel, Field
@@ -72,6 +73,16 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan, title="WellBee Agent Runtime")
+settings = get_settings()
+origins = [o.strip() for o in settings.cors_origins.split(",") if o.strip()]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/health")
@@ -90,7 +101,9 @@ async def health():
 @app.post("/v1/session/start")
 async def start_session(payload: SessionStartPayload):
     claims = decode_session_token(payload.session_token)
-    if claims.get("agent_id") != get_settings().agent_id or claims.get("convo_id") != payload.convo_id:
+    expected_runtime_id = get_settings().agent_id
+    token_runtime_id = claims.get("agent_runtime_id", claims.get("agent_id"))
+    if token_runtime_id != expected_runtime_id or claims.get("convo_id") != payload.convo_id:
         raise HTTPException(status_code=401, detail="Session token does not match runtime")
 
     agent_session_id = str(uuid4())

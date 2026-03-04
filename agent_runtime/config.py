@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-2.0-flash"
     redis_url: str = ""
     session_ttl_seconds: int = 86400
+    cors_origins: str = "http://localhost,http://127.0.0.1,http://localhost:3000,http://127.0.0.1:3000"
 
 
 @lru_cache

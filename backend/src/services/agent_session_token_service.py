@@ -9,6 +9,7 @@ from src.config import get_settings
 def create_agent_session_token(
     *,
     agent_id: str,
+    agent_runtime_id: str | None,
     convo_id: str,
     emp_id: str,
     public_base_url: str,
@@ -18,6 +19,7 @@ def create_agent_session_token(
     payload = {
         "sub": "agent-session",
         "agent_id": agent_id,
+        "agent_runtime_id": agent_runtime_id or agent_id,
         "convo_id": convo_id,
         "emp_id": emp_id,
         "public_base_url": public_base_url,

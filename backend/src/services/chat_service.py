@@ -101,6 +101,7 @@ async def initiate_chat_service(convo_id: str, user: Any, agent_id: str) -> dict
     prompt = _build_employee_context_prompt(employee)
     session_token = create_agent_session_token(
         agent_id=agent.agent_id,
+        agent_runtime_id=agent.slug,
         convo_id=convo_id,
         emp_id=emp_id,
         public_base_url=agent.public_base_url,
