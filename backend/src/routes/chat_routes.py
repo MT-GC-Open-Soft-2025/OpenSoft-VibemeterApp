@@ -5,6 +5,7 @@ from fastapi.responses import StreamingResponse
 
 from src.controllers.chat_controller import (
     Chat_frontend,
+    ChatInitiationPayload,
     add_feedback_controller,
     end_chat_controller,
     feedback_controller,
@@ -16,15 +17,23 @@ from src.controllers.chat_controller import (
     response_stream_redis_controller,
 )
 from src.middlewares.authmiddleware import authenticate
+from src.services.agent_registry_service import list_selectable_agents
 
 chat_router = APIRouter()
 
 
+@chat_router.get("/agents")
+async def get_agents_route(current_user: dict = Depends(authenticate)) -> dict[str, Any]:
+    return {"agents": await list_selectable_agents()}
+
+
 @chat_router.post("/initiate_chat/{convo_id}")
 async def initiate_chat_route(
-    convo_id: str, current_user: dict = Depends(authenticate)
+    convo_id: str,
+    payload: ChatInitiationPayload,
+    current_user: dict = Depends(authenticate),
 ) -> dict[str, Any]:
-    return await initiate_chat_controller(convo_id, current_user)
+    return await initiate_chat_controller(convo_id, payload, current_user)
 
 
 @chat_router.post("/send")

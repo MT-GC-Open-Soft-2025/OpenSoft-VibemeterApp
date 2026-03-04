@@ -31,6 +31,67 @@ def initialize():
         return {"error": str(e)}
 
 
+def generate_response_with_system_prompt(
+    system_prompt: str, user_input: str, model: str | None = None
+) -> str:
+    try:
+        settings = get_settings()
+        client = _get_client()
+        response = client.models.generate_content(
+            model=model or settings.gemini_model,
+            contents=f"{system_prompt}\n\nUser: {user_input}",
+        )
+        return response.text or ""
+    except Exception as e:
+        logger.error("Failed to generate response with system prompt: %s", e)
+        raise
+
+
+def generate_response_stream_with_system_prompt(
+    system_prompt: str, user_input: str, model: str | None = None
+):
+    try:
+        settings = get_settings()
+        client = _get_client()
+        for chunk in client.models.generate_content_stream(
+            model=model or settings.gemini_model,
+            contents=f"{system_prompt}\n\nUser: {user_input}",
+        ):
+            yield chunk.text or ""
+    except Exception as e:
+        logger.error("Streaming error with system prompt: %s", e)
+        raise
+
+
+async def stream_response_sse_with_system_prompt(
+    system_prompt: str, user_input: str, model: str | None = None
+):
+    loop = asyncio.get_running_loop()
+    queue = asyncio.Queue()
+
+    def run_stream():
+        try:
+            for text in generate_response_stream_with_system_prompt(
+                system_prompt, user_input, model
+            ):
+                loop.call_soon_threadsafe(queue.put_nowait, ("chunk", text))
+        except Exception as e:
+            loop.call_soon_threadsafe(queue.put_nowait, ("error", str(e)))
+        loop.call_soon_threadsafe(queue.put_nowait, ("done", None))
+
+    loop.run_in_executor(None, run_stream)
+
+    while True:
+        msg_type, value = await queue.get()
+        if msg_type == "error":
+            yield f"data: {json.dumps({'error': value})}\n\n"
+            break
+        if msg_type == "done":
+            yield f"data: {json.dumps({'done': True})}\n\n"
+            break
+        yield f"data: {json.dumps({'text': value})}\n\n"
+
+
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10))
 def generate_response(user_input: str, chat1) -> str:
     response = chat1.send_message(user_input)

@@ -1,1 +1,0 @@
-import{u as e,j as a}from"./index-DbqS3s8y.js";/* empty css                       */const t=({title:s})=>{const n=e();return a.jsxs("nav",{className:"navbar1",children:[a.jsx("div",{className:"nav-content",children:s?`${s} `:"Chat Feedback"}),a.jsx("span",{className:"go-back-btn",onClick:()=>n(-1),children:"Go Back"})]})};export{t as F};

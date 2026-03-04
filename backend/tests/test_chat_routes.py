@@ -11,23 +11,49 @@ async def test_initiate_chat_success(client, user_token):
     with patch(
         "src.controllers.chat_controller.initiate_chat_service", new_callable=AsyncMock
     ) as m:
-        m.return_value = {"response": "Hello! How can I help you today?"}
+        m.return_value = {
+            "convo_id": "conv-001",
+            "agent": {"agent_id": "anchor", "display_name": "Anchor"},
+            "connection": {
+                "public_base_url": "http://localhost:8101",
+                "agent_session_id": "session-001",
+                "session_token": "token-001",
+                "send_path": "/v1/session/session-001/message",
+                "health_path": "/health",
+            },
+            "opener": "Hello! How can I help you today?",
+        }
 
         response = await client.post(
             "/api/v1/chat/initiate_chat/conv-001",
             headers={"Authorization": f"Bearer {user_token}"},
+            json={"agent_id": "anchor"},
         )
 
         assert response.status_code == 200
-        assert "response" in response.json()
-        assert "Hello" in response.json()["response"]
+        assert "connection" in response.json()
+        assert "Hello" in response.json()["opener"]
 
 
 @pytest.mark.asyncio
 async def test_initiate_chat_unauthorized(client):
     """POST /initiate_chat without token returns 401."""
-    response = await client.post("/api/v1/chat/initiate_chat/conv-001")
+    response = await client.post("/api/v1/chat/initiate_chat/conv-001", json={"agent_id": "anchor"})
     assert response.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_get_agents_success(client, user_token):
+    with patch("src.routes.chat_routes.list_selectable_agents", new_callable=AsyncMock) as m:
+        m.return_value = [{"agent_id": "anchor", "display_name": "Anchor"}]
+
+        response = await client.get(
+            "/api/v1/chat/agents",
+            headers={"Authorization": f"Bearer {user_token}"},
+        )
+
+        assert response.status_code == 200
+        assert response.json()["agents"][0]["agent_id"] == "anchor"
 
 
 @pytest.mark.asyncio

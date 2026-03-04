@@ -9,6 +9,9 @@ services:
       JWT_SECRET: ${JWT_SECRET}
       JWT_ALGORITHM: ${JWT_ALGORITHM:-HS256}
       TOKEN_EXPIRY_SECONDS: ${TOKEN_EXPIRY_SECONDS:-3600}
+      AGENT_SESSION_SIGNING_SECRET: ${AGENT_SESSION_SIGNING_SECRET:-wellbee-agent-session-secret}
+      AGENT_INTERNAL_SYNC_SECRET: ${AGENT_INTERNAL_SYNC_SECRET:-wellbee-agent-sync-secret}
+      AGENT_BOOTSTRAP_TOKEN_TTL_SECONDS: ${AGENT_BOOTSTRAP_TOKEN_TTL_SECONDS:-300}
       DB_NAME: ${DB_NAME}
       GEMINI_KEY: ${GEMINI_KEY}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost,http://localhost:80,http://localhost:3000}
@@ -22,6 +25,66 @@ services:
       retries: 5
       start_period: 15s
 
+  agent-anchor:
+    build:
+      context: ./agent_runtime
+    image: ${AGENT_RUNTIME_IMAGE:-wellbee-agent-runtime}:${TAG:-latest}
+    container_name: wellbee-agent-anchor
+    environment:
+      PORT: 8101
+      AGENT_ID: anchor
+      AGENT_DISPLAY_NAME: Anchor
+      AGENT_PERSONA_KEY: anchor
+      AGENT_SESSION_SIGNING_SECRET: ${AGENT_SESSION_SIGNING_SECRET:-wellbee-agent-session-secret}
+      AGENT_INTERNAL_SYNC_SECRET: ${AGENT_INTERNAL_SYNC_SECRET:-wellbee-agent-sync-secret}
+      MAIN_BACKEND_INTERNAL_URL: http://backend:8000/api/v1/internal
+      GEMINI_KEY: ${GEMINI_KEY}
+    ports:
+      - "8101:8101"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  agent-spark:
+    build:
+      context: ./agent_runtime
+    image: ${AGENT_RUNTIME_IMAGE:-wellbee-agent-runtime}:${TAG:-latest}
+    container_name: wellbee-agent-spark
+    environment:
+      PORT: 8102
+      AGENT_ID: spark
+      AGENT_DISPLAY_NAME: Spark
+      AGENT_PERSONA_KEY: spark
+      AGENT_SESSION_SIGNING_SECRET: ${AGENT_SESSION_SIGNING_SECRET:-wellbee-agent-session-secret}
+      AGENT_INTERNAL_SYNC_SECRET: ${AGENT_INTERNAL_SYNC_SECRET:-wellbee-agent-sync-secret}
+      MAIN_BACKEND_INTERNAL_URL: http://backend:8000/api/v1/internal
+      GEMINI_KEY: ${GEMINI_KEY}
+    ports:
+      - "8102:8102"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+  agent-sage:
+    build:
+      context: ./agent_runtime
+    image: ${AGENT_RUNTIME_IMAGE:-wellbee-agent-runtime}:${TAG:-latest}
+    container_name: wellbee-agent-sage
+    environment:
+      PORT: 8103
+      AGENT_ID: sage
+      AGENT_DISPLAY_NAME: Sage
+      AGENT_PERSONA_KEY: sage
+      AGENT_SESSION_SIGNING_SECRET: ${AGENT_SESSION_SIGNING_SECRET:-wellbee-agent-session-secret}
+      AGENT_INTERNAL_SYNC_SECRET: ${AGENT_INTERNAL_SYNC_SECRET:-wellbee-agent-sync-secret}
+      MAIN_BACKEND_INTERNAL_URL: http://backend:8000/api/v1/internal
+      GEMINI_KEY: ${GEMINI_KEY}
+    ports:
+      - "8103:8103"
+    depends_on:
+      backend:
+        condition: service_healthy
+
   frontend:
     image: ${FRONTEND_IMAGE:-ghcr.io/mt-gc-open-soft-2025/vibemeter-frontend}:${TAG:-latest}
     container_name: vibemeter-frontend
@@ -30,6 +93,12 @@ services:
     depends_on:
       backend:
         condition: service_healthy
+      agent-anchor:
+        condition: service_started
+      agent-spark:
+        condition: service_started
+      agent-sage:
+        condition: service_started
     restart: unless-stopped
 
 networks:

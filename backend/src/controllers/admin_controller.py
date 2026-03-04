@@ -12,6 +12,13 @@ from src.services.admin_services import (
     get_all_employees,
     specific_conversation,
 )
+from src.services.agent_registry_service import (
+    create_agent,
+    get_agent_history,
+    list_admin_agents,
+    run_agent_healthcheck,
+    update_agent,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -87,3 +94,25 @@ async def get_aggregate_list() -> Any:
     except Exception as error:
         logger.error("Error fetching aggregate feedback: %s", error)
         raise HTTPException(status_code=500, detail=str(error))
+
+
+async def get_agents_controller() -> dict[str, Any]:
+    return {"agents": await list_admin_agents()}
+
+
+async def create_agent_controller(payload: dict[str, Any], admin: dict[str, Any]) -> dict[str, Any]:
+    return await create_agent(payload, changed_by=admin.get("emp_id"))
+
+
+async def update_agent_controller(
+    agent_id: str, payload: dict[str, Any], admin: dict[str, Any]
+) -> dict[str, Any]:
+    return await update_agent(agent_id, payload, changed_by=admin.get("emp_id"))
+
+
+async def get_agent_history_controller(agent_id: str) -> dict[str, Any]:
+    return {"history": await get_agent_history(agent_id)}
+
+
+async def run_agent_healthcheck_controller(agent_id: str) -> dict[str, Any]:
+    return await run_agent_healthcheck(agent_id)

@@ -135,23 +135,39 @@ class TestInitiateChatService:
             mock_employee.find.return_value.first_or_none = AsyncMock(return_value=None)
 
             with pytest.raises(HTTPException) as exc_info:
-                await initiate_chat_service("conv-001", {"emp_id": "unknown"})
+                await initiate_chat_service("conv-001", {"emp_id": "unknown"}, "anchor")
 
             assert exc_info.value.status_code == 404
 
     @pytest.mark.asyncio
-    async def test_ai_init_failure_raises_503(self, mock_employee):
-        """initiate_chat_service when AI init fails raises 503."""
+    async def test_agent_start_failure_raises_503(self, mock_employee):
+        """initiate_chat_service when agent start fails raises 503."""
         with patch("src.services.chat_service.Employee") as mock_emp_cls:
             mock_emp_cls.find.return_value.first_or_none = AsyncMock(return_value=mock_employee)
-            with patch("src.services.chat_service.initi") as mock_init:
-                mock_init.return_value = {"error": "API key invalid"}
+            with patch(
+                "src.services.chat_service.get_agent_location", new_callable=AsyncMock
+            ) as agent_loc:
+                with patch(
+                    "src.services.chat_service._start_agent_session", new_callable=AsyncMock
+                ) as start_session:
+                    with patch("src.services.chat_service.Chat") as chat_cls:
+                        chat_instance = MagicMock()
+                        chat_instance.insert = AsyncMock()
+                        chat_cls.return_value = chat_instance
+                        agent_loc.return_value = MagicMock(
+                            agent_id="anchor",
+                            display_name="Anchor",
+                            public_base_url="http://localhost:8101",
+                            persona_key="anchor",
+                            base_url="http://localhost:8101",
+                        )
+                        start_session.side_effect = Exception("runtime down")
 
-                with pytest.raises(HTTPException) as exc_info:
-                    await initiate_chat_service("conv-001", {"emp_id": "emp001"})
+                        with pytest.raises(HTTPException) as exc_info:
+                            await initiate_chat_service("conv-001", {"emp_id": "emp001"}, "anchor")
 
-                assert exc_info.value.status_code == 503
-                assert "unavailable" in str(exc_info.value.detail).lower()
+                        assert exc_info.value.status_code == 503
+                        assert "unavailable" in str(exc_info.value.detail).lower()
 
 
 class TestEndChat:

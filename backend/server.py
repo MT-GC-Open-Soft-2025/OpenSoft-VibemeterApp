@@ -14,7 +14,9 @@ from src.models.redis_client import close_redis, init_redis
 from src.routes.admin_routes import admin_router
 from src.routes.auth_routes import auth_router
 from src.routes.chat_routes import chat_router
+from src.routes.internal_routes import internal_router
 from src.routes.user_routes import user_router
+from src.services.agent_registry_service import seed_default_agents
 
 logging.basicConfig(
     level=logging.INFO,
@@ -29,6 +31,7 @@ limiter = Limiter(key_func=get_remote_address)
 async def lifespan(app: FastAPI):
     logger.info("Starting up — initialising database")
     await init_db()
+    await seed_default_agents()
     # Initialise Redis (optional; requires REDIS_URL in env/.env)
     try:
         redis_client = await init_redis()
@@ -76,12 +79,14 @@ app.include_router(auth_router, prefix="/api/v1/auth", tags=["Auth"])
 app.include_router(user_router, prefix="/api/v1/user", tags=["User"])
 app.include_router(admin_router, prefix="/api/v1/admin", tags=["Admin"])
 app.include_router(chat_router, prefix="/api/v1/chat", tags=["Chat"])
+app.include_router(internal_router, prefix="/api/v1/internal", tags=["Internal"])
 
 # Backward-compatible prefixes (can be removed after frontend migration)
 app.include_router(auth_router, prefix="/auth", tags=["Auth"], include_in_schema=False)
 app.include_router(user_router, prefix="/user", tags=["User"], include_in_schema=False)
 app.include_router(admin_router, prefix="/admin", tags=["Admin"], include_in_schema=False)
 app.include_router(chat_router, prefix="/chat", tags=["Chat"], include_in_schema=False)
+app.include_router(internal_router, prefix="/internal", tags=["Internal"], include_in_schema=False)
 
 
 @app.get("/")

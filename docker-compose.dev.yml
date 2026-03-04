@@ -10,6 +10,8 @@ services:
       - ./backend:/app
     command: >
       sh -c "uvicorn server:app --host 0.0.0.0 --port 8000 --reload"
+    environment:
+      AGENT_SEED_BASE_HOST: "http://localhost"
     # healthcheck start_period is lower in dev so the frontend starts faster
     healthcheck:
       start_period: 5s
@@ -30,3 +32,63 @@ services:
     # frontend in dev mode doesn't need to wait for a healthy backend
     depends_on:
       - backend
+      - agent-anchor
+      - agent-spark
+      - agent-sage
+
+  agent-anchor:
+    build:
+      context: ./agent_runtime
+    image: ""
+    volumes:
+      - ./agent_runtime:/app
+    ports:
+      - "8101:8101"
+    command: ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port 8101 --reload"]
+    environment:
+      PORT: "8101"
+      AGENT_ID: "anchor"
+      AGENT_DISPLAY_NAME: "Anchor"
+      AGENT_PERSONA_KEY: "anchor"
+      MAIN_BACKEND_INTERNAL_URL: "http://backend:8000/api/v1/internal"
+      AGENT_SESSION_SIGNING_SECRET: "${AGENT_SESSION_SIGNING_SECRET:-wellbee-agent-session-secret}"
+      AGENT_INTERNAL_SYNC_SECRET: "${AGENT_INTERNAL_SYNC_SECRET:-wellbee-agent-sync-secret}"
+      GEMINI_KEY: "${GEMINI_KEY}"
+
+  agent-spark:
+    build:
+      context: ./agent_runtime
+    image: ""
+    volumes:
+      - ./agent_runtime:/app
+    ports:
+      - "8102:8102"
+    command: ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port 8102 --reload"]
+    environment:
+      PORT: "8102"
+      AGENT_ID: "spark"
+      AGENT_DISPLAY_NAME: "Spark"
+      AGENT_PERSONA_KEY: "spark"
+      MAIN_BACKEND_INTERNAL_URL: "http://backend:8000/api/v1/internal"
+      AGENT_SESSION_SIGNING_SECRET: "${AGENT_SESSION_SIGNING_SECRET:-wellbee-agent-session-secret}"
+      AGENT_INTERNAL_SYNC_SECRET: "${AGENT_INTERNAL_SYNC_SECRET:-wellbee-agent-sync-secret}"
+      GEMINI_KEY: "${GEMINI_KEY}"
+
+  agent-sage:
+    build:
+      context: ./agent_runtime
+    image: ""
+    volumes:
+      - ./agent_runtime:/app
+    ports:
+      - "8103:8103"
+    command: ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port 8103 --reload"]
+    environment:
+      PORT: "8103"
+      AGENT_ID: "sage"
+      AGENT_DISPLAY_NAME: "Sage"
+      AGENT_PERSONA_KEY: "sage"
+      MAIN_BACKEND_INTERNAL_URL: "http://backend:8000/api/v1/internal"
+      AGENT_SESSION_SIGNING_SECRET: "${AGENT_SESSION_SIGNING_SECRET:-wellbee-agent-session-secret}"
+      AGENT_INTERNAL_SYNC_SECRET: "${AGENT_INTERNAL_SYNC_SECRET:-wellbee-agent-sync-secret}"
+      GEMINI_KEY: "${GEMINI_KEY}"

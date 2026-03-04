@@ -26,13 +26,19 @@ class Chat_frontend(BaseModel):
     message: str = Field(..., min_length=1, max_length=5000)
 
 
+class ChatInitiationPayload(BaseModel):
+    agent_id: str = Field(..., min_length=1)
+
+
 class Feedback(BaseModel):
     feedback: dict[str, int]
 
 
-async def initiate_chat_controller(convo_id: str, user: Any) -> dict[str, Any]:
+async def initiate_chat_controller(
+    convo_id: str, payload: ChatInitiationPayload, user: Any
+) -> dict[str, Any]:
     try:
-        return await initiate_chat_service(convo_id, user)
+        return await initiate_chat_service(convo_id, user, payload.agent_id)
     except HTTPException:
         raise
     except ValueError as e:

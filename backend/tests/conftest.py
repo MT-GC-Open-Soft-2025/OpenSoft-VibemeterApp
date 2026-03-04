@@ -13,6 +13,8 @@ os.environ.setdefault("DB_NAME", "wellbee_test")
 os.environ.setdefault("JWT_SECRET", "test-jwt-secret-key-for-testing-only")
 os.environ.setdefault("JWT_ALGORITHM", "HS256")
 os.environ.setdefault("GEMINI_KEY", "test-gemini-key")
+os.environ.setdefault("AGENT_SESSION_SIGNING_SECRET", "test-agent-session-secret")
+os.environ.setdefault("AGENT_INTERNAL_SYNC_SECRET", "test-agent-sync-secret")
 
 
 @pytest.fixture(autouse=True)
@@ -37,6 +39,7 @@ def test_app():
     from src.routes.admin_routes import admin_router
     from src.routes.auth_routes import auth_router
     from src.routes.chat_routes import chat_router
+    from src.routes.internal_routes import internal_router
     from src.routes.user_routes import user_router
 
     limiter = Limiter(key_func=get_remote_address)
@@ -62,6 +65,7 @@ def test_app():
     app.include_router(user_router, prefix="/api/v1/user", tags=["User"])
     app.include_router(admin_router, prefix="/api/v1/admin", tags=["Admin"])
     app.include_router(chat_router, prefix="/api/v1/chat", tags=["Chat"])
+    app.include_router(internal_router, prefix="/api/v1/internal", tags=["Internal"])
 
     @app.get("/")
     def home():

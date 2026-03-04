@@ -1,8 +1,13 @@
 import apiClient from "./client";
 import baseUrl from "../Config";
 
-export async function initiateChat(convoId) {
-  const response = await apiClient.post(`/chat/initiate_chat/${convoId}`, {});
+export async function getAgents() {
+  const response = await apiClient.get("/chat/agents");
+  return response.data;
+}
+
+export async function initiateChat(convoId, agentId) {
+  const response = await apiClient.post(`/chat/initiate_chat/${convoId}`, { agent_id: agentId });
   return response.data;
 }
 
@@ -140,6 +145,67 @@ export function sendMessageStreamRedis(convid, message, onChunk, onError, onDone
       if (err.name !== "AbortError") {
         onError(err);
       }
+    }
+  })();
+
+  return controller;
+}
+
+export function sendMessageToAgent({
+  baseUrl: agentBaseUrl,
+  sendPath,
+  sessionToken,
+  message,
+  onChunk,
+  onError,
+  onDone,
+}) {
+  const controller = new AbortController();
+
+  (async () => {
+    try {
+      const res = await fetch(`${agentBaseUrl}${sendPath}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionToken}`,
+        },
+        body: JSON.stringify({ message }),
+        signal: controller.signal,
+      });
+
+      if (!res.ok) {
+        const errBody = await res.text();
+        throw new Error(errBody || res.statusText);
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split("\n\n");
+        buffer = lines.pop() || "";
+
+        for (const line of lines) {
+          if (!line.startsWith("data: ")) continue;
+          try {
+            const data = JSON.parse(line.slice(6));
+            if (data.text) onChunk(data.text);
+            if (data.error) onError(new Error(data.error));
+            if (data.done && onDone) onDone();
+          } catch {
+            // ignore malformed event
+          }
+        }
+      }
+
+      if (onDone) onDone();
+    } catch (err) {
+      if (err.name !== "AbortError") onError(err);
     }
   })();
 

@@ -17,6 +17,13 @@ class Chat(Document):
     messages: list[Message]
     feedback: str
     summary: str
+    agent_id: str | None = None
+    agent_name_snapshot: str | None = None
+    agent_public_base_url_snapshot: str | None = None
+    agent_persona_snapshot: str | None = None
+    agent_session_id: str | None = None
+    agent_connection_mode: str = "direct"
+    agent_session_started_at: datetime | None = None
 
     class Settings:
         name = "chats"

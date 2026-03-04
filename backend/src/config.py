@@ -24,6 +24,11 @@ class Settings(BaseSettings):
     # Redis configuration (used for streaming queues / caching)
     redis_url: str = ""
     redis_db: int = 0
+    agent_session_signing_secret: str = "wellbee-agent-session-secret"
+    agent_internal_sync_secret: str = "wellbee-agent-sync-secret"
+    agent_bootstrap_token_ttl_seconds: int = 300
+    seed_default_agents: bool = True
+    agent_seed_base_host: str = "http://localhost"
 
     model_config = {
         "env_file": str(_ENV_FILE),
