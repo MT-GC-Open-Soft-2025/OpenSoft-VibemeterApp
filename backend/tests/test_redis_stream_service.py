@@ -28,16 +28,18 @@ class TestMakeStreamKey:
         from src.services.redis_stream_service import make_stream_key
 
         key = make_stream_key("conv-123")
-        assert key.startswith("stream:chat:conv-123:")
-        # suffix is an 8-char hex uuid fragment
-        suffix = key.split(":")[-1]
-        assert len(suffix) == 8
-        assert all(c in "0123456789abcdef" for c in suffix)
+        assert key == "stream:chat:conv-123"
 
-    def test_unique_per_call(self):
+    def test_different_convids_produce_different_keys(self):
         from src.services.redis_stream_service import make_stream_key
 
-        assert make_stream_key("c1") != make_stream_key("c1")
+        assert make_stream_key("conv-1") != make_stream_key("conv-2")
+
+    def test_same_convid_produces_same_key(self):
+        from src.services.redis_stream_service import make_stream_key
+
+        # Deterministic by design: consumer can locate stream by convId alone.
+        assert make_stream_key("conv-abc") == make_stream_key("conv-abc")
 
 
 # ---------------------------------------------------------------------------

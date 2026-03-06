@@ -84,11 +84,13 @@ export function sendMessageStream(convid, message, onChunk, onError, onDone) {
 
 /**
  * Send a message and stream the AI response via Redis Streams–backed SSE.
- * Identical signature to sendMessageStream — switch with one import change.
+ * Identical signature to sendMessageStream — drop-in replacement.
  *
- * The backend POST starts the AI producer as a background task, then issues a
- * 303 redirect to GET /chat/consume_stream/:convid.  fetch follows the redirect
- * transparently, so the response body here is the live SSE stream from Redis.
+ * Two-step approach:
+ *   1. POST /chat/send_stream_redis  — starts the background AI producer,
+ *      returns JSON { status: "started", convid }.
+ *   2. GET  /chat/consume_stream/:convid — opens the SSE stream with its own
+ *      Authorization header (avoids the browser stripping credentials on redirect).
  *
  * Requires REDIS_URL to be configured on the backend (returns an onError call otherwise).
  *
@@ -101,14 +103,12 @@ export function sendMessageStream(convid, message, onChunk, onError, onDone) {
  */
 export function sendMessageStreamRedis(convid, message, onChunk, onError, onDone) {
   const token = localStorage.getItem("token");
-  const url = `${baseUrl}/chat/send_stream_redis`;
   const controller = new AbortController();
 
   (async () => {
     try {
-      // POST starts the producer; the server 303-redirects to the SSE consumer.
-      // fetch follows the redirect automatically — res.body is the SSE stream.
-      const res = await fetch(url, {
+      // Step 1: Start the Redis producer (fire-and-forget POST — returns JSON 200).
+      const startRes = await fetch(`${baseUrl}/chat/send_stream_redis`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -116,15 +116,33 @@ export function sendMessageStreamRedis(convid, message, onChunk, onError, onDone
         },
         body: JSON.stringify({ convid, message }),
         signal: controller.signal,
-        redirect: "follow",
       });
 
-      if (!res.ok) {
-        const errBody = await res.text();
-        throw new Error(res.status === 401 ? "Unauthorized" : errBody || res.statusText);
+      if (!startRes.ok) {
+        const errBody = await startRes.text();
+        throw new Error(
+          startRes.status === 401 ? "Unauthorized" : errBody || startRes.statusText
+        );
       }
 
-      const reader = res.body.getReader();
+      // Step 2: Open a separate SSE connection with auth — no redirect involved.
+      const sseRes = await fetch(`${baseUrl}/chat/consume_stream/${convid}`, {
+        method: "GET",
+        headers: {
+          Authorization: token ? `Bearer ${token}` : "",
+          Accept: "text/event-stream",
+        },
+        signal: controller.signal,
+      });
+
+      if (!sseRes.ok) {
+        const errBody = await sseRes.text();
+        throw new Error(
+          sseRes.status === 401 ? "Unauthorized" : errBody || sseRes.statusText
+        );
+      }
+
+      const reader = sseRes.body.getReader();
       const decoder = new TextDecoder();
       let buffer = "";
 
@@ -143,7 +161,7 @@ export function sendMessageStreamRedis(convid, message, onChunk, onError, onDone
               if (data.error) onError(new Error(data.error));
               if (data.done && onDone) onDone();
             } catch {
-              // skip malformed
+              // skip malformed frames
             }
           }
         }

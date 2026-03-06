@@ -1,7 +1,7 @@
 from typing import Any
 
 from fastapi import APIRouter, Depends
-from fastapi.responses import RedirectResponse, StreamingResponse
+from fastapi.responses import StreamingResponse
 
 from src.controllers.chat_controller import (
     Chat_frontend,
@@ -59,24 +59,17 @@ async def send_chat_stream(payload: Chat_frontend, user: dict[str, Any] = Depend
 async def send_chat_stream_redis_start(
     payload: Chat_frontend, user: dict[str, Any] = Depends(authenticate)
 ):
-    """Start the Redis-backed AI producer then 303-redirect to the SSE consumer.
+    """Start the Redis-backed AI producer as a background task and return immediately.
 
-    The background producer begins writing chunks to the Redis stream immediately.
-    The 303 redirect points the client to GET /consume_stream/{convid} which
-    is an SSE endpoint that actively listens to the stream and flushes each
-    entry as soon as it is written.
-
-    fetch follows the redirect transparently (redirect="follow" default), so
-    the caller receives the SSE stream body as if it had called the GET endpoint
-    directly.
+    After this returns 200, the client should open a separate authenticated GET
+    connection to /chat/consume_stream/{convid} to receive the SSE stream.
+    Splitting into two requests avoids the browser's behaviour of dropping the
+    Authorization header when following a 303 redirect.
 
     Requires REDIS_URL to be configured; returns 503 otherwise.
     """
     await start_stream_redis_controller(payload, user)
-    return RedirectResponse(
-        url=f"/chat/consume_stream/{payload.convid}",
-        status_code=303,
-    )
+    return {"status": "started", "convid": payload.convid}
 
 
 @chat_router.get("/consume_stream/{conv_id}")

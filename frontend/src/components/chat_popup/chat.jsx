@@ -9,6 +9,7 @@ import { nanoid } from "nanoid";
 import Markdown from "markdown-to-jsx";
 import { getConvoids } from "../../api/user";
 import {
+  getAgents,
   initiateChat,
   sendMessage as sendMessageApi,
   sendMessageStreamRedis as sendMessageStream,
@@ -24,6 +25,7 @@ const Chat = ({ onClose, fullPage = false }) => {
   const [chatMessages, setChatMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const [availableAgents, setAvailableAgents] = useState([]);
   const [isBotTyping, setIsBotTyping] = useState(false);
   const chatHistoryRef = useRef(null);
 
@@ -56,6 +58,9 @@ const Chat = ({ onClose, fullPage = false }) => {
 
   useEffect(() => {
     fetchConversations();
+    getAgents()
+      .then((res) => setAvailableAgents(res.agents || []))
+      .catch(() => {});
   }, [navigate]);
 
   useEffect(() => {
@@ -140,8 +145,13 @@ const Chat = ({ onClose, fullPage = false }) => {
     await fetchConversations();
 
     try {
-      const res = await initiateChat(uniqueId);
-      setChatMessages([{ sender: "bot", text: res.response }]);
+      const firstAgentId = availableAgents[0]?.agent_id || null;
+      if (!firstAgentId) {
+        showErrorModal("No agents are available. Please try again later.");
+        return;
+      }
+      const res = await initiateChat(uniqueId, firstAgentId);
+      setChatMessages([{ sender: "bot", text: res.opener }]);
     } catch {
       showErrorModal("Failed to start a new chat.");
     }
