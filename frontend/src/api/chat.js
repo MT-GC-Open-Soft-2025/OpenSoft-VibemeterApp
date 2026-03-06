@@ -85,6 +85,11 @@ export function sendMessageStream(convid, message, onChunk, onError, onDone) {
 /**
  * Send a message and stream the AI response via Redis Streams–backed SSE.
  * Identical signature to sendMessageStream — switch with one import change.
+ *
+ * The backend POST starts the AI producer as a background task, then issues a
+ * 303 redirect to GET /chat/consume_stream/:convid.  fetch follows the redirect
+ * transparently, so the response body here is the live SSE stream from Redis.
+ *
  * Requires REDIS_URL to be configured on the backend (returns an onError call otherwise).
  *
  * @param {string} convid
@@ -101,6 +106,8 @@ export function sendMessageStreamRedis(convid, message, onChunk, onError, onDone
 
   (async () => {
     try {
+      // POST starts the producer; the server 303-redirects to the SSE consumer.
+      // fetch follows the redirect automatically — res.body is the SSE stream.
       const res = await fetch(url, {
         method: "POST",
         headers: {
@@ -109,6 +116,7 @@ export function sendMessageStreamRedis(convid, message, onChunk, onError, onDone
         },
         body: JSON.stringify({ convid, message }),
         signal: controller.signal,
+        redirect: "follow",
       });
 
       if (!res.ok) {

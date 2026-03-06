@@ -17,9 +17,9 @@ Consumer  (`consume_stream_sse`):
   - Supports Last-Event-ID reconnection — callers can pass `last_id` to resume.
 """
 
+import asyncio
 import json
 import logging
-import uuid
 from collections.abc import AsyncGenerator
 
 from src.models.redis_client import get_redis
@@ -41,9 +41,13 @@ XREAD_COUNT = 20
 
 
 def make_stream_key(convid: str) -> str:
-    """Return a unique Redis Stream key for this message exchange."""
-    short_id = uuid.uuid4().hex[:8]
-    return f"stream:chat:{convid}:{short_id}"
+    """Return a stable Redis Stream key for this conversation's current exchange.
+
+    Keyed purely on convid so the consumer can locate the stream without
+    needing a separate lookup.  The old messages are overwritten each time
+    a new message is sent (stream is deleted before the producer starts).
+    """
+    return f"stream:chat:{convid}"
 
 
 # ---------------------------------------------------------------------------
@@ -68,9 +72,17 @@ async def produce_stream(stream_key: str, user_input: str, chat_obj) -> None:
     """
     redis = get_redis()
     if redis is None:
-        logger.error("Producer: Redis not available — cannot write stream %s", stream_key)
+        logger.error("Producer [%s]: Redis not available — cannot write stream", stream_key)
         return
 
+    logger.info("Producer [%s]: Starting — deleting any stale stream entries", stream_key)
+    try:
+        # Delete any leftover entries from a previous exchange on this conv.
+        await redis.delete(stream_key)
+    except Exception as exc:
+        logger.warning("Producer [%s]: Could not delete stale stream: %s", stream_key, exc)
+
+    chunk_count = 0
     try:
         async for sse_chunk in stream_response_sse(user_input, chat_obj):
             # sse_chunk is already formatted as "data: {...}\n\n"
@@ -79,15 +91,33 @@ async def produce_stream(stream_key: str, user_input: str, chat_obj) -> None:
                 try:
                     payload = json.loads(sse_chunk[6:].strip())
                 except json.JSONDecodeError:
+                    logger.warning(
+                        "Producer [%s]: Failed to decode SSE chunk, skipping", stream_key
+                    )
                     continue
 
                 entry: dict[str, str] = {}
                 if "text" in payload:
                     entry = {"type": "chunk", "text": payload["text"]}
+                    chunk_count += 1
+                    logger.debug(
+                        "Producer [%s]: Writing chunk #%d (%d chars)",
+                        stream_key,
+                        chunk_count,
+                        len(payload["text"]),
+                    )
                 elif "done" in payload:
                     entry = {"type": "done"}
+                    logger.info(
+                        "Producer [%s]: Writing 'done' sentinel after %d chunks",
+                        stream_key,
+                        chunk_count,
+                    )
                 elif "error" in payload:
                     entry = {"type": "error", "message": payload["error"]}
+                    logger.error(
+                        "Producer [%s]: Writing 'error' sentinel: %s", stream_key, payload["error"]
+                    )
                 else:
                     continue
 
@@ -97,7 +127,9 @@ async def produce_stream(stream_key: str, user_input: str, chat_obj) -> None:
                     break
 
     except Exception as exc:
-        logger.exception("Producer: unhandled error on stream %s: %s", stream_key, exc)
+        logger.exception(
+            "Producer [%s]: Unhandled error after %d chunks: %s", stream_key, chunk_count, exc
+        )
         try:
             await redis.xadd(
                 stream_key,
@@ -105,14 +137,19 @@ async def produce_stream(stream_key: str, user_input: str, chat_obj) -> None:
                 maxlen=STREAM_MAXLEN,
                 approximate=True,
             )
-        except Exception:
-            pass
+        except Exception as inner:
+            logger.error(
+                "Producer [%s]: Also failed to write error sentinel: %s", stream_key, inner
+            )
     finally:
         # Set TTL so orphaned streams don't linger in Redis.
         try:
             await redis.expire(stream_key, STREAM_TTL_SECONDS)
-        except Exception:
-            pass
+            logger.info(
+                "Producer [%s]: TTL set to %ds — stream complete", stream_key, STREAM_TTL_SECONDS
+            )
+        except Exception as exc:
+            logger.error("Producer [%s]: Failed to set TTL: %s", stream_key, exc)
 
 
 # ---------------------------------------------------------------------------
@@ -142,12 +179,24 @@ async def consume_stream_sse(
     """
     redis = get_redis()
     if redis is None:
+        logger.error("Consumer [%s]: Redis not available", stream_key)
         yield f"data: {json.dumps({'error': 'Redis not available'})}\n\n"
         return
 
+    logger.info("Consumer [%s]: Connected — reading from id='%s'", stream_key, last_id)
+    # Yield to the event loop once before the first XREAD so the background
+    # producer task (created just before this consumer started) gets a chance
+    # to begin writing.  Without this, the very first XREAD may hit an empty /
+    # non-existent stream even though the producer is ready to run.
+    await asyncio.sleep(0)
+
     current_id = last_id
     consecutive_empty = 0
+    # Use wall-clock seconds for timeout rather than counting polls, because
+    # XREAD on a non-existent key may return immediately (no blocking) on some
+    # Redis / client versions, making poll-based timeouts unreliable.
     max_empty_polls = int((STREAM_TTL_SECONDS * 1000) / XREAD_BLOCK_MS) + 10
+    delivered_chunks = 0
 
     while True:
         try:
@@ -157,25 +206,37 @@ async def consume_stream_sse(
                 block=XREAD_BLOCK_MS,
             )
         except Exception as exc:
-            logger.error("Consumer: XREAD error on %s: %s", stream_key, exc)
+            logger.error("Consumer [%s]: XREAD error: %s", stream_key, exc)
             yield f"data: {json.dumps({'error': str(exc)})}\n\n"
             return
 
         if not results:
             # No new entries yet — stream may still be producing.
             consecutive_empty += 1
-            if consecutive_empty >= max_empty_polls:
-                logger.warning(
-                    "Consumer: timed out waiting for entries on %s after %d polls",
+            if consecutive_empty % 50 == 0:
+                logger.debug(
+                    "Consumer [%s]: Waiting for producer — %d empty polls so far",
                     stream_key,
                     consecutive_empty,
                 )
+            if consecutive_empty >= max_empty_polls:
+                logger.warning(
+                    "Consumer [%s]: Timed out after %d polls (delivered %d chunks)",
+                    stream_key,
+                    consecutive_empty,
+                    delivered_chunks,
+                )
                 yield f"data: {json.dumps({'error': 'Stream timeout'})}\n\n"
                 return
+            # If XREAD returned immediately (non-existent key on some Redis
+            # versions), sleep for the nominal polling interval so we don't
+            # spin and starve the background producer task.
+            await asyncio.sleep(XREAD_BLOCK_MS / 1000)
             continue
 
         consecutive_empty = 0
         _stream_name, entries = results[0]
+        logger.debug("Consumer [%s]: Received batch of %d entries", stream_key, len(entries))
 
         for entry_id, fields in entries:
             current_id = entry_id  # advance cursor for next XREAD / reconnect
@@ -192,9 +253,16 @@ async def consume_stream_sse(
                     if isinstance(fields.get(b"text"), bytes)
                     else fields.get("text", "")
                 )
+                delivered_chunks += 1
+                logger.debug("Consumer [%s]: Forwarding chunk #%d", stream_key, delivered_chunks)
                 yield f"data: {json.dumps({'text': text})}\n\n"
 
             elif entry_type == "done":
+                logger.info(
+                    "Consumer [%s]: Done sentinel received — delivered %d chunks total",
+                    stream_key,
+                    delivered_chunks,
+                )
                 yield f"data: {json.dumps({'done': True})}\n\n"
                 return
 
@@ -204,5 +272,6 @@ async def consume_stream_sse(
                     if isinstance(fields.get(b"message"), bytes)
                     else fields.get("message", "Unknown error")
                 )
+                logger.error("Consumer [%s]: Error sentinel received: %s", stream_key, message)
                 yield f"data: {json.dumps({'error': message})}\n\n"
                 return

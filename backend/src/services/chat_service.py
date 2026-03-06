@@ -299,16 +299,29 @@ async def send_message_stream_redis(user: Any, msg: str, convid: str) -> str:
 
     async def _produce_and_persist():
         """Background task: produce chunks to Redis, then persist the full bot reply to DB."""
-        full_text: list[str] = []
         from src.models.redis_client import get_redis
+        from src.services.redis_stream_service import STREAM_MAXLEN, STREAM_TTL_SECONDS
 
+        full_text: list[str] = []
         redis = get_redis()
+
+        # Delete any stale stream entries from a previous exchange on this conv
+        # BEFORE writing new ones so the consumer always reads from id="0".
+        if redis is not None:
+            try:
+                await redis.delete(stream_key)
+                logger.info("Producer [%s]: Cleared stale stream entries", stream_key)
+            except Exception as exc:
+                logger.warning("Producer [%s]: Could not clear stale stream: %s", stream_key, exc)
 
         # Re-fetch chat record inside the background task to avoid stale state.
         record = await Chat.find(Chat.convid == convid).first_or_none()
         if record is None:
-            logger.error("Background producer: chat %s not found", convid)
+            logger.error("Producer [%s]: Chat not found — aborting", stream_key)
             return
+
+        logger.info("Producer [%s]: Starting AI stream for conv=%s", stream_key, convid)
+        chunk_count = 0
 
         # Collect chunks during production so we can persist the full response.
         try:
@@ -331,16 +344,28 @@ async def send_message_stream_redis(user: Any, msg: str, convid: str) -> str:
                         entry: dict[str, str] = {}
                         if "text" in payload:
                             entry = {"type": "chunk", "text": payload["text"]}
+                            chunk_count += 1
+                            logger.debug(
+                                "Producer [%s]: Writing chunk #%d (%d chars)",
+                                stream_key,
+                                chunk_count,
+                                len(payload["text"]),
+                            )
                         elif "done" in payload:
                             entry = {"type": "done"}
+                            logger.info(
+                                "Producer [%s]: Writing 'done' sentinel after %d chunks",
+                                stream_key,
+                                chunk_count,
+                            )
                         elif "error" in payload:
                             entry = {"type": "error", "message": payload["error"]}
-                        if entry:
-                            from src.services.redis_stream_service import (
-                                STREAM_MAXLEN,
-                                STREAM_TTL_SECONDS,
+                            logger.error(
+                                "Producer [%s]: Writing 'error' sentinel: %s",
+                                stream_key,
+                                payload["error"],
                             )
-
+                        if entry:
                             await redis.xadd(
                                 stream_key, entry, maxlen=STREAM_MAXLEN, approximate=True
                             )
@@ -350,17 +375,20 @@ async def send_message_stream_redis(user: Any, msg: str, convid: str) -> str:
             else:
                 # Ensure a "done" sentinel is always written.
                 if redis is not None:
-                    from src.services.redis_stream_service import STREAM_MAXLEN, STREAM_TTL_SECONDS
-
+                    logger.info(
+                        "Producer [%s]: Stream exhausted — writing 'done' sentinel (%d chunks)",
+                        stream_key,
+                        chunk_count,
+                    )
                     await redis.xadd(
                         stream_key, {"type": "done"}, maxlen=STREAM_MAXLEN, approximate=True
                     )
                     await redis.expire(stream_key, STREAM_TTL_SECONDS)
         except Exception as exc:
-            logger.exception("Background producer error on stream %s: %s", stream_key, exc)
+            logger.exception(
+                "Producer [%s]: Unhandled error after %d chunks: %s", stream_key, chunk_count, exc
+            )
             if redis is not None:
-                from src.services.redis_stream_service import STREAM_MAXLEN, STREAM_TTL_SECONDS
-
                 try:
                     await redis.xadd(
                         stream_key,
@@ -369,19 +397,33 @@ async def send_message_stream_redis(user: Any, msg: str, convid: str) -> str:
                         approximate=True,
                     )
                     await redis.expire(stream_key, STREAM_TTL_SECONDS)
-                except Exception:
-                    pass
+                except Exception as inner:
+                    logger.error(
+                        "Producer [%s]: Also failed to write error sentinel: %s", stream_key, inner
+                    )
 
         # Persist final bot reply to MongoDB.
         full_response = "".join(full_text)
         if full_response:
+            logger.info(
+                "Producer [%s]: Persisting bot reply to DB (%d chars)",
+                stream_key,
+                len(full_response),
+            )
             dict_bot = Message(
                 sender="bot", timestamp=datetime.datetime.now(), message=full_response
             )
             record.messages.append(dict_bot)
             await record.save()
+        else:
+            logger.warning("Producer [%s]: No text collected — nothing persisted to DB", stream_key)
 
     asyncio.create_task(_produce_and_persist())
+    logger.info(
+        "send_message_stream_redis: background producer launched for conv=%s, stream_key=%s",
+        convid,
+        stream_key,
+    )
     return stream_key
 
 
