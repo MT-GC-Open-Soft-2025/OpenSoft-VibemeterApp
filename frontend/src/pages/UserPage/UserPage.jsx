@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+/* Bootstrap imported once in App.js */
 import "./UserPage.css";
 import { useNavigate } from "react-router-dom";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar2.jsx";

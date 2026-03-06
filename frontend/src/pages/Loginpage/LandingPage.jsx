@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Element, scroller, Link } from 'react-scroll';
 import { Accordion } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+/* Bootstrap imported once in App.js */
 import './LandingPage.css';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Element, Link } from "react-scroll";
-import "bootstrap/dist/css/bootstrap.min.css";
+import { Link } from "react-scroll";
+/* Bootstrap imported once in App.js */
 import "./LoginPage.css";
 import Swal from "sweetalert2";
 import { signin } from "../../api/auth";

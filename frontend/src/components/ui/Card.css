@@ -1,0 +1,35 @@
+/* WellBee – Card Component Styles */
+
+.wb-card {
+    background: var(--wb-surface);
+    border: 1px solid var(--wb-border);
+    border-radius: var(--wb-r-md);
+    box-shadow: var(--wb-shadow-sm);
+    transition: box-shadow var(--wb-duration) var(--wb-ease);
+}
+
+.wb-card--padded {
+    padding: 1.5rem;
+}
+
+.wb-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 1rem;
+}
+
+.wb-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--wb-ink);
+    margin: 0;
+    letter-spacing: -0.01em;
+}
+
+.wb-card-body {
+    color: var(--wb-muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+}

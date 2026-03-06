@@ -1,83 +1,51 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import "./SurveyForm.css";
-import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar";
-import Swal from "sweetalert2";
-import { getFeedbackQuestions, addFeedback } from "../../api/chat";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './SurveyForm.css';
+import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar';
+import { useSurvey } from '../../hooks/useSurvey';
+import Swal from 'sweetalert2';
+/* Bootstrap imported once in App.js */
 
 const SurveyForm = () => {
   const navigate = useNavigate();
-  const [questions, setQuestions] = useState([]);
-  const [answers, setAnswers] = useState({});
-  const [status, setStatus] = useState("");
-
-  useEffect(() => {
-    fetchQuestions();
-  }, []);
-
-  const fetchQuestions = async () => {
-    try {
-      const res = await getFeedbackQuestions();
-      const data = res?.response || [];
-
-      if (!Array.isArray(data) || data.length === 0) {
-        setStatus("No questions available.");
-        setQuestions([]);
-        return;
-      }
-
-      setQuestions(data);
-      const initialAnswers = {};
-      data.forEach((q) => (initialAnswers[q.question_id] = 3));
-      setAnswers(initialAnswers);
-    } catch (error) {
-      console.error("Error fetching questions:", error.response?.data || error.message);
-      setStatus("Failed to load questions.");
-    }
-  };
-
-  const handleRating = (questionId, rating) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: rating }));
-  };
+  const { questions, answers, status, errorMessage, setAnswer, submitSurvey } = useSurvey();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const payload = Object.fromEntries(
-        Object.entries(answers).map(([question_id, rating]) => [`${question_id}`, rating])
-      );
-
-      const res = await addFeedback(payload);
-      setStatus(200);
-
+    const result = await submitSurvey();
+    if (result.ok) {
+      /* Swal only for the success confirm — it's a navigating action */
       Swal.fire({
-        icon: "success",
-        title: "Thank you!",
-        text: "Your feedback has been submitted.",
-        confirmButtonColor: "#36ABAA",
-      }).then(() => {
-        const initialAnswers = {};
-        questions.forEach((q) => (initialAnswers[q.id] = 3));
-        setAnswers(initialAnswers);
-        navigate("/user");
-      });
-    } catch (error) {
-      console.error("Error:", error);
-      setStatus("Failed to take feedback.");
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: "Failed to submit feedback. Please try again later!",
-        confirmButtonColor: "#d33",
-      });
+        icon: 'success',
+        title: 'Thank you!',
+        text: 'Your feedback has been submitted.',
+        confirmButtonColor: '#0f766e',
+      }).then(() => navigate('/user'));
     }
+    /* Error is surfaced via inline errorMessage state */
   };
+
+  if (status === 'loading') {
+    return (
+      <div className="feedback-wrapper">
+        <Feedbacknavbar title="Survey" />
+        <div className="survey-loading">Loading questions…</div>
+      </div>
+    );
+  }
 
   return (
     <div className="feedback-wrapper">
       <Feedbacknavbar title="Survey" />
       <div className="survey-container bg-white shadow-sm rounded-4 p-4 p-md-5 mx-auto">
         <h2 className="mb-4 text-center text-dark">Survey</h2>
+
+        {errorMessage && (
+          <div className="alert alert-danger py-2 mb-4" role="alert">
+            {errorMessage}
+          </div>
+        )}
+
         <form className="survey-form" onSubmit={handleSubmit}>
           {questions.map((q) => (
             <div key={q.question_id} className="question-block mb-5">
@@ -90,11 +58,7 @@ const SurveyForm = () => {
                 aria-label={q.question_text}
               >
                 {[1, 2, 3, 4, 5].map((score) => {
-                  const currentResponse =
-                    answers[q.question_id] !== undefined
-                      ? answers[q.question_id]
-                      : 3;
-                  const isSelected = currentResponse === score;
+                  const isSelected = (answers[q.question_id] ?? 3) === score;
                   return (
                     <button
                       key={score}
@@ -102,10 +66,8 @@ const SurveyForm = () => {
                       role="radio"
                       aria-checked={isSelected}
                       aria-label={`Score ${score}`}
-                      className={`pill-btn flex-fill py-2 rounded-pill fw-medium transition-all ${
-                        isSelected ? "selected" : ""
-                      }`}
-                      onClick={() => handleRating(q.question_id, score)}
+                      className={`pill-btn flex-fill py-2 rounded-pill fw-medium ${isSelected ? 'selected' : ''}`}
+                      onClick={() => setAnswer(q.question_id, score)}
                     >
                       {score}
                     </button>
@@ -114,19 +76,15 @@ const SurveyForm = () => {
               </div>
             </div>
           ))}
+
           <button
             type="submit"
-            className="survey-submit mt-4 rounded-pill fw-bold text-white w-100 py-3 border-0 transition-all"
+            className="survey-submit mt-4 rounded-pill fw-bold text-white w-100 py-3 border-0"
+            disabled={status === 'submitting' || questions.length === 0}
           >
-            Submit Survey
+            {status === 'submitting' ? 'Submitting…' : 'Submit Survey'}
           </button>
         </form>
-
-        {status && (
-          <p className="success-message text-center mt-3" role="status">
-            {status === 200 ? "Added Successfully" : "Failed to Add"}
-          </p>
-        )}
       </div>
     </div>
   );

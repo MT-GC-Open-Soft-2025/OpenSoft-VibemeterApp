@@ -1,30 +1,15 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-scroll';
+import React from 'react';
+import { Link, Element } from 'react-scroll';
 import LandingPage from './LandingPage';
 import LoginPage from './LoginPage';
 import FAQPage from './FAQsection';
 import Footer from './Footer';
-import ChatInterface from './ChatInterface';
-import { Element } from 'react-scroll';
 import BookDemoForm from './BookDemoForm';
 import logo from './company_logo.png';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './Start.css';
-
-import 'animate.css';
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+/* Bootstrap, animate.css, and AOS are loaded once in App.js */
 
 const Start = () => {
-  useEffect(() => {
-    AOS.init({
-      duration: 1000,
-      once: false,
-      mirror: true,
-      offset: 100,
-    });
-  }, []);
 
   return (
       <div>

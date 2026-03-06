@@ -1,0 +1,14 @@
+/* WellBee – StatusBadge Styles */
+
+.wb-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: var(--wb-r-pill);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
+    white-space: nowrap;
+}

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "./AdminPage.css";
 import Footer from "../../components/Footer/Footer";
 import PerformanceGraph from "../../components/Admin_page _components/Admin_performance_rewards/PerformanceGraph";
@@ -13,37 +12,15 @@ import Navbar from "../../components/Search-bar/SearchBar";
 import Feedbacknavbar from "../../components/Feedback_navbar/Feedbacknavbar2";
 import user1 from "../../Assets/user.png";
 import EmojiMeter from "../../components/Admin_page _components/Admin_performance_rewards/EmojiMeter.jsx";
-import {
-  createAgent,
-  getAgentHistory,
-  getAgentsAdmin,
-  runAgentHealthcheck,
-  updateAgent,
-} from "../../api/admin";
-
-const EMPTY_AGENT_FORM = {
-  display_name: "",
-  slug: "",
-  description: "",
-  persona_key: "anchor",
-  greeting_style: "",
-  avatar_key: "default",
-  theme_key: "default",
-  base_url: "",
-  public_base_url: "",
-  status: "active",
-};
+import { useAdminData } from "../../hooks/useAdminData";
+/* Bootstrap is imported once in App.js */
 
 const AdminPage = () => {
   const navigate = useNavigate();
   const [selectedEmployee, setSelectedEmployee] = useState("");
   const [activeSection, setActiveSection] = useState("employees");
-  const [agents, setAgents] = useState([]);
-  const [agentHistory, setAgentHistory] = useState([]);
-  const [selectedAgentId, setSelectedAgentId] = useState(null);
-  const [agentForm, setAgentForm] = useState(EMPTY_AGENT_FORM);
-  const [editingAgentId, setEditingAgentId] = useState(null);
-  const [agentMessage, setAgentMessage] = useState("");
+
+  const admin = useAdminData(activeSection === "agents");
 
   const handlegetfeedback = () => {
     if (!selectedEmployee) return;
@@ -51,75 +28,10 @@ const AdminPage = () => {
     navigate("/feedback");
   };
 
-  const handlegetBack = () => {
-    window.location.reload();
-  };
+  /* Replace window.location.reload() with React Router navigate(0) */
+  const handlegetBack = () => navigate(0);
 
-  const loadAgents = async () => {
-    try {
-      const res = await getAgentsAdmin();
-      setAgents(res.agents || []);
-    } catch {
-      setAgentMessage("Failed to load agents.");
-    }
-  };
 
-  useEffect(() => {
-    if (activeSection === "agents") {
-      loadAgents();
-    }
-  }, [activeSection]);
-
-  const openEditAgent = async (agent) => {
-    setEditingAgentId(agent.agent_id);
-    setSelectedAgentId(agent.agent_id);
-    setAgentForm({
-      display_name: agent.display_name,
-      slug: agent.slug,
-      description: agent.description,
-      persona_key: agent.persona_key,
-      greeting_style: agent.greeting_style,
-      avatar_key: agent.avatar_key,
-      theme_key: agent.theme_key,
-      base_url: agent.base_url,
-      public_base_url: agent.public_base_url,
-      status: agent.status,
-    });
-    const res = await getAgentHistory(agent.agent_id);
-    setAgentHistory(res.history || []);
-  };
-
-  const submitAgentForm = async () => {
-    setAgentMessage("");
-    try {
-      if (editingAgentId) {
-        await updateAgent(editingAgentId, agentForm);
-        setAgentMessage("Agent updated.");
-      } else {
-        await createAgent(agentForm);
-        setAgentMessage("Agent created.");
-      }
-      setAgentForm(EMPTY_AGENT_FORM);
-      setEditingAgentId(null);
-      await loadAgents();
-    } catch (error) {
-      setAgentMessage(error?.response?.data?.detail || "Unable to save agent.");
-    }
-  };
-
-  const triggerHealthcheck = async (agentId) => {
-    try {
-      await runAgentHealthcheck(agentId);
-      setAgentMessage("Healthcheck completed.");
-      await loadAgents();
-      if (selectedAgentId === agentId) {
-        const res = await getAgentHistory(agentId);
-        setAgentHistory(res.history || []);
-      }
-    } catch {
-      setAgentMessage("Healthcheck failed.");
-    }
-  };
 
   return (
     <>
@@ -212,17 +124,12 @@ const AdminPage = () => {
                     </div>
                     <button
                       className="btn btn-outline-primary rounded-pill px-4"
-                      onClick={() => {
-                        setEditingAgentId(null);
-                        setSelectedAgentId(null);
-                        setAgentHistory([]);
-                        setAgentForm(EMPTY_AGENT_FORM);
-                      }}
+                      onClick={admin.resetForm}
                     >
                       New Agent
                     </button>
                   </div>
-                  {agentMessage && <div className="alert alert-secondary py-2">{agentMessage}</div>}
+                  {admin.agentMessage && <div className="alert alert-secondary py-2">{admin.agentMessage}</div>}
                   <div className="table-responsive">
                     <table className="table align-middle">
                       <thead>
@@ -235,8 +142,8 @@ const AdminPage = () => {
                           <th />
                         </tr>
                       </thead>
-                      <tbody>
-                        {agents.map((agent) => (
+                    <tbody>
+                        {admin.agents.map((agent) => (
                           <tr key={agent.agent_id}>
                             <td>{agent.display_name}</td>
                             <td>{agent.persona_key}</td>
@@ -244,17 +151,17 @@ const AdminPage = () => {
                             <td>{agent.public_base_url}</td>
                             <td>{agent.health_status}</td>
                             <td className="text-end d-flex gap-2 justify-content-end">
-                              <button className="btn btn-sm btn-outline-secondary" onClick={() => openEditAgent(agent)}>Edit</button>
-                              <button className="btn btn-sm btn-outline-primary" onClick={() => triggerHealthcheck(agent.agent_id)}>Healthcheck</button>
+                              <button className="btn btn-sm btn-outline-secondary" onClick={() => admin.openEditAgent(agent)}>Edit</button>
+                              <button className="btn btn-sm btn-outline-primary" onClick={() => admin.triggerHealthcheck(agent.agent_id)}>Healthcheck</button>
                             </td>
                           </tr>
                         ))}
-                        {agents.length === 0 && (
+                        {admin.agents.length === 0 && (
                           <tr>
                             <td colSpan="6" className="text-center text-muted py-4">No agents configured.</td>
                           </tr>
                         )}
-                      </tbody>
+                    </tbody>
                     </table>
                   </div>
                 </div>
@@ -262,16 +169,16 @@ const AdminPage = () => {
 
               <div className="col-12 col-xl-5 d-flex flex-column gap-4">
                 <div className="card border-0 shadow-sm p-4 admin-bento-card">
-                  <h4 className="fw-bold mb-3">{editingAgentId ? "Edit Agent" : "Create Agent"}</h4>
+                  <h4 className="fw-bold mb-3">{admin.editingAgentId ? "Edit Agent" : "Create Agent"}</h4>
                   <div className="row g-3">
-                    {Object.entries(agentForm).map(([key, value]) => (
+                    {Object.entries(admin.agentForm).map(([key, value]) => (
                       <div className="col-12" key={key}>
                         <label className="form-label text-capitalize">{key.replaceAll("_", " ")}</label>
                         {key === "status" || key === "persona_key" ? (
                           <select
                             className="form-select"
                             value={value}
-                            onChange={(e) => setAgentForm((prev) => ({ ...prev, [key]: e.target.value }))}
+                            onChange={(e) => admin.updateField(key, e.target.value)}
                           >
                             {key === "status"
                               ? ["active", "inactive", "draining"].map((option) => <option key={option} value={option}>{option}</option>)
@@ -281,22 +188,22 @@ const AdminPage = () => {
                           <input
                             className="form-control"
                             value={value}
-                            onChange={(e) => setAgentForm((prev) => ({ ...prev, [key]: e.target.value }))}
+                            onChange={(e) => admin.updateField(key, e.target.value)}
                           />
                         )}
                       </div>
                     ))}
                   </div>
-                  <button className="btn btn-primary mt-4 rounded-pill" onClick={submitAgentForm}>
-                    {editingAgentId ? "Save Agent" : "Create Agent"}
+                  <button className="btn btn-primary mt-4 rounded-pill" onClick={admin.submitAgentForm}>
+                    {admin.editingAgentId ? "Save Agent" : "Create Agent"}
                   </button>
                 </div>
 
                 <div className="card border-0 shadow-sm p-4 admin-bento-card">
                   <h4 className="fw-bold mb-3">Location History</h4>
-                  {selectedAgentId ? (
+                  {admin.selectedAgentId ? (
                     <div className="d-flex flex-column gap-3">
-                      {agentHistory.map((event) => (
+                      {admin.agentHistory.map((event) => (
                         <div key={event.event_id} className="border rounded-4 p-3 bg-light">
                           <div className="fw-semibold">{event.event_type}</div>
                           <div className="small text-muted">{new Date(event.timestamp).toLocaleString()}</div>
@@ -306,7 +213,7 @@ const AdminPage = () => {
                           <div className="small">Status: {event.new_status || "-"}</div>
                         </div>
                       ))}
-                      {agentHistory.length === 0 && <div className="text-muted">No lifecycle events recorded yet.</div>}
+                      {admin.agentHistory.length === 0 && <div className="text-muted">No lifecycle events recorded yet.</div>}
                     </div>
                   ) : (
                     <div className="text-muted">Select an agent to inspect its lifecycle history.</div>
