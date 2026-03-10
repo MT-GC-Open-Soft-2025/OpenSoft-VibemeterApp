@@ -37,8 +37,9 @@ const SurveyForm = () => {
   return (
     <div className="feedback-wrapper">
       <Feedbacknavbar title="Survey" />
-      <div className="survey-container bg-white shadow-sm rounded-4 p-4 p-md-5 mx-auto">
-        <h2 className="mb-4 text-center text-dark">Survey</h2>
+      <div className="survey-container">
+        <h2 className="mb-4 text-center" style={{ fontWeight: 800, color: '#1e293b', letterSpacing: '-0.02em', fontSize: '2.2rem' }}>We Value Your Feedback</h2>
+        <p className="text-center text-muted mb-5" style={{ fontSize: '0.95rem' }}>Your thoughts help us improve WellBee for everyone.</p>
 
         {errorMessage && (
           <div className="alert alert-danger py-2 mb-4" role="alert">
@@ -48,12 +49,12 @@ const SurveyForm = () => {
 
         <form className="survey-form" onSubmit={handleSubmit}>
           {questions.map((q) => (
-            <div key={q.question_id} className="question-block mb-5">
-              <p className="question-text fw-semibold fs-5 text-dark mb-3">
+            <div key={q.question_id} className="question-block">
+              <p className="question-text">
                 {q.question_text}
               </p>
               <div
-                className="segmented-pill-control d-flex gap-2"
+                className="segmented-pill-control"
                 role="radiogroup"
                 aria-label={q.question_text}
               >
@@ -66,7 +67,7 @@ const SurveyForm = () => {
                       role="radio"
                       aria-checked={isSelected}
                       aria-label={`Score ${score}`}
-                      className={`pill-btn flex-fill py-2 rounded-pill fw-medium ${isSelected ? 'selected' : ''}`}
+                      className={`pill-btn ${isSelected ? 'selected' : ''}`}
                       onClick={() => setAnswer(q.question_id, score)}
                     >
                       {score}
@@ -79,7 +80,7 @@ const SurveyForm = () => {
 
           <button
             type="submit"
-            className="survey-submit mt-4 rounded-pill fw-bold text-white w-100 py-3 border-0"
+            className="survey-submit w-100"
             disabled={status === 'submitting' || questions.length === 0}
           >
             {status === 'submitting' ? 'Submitting…' : 'Submit Survey'}

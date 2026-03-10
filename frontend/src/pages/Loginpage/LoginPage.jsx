@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-scroll";
+import { Link, Element } from "react-scroll";
 /* Bootstrap imported once in App.js */
 import "./LoginPage.css";
 import Swal from "sweetalert2";

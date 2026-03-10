@@ -10,7 +10,7 @@ import { IconPlus } from '../../components/icons/icons';
 const AgentPicker = ({ availableAgents, selectedAgentId, onSelectAgent, onStart }) => (
   <div className="cp-welcome">
     <div className="cp-welcome-lottie">
-      <Lottie animationData={animationData} loop style={{ width: 120, height: 120 }} />
+      <Lottie animationData={animationData} loop style={{ width: 100, height: 100 }} />
     </div>
     <h2 className="cp-welcome-title">Pick the agent you want to talk to</h2>
     <p className="cp-welcome-sub">

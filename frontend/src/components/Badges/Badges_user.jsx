@@ -32,7 +32,12 @@ export default function Badges({ employeeId }) {
 
   if (!employeeId) return <div className="no-badges">No employee selected</div>;
   if (error) return <div className="alert alert-danger">{error}</div>;
-  if (awardList.length === 0) return <div className="no-badges">No awards earned</div>;
+  if (awardList.length === 0) return (
+    <div className="no-badges-empty">
+      <div className="empty-icon">🏆</div>
+      <p>No badges yet. Keep up the great work to earn your first award!</p>
+    </div>
+  );
 
   const awardBadgeMap = {
     "Innovation Award": badge1,

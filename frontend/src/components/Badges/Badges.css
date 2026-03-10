@@ -1,6 +1,7 @@
 h2 {
   color: black;
 }
+
 .badges-container {
   justify-content: center;
 }
@@ -19,7 +20,6 @@ h2 {
   justify-content: center;
   gap: 10px;
   margin-top: 10px;
-  margin-bottom: 65px;
 }
 
 /* Badge image styling */
@@ -58,4 +58,31 @@ h2 {
   visibility: visible;
   opacity: 1;
   transform: translateY(100%);
+}
+
+/* Empty State */
+.no-badges-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.no-badges-empty .empty-icon {
+  font-size: 2.5rem;
+  opacity: 0.5;
+  margin-bottom: 0.5rem;
+  filter: grayscale(1);
+}
+
+.no-badges-empty p {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
 }

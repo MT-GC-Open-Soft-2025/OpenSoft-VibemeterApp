@@ -67,63 +67,83 @@ const ContactForm = () => {
   };
 
   return (
-     <div className='feedback-wrapper' style={{backgroundImage: "linear-gradient(135deg, rgb(255, 255, 255), rgb(168, 241, 255))"}}>
-    {/* //   <nav className='navbar'>
-    //     <div className='nav-content'>Contact Us</div>
-    //     <button className='go-back-btn' onClick={handleGoBack}>Go Back</button>
-    //   </nav>
-     */}
-    <Feedbacknavbar title="Contact Us" />
+    <div className='feedback-wrapper'>
+      <Feedbacknavbar title="Contact Us" />
 
+      <div className="contact-split-card">
+        {/* Left Side: Contact Info */}
+        <div className="contact-info-side">
+          <h2 className="contact-info-title">Let's Talk</h2>
+          <p className="contact-info-desc">
+            Whether you have a question about features, pricing, or anything else, our team is ready to answer all your questions.
+          </p>
+          
+          <div className="contact-meta">
+            <div className="contact-meta-icon">📍</div>
+            <span>123 WellBee Street, Tech City, NY</span>
+          </div>
+          <div className="contact-meta">
+            <div className="contact-meta-icon">✉️</div>
+            <span>support@wellbee.com</span>
+          </div>
+          <div className="contact-meta">
+            <div className="contact-meta-icon">📞</div>
+            <span>+1 (555) 123-4567</span>
+          </div>
+        </div>
 
-    <div className="contact-form-container bg-white shadow-sm rounded-4 p-4 p-md-5 mx-auto mt-5 mb-5" style={{ maxWidth: "500px", width: "90%" }}>
-      <h2>Contact Us</h2>
-      <form className="contact-form" onSubmit={handleSubmit}>
-        <div className="form-floating mb-3">
-          <input
-            type="text"
-            className="form-control"
-            id="floatingName"
-            name="name"
-            placeholder="Your Name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <label htmlFor="floatingName">Your Name</label>
+        {/* Right Side: Form */}
+        <div className="contact-form-side">
+          <form className="contact-form" onSubmit={handleSubmit}>
+            <div className="form-floating mb-4">
+              <input
+                type="text"
+                className="form-control"
+                id="floatingName"
+                name="name"
+                placeholder="Your Name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+              />
+              <label htmlFor="floatingName">Your Name</label>
+            </div>
+            
+            <div className="form-floating mb-4">
+              <input
+                type="email"
+                className="form-control"
+                id="floatingEmail"
+                name="email"
+                placeholder="name@example.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <label htmlFor="floatingEmail">Your Email</label>
+            </div>
+
+            <div className="form-floating mb-4">
+              <textarea
+                className="form-control"
+                id="floatingMessage"
+                name="message"
+                placeholder="Your Message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+              ></textarea>
+              <label htmlFor="floatingMessage">How can we help?</label>
+            </div>
+
+            <button type="submit" className="submit-btn">
+              Send Message
+            </button>
+          </form>
+          {status && <p className="success-message">{status}</p>}
         </div>
-        <div className="form-floating mb-3">
-          <input
-            type="email"
-            className="form-control"
-            id="floatingEmail"
-            name="email"
-            placeholder="name@example.com"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          <label htmlFor="floatingEmail">Your Email</label>
-        </div>
-        <div className="form-floating mb-4">
-          <textarea
-            className="form-control"
-            id="floatingMessage"
-            name="message"
-            placeholder="Your Message"
-            style={{ height: "120px" }}
-            value={formData.message}
-            onChange={handleChange}
-            required
-          ></textarea>
-          <label htmlFor="floatingMessage">Your Message</label>
-        </div>
-        <button type="submit" className="submit-btn">Send Message</button>
-      </form>
-      {status && <p className="success-message">{status}</p>}
+      </div>
     </div>
-    </div>
-
   );
 };
 

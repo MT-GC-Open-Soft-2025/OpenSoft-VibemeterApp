@@ -63,7 +63,9 @@ const ChatSidebar = ({
             >
               <span className="cp-conv-ico"><IconMessage /></span>
               {sidebarOpen && (
-                <span className="cp-conv-label-text">{getSessionLabel(convId, idx)}</span>
+                <div className="cp-conv-text-wrapper" style={{ display: 'flex', flexDirection: 'column', flex: 1, minWidth: 0 }}>
+                  <span className="cp-conv-label-text">{getSessionLabel(convId, idx)}</span>
+                </div>
               )}
               {isActive && <span className="cp-live-dot" />}
             </button>

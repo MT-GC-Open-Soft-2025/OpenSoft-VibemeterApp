@@ -1,53 +1,192 @@
-.contact-form-container h2 {
-  color: #333;
-  margin-bottom: 25px;
-  font-size: 28px;
-  font-weight: 600;
-  text-align: center;
+/* ============================================================
+   ContactForm — Premium Redesign
+   ============================================================ */
+
+.feedback-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e0e7ff 100%);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
 
-.contact-form input,
-.contact-form textarea {
-  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+/* Background aesthetic shapes */
+.feedback-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
 }
 
-.contact-form input:focus,
-.contact-form textarea:focus {
-  border-color: var(--wb-primary, #009688);
-  box-shadow: 0 0 0 0.25rem rgba(0, 150, 136, 0.25);
+.feedback-wrapper::after {
+  content: '';
+  position: absolute;
+  bottom: -150px;
+  left: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
 }
 
-.contact-form textarea {
-  height: 120px;
+/* ── Split Layout Card ────────────────────────────────────── */
+.contact-split-card {
+  display: flex;
+  max-width: 900px;
+  width: 90%;
+  margin: 3rem auto 4rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+/* Left side: Info */
+.contact-info-side {
+  flex: 1;
+  background: linear-gradient(135deg, #0f766e 0%, #0369a1 100%);
+  color: white;
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+.contact-info-side::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 100% 0 0 0;
+}
+
+.contact-info-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+
+.contact-info-desc {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.contact-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+  font-size: 0.9rem;
+}
+
+.contact-meta-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Right side: Form */
+.contact-form-side {
+  flex: 1.3;
+  padding: 3.5rem 3rem;
+  background: white;
+}
+
+/* ── Form Inputs ──────────────────────────────────────────── */
+.contact-form .form-floating>label {
+  color: #64748b;
+  font-size: 0.9rem;
+  padding-left: 1rem;
+}
+
+.contact-form .form-control {
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  background: #f8fafc;
+  box-shadow: none;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+  padding-left: 1rem;
+}
+
+.contact-form .form-control:focus {
+  border-color: #0f766e;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.1);
+}
+
+.contact-form textarea.form-control {
+  height: 140px;
   resize: none;
+  border-radius: 16px;
 }
 
-.contact-form button {
+/* ── Submit Button ────────────────────────────────────────── */
+.submit-btn {
   width: 100%;
   padding: 14px;
-  background-color: var(--wb-primary, #009688);
+  background: linear-gradient(135deg, #0f766e 0%, #0369a1 100%);
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   color: white;
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: transform 0.15s ease, background-color 0.3s ease;
-  display: block;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-top: 1rem;
 }
 
-.contact-form button:hover {
-  background-color: var(--wb-primary-dark, #00796b);
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.3);
 }
 
-.contact-form button:active {
+.submit-btn:active {
   transform: scale(0.98);
 }
 
 .success-message {
-  color: #198754;
+  color: #10b981;
   text-align: center;
-  font-size: 16px;
+  font-size: 0.9rem;
   margin-top: 15px;
-  font-weight: 500;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact-split-card {
+    flex-direction: column;
+    margin: 2rem auto;
+  }
+
+  .contact-info-side {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .contact-form-side {
+    padding: 2.5rem 1.5rem;
+  }
 }
