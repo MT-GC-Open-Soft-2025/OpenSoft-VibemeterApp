@@ -124,53 +124,62 @@ const ChatPage = () => {
 
       <main className="flex-1 flex flex-col bg-slate-50 overflow-hidden min-w-0">
         {/* Topbar */}
-        <header className="h-[60px] flex items-center justify-between px-6 border-b border-[hsl(var(--border))] flex-shrink-0 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-          <div className="flex items-center gap-2.5">
+        <header className="h-[64px] flex items-center justify-between px-5 border-b border-[hsl(var(--border))] flex-shrink-0 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.05)]">
+          <div className="flex items-center gap-3 min-w-0">
             {!sidebarOpen && (
               <button
-                className="flex items-center justify-center p-1.5 rounded-lg bg-transparent border-none text-slate-400 cursor-pointer transition-colors hover:bg-slate-100 hover:text-slate-700"
+                className="flex items-center justify-center w-8 h-8 rounded-lg bg-transparent border-none text-slate-400 cursor-pointer transition-colors hover:bg-slate-100 hover:text-slate-700 flex-shrink-0"
                 onClick={() => setSidebarOpen(true)}
                 aria-label="Open sidebar"
               >
                 <IconMenu />
               </button>
             )}
-            <div>
-              <span className="text-[0.95rem] font-semibold text-[hsl(var(--foreground))]">
-                {chat.displayedAgent?.display_name || (chat.viewingConvId ? 'WellBee Chat' : 'Choose Your Agent')}
-              </span>
-              {chat.displayedAgent?.agent_id && (
-                <div className="text-[0.72rem] text-[hsl(var(--muted-foreground))] uppercase tracking-[0.08em]">
-                  {chat.displayedAgent.agent_id}
+            {chat.displayedAgent ? (
+              <div className="flex items-center gap-2.5 min-w-0">
+                {/* Agent avatar dot */}
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-white text-[0.8rem] font-extrabold flex-shrink-0"
+                  style={{ background: GRADIENT }}
+                >
+                  {chat.displayedAgent.display_name?.[0] || 'W'}
                 </div>
-              )}
-            </div>
+                <div className="min-w-0">
+                  <div className="text-[0.95rem] font-semibold text-[hsl(var(--foreground))] leading-tight truncate">
+                    {chat.displayedAgent.display_name}
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0" />
+                    <span className="text-[0.72rem] text-emerald-600 font-medium">Active now</span>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <span className="text-[0.95rem] font-semibold text-[hsl(var(--foreground))]">
+                {chat.viewingConvId ? 'WellBee Chat' : 'Choose Your Agent'}
+              </span>
+            )}
           </div>
-          <div className="flex items-center gap-2.5">
+
+          <div className="flex items-center gap-2 flex-shrink-0">
             {chat.activeConvId && chat.viewingConvId !== chat.activeConvId && (
               <button
-                className="bg-teal-700/8 border border-teal-700/25 text-teal-700 text-[0.8rem] font-semibold px-4 py-1.5 rounded-full cursor-pointer transition-colors hover:bg-teal-700/14 whitespace-nowrap"
+                className="flex items-center gap-1.5 bg-teal-50 border border-teal-200 text-teal-700 text-[0.8rem] font-semibold px-3.5 py-1.5 rounded-full cursor-pointer transition-colors hover:bg-teal-100 whitespace-nowrap"
                 onClick={chat.handleBackToCurrentChat}
               >
-                ↩ Current Chat
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="12" height="12"><path d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 0 1 0 12h-3"/></svg>
+                Back to chat
               </button>
             )}
             {chat.chatStarted && chat.activeConvId && chat.viewingConvId === chat.activeConvId && (
               <button
-                className="bg-red-500/6 border border-red-500/20 text-red-600 text-[0.8rem] font-semibold px-4 py-1.5 rounded-full cursor-pointer transition-colors hover:bg-red-500/12 whitespace-nowrap"
+                className="flex items-center gap-1.5 bg-red-50 border border-red-200 text-red-600 text-[0.8rem] font-semibold px-3.5 py-1.5 rounded-full cursor-pointer transition-colors hover:bg-red-100 whitespace-nowrap"
                 onClick={chat.handleEndChat}
               >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" width="12" height="12"><path d="M18 6L6 18M6 6l12 12"/></svg>
                 End Chat
               </button>
             )}
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[0.78rem] text-emerald-600 font-semibold">
-                {chat.displayedAgent?.display_name
-                  ? `${chat.displayedAgent.display_name} online`
-                  : 'online'}
-              </span>
-            </div>
           </div>
         </header>
 

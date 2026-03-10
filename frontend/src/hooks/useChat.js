@@ -57,6 +57,9 @@ export function useChat() {
   // Conversation list
   const [convids, setConvids] = useState([]);
 
+  // Per-session metadata cache: { [convId]: { agentName, agentId } }
+  const [sessionMeta, setSessionMeta] = useState({});
+
   // Available agents
   const [availableAgents, setAvailableAgents] = useState([]);
   const [selectedAgentId, setSelectedAgentId] = useState(
@@ -160,11 +163,16 @@ export function useChat() {
       setChatMessages(msgs);
       setChatStarted(true);
       setViewingConvId(convId);
-      setViewingMeta(
-        res.meta?.agent_name
-          ? { agent_id: res.meta.agent_id, display_name: res.meta.agent_name, theme_key: res.meta.agent_persona || 'default' }
-          : null
-      );
+      const meta = res.meta?.agent_name
+        ? { agent_id: res.meta.agent_id, display_name: res.meta.agent_name, theme_key: res.meta.agent_persona || 'default' }
+        : null;
+      setViewingMeta(meta);
+      if (meta) {
+        setSessionMeta((prev) => ({
+          ...prev,
+          [convId]: { agentName: meta.display_name, agentId: meta.agent_id },
+        }));
+      }
       localStorage.setItem('conversationId', convId);
     } catch {
       setModal({ type: 'error', message: 'Failed to load chat. Please try again.' });
@@ -215,7 +223,11 @@ export function useChat() {
       setAgentConnection(res.connection);
       setViewingMeta(res.agent);
       persistActiveAgent(res.agent, res.connection);
-      setChatMessages([{ sender: 'bot', text: res.opener }]);
+      setChatMessages([{ sender: 'bot', text: res.opener, timestamp: Date.now() }]);
+      setSessionMeta((prev) => ({
+        ...prev,
+        [newId]: { agentName: res.agent.display_name, agentId: res.agent.agent_id },
+      }));
       await fetchConvids();
     } catch {
       clearActiveAgent();
@@ -259,11 +271,12 @@ export function useChat() {
   const handleSend = async () => {
     if (!inputValue.trim() || isReadonly || !agentConnection?.public_base_url) return;
     const text = inputValue;
-    setChatMessages((prev) => [...prev, { sender: 'user', text }]);
+    const now = Date.now();
+    setChatMessages((prev) => [...prev, { sender: 'user', text, timestamp: now }]);
     setInputValue('');
     setIsBotTyping(true);
     if (streamAbortRef.current) streamAbortRef.current.abort();
-    setChatMessages((prev) => [...prev, { sender: 'bot', text: '' }]);
+    setChatMessages((prev) => [...prev, { sender: 'bot', text: '', timestamp: Date.now() }]);
 
     const controller = sendMessageToAgent({
       baseUrl: agentConnection.public_base_url,
@@ -307,12 +320,15 @@ export function useChat() {
   /* ── Session label helper ─────────────────────────────────── */
   const getSessionLabel = (convId, idx) => {
     if (convId === activeConvId) return 'Current Chat';
+    const cached = sessionMeta[convId];
+    if (cached?.agentName) return `Chat with ${cached.agentName}`;
     return `Session ${convids.length - idx}`;
   };
 
   return {
     // Data
     convids,
+    sessionMeta,
     availableAgents,
     chatMessages,
     isBotTyping,
