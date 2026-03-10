@@ -95,7 +95,7 @@ make dev
 This opens `mprocs` with:
 
 - backend on `127.0.0.1:8000`
-- frontend on `127.0.0.1:3000`
+- frontend on `127.0.0.1:8100`
 - agent runtimes on `127.0.0.1:8101`, `:8102`, and `:8103`
 - MongoDB and Redis taken from `.env`
 
@@ -207,7 +207,8 @@ In normal local development you should not run agent runtimes manually; `make de
 ```bash
 cd frontend
 bun install       # install deps
-bun run dev       # start Vite dev server on :3000
+bun run dev       # start Vite dev server (default :3000)
+bun run dev --port 8100 --host 0.0.0.0  # match the mprocs workflow
 bun run build     # production build → dist/
 bun run preview   # serve production build locally
 ```

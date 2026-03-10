@@ -41,7 +41,7 @@ if [[ -z "${GEMINI_KEY}" ]]; then
 fi
 
 echo "backend api: http://127.0.0.1:8000"
-echo "frontend:    http://127.0.0.1:3000"
+echo "frontend:    http://127.0.0.1:8100"
 echo "agents:      http://127.0.0.1:8101, :8102, :8103"
 echo "data mode:   ${DEV_DATA_SERVICES}"
 echo "mongo uri:   ${MONGO_URI}"

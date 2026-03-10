@@ -15,7 +15,15 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     token_expiry_seconds: int = 3600
     gemini_key: str = ""
-    cors_origins: str = "http://localhost,http://localhost:80,http://localhost:3000"
+    cors_origins: str = (
+        "http://localhost,"
+        "http://127.0.0.1,"
+        "http://localhost:80,"
+        "http://localhost:3000,"
+        "http://127.0.0.1:3000,"
+        "http://localhost:8100,"
+        "http://127.0.0.1:8100"
+    )
 
     # AI model config (optional overrides)
     gemini_model: str = "gemini-2.0-flash"

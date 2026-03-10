@@ -64,7 +64,7 @@ load_env() {
   export TOKEN_EXPIRY_SECONDS="${TOKEN_EXPIRY_SECONDS:-3600}"
   export GEMINI_KEY="${GEMINI_KEY:-}"
   export VITE_API_BASE_URL="${VITE_API_BASE_URL:-http://127.0.0.1:8000}"
-  export CORS_ORIGINS="${CORS_ORIGINS:-http://localhost,http://127.0.0.1,http://localhost:3000,http://127.0.0.1:3000}"
+  export CORS_ORIGINS="${CORS_ORIGINS:-http://localhost,http://127.0.0.1,http://localhost:3000,http://127.0.0.1:3000,http://localhost:8100,http://127.0.0.1:8100}"
   export AGENT_SESSION_SIGNING_SECRET="${AGENT_SESSION_SIGNING_SECRET:-wellbee-agent-session-secret}"
   export AGENT_INTERNAL_SYNC_SECRET="${AGENT_INTERNAL_SYNC_SECRET:-wellbee-agent-sync-secret}"
   export AGENT_BOOTSTRAP_TOKEN_TTL_SECONDS="${AGENT_BOOTSTRAP_TOKEN_TTL_SECONDS:-300}"
