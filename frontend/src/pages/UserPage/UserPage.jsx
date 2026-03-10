@@ -6,9 +6,9 @@ import Badges from '@/components/Badges/Badges_user';
 import Lottie from 'lottie-react';
 import animationData from '@/Assets/Newanimation.json';
 import Footer from '@/components/Footer/Footer';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 

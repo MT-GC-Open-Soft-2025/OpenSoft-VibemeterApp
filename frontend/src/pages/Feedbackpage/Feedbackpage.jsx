@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Markdown from 'markdown-to-jsx';
 import { getConversations, getConversationFeedback, getConversationSummary } from '@/api/admin';
 import AppShell from '@/components/AppShell/AppShell';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
