@@ -1,149 +1,174 @@
-
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import emailjs from "@emailjs/browser";
-import "./ContactForm.css"; // Import the CSS file
-import Feedbacknavbar from '../../components/Feedback_navbar/Feedbacknavbar';
-import axios from "axios";
-import { Element, Link } from "react-scroll";
-import "bootstrap/dist/css/bootstrap.min.css";
+import emailjs from '@emailjs/browser';
+import AppShell from '@/components/AppShell/AppShell';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
-import { FaUser, FaUserShield } from "react-icons/fa";
-import Swal from "sweetalert2";
 const ContactForm = () => {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-
-  const [status, setStatus] = useState("");
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState('idle'); // idle | sending | success | error
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-  const handleGoBack = () => {
-
-    navigate(-1);
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    emailjs
-      .send(
-        "service_a4qj7tr",
-        "template_dmmicgj",
-        {
-          from_name: formData.name,
-          from_email: formData.email,
-          message: formData.message,
-        },
-        "HdJeyKeeZ-eU_AELB"
-      )
-      .then(
-        (response) => {
-          console.log("SUCCESS!", response.status, response.text);
-          // setStatus("Message sent successfully!");
-          Swal.fire({
-            icon: 'success',
-            title: 'Message sent successfully!',
-            confirmButtonColor: '#36ABAA'
-          });
-          setFormData({ name: "", email: "", message: "" });
-        },
-        (error) => {
-          console.log("FAILED...", error);
-          //setStatus("Failed to send message.");
-          Swal.fire({
-            icon: 'error',
-            title: 'Failed to send message.',
-            confirmButtonColor : '#d33'
-          });
-        }
+    setStatus('sending');
+    try {
+      await emailjs.send(
+        'service_a4qj7tr',
+        'template_dmmicgj',
+        { from_name: formData.name, from_email: formData.email, message: formData.message },
+        'HdJeyKeeZ-eU_AELB',
       );
+      setStatus('success');
+      setFormData({ name: '', email: '', message: '' });
+    } catch {
+      setStatus('error');
+    }
   };
 
   return (
-    <div className='feedback-wrapper'>
-      <Feedbacknavbar title="Contact Us" />
+    <AppShell title="Contact Us" showBack>
+      <div className="max-w-4xl mx-auto pb-10">
 
-      <div className="contact-split-card">
-        {/* Left Side: Contact Info */}
-        <div className="contact-info-side">
-          <h2 className="contact-info-title">Let's Talk</h2>
-          <p className="contact-info-desc">
-            Whether you have a question about features, pricing, or anything else, our team is ready to answer all your questions.
-          </p>
-          
-          <div className="contact-meta">
-            <div className="contact-meta-icon">📍</div>
-            <span>123 WellBee Street, Tech City, NY</span>
+        {/* Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl mb-4 text-2xl"
+            style={{ background: 'linear-gradient(135deg, #0f766e, #0369a1)' }}>
+            ✉️
           </div>
-          <div className="contact-meta">
-            <div className="contact-meta-icon">✉️</div>
-            <span>support@wellbee.com</span>
-          </div>
-          <div className="contact-meta">
-            <div className="contact-meta-icon">📞</div>
-            <span>+1 (555) 123-4567</span>
-          </div>
+          <h1 className="text-2xl font-extrabold text-foreground tracking-tight">Get in Touch</h1>
+          <p className="text-sm text-muted-foreground mt-2">Our team is ready to answer all your questions.</p>
         </div>
 
-        {/* Right Side: Form */}
-        <div className="contact-form-side">
-          <form className="contact-form" onSubmit={handleSubmit}>
-            <div className="form-floating mb-4">
-              <input
-                type="text"
-                className="form-control"
-                id="floatingName"
-                name="name"
-                placeholder="Your Name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              />
-              <label htmlFor="floatingName">Your Name</label>
-            </div>
-            
-            <div className="form-floating mb-4">
-              <input
-                type="email"
-                className="form-control"
-                id="floatingEmail"
-                name="email"
-                placeholder="name@example.com"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-              <label htmlFor="floatingEmail">Your Email</label>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
 
-            <div className="form-floating mb-4">
-              <textarea
-                className="form-control"
-                id="floatingMessage"
-                name="message"
-                placeholder="Your Message"
-                value={formData.message}
-                onChange={handleChange}
-                required
-              ></textarea>
-              <label htmlFor="floatingMessage">How can we help?</label>
-            </div>
+          {/* Contact info */}
+          <div className="md:col-span-2">
+            <Card className="shadow-sm h-full">
+              <CardContent className="pt-6 space-y-6">
+                <div>
+                  <h2 className="text-lg font-bold text-foreground mb-1">Let's Talk</h2>
+                  <p className="text-sm text-muted-foreground">
+                    Whether you have a question about features, pricing, or anything else — we're here.
+                  </p>
+                </div>
 
-            <button type="submit" className="submit-btn">
-              Send Message
-            </button>
-          </form>
-          {status && <p className="success-message">{status}</p>}
+                <div className="space-y-4">
+                  {[
+                    { icon: '📍', label: 'Address', value: '123 WellBee Street, Tech City, NY' },
+                    { icon: '✉️', label: 'Email', value: 'support@wellbee.com' },
+                    { icon: '📞', label: 'Phone', value: '+1 (555) 123-4567' },
+                  ].map(item => (
+                    <div key={item.label} className="flex items-start gap-3">
+                      <div className="w-9 h-9 rounded-xl bg-[hsl(var(--accent))] flex items-center justify-center text-base flex-shrink-0">
+                        {item.icon}
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{item.label}</p>
+                        <p className="text-sm text-foreground font-medium">{item.value}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Decorative gradient */}
+                <div
+                  className="h-1.5 w-full rounded-full"
+                  style={{ background: 'linear-gradient(90deg, #0f766e, #0369a1, #6366f1)' }}
+                />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Form */}
+          <div className="md:col-span-3">
+            <Card className="shadow-sm">
+              <CardContent className="pt-6">
+                {status === 'success' && (
+                  <Alert className="mb-4 border-emerald-200 bg-emerald-50 text-emerald-800">
+                    <AlertDescription>✓ Message sent successfully! We'll get back to you soon.</AlertDescription>
+                  </Alert>
+                )}
+                {status === 'error' && (
+                  <Alert variant="destructive" className="mb-4">
+                    <AlertDescription>Failed to send message. Please try again.</AlertDescription>
+                  </Alert>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="space-y-1.5">
+                    <Label htmlFor="name" className="text-sm font-semibold">Your Name</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      placeholder="Jane Doe"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="h-10"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="email" className="text-sm font-semibold">Email Address</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="jane@company.com"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="h-10"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <Label htmlFor="message" className="text-sm font-semibold">Message</Label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      placeholder="How can we help you?"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      rows={5}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full h-11 font-bold shadow-sm"
+                    style={{ background: 'linear-gradient(135deg, #0f766e, #0369a1)' }}
+                    disabled={status === 'sending'}
+                  >
+                    {status === 'sending' ? (
+                      <span className="flex items-center gap-2">
+                        <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                        </svg>
+                        Sending…
+                      </span>
+                    ) : 'Send Message'}
+                  </Button>
+                </form>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
-    </div>
+    </AppShell>
   );
 };
 

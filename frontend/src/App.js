@@ -1,19 +1,20 @@
 import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-/* ── Single Bootstrap import for the entire app ──────────────── */
+/* ── Bootstrap (needed for landing page) ────────────────────── */
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'animate.css';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-/* ── App global design tokens + base styles ──────────────────── */
+/* ── App global design tokens + Tailwind base styles ─────────── */
 import './index.css';
 
 import { AuthProvider } from './context/AuthContext';
 import ErrorBoundary from './components/ErrorBoundary';
 import ProtectedRoute from './components/ProtectedRoute';
 import { FullPageSpinner } from './components/ui/Spinner';
+import { Toaster } from './components/ui/sonner';
 
 const Start      = lazy(() => import('./pages/Loginpage/Start'));
 const AdminPage  = lazy(() => import('./pages/AdminPage/AdminPage'));
@@ -30,40 +31,43 @@ const App = () => {
   }, []);
 
   return (
-    <ErrorBoundary>
-      <AuthProvider>
-        <Router>
-          <Suspense fallback={<FullPageSpinner />}>
-            <a href="#main-content" className="visually-hidden-focusable skip-link">
-              Skip to main content
-            </a>
-            <main id="main-content">
-              <Routes>
-                <Route path="/"       element={<Start />} />
-                <Route path="/login"  element={<Start />} />
-                <Route path="/contact" element={<ContactForm />} />
+    <>
+      <ErrorBoundary>
+        <AuthProvider>
+          <Router>
+            <Suspense fallback={<FullPageSpinner />}>
+              <a href="#main-content" className="visually-hidden-focusable skip-link">
+                Skip to main content
+              </a>
+              <main id="main-content">
+                <Routes>
+                  <Route path="/"       element={<Start />} />
+                  <Route path="/login"  element={<Start />} />
+                  <Route path="/contact" element={<ContactForm />} />
 
-                <Route path="/admin" element={
-                  <ProtectedRoute requiredRole="admin"><AdminPage /></ProtectedRoute>
-                } />
-                <Route path="/user" element={
-                  <ProtectedRoute><UserPage /></ProtectedRoute>
-                } />
-                <Route path="/surveyform" element={
-                  <ProtectedRoute><SurveyForm /></ProtectedRoute>
-                } />
-                <Route path="/chat" element={
-                  <ProtectedRoute><ChatPage /></ProtectedRoute>
-                } />
-                <Route path="/feedback" element={
-                  <ProtectedRoute requiredRole="admin"><FeedbackPage /></ProtectedRoute>
-                } />
-              </Routes>
-            </main>
-          </Suspense>
-        </Router>
-      </AuthProvider>
-    </ErrorBoundary>
+                  <Route path="/admin" element={
+                    <ProtectedRoute requiredRole="admin"><AdminPage /></ProtectedRoute>
+                  } />
+                  <Route path="/user" element={
+                    <ProtectedRoute><UserPage /></ProtectedRoute>
+                  } />
+                  <Route path="/surveyform" element={
+                    <ProtectedRoute><SurveyForm /></ProtectedRoute>
+                  } />
+                  <Route path="/chat" element={
+                    <ProtectedRoute><ChatPage /></ProtectedRoute>
+                  } />
+                  <Route path="/feedback" element={
+                    <ProtectedRoute requiredRole="admin"><FeedbackPage /></ProtectedRoute>
+                  } />
+                </Routes>
+              </main>
+            </Suspense>
+          </Router>
+        </AuthProvider>
+      </ErrorBoundary>
+      <Toaster position="top-right" richColors />
+    </>
   );
 };
 

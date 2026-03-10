@@ -1,13 +1,21 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Modal, Button } from 'react-bootstrap';
 import './ChatPage.css';
-import { useChat } from '../../hooks/useChat';
-import { IconMenu, IconLock } from '../../components/icons/icons';
+import { useChat } from '@/hooks/useChat';
+import { IconMenu, IconLock } from '@/components/icons/icons';
 import ChatSidebar from './ChatSidebar';
 import AgentPicker from './AgentPicker';
 import MessageList from './MessageList';
 import InputBar from './InputBar';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 const ChatPage = () => {
   const navigate = useNavigate();
@@ -16,7 +24,6 @@ const ChatPage = () => {
 
   const chat = useChat();
 
-  /* Auto-scroll to bottom on new messages */
   useEffect(() => {
     if (chatHistoryRef.current) {
       chatHistoryRef.current.scrollTop = chatHistoryRef.current.scrollHeight;
@@ -24,31 +31,37 @@ const ChatPage = () => {
   }, [chat.chatMessages, chat.isBotTyping]);
 
   /* ── Modal content ─────────────────────────────────────── */
-  const renderModal = () => {
+  const renderDialogContent = () => {
     if (chat.modal.type === 'error') {
       return (
         <>
-          <Modal.Header closeButton><Modal.Title>Something went wrong</Modal.Title></Modal.Header>
-          <Modal.Body><p className="text-muted mb-0">{chat.modal.message}</p></Modal.Body>
-          <Modal.Footer><Button variant="secondary" onClick={chat.closeModal}>Close</Button></Modal.Footer>
+          <DialogHeader>
+            <DialogTitle>Something went wrong</DialogTitle>
+            <DialogDescription>{chat.modal.message}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={chat.closeModal}>Close</Button>
+          </DialogFooter>
         </>
       );
     }
+
     if (chat.modal.type === 'endChat') {
       return (
         <>
-          <Modal.Header closeButton>
-            <Modal.Title>{chat.pendingNewChat ? 'End chat & start new?' : 'End this chat?'}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p className="text-muted mb-4">
+          <DialogHeader>
+            <DialogTitle>{chat.pendingNewChat ? 'End chat & start new?' : 'End this chat?'}</DialogTitle>
+            <DialogDescription>
               {chat.pendingNewChat
                 ? 'You have an active conversation. Please end it before starting a new one. Rate your experience below (optional).'
                 : 'This will close your current conversation. You can still read it from history afterwards.'}
-            </p>
-            <p className="fw-semibold text-dark mb-2">Rate your experience</p>
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="py-2">
+            <p className="text-sm font-semibold text-foreground mb-3">Rate your experience</p>
             <div className="cp-star-row" role="radiogroup" aria-label="Chat rating">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[1, 2, 3, 4, 5].map(star => (
                 <button
                   key={star}
                   className={`cp-star ${star <= (chat.hoverRating || chat.rating) ? 'cp-star-lit' : ''}`}
@@ -56,27 +69,35 @@ const ChatPage = () => {
                   onMouseLeave={() => chat.setHoverRating(0)}
                   onClick={() => chat.setRating(star)}
                   aria-label={`${star} star`}
-                >★</button>
+                >
+                  ★
+                </button>
               ))}
             </div>
-            {chat.modalLoading && <p className="text-muted mt-3 text-center small">Ending chat…</p>}
-          </Modal.Body>
-          <Modal.Footer className="gap-2">
-            <Button variant="secondary" onClick={chat.closeModal} disabled={chat.modalLoading}>Cancel</Button>
-            <Button variant="outline-danger" onClick={() => chat.submitEndChat(0)} disabled={chat.modalLoading}>
+            {chat.modalLoading && (
+              <p className="text-sm text-muted-foreground mt-3 text-center">Ending chat…</p>
+            )}
+          </div>
+
+          <DialogFooter className="gap-2 flex-wrap">
+            <Button variant="outline" onClick={chat.closeModal} disabled={chat.modalLoading}>
+              Cancel
+            </Button>
+            <Button variant="outline" className="border-destructive text-destructive hover:bg-destructive/10" onClick={() => chat.submitEndChat(0)} disabled={chat.modalLoading}>
               Skip &amp; End
             </Button>
             <Button
-              variant="primary"
               onClick={() => chat.submitEndChat(chat.rating)}
               disabled={chat.modalLoading || chat.rating === 0}
+              className="bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))]/90"
             >
               {chat.pendingNewChat ? 'End & Start New' : 'Submit & End'}
             </Button>
-          </Modal.Footer>
+          </DialogFooter>
         </>
       );
     }
+
     return null;
   };
 
@@ -176,9 +197,12 @@ const ChatPage = () => {
           isActive={!!chat.activeConvId}
         />
 
-        <Modal show={chat.modal.type !== null} onHide={chat.closeModal} centered>
-          {renderModal()}
-        </Modal>
+        {/* Dialog (replaces Bootstrap Modal) */}
+        <Dialog open={chat.modal.type !== null} onOpenChange={(open) => !open && chat.closeModal()}>
+          <DialogContent className="sm:max-w-md">
+            {renderDialogContent()}
+          </DialogContent>
+        </Dialog>
       </main>
     </div>
   );
