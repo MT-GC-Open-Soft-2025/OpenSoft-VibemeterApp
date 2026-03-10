@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ChatPage.css';
 import { useChat } from '@/hooks/useChat';
 import { IconMenu, IconLock } from '@/components/icons/icons';
 import ChatSidebar from './ChatSidebar';
@@ -15,7 +14,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
+
+const GRADIENT = 'linear-gradient(135deg, #0f766e 0%, #0369a1 100%)';
 
 const ChatPage = () => {
   const navigate = useNavigate();
@@ -59,12 +60,12 @@ const ChatPage = () => {
           </DialogHeader>
 
           <div className="py-2">
-            <p className="text-sm font-semibold text-foreground mb-3">Rate your experience</p>
-            <div className="cp-star-row" role="radiogroup" aria-label="Chat rating">
+            <p className="text-sm font-semibold text-[hsl(var(--foreground))] mb-3">Rate your experience</p>
+            <div className="flex gap-2" role="radiogroup" aria-label="Chat rating">
               {[1, 2, 3, 4, 5].map(star => (
                 <button
                   key={star}
-                  className={`cp-star ${star <= (chat.hoverRating || chat.rating) ? 'cp-star-lit' : ''}`}
+                  className={`bg-transparent border-none text-[2.2rem] cursor-pointer p-0 leading-none transition-all hover:scale-110 ${star <= (chat.hoverRating || chat.rating) ? 'text-amber-400' : 'text-slate-300'}`}
                   onMouseEnter={() => chat.setHoverRating(star)}
                   onMouseLeave={() => chat.setHoverRating(0)}
                   onClick={() => chat.setRating(star)}
@@ -75,7 +76,7 @@ const ChatPage = () => {
               ))}
             </div>
             {chat.modalLoading && (
-              <p className="text-sm text-muted-foreground mt-3 text-center">Ending chat…</p>
+              <p className="text-sm text-[hsl(var(--muted-foreground))] mt-3 text-center">Ending chat…</p>
             )}
           </div>
 
@@ -83,13 +84,19 @@ const ChatPage = () => {
             <Button variant="outline" onClick={chat.closeModal} disabled={chat.modalLoading}>
               Cancel
             </Button>
-            <Button variant="outline" className="border-destructive text-destructive hover:bg-destructive/10" onClick={() => chat.submitEndChat(0)} disabled={chat.modalLoading}>
+            <Button
+              variant="outline"
+              className="border-destructive text-destructive hover:bg-destructive/10"
+              onClick={() => chat.submitEndChat(0)}
+              disabled={chat.modalLoading}
+            >
               Skip &amp; End
             </Button>
             <Button
               onClick={() => chat.submitEndChat(chat.rating)}
               disabled={chat.modalLoading || chat.rating === 0}
-              className="bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))]/90"
+              style={{ background: GRADIENT }}
+              className="text-white hover:brightness-110 border-none"
             >
               {chat.pendingNewChat ? 'End & Start New' : 'Submit & End'}
             </Button>
@@ -102,7 +109,7 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="cp-root">
+    <div className="flex h-screen w-screen overflow-hidden bg-slate-50 text-[hsl(var(--foreground))] font-[inherit]">
       <ChatSidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
@@ -115,36 +122,50 @@ const ChatPage = () => {
         getSessionLabel={chat.getSessionLabel}
       />
 
-      <main className="cp-main">
+      <main className="flex-1 flex flex-col bg-slate-50 overflow-hidden min-w-0">
         {/* Topbar */}
-        <header className="cp-topbar">
-          <div className="cp-topbar-left">
+        <header className="h-[60px] flex items-center justify-between px-6 border-b border-[hsl(var(--border))] flex-shrink-0 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+          <div className="flex items-center gap-2.5">
             {!sidebarOpen && (
-              <button className="cp-icon-btn" onClick={() => setSidebarOpen(true)} aria-label="Open sidebar">
+              <button
+                className="flex items-center justify-center p-1.5 rounded-lg bg-transparent border-none text-slate-400 cursor-pointer transition-colors hover:bg-slate-100 hover:text-slate-700"
+                onClick={() => setSidebarOpen(true)}
+                aria-label="Open sidebar"
+              >
                 <IconMenu />
               </button>
             )}
             <div>
-              <span className="cp-topbar-title">
+              <span className="text-[0.95rem] font-semibold text-[hsl(var(--foreground))]">
                 {chat.displayedAgent?.display_name || (chat.viewingConvId ? 'WellBee Chat' : 'Choose Your Agent')}
               </span>
               {chat.displayedAgent?.agent_id && (
-                <div className="cp-agent-subtitle">{chat.displayedAgent.agent_id}</div>
+                <div className="text-[0.72rem] text-[hsl(var(--muted-foreground))] uppercase tracking-[0.08em]">
+                  {chat.displayedAgent.agent_id}
+                </div>
               )}
             </div>
           </div>
-          <div className="cp-topbar-right">
+          <div className="flex items-center gap-2.5">
             {chat.activeConvId && chat.viewingConvId !== chat.activeConvId && (
-              <button className="cp-back-current-btn" onClick={chat.handleBackToCurrentChat}>
+              <button
+                className="bg-teal-700/8 border border-teal-700/25 text-teal-700 text-[0.8rem] font-semibold px-4 py-1.5 rounded-full cursor-pointer transition-colors hover:bg-teal-700/14 whitespace-nowrap"
+                onClick={chat.handleBackToCurrentChat}
+              >
                 ↩ Current Chat
               </button>
             )}
             {chat.chatStarted && chat.activeConvId && chat.viewingConvId === chat.activeConvId && (
-              <button className="cp-end-btn" onClick={chat.handleEndChat}>End Chat</button>
+              <button
+                className="bg-red-500/6 border border-red-500/20 text-red-600 text-[0.8rem] font-semibold px-4 py-1.5 rounded-full cursor-pointer transition-colors hover:bg-red-500/12 whitespace-nowrap"
+                onClick={chat.handleEndChat}
+              >
+                End Chat
+              </button>
             )}
-            <div className="cp-status-row">
-              <span className="cp-status-dot" />
-              <span className="cp-status-label">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[0.78rem] text-emerald-600 font-semibold">
                 {chat.displayedAgent?.display_name
                   ? `${chat.displayedAgent.display_name} online`
                   : 'online'}
@@ -155,11 +176,14 @@ const ChatPage = () => {
 
         {/* Read-only banner */}
         {chat.viewingConvId && chat.viewingConvId !== chat.activeConvId && chat.chatStarted && (
-          <div className="cp-readonly-banner">
+          <div className="flex items-center gap-2 px-6 py-2.5 bg-amber-50/70 border-b border-amber-200 text-amber-800 text-[0.82rem] font-medium flex-shrink-0">
             <IconLock />
             <span>Read-only — this is a past conversation.</span>
             {chat.activeConvId && (
-              <button className="cp-readonly-back-btn" onClick={chat.handleBackToCurrentChat}>
+              <button
+                className="ml-auto bg-transparent border-none text-teal-700 text-[0.82rem] font-semibold cursor-pointer underline hover:text-sky-700"
+                onClick={chat.handleBackToCurrentChat}
+              >
                 Go to current chat →
               </button>
             )}
@@ -195,9 +219,10 @@ const ChatPage = () => {
           chatStarted={chat.chatStarted}
           displayedAgent={chat.displayedAgent}
           isActive={!!chat.activeConvId}
+          onBackToCurrentChat={chat.handleBackToCurrentChat}
         />
 
-        {/* Dialog (replaces Bootstrap Modal) */}
+        {/* Dialog */}
         <Dialog open={chat.modal.type !== null} onOpenChange={(open) => !open && chat.closeModal()}>
           <DialogContent className="sm:max-w-md">
             {renderDialogContent()}
