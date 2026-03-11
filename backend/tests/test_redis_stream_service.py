@@ -182,8 +182,6 @@ class TestConsumeStreamSse:
     async def test_timeout_after_max_empty_polls(self):
         """consume_stream_sse yields a timeout error after too many empty polls."""
         from src.services.redis_stream_service import (
-            STREAM_TTL_SECONDS,
-            XREAD_BLOCK_MS,
             consume_stream_sse,
         )
 
@@ -191,10 +189,15 @@ class TestConsumeStreamSse:
         # Always return empty — simulate no producer arriving.
         mock_redis.xread = AsyncMock(return_value=[])
 
-        max_polls = int((STREAM_TTL_SECONDS * 1000) / XREAD_BLOCK_MS) + 10
+        # Keep this test fast while still validating timeout behavior.
+        with (
+            patch("src.services.redis_stream_service.STREAM_TTL_SECONDS", 1),
+            patch("src.services.redis_stream_service.XREAD_BLOCK_MS", 100),
+        ):
+            max_polls = int((1 * 1000) / 100) + 10
 
-        with patch("src.services.redis_stream_service.get_redis", return_value=mock_redis):
-            chunks = [c async for c in consume_stream_sse("stream:chat:c:abc")]
+            with patch("src.services.redis_stream_service.get_redis", return_value=mock_redis):
+                chunks = [c async for c in consume_stream_sse("stream:chat:c:abc")]
 
         assert mock_redis.xread.call_count == max_polls
         data = json.loads(chunks[-1].removeprefix("data: ").strip())
