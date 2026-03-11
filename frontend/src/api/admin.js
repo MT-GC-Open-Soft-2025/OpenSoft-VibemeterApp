@@ -59,3 +59,8 @@ export async function runAgentHealthcheck(agentId) {
   const response = await apiClient.post(`/admin/agents/${agentId}/healthcheck`);
   return response.data;
 }
+
+export async function getRuntimeMetrics() {
+  const response = await apiClient.get("/admin/runtime-metrics");
+  return response.data;
+}

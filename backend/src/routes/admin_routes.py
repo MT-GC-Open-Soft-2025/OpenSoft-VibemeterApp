@@ -13,6 +13,7 @@ from src.controllers.admin_controller import (
     get_employee_conversationFeedback_byId,
     get_employee_conversationSummary_byId,
     get_employee_detail,
+    get_runtime_metrics_controller,
     run_agent_healthcheck_controller,
     update_agent_controller,
 )
@@ -104,3 +105,8 @@ async def run_agent_healthcheck_route(
     agent_id: str, admin: dict = Depends(adminauthenticate)
 ) -> dict[str, Any]:
     return await run_agent_healthcheck_controller(agent_id)
+
+
+@admin_router.get("/runtime-metrics")
+async def get_runtime_metrics_route(admin: dict = Depends(adminauthenticate)) -> dict[str, Any]:
+    return await get_runtime_metrics_controller()

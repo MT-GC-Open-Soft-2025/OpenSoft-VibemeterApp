@@ -144,17 +144,15 @@ async def send_message(
         raise HTTPException(status_code=401, detail="Session token mismatch")
 
     persona = get_persona(get_settings().agent_persona_key)
-    history_text = "\n".join(f"{item['sender']}: {item['message']}" for item in session["history"])
     system_prompt = (
         f"You are {persona['display_name']}. Your conversational style is {persona['style']}."
-        f" Follow this counseling context:\n{session['chat_context']}\n\n"
-        f"Conversation so far:\n{history_text}\n"
+        f" Follow this counseling context:\n{session['chat_context']}\n"
         "Respond in under 100 words unless the user asks for more detail."
     )
 
     async def stream():
         collected: list[str] = []
-        async for chunk in stream_response_sse(system_prompt, payload.message):
+        async for chunk in stream_response_sse(system_prompt, payload.message, history=session["history"]):
             if chunk.startswith("data: "):
                 try:
                     data = json.loads(chunk[6:].strip())

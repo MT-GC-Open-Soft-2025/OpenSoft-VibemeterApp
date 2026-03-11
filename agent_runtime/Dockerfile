@@ -7,10 +7,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
 
 WORKDIR /app
 
-COPY requirements.txt .
-RUN uv pip install --system --no-cache -r requirements.txt
+# Layer-cache: install dependencies before copying source
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project
 
+# Copy application source
 COPY . .
+
+# Add the virtual environment to PATH
+ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 8000
 

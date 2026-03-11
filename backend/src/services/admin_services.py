@@ -76,3 +76,67 @@ async def fetch_average_feedback_score() -> Any:
     except Exception as error:
         logger.error("Error fetching average feedback: %s", error)
         raise HTTPException(status_code=500, detail=str(error))
+
+
+async def get_runtime_metrics() -> dict:
+    """Read stream timing metrics from Redis and return aggregated stats."""
+    from src.models.redis_client import get_redis
+    from src.services.redis_stream_service import METRICS_INDEX_KEY, make_metrics_key
+
+    redis = get_redis()
+    if redis is None:
+        return {
+            "available": False,
+            "recent_count": 0,
+            "streams": [],
+            "avg_ttfb_ms": 0.0,
+            "avg_duration_ms": 0.0,
+        }
+
+    try:
+        # Get last 20 convids from sorted index (most recent first).
+        members = await redis.zrevrange(METRICS_INDEX_KEY, 0, 19, withscores=True)
+        streams = []
+        for member, score in members:
+            convid = member.decode() if isinstance(member, bytes) else str(member)
+            metrics_key = make_metrics_key(convid)
+            data = await redis.hgetall(metrics_key)
+            if data:
+                decoded = {
+                    (k.decode() if isinstance(k, bytes) else k): (
+                        v.decode() if isinstance(v, bytes) else v
+                    )
+                    for k, v in data.items()
+                }
+                streams.append(
+                    {
+                        "convid": convid,
+                        "t_request_ms": float(decoded.get("t_request_ms", 0)),
+                        "ttfb_ms": float(decoded.get("ttfb_ms", 0)),
+                        "duration_ms": float(decoded.get("duration_ms", 0)),
+                        "chunk_count": int(decoded.get("chunk_count", 0)),
+                        "total_chars": int(decoded.get("total_chars", 0)),
+                    }
+                )
+
+        valid_ttfb = [s["ttfb_ms"] for s in streams if s["ttfb_ms"] > 0]
+        valid_dur = [s["duration_ms"] for s in streams if s["duration_ms"] > 0]
+        avg_ttfb = round(sum(valid_ttfb) / len(valid_ttfb), 2) if valid_ttfb else 0.0
+        avg_duration = round(sum(valid_dur) / len(valid_dur), 2) if valid_dur else 0.0
+
+        return {
+            "available": True,
+            "recent_count": len(streams),
+            "avg_ttfb_ms": avg_ttfb,
+            "avg_duration_ms": avg_duration,
+            "streams": streams,
+        }
+    except Exception as exc:
+        logger.error("get_runtime_metrics: Redis error: %s", exc)
+        return {
+            "available": False,
+            "recent_count": 0,
+            "streams": [],
+            "avg_ttfb_ms": 0.0,
+            "avg_duration_ms": 0.0,
+        }

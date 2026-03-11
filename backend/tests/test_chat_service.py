@@ -232,49 +232,101 @@ class TestSendMessageStreamRedis:
             assert exc_info.value.status_code == 403
 
     @pytest.mark.asyncio
-    async def test_raises_503_when_ai_unavailable(self):
-        """send_message_stream_redis raises 503 when AI initialisation fails."""
-        chat = MagicMock()
-        chat.empid = "emp001"
-        chat.messages = []
-        chat.initial_prompt = "system prompt"
-        chat.save = AsyncMock()
-
-        with (
-            patch("src.services.chat_service.Chat") as mock_chat,
-            patch("src.services.chat_service.initi") as mock_initi,
-        ):
-            mock_chat.find.return_value.first_or_none = AsyncMock(return_value=chat)
-            mock_initi.return_value = {"error": "API key invalid"}
-
-            with pytest.raises(HTTPException) as exc_info:
-                await send_message_stream_redis({"emp_id": "emp001"}, "Hello", "conv-001")
-
-            assert exc_info.value.status_code == 503
-
-    @pytest.mark.asyncio
     async def test_returns_stream_key_string(self):
         """send_message_stream_redis returns a non-empty stream key on success."""
         chat = MagicMock()
         chat.empid = "emp001"
         chat.messages = []
         chat.initial_prompt = "system prompt"
+        chat.active_topic = None
+        chat.resolved_topics = []
+        chat.turn_count = 0
+        chat.last_sentiment = None
+        chat.folded_summary = ""
         chat.save = AsyncMock()
-
-        chat_obj = MagicMock()
 
         with (
             patch("src.services.chat_service.Chat") as mock_chat,
-            patch("src.services.chat_service.initi", return_value=chat_obj),
             patch(
                 "src.services.chat_service.make_stream_key",
                 return_value="stream:chat:conv-001:abc12345",
             ),
-            patch("asyncio.create_task"),  # prevent background task from actually running
+            # Mock the graph directly so no unawaited coroutine warning is raised.
+            patch("src.services.chat_service.chat_turn_graph") as mock_graph,
         ):
+            mock_graph.ainvoke = AsyncMock(return_value={})
             mock_chat.find.return_value.first_or_none = AsyncMock(return_value=chat)
 
             result = await send_message_stream_redis({"emp_id": "emp001"}, "Hello", "conv-001")
 
         assert result == "stream:chat:conv-001:abc12345"
         chat.save.assert_called_once()  # user message persisted immediately
+
+
+class TestSendMessageWithMemory:
+    """Tests for send_message memory integration."""
+
+    @pytest.mark.asyncio
+    async def test_send_message_updates_turn_count(self):
+        """send_message increments turn_count via update_chat_memory."""
+        from src.services.chat_service import send_message
+
+        chat = MagicMock()
+        chat.empid = "emp001"
+        chat.messages = []
+        chat.initial_prompt = "You are a wellness bot."
+        chat.active_topic = None
+        chat.resolved_topics = []
+        chat.turn_count = 2
+        chat.last_sentiment = None
+        chat.folded_summary = ""
+        chat.save = AsyncMock()
+
+        with (
+            patch("src.services.chat_service.Chat") as mock_chat,
+            patch(
+                "src.services.chat_service.generate_response_async",
+                new=AsyncMock(return_value="Bot reply"),
+            ),
+            patch("src.services.chat_service.should_fold", return_value=False),
+        ):
+            mock_chat.find.return_value.first_or_none = AsyncMock(return_value=chat)
+            result = await send_message({"emp_id": "emp001"}, "Hello", "conv-001")
+
+        assert result["response"] == "Bot reply"
+        assert chat.turn_count == 3  # incremented from 2 to 3
+
+    @pytest.mark.asyncio
+    async def test_send_message_uses_langchain_messages(self):
+        """send_message calls build_langchain_messages to build context."""
+        from src.services.chat_service import send_message
+
+        chat = MagicMock()
+        chat.empid = "emp001"
+        chat.messages = []
+        chat.initial_prompt = "You are a wellness bot."
+        chat.active_topic = None
+        chat.resolved_topics = []
+        chat.turn_count = 0
+        chat.last_sentiment = None
+        chat.folded_summary = ""
+        chat.save = AsyncMock()
+
+        fake_messages = ["fake_message_list"]
+
+        with (
+            patch("src.services.chat_service.Chat") as mock_chat,
+            patch(
+                "src.services.chat_service.build_langchain_messages", return_value=fake_messages
+            ) as mock_build,
+            patch(
+                "src.services.chat_service.generate_response_async",
+                new=AsyncMock(return_value="Reply"),
+            ) as mock_gen,
+            patch("src.services.chat_service.should_fold", return_value=False),
+        ):
+            mock_chat.find.return_value.first_or_none = AsyncMock(return_value=chat)
+            await send_message({"emp_id": "emp001"}, "Hello", "conv-001")
+
+        mock_build.assert_called_once_with(chat)
+        mock_gen.assert_called_once_with(fake_messages)

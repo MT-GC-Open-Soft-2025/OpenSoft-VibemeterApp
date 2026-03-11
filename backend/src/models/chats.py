@@ -25,5 +25,12 @@ class Chat(Document):
     agent_connection_mode: str = "direct"
     agent_session_started_at: datetime | None = None
 
+    # Conversation memory fields
+    active_topic: str | None = None
+    resolved_topics: list[str] = []
+    folded_summary: str = ""
+    last_sentiment: str | None = None
+    turn_count: int = 0
+
     class Settings:
         name = "chats"

@@ -10,6 +10,7 @@ from src.services.admin_services import (
     fetch_employee_conversationSummary_byId,
     fetch_employee_data,
     get_all_employees,
+    get_runtime_metrics,
     specific_conversation,
 )
 from src.services.agent_registry_service import (
@@ -116,3 +117,11 @@ async def get_agent_history_controller(agent_id: str) -> dict[str, Any]:
 
 async def run_agent_healthcheck_controller(agent_id: str) -> dict[str, Any]:
     return await run_agent_healthcheck(agent_id)
+
+
+async def get_runtime_metrics_controller() -> dict[str, Any]:
+    try:
+        return await get_runtime_metrics()
+    except Exception as error:
+        logger.error("Error fetching runtime metrics: %s", error)
+        raise HTTPException(status_code=500, detail=str(error))

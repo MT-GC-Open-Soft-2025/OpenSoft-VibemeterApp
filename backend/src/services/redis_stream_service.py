@@ -275,3 +275,64 @@ async def consume_stream_sse(
                 logger.error("Consumer [%s]: Error sentinel received: %s", stream_key, message)
                 yield f"data: {json.dumps({'error': message})}\n\n"
                 return
+
+
+# ---------------------------------------------------------------------------
+# Stream metrics helpers
+# ---------------------------------------------------------------------------
+
+# Metrics keys and constants
+METRICS_INDEX_KEY = "metrics:stream:recent"
+METRICS_TTL_SECONDS = 3600  # 1 hour
+METRICS_MAX_RECENT = 100  # Keep last 100 entries
+
+
+def make_metrics_key(convid: str) -> str:
+    """Return Redis key for a stream's timing metrics hash."""
+    return f"metrics:stream:{convid}"
+
+
+async def record_stream_metrics(
+    redis,
+    convid: str,
+    t_request_ms: float,
+    ttfb_ms: float,
+    duration_ms: float,
+    chunk_count: int,
+    total_chars: int,
+) -> None:
+    """Write timing metrics for a completed stream to Redis.
+
+    Stores a hash at ``metrics:stream:{convid}`` and adds the convid to
+    ``metrics:stream:recent`` sorted set (scored by t_request_ms).
+    """
+    if redis is None:
+        return
+
+    metrics_key = make_metrics_key(convid)
+    try:
+        await redis.hset(
+            metrics_key,
+            mapping={
+                "t_request_ms": str(round(t_request_ms, 2)),
+                "ttfb_ms": str(round(ttfb_ms, 2)),
+                "duration_ms": str(round(duration_ms, 2)),
+                "chunk_count": str(chunk_count),
+                "total_chars": str(total_chars),
+            },
+        )
+        await redis.expire(metrics_key, METRICS_TTL_SECONDS)
+        # Add to sorted index (score = t_request_ms for chronological ordering).
+        await redis.zadd(METRICS_INDEX_KEY, {convid: t_request_ms})
+        # Trim to last METRICS_MAX_RECENT entries.
+        await redis.zremrangebyrank(METRICS_INDEX_KEY, 0, -(METRICS_MAX_RECENT + 1))
+        await redis.expire(METRICS_INDEX_KEY, METRICS_TTL_SECONDS)
+        logger.debug(
+            "record_stream_metrics [%s]: TTFB=%.1fms duration=%.1fms chunks=%d",
+            convid,
+            ttfb_ms,
+            duration_ms,
+            chunk_count,
+        )
+    except Exception as exc:
+        logger.warning("record_stream_metrics [%s]: failed: %s", convid, exc)

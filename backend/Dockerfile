@@ -10,11 +10,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl \
 WORKDIR /app
 
 # Layer-cache: install dependencies before copying source
-COPY requirements.txt .
-RUN uv pip install --system --no-cache -r requirements.txt
+COPY pyproject.toml uv.lock ./
+RUN uv sync --frozen --no-dev --no-install-project
 
 # Copy application source
 COPY . .
+
+# Add the virtual environment to PATH so uvicorn/python are directly available
+ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 8000
 

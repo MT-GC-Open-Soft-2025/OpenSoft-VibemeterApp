@@ -1,148 +1,169 @@
-import asyncio
+"""AI service layer — backed by LangChain + Google Gemini.
+
+This module provides the primary interface for all LLM interactions in the
+WellBee backend.  It replaces the direct ``google.genai`` SDK calls with
+LangChain's ``ChatGoogleGenerativeAI`` which gives us:
+
+- Native async ``astream()`` (no more ``run_in_executor`` threading)
+- Standardised callback system (used by ``StreamTimingCallback``)
+- Proper structured messages (SystemMessage / HumanMessage / AIMessage)
+- Easy LLM provider swap in the future
+"""
+
 import json
 import logging
 
-import google.genai as genai
-from tenacity import retry, stop_after_attempt, wait_exponential
+from langchain_core.messages import HumanMessage
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from src.config import get_settings
+from src.services.stream_timing_callback import StreamTimingCallback
 
 logger = logging.getLogger(__name__)
 
-_client = None
+_llm: ChatGoogleGenerativeAI | None = None
 
 
-def _get_client():
-    global _client
-    if _client is None:
-        settings = get_settings()
-        _client = genai.Client(api_key=settings.gemini_key)
-    return _client
+def get_llm(callbacks: list | None = None) -> ChatGoogleGenerativeAI:
+    """Return a (singleton when no callbacks) ChatGoogleGenerativeAI instance."""
+    global _llm
+    settings = get_settings()
+    if callbacks is None:
+        # Reuse singleton for calls that don't need per-request callbacks.
+        if _llm is None:
+            _llm = ChatGoogleGenerativeAI(
+                model=settings.gemini_model,
+                google_api_key=settings.gemini_key,
+            )
+        return _llm
+    # With callbacks, return a fresh instance so callback state is isolated.
+    return ChatGoogleGenerativeAI(
+        model=settings.gemini_model,
+        google_api_key=settings.gemini_key,
+        callbacks=callbacks,
+    )
 
 
 def initialize():
+    """Backward-compatible initialisation stub.
+
+    Returns the shared LLM instance or ``{"error": "..."}`` on failure.
+    Callers should check ``isinstance(result, dict) and "error" in result``.
+    """
     try:
-        settings = get_settings()
-        client = _get_client()
-        chat = client.chats.create(model=settings.gemini_model)
-        return chat
-    except Exception as e:
-        logger.error("Failed to initialize AI chat: %s", e)
-        return {"error": str(e)}
+        return get_llm()
+    except Exception as exc:
+        logger.error("Failed to initialise AI service: %s", exc)
+        return {"error": str(exc)}
 
 
-def generate_response_with_system_prompt(
-    system_prompt: str, user_input: str, model: str | None = None
-) -> str:
-    try:
-        settings = get_settings()
-        client = _get_client()
-        response = client.models.generate_content(
-            model=model or settings.gemini_model,
-            contents=f"{system_prompt}\n\nUser: {user_input}",
-        )
-        return response.text or ""
-    except Exception as e:
-        logger.error("Failed to generate response with system prompt: %s", e)
-        raise
+async def generate_response_async(messages: list) -> str:
+    """Async invoke: pass a list of LangChain messages, return the reply text."""
+    llm = get_llm()
+    response = await llm.ainvoke(messages)
+    return response.content
 
 
-def generate_response_stream_with_system_prompt(
-    system_prompt: str, user_input: str, model: str | None = None
+def generate_response(user_input: str, llm_or_chat) -> str:  # noqa: ANN001
+    """Backward-compatible sync generate.
+
+    Accepts the LLM object returned by ``initialize()``.
+    Runs the LLM synchronously via ``invoke``.
+    """
+    if isinstance(llm_or_chat, dict):
+        raise ValueError("AI service not initialised")
+    llm = llm_or_chat
+    response = llm.invoke([HumanMessage(content=user_input)])
+    return response.content
+
+
+async def stream_response_sse(
+    messages_or_prompt: list | str, llm_or_chat=None, callbacks: list | None = None
 ):
+    """Async generator yielding SSE-formatted text chunks.
+
+    Supports two calling conventions:
+    - New: ``stream_response_sse(messages_list, callbacks=[...])``
+    - Legacy: ``stream_response_sse(prompt_string, chat_obj)``
+    """
+    if isinstance(messages_or_prompt, str):
+        # Legacy interface: wrap in a single HumanMessage
+        messages = [HumanMessage(content=messages_or_prompt)]
+    else:
+        messages = messages_or_prompt
+
+    llm = get_llm(callbacks=callbacks)
     try:
-        settings = get_settings()
-        client = _get_client()
-        for chunk in client.models.generate_content_stream(
-            model=model or settings.gemini_model,
-            contents=f"{system_prompt}\n\nUser: {user_input}",
-        ):
-            yield chunk.text or ""
-    except Exception as e:
-        logger.error("Streaming error with system prompt: %s", e)
-        raise
+        async for chunk in llm.astream(messages):
+            text = chunk.content
+            if text:
+                yield f"data: {json.dumps({'text': text})}\n\n"
+        yield f"data: {json.dumps({'done': True})}\n\n"
+    except Exception as exc:
+        logger.error("stream_response_sse error: %s", exc)
+        yield f"data: {json.dumps({'error': str(exc)})}\n\n"
 
 
 async def stream_response_sse_with_system_prompt(
     system_prompt: str, user_input: str, model: str | None = None
 ):
-    loop = asyncio.get_running_loop()
-    queue = asyncio.Queue()
+    """Stream with explicit system prompt and user input."""
+    from langchain_core.messages import SystemMessage
 
-    def run_stream():
-        try:
-            for text in generate_response_stream_with_system_prompt(
-                system_prompt, user_input, model
-            ):
-                loop.call_soon_threadsafe(queue.put_nowait, ("chunk", text))
-        except Exception as e:
-            loop.call_soon_threadsafe(queue.put_nowait, ("error", str(e)))
-        loop.call_soon_threadsafe(queue.put_nowait, ("done", None))
-
-    loop.run_in_executor(None, run_stream)
-
-    while True:
-        msg_type, value = await queue.get()
-        if msg_type == "error":
-            yield f"data: {json.dumps({'error': value})}\n\n"
-            break
-        if msg_type == "done":
-            yield f"data: {json.dumps({'done': True})}\n\n"
-            break
-        yield f"data: {json.dumps({'text': value})}\n\n"
+    messages = [
+        SystemMessage(content=system_prompt),
+        HumanMessage(content=user_input),
+    ]
+    async for chunk in stream_response_sse(messages):
+        yield chunk
 
 
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10))
-def generate_response(user_input: str, chat1) -> str:
-    response = chat1.send_message(user_input)
-    return response.text
+def generate_response_with_system_prompt(
+    system_prompt: str, user_input: str, model: str | None = None
+) -> str:
+    """Sync generate with system prompt."""
+    from langchain_core.messages import SystemMessage
+
+    llm = get_llm()
+    response = llm.invoke(
+        [
+            SystemMessage(content=system_prompt),
+            HumanMessage(content=user_input),
+        ]
+    )
+    return response.content
 
 
-def generate_response_stream(user_input: str, chat1):
-    """Sync generator that yields text chunks from the model. Runs in executor for async use."""
-    try:
-        for chunk in chat1.send_message_stream(user_input):
-            yield chunk.text or ""
-    except Exception as e:
-        logger.error("Streaming error: %s", e)
-        raise
-
-
-async def stream_response_sse(user_input: str, chat1):
-    """Async generator that yields SSE-formatted chunks. Runs sync stream in executor."""
-    loop = asyncio.get_running_loop()
-    queue = asyncio.Queue()
-
-    def run_stream():
-        try:
-            for text in generate_response_stream(user_input, chat1):
-                loop.call_soon_threadsafe(queue.put_nowait, ("chunk", text))
-        except Exception as e:
-            loop.call_soon_threadsafe(queue.put_nowait, ("error", str(e)))
-        loop.call_soon_threadsafe(queue.put_nowait, ("done", None))
-
-    loop.run_in_executor(None, run_stream)
-
-    while True:
-        msg_type, value = await queue.get()
-        if msg_type == "error":
-            yield f"data: {json.dumps({'error': value})}\n\n"
-            break
-        if msg_type == "done":
-            yield f"data: {json.dumps({'done': True})}\n\n"
-            break
-        yield f"data: {json.dumps({'text': value})}\n\n"
-
-
-@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=1, max=10))
-def summarize_text(text, chatObj):
+async def summarize_text_async(text: str) -> str:
+    """Async chat summarization using LangChain."""
     prompt = (
-        "Based on current conversation between bot and user, summarize it in points in"
-        " concise and clear manner highlighting the problems faced by user and how bot"
-        " helps him. In the end give the main issue in 1-2 lines why you think user is"
-        " sad, in case he admits that he is sad. Also analyse sentiment on scale of 0-1"
-        " as to how intense is his situation and say whether HR needs to intervene or not."
+        "Based on the current conversation between bot and user, summarize it in points in "
+        "a concise and clear manner highlighting the problems faced by the user and how the bot "
+        "helps them. In the end give the main issue in 1-2 lines explaining why you think the user "
+        "is sad (if they admit to being sad). Also analyse the sentiment on a scale of 0-1 as to "
+        "how intense the situation is and say whether HR needs to intervene or not."
         f"\n\n{text}"
     )
-    response = chatObj.send_message(prompt)
-    return response.text
+    llm = get_llm()
+    response = await llm.ainvoke([HumanMessage(content=prompt)])
+    return response.content
+
+
+def summarize_text(text: str, llm_or_chat=None) -> str:
+    """Backward-compatible sync summarize."""
+    prompt = (
+        "Based on the current conversation between bot and user, summarize it in points in "
+        "a concise and clear manner highlighting the problems faced by the user and how the bot "
+        "helps them. In the end give the main issue in 1-2 lines explaining why you think the user "
+        "is sad (if they admit to being sad). Also analyse the sentiment on a scale of 0-1 as to "
+        "how intense the situation is and say whether HR needs to intervene or not."
+        f"\n\n{text}"
+    )
+    llm = get_llm()
+    response = llm.invoke([HumanMessage(content=prompt)])
+    return response.content
+
+
+def get_timing_callback() -> StreamTimingCallback:
+    """Convenience factory for StreamTimingCallback."""
+    return StreamTimingCallback()

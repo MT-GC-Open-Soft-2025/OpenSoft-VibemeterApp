@@ -113,6 +113,11 @@ const AdminPage = () => {
 
   const admin = useAdminData(activeTab === 'agents');
 
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    if (tab === 'agents') admin.loadRuntimeMetrics?.();
+  };
+
   const handleGetFeedback = () => {
     if (!selectedEmployee) return;
     localStorage.setItem('selectedEmployee', selectedEmployee);
@@ -123,7 +128,7 @@ const AdminPage = () => {
     <AppShell title="Admin Dashboard">
       <div className="max-w-7xl mx-auto space-y-5 pb-8">
 
-        <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <Tabs value={activeTab} onValueChange={handleTabChange}>
           {/* ── Tab controls + search ──────────────────────── */}
           <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
             <div className="space-y-0.5">
@@ -340,6 +345,73 @@ const AdminPage = () => {
                       </div>
                     ) : (
                       <p className="text-sm text-muted-foreground">Select an agent to view its history.</p>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Runtime Metrics */}
+                <Card className="shadow-sm">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-base">Runtime Metrics</CardTitle>
+                      <Button variant="ghost" size="sm" className="h-7 px-2 text-xs" onClick={admin.loadRuntimeMetrics}>
+                        Refresh
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    {admin.runtimeMetrics === null ? (
+                      <p className="text-sm text-muted-foreground">Loading metrics…</p>
+                    ) : !admin.runtimeMetrics.available ? (
+                      <p className="text-sm text-muted-foreground">Redis not available — metrics unavailable.</p>
+                    ) : (
+                      <div className="space-y-4">
+                        {/* Summary stat cards */}
+                        <div className="grid grid-cols-3 gap-2">
+                          <div className="rounded-lg border border-slate-100 bg-slate-50/50 p-3 text-center">
+                            <p className="text-[11px] text-muted-foreground">Avg TTFB</p>
+                            <p className="text-base font-bold text-foreground">{admin.runtimeMetrics.avg_ttfb_ms} ms</p>
+                          </div>
+                          <div className="rounded-lg border border-slate-100 bg-slate-50/50 p-3 text-center">
+                            <p className="text-[11px] text-muted-foreground">Avg Duration</p>
+                            <p className="text-base font-bold text-foreground">{admin.runtimeMetrics.avg_duration_ms} ms</p>
+                          </div>
+                          <div className="rounded-lg border border-slate-100 bg-slate-50/50 p-3 text-center">
+                            <p className="text-[11px] text-muted-foreground">Recent Streams</p>
+                            <p className="text-base font-bold text-foreground">{admin.runtimeMetrics.recent_count}</p>
+                          </div>
+                        </div>
+                        {/* Recent streams table */}
+                        {admin.runtimeMetrics.streams.length > 0 && (
+                          <div className="overflow-x-auto">
+                            <Table>
+                              <TableHeader>
+                                <TableRow className="bg-slate-50/50">
+                                  <TableHead className="text-xs font-semibold">Conversation ID</TableHead>
+                                  <TableHead className="text-xs font-semibold">TTFB (ms)</TableHead>
+                                  <TableHead className="text-xs font-semibold">Duration (ms)</TableHead>
+                                  <TableHead className="text-xs font-semibold">Chunks</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {admin.runtimeMetrics.streams.map(s => (
+                                  <TableRow key={s.convid} className="hover:bg-slate-50/50">
+                                    <TableCell className="text-xs font-mono text-muted-foreground">
+                                      {s.convid.length > 16 ? `…${s.convid.slice(-16)}` : s.convid}
+                                    </TableCell>
+                                    <TableCell className="text-xs">{s.ttfb_ms}</TableCell>
+                                    <TableCell className="text-xs">{s.duration_ms}</TableCell>
+                                    <TableCell className="text-xs">{s.chunk_count}</TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
+                        )}
+                        {admin.runtimeMetrics.streams.length === 0 && (
+                          <p className="text-sm text-muted-foreground">No stream metrics recorded yet.</p>
+                        )}
+                      </div>
                     )}
                   </CardContent>
                 </Card>

@@ -7,6 +7,7 @@ import {
   createAgent,
   getAgentHistory,
   getAgentsAdmin,
+  getRuntimeMetrics,
   runAgentHealthcheck,
   updateAgent,
 } from '../api/admin';
@@ -32,6 +33,7 @@ export function useAdminData(active) {
   const [editingAgentId, setEditingAgentId] = useState(null);
   const [agentMessage, setAgentMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [runtimeMetrics, setRuntimeMetrics] = useState(null);
 
   const loadAgents = useCallback(async () => {
     setLoading(true);
@@ -45,9 +47,21 @@ export function useAdminData(active) {
     }
   }, []);
 
+  const loadRuntimeMetrics = useCallback(async () => {
+    try {
+      const res = await getRuntimeMetrics();
+      setRuntimeMetrics(res);
+    } catch {
+      setRuntimeMetrics(null);
+    }
+  }, []);
+
   useEffect(() => {
-    if (active) loadAgents();
-  }, [active, loadAgents]);
+    if (active) {
+      loadAgents();
+      loadRuntimeMetrics();
+    }
+  }, [active, loadAgents, loadRuntimeMetrics]);
 
   const openEditAgent = async (agent) => {
     setEditingAgentId(agent.agent_id);
@@ -122,6 +136,8 @@ export function useAdminData(active) {
     editingAgentId,
     agentMessage,
     loading,
+    runtimeMetrics,
+    loadRuntimeMetrics,
     openEditAgent,
     resetForm,
     submitAgentForm,

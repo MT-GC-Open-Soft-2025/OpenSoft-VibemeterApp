@@ -200,3 +200,112 @@ class TestConsumeStreamSse:
         data = json.loads(chunks[-1].removeprefix("data: ").strip())
         assert "error" in data
         assert "timeout" in data["error"].lower()
+
+
+# ---------------------------------------------------------------------------
+# record_stream_metrics
+# ---------------------------------------------------------------------------
+
+
+class TestRecordStreamMetrics:
+    @pytest.mark.asyncio
+    async def test_record_stream_metrics_writes_hash(self):
+        """record_stream_metrics calls HSET with correct field names."""
+        from src.services.redis_stream_service import record_stream_metrics
+
+        mock_redis = AsyncMock()
+        mock_redis.hset = AsyncMock()
+        mock_redis.expire = AsyncMock()
+        mock_redis.zadd = AsyncMock()
+        mock_redis.zremrangebyrank = AsyncMock()
+
+        await record_stream_metrics(
+            redis=mock_redis,
+            convid="conv-001",
+            t_request_ms=1000.0,
+            ttfb_ms=150.5,
+            duration_ms=2500.0,
+            chunk_count=20,
+            total_chars=500,
+        )
+
+        mock_redis.hset.assert_called_once()
+        # hset called with mapping kwarg
+        hset_call = mock_redis.hset.call_args
+        assert hset_call is not None
+        # Verify fields are present in the mapping by checking the call
+        args, kwargs = hset_call
+        assert "metrics:stream:conv-001" in args or "metrics:stream:conv-001" == args[0]
+
+    @pytest.mark.asyncio
+    async def test_record_stream_metrics_sets_ttl(self):
+        """record_stream_metrics calls EXPIRE on the metrics key."""
+        from src.services.redis_stream_service import METRICS_TTL_SECONDS, record_stream_metrics
+
+        mock_redis = AsyncMock()
+        mock_redis.hset = AsyncMock()
+        mock_redis.expire = AsyncMock()
+        mock_redis.zadd = AsyncMock()
+        mock_redis.zremrangebyrank = AsyncMock()
+
+        await record_stream_metrics(
+            redis=mock_redis,
+            convid="conv-002",
+            t_request_ms=1000.0,
+            ttfb_ms=100.0,
+            duration_ms=2000.0,
+            chunk_count=10,
+            total_chars=300,
+        )
+
+        expire_calls = mock_redis.expire.call_args_list
+        assert len(expire_calls) >= 1
+        # At least one expire call should use the metrics TTL
+        ttl_values = [c.args[1] for c in expire_calls if len(c.args) > 1]
+        assert METRICS_TTL_SECONDS in ttl_values
+
+    @pytest.mark.asyncio
+    async def test_record_stream_metrics_updates_index(self):
+        """record_stream_metrics calls ZADD to update the sorted index."""
+        from src.services.redis_stream_service import METRICS_INDEX_KEY, record_stream_metrics
+
+        mock_redis = AsyncMock()
+        mock_redis.hset = AsyncMock()
+        mock_redis.expire = AsyncMock()
+        mock_redis.zadd = AsyncMock()
+        mock_redis.zremrangebyrank = AsyncMock()
+
+        await record_stream_metrics(
+            redis=mock_redis,
+            convid="conv-003",
+            t_request_ms=5000.0,
+            ttfb_ms=200.0,
+            duration_ms=3000.0,
+            chunk_count=15,
+            total_chars=400,
+        )
+
+        mock_redis.zadd.assert_called_once()
+        zadd_args = mock_redis.zadd.call_args
+        assert METRICS_INDEX_KEY in zadd_args.args or METRICS_INDEX_KEY == zadd_args.args[0]
+        # The mapping should include conv-003 with score 5000.0
+        mapping = (
+            zadd_args.args[1] if len(zadd_args.args) > 1 else list(zadd_args.kwargs.values())[0]
+        )
+        assert "conv-003" in mapping
+
+    @pytest.mark.asyncio
+    async def test_record_stream_metrics_no_redis(self):
+        """record_stream_metrics handles None redis gracefully."""
+        from src.services.redis_stream_service import record_stream_metrics
+
+        # Should not raise
+        await record_stream_metrics(
+            redis=None,
+            convid="conv-004",
+            t_request_ms=1000.0,
+            ttfb_ms=100.0,
+            duration_ms=2000.0,
+            chunk_count=10,
+            total_chars=300,
+        )
