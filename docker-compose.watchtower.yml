@@ -1,6 +1,6 @@
 services:
   watchtower:
-    image: nicholas-fedor/watchtower:latest
+    image: nickfedor/watchtower:latest
     container_name: vibemeter-watchtower
     restart: unless-stopped
     volumes:
