@@ -2,6 +2,8 @@ services:
   backend:
     image: ${BACKEND_IMAGE:-ghcr.io/mt-gc-open-soft-2025/vibemeter-backend}:${TAG:-latest}
     container_name: vibemeter-backend
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     env_file:
       - .env
     environment:
@@ -28,6 +30,8 @@ services:
   agent-anchor:
     image: ${AGENT_RUNTIME_IMAGE:-ghcr.io/mt-gc-open-soft-2025/wellbee-agent-runtime}:${TAG:-latest}
     container_name: wellbee-agent-anchor
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     environment:
       PORT: 8101
       AGENT_ID: anchor
@@ -46,6 +50,8 @@ services:
   agent-spark:
     image: ${AGENT_RUNTIME_IMAGE:-ghcr.io/mt-gc-open-soft-2025/wellbee-agent-runtime}:${TAG:-latest}
     container_name: wellbee-agent-spark
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     environment:
       PORT: 8102
       AGENT_ID: spark
@@ -64,6 +70,8 @@ services:
   agent-sage:
     image: ${AGENT_RUNTIME_IMAGE:-ghcr.io/mt-gc-open-soft-2025/wellbee-agent-runtime}:${TAG:-latest}
     container_name: wellbee-agent-sage
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     environment:
       PORT: 8103
       AGENT_ID: sage
@@ -82,6 +90,8 @@ services:
   frontend:
     image: ${FRONTEND_IMAGE:-ghcr.io/mt-gc-open-soft-2025/vibemeter-frontend}:${TAG:-latest}
     container_name: vibemeter-frontend
+    labels:
+      com.centurylinklabs.watchtower.enable: "true"
     ports:
       - "3000:80"
     depends_on:

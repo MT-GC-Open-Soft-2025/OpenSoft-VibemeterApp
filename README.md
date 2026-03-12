@@ -24,6 +24,7 @@ wellbee/
 ├── backend/           # FastAPI app
 ├── data-process/      # Jupyter notebooks — data pipeline & ML scoring
 ├── docker-compose.yml         # Production: pull & run published images
+├── docker-compose.watchtower.yml # Production override: auto-update published images
 ├── docker-compose.dev.yml     # Development: build from source with hot-reload
 ├── Makefile                   # Common developer commands
 └── .env.example               # Environment variable template
@@ -136,10 +137,21 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
 ```bash
 docker compose pull
-docker compose up
+docker compose up -d
 ```
 
-### 10. Build production images locally
+### 10. Run published production images with Watchtower
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.watchtower.yml pull
+docker compose -f docker-compose.yml -f docker-compose.watchtower.yml up -d
+```
+
+Watchtower checks for new tagged images every `WATCHTOWER_POLL_INTERVAL_SECONDS` seconds (default `300`) and only updates containers explicitly labeled for it.
+
+If your GHCR packages are private, the deployment host still needs valid registry auth for pulls. Public images continue to work without extra Watchtower configuration.
+
+### 11. Build production images locally
 
 ```bash
 make build
@@ -164,6 +176,7 @@ docker build -t "${AGENT_RUNTIME_IMAGE:-ghcr.io/mt-gc-open-soft-2025/wellbee-age
 | `AGENT_INTERNAL_SYNC_SECRET` | No | `wellbee-agent-sync-secret` | Shared secret for runtime-to-backend sync callbacks |
 | `AGENT_SEED_BASE_HOST` | No | `http://127.0.0.1` | Host prefix used when seeding local agent URLs |
 | `VITE_API_BASE_URL` | No | `https://api.wellbee.live` | Backend URL for frontend build |
+| `WATCHTOWER_POLL_INTERVAL_SECONDS` | No | `300` | Poll interval used by `docker-compose.watchtower.yml` |
 
 See `.env.example` for a ready-to-copy template.
 
