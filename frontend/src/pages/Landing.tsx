@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MessageCircle, BarChart3, Brain, ChevronRight, Send, Menu, X } from "lucide-react";
+import { BarChart3, Brain, ChevronRight, Send, Menu, X } from "lucide-react";
+import botImg from "@/assets/bot.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -11,7 +12,7 @@ import { toast } from "sonner";
 
 const features = [
   {
-    icon: MessageCircle,
+    icon: null,
     title: "Meet Vibey",
     description: "Chat with our AI wellness counselors who understand you. Get personalized support anytime, anywhere.",
     color: "text-primary",
@@ -58,9 +59,8 @@ const Landing = () => {
       <nav className="sticky top-0 z-50 bg-card/80 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link to="/" className="flex items-center gap-2">
-              <span className="text-2xl">🌿</span>
-              <span className="text-xl font-heading font-bold text-primary">WellBee</span>
+            <Link to="/" className="flex items-center">
+              <img src="/company_logo.png" alt="WellBee" className="h-10 w-auto" />
             </Link>
             <div className="hidden md:flex items-center gap-6">
               <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">Features</a>
@@ -93,9 +93,11 @@ const Landing = () => {
               <span className="inline-block px-4 py-1.5 rounded-full bg-accent text-accent-foreground text-sm font-medium mb-6">
                 🌟 Enterprise Wellbeing Platform
               </span>
+              <div className="flex justify-center mb-6">
+                <img src="/company_logo.png" alt="WellBee" className="h-24 w-auto" />
+              </div>
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight mb-6">
-                Welcome to{" "}
-                <span className="text-primary">WellBee</span>
+                Your AI Wellness Partner
               </h1>
               <p className="text-lg sm:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                 Empower your workforce with AI-driven wellness support. Personalized counseling, real-time mood tracking, and actionable insights — all in one platform.
@@ -133,7 +135,10 @@ const Landing = () => {
                 <Card className="h-full border-0 shadow-lg hover:shadow-xl transition-shadow">
                   <CardContent className="p-8 text-center">
                     <div className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl ${f.bg} mb-5`}>
-                      <f.icon className={`h-7 w-7 ${f.color}`} />
+                      {f.icon === null
+                        ? <img src={botImg} alt="Vibey" className="w-10 h-10 object-contain" />
+                        : <f.icon className={`h-7 w-7 ${f.color}`} />
+                      }
                     </div>
                     <h3 className="text-xl font-heading font-bold mb-3">{f.title}</h3>
                     <p className="text-muted-foreground">{f.description}</p>
@@ -202,6 +207,9 @@ const Landing = () => {
       {/* Footer */}
       <footer className="py-8 border-t border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-muted-foreground">
+          <div className="flex justify-center mb-3">
+            <img src="/company_logo.png" alt="WellBee" className="h-8 w-auto opacity-70" />
+          </div>
           <p>© 2026 WellBee. All rights reserved. | Empowering employee wellness through AI.</p>
         </div>
       </footer>

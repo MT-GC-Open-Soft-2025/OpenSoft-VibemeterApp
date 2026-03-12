@@ -44,12 +44,11 @@ export function AppSidebar() {
         <SidebarGroup>
           <SidebarGroupLabel className="font-heading font-bold text-primary">
             {!collapsed && (
-              <Link to={isAdmin ? "/admin" : "/dashboard"} className="flex items-center gap-2">
-                <span className="text-lg">🌿</span>
-                <span>WellBee</span>
+              <Link to={isAdmin ? "/admin" : "/dashboard"} className="flex items-center">
+                <img src="/company_logo.png" alt="WellBee" className="h-8 w-auto" />
               </Link>
             )}
-            {collapsed && <span className="text-lg">🌿</span>}
+            {collapsed && <span className="text-lg">🐝</span>}
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

@@ -47,9 +47,8 @@ const Login = () => {
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-4">
-            <span className="text-3xl">🌿</span>
-            <span className="text-2xl font-heading font-bold text-primary">WellBee</span>
+          <Link to="/" className="inline-flex items-center mb-4">
+            <img src="/company_logo.png" alt="WellBee" className="h-16 w-auto" />
           </Link>
           <p className="text-muted-foreground">Sign in to your wellness portal</p>
         </div>

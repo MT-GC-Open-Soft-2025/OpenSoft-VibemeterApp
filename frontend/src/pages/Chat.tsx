@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, ArrowLeft, Star, History, Plus } from "lucide-react";
+import botImg from "@/assets/bot.png";
 import { AppLayout } from "@/components/AppLayout";
 import { mapBackendAgent, type Agent, type ChatMessage, type ChatSession } from "@/lib/mock-data";
 import { useChat } from "@/contexts/ChatContext";
@@ -298,7 +299,7 @@ const Chat = () => {
                       <ArrowLeft className="h-5 w-5" />
                     </Button>
                   )}
-                  <span className="text-2xl">{selectedAgent?.avatar}</span>
+                  <img src={botImg} alt="Agent" className="w-9 h-9 rounded-full object-cover" />
                   <div>
                     <p className="font-heading font-bold">{selectedAgent?.name}</p>
                     <p className="text-xs text-muted-foreground">
@@ -331,7 +332,10 @@ const Chat = () => {
                 <div ref={scrollRef} className="flex-1 overflow-auto p-4 space-y-4">
                   {messages.map((msg) => (
                     <motion.div key={msg.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                      className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                      className={`flex items-end gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
+                      {msg.role === "assistant" && (
+                        <img src={botImg} alt="Agent" className="w-8 h-8 rounded-full object-cover shrink-0 mb-1" />
+                      )}
                       <div className={`max-w-[75%] rounded-2xl px-4 py-3 ${
                         msg.role === "user"
                           ? "bg-primary text-primary-foreground rounded-br-sm"
@@ -352,7 +356,8 @@ const Chat = () => {
                   ))}
                   {isTyping && messages[messages.length - 1]?.content === "" && null}
                   {isTyping && messages[messages.length - 1]?.content !== "" && (
-                    <div className="flex justify-start">
+                    <div className="flex items-end gap-2 justify-start">
+                      <img src={botImg} alt="Agent" className="w-8 h-8 rounded-full object-cover shrink-0 mb-1" />
                       <div className="bg-card shadow-md border border-border rounded-2xl rounded-bl-sm px-4 py-3">
                         <div className="flex gap-1">
                           <span className="w-2 h-2 bg-muted-foreground rounded-full animate-pulse-soft" />
