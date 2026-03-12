@@ -20,7 +20,7 @@ const GRADIENT = 'linear-gradient(135deg, #0f766e 0%, #0369a1 100%)';
 
 const ChatPage = () => {
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(() => window.innerWidth >= 1024);
   const chatHistoryRef = useRef(null);
 
   const chat = useChat();
@@ -110,6 +110,14 @@ const ChatPage = () => {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-slate-50 text-[hsl(var(--foreground))] font-[inherit]">
+      {/* Mobile sidebar backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
+      )}
       <ChatSidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
@@ -126,15 +134,13 @@ const ChatPage = () => {
         {/* Topbar */}
         <header className="h-[64px] flex items-center justify-between px-5 border-b border-[hsl(var(--border))] flex-shrink-0 bg-white shadow-[0_2px_12px_rgba(0,0,0,0.05)]">
           <div className="flex items-center gap-3 min-w-0">
-            {!sidebarOpen && (
-              <button
-                className="flex items-center justify-center w-8 h-8 rounded-lg bg-transparent border-none text-slate-400 cursor-pointer transition-colors hover:bg-slate-100 hover:text-slate-700 flex-shrink-0"
-                onClick={() => setSidebarOpen(true)}
-                aria-label="Open sidebar"
-              >
-                <IconMenu />
-              </button>
-            )}
+            <button
+              className={`flex items-center justify-center w-8 h-8 rounded-lg bg-transparent border-none text-slate-400 cursor-pointer transition-colors hover:bg-slate-100 hover:text-slate-700 flex-shrink-0 ${sidebarOpen ? 'lg:hidden' : ''}`}
+              onClick={() => setSidebarOpen(v => !v)}
+              aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
+            >
+              <IconMenu />
+            </button>
             {chat.displayedAgent ? (
               <div className="flex items-center gap-2.5 min-w-0">
                 {/* Agent avatar dot */}

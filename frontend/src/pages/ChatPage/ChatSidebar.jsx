@@ -20,7 +20,7 @@ const ChatSidebar = ({
   getSessionLabel,
 }) => (
   <aside
-    className="relative flex flex-col flex-shrink-0 h-screen overflow-hidden transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
+    className={`flex flex-col flex-shrink-0 h-screen overflow-hidden transition-all duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)] fixed lg:relative z-50 lg:z-auto ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}
     style={{
       width: sidebarOpen ? 264 : 60,
       background: GRADIENT,
@@ -58,7 +58,7 @@ const ChatSidebar = ({
         <button
           className={`flex items-center gap-2 border border-white/35 bg-white/12 text-white text-[0.85rem] font-semibold cursor-pointer rounded-xl transition-all hover:bg-white/22 hover:border-white/55 backdrop-blur-sm whitespace-nowrap overflow-hidden w-full
             ${sidebarOpen ? 'px-3.5 py-2.5 justify-start' : 'px-2.5 py-2.5 justify-center'}`}
-          onClick={onNewChat}
+          onClick={() => { onNewChat(); if (window.innerWidth < 1024) setSidebarOpen(false); }}
           title="New Chat"
         >
           <IconPlus />
@@ -95,7 +95,7 @@ const ChatSidebar = ({
                     : 'bg-transparent text-white/65 hover:bg-white/12 hover:text-white'
                   }
                   ${sidebarOpen ? 'px-2.5' : 'px-2 justify-center'}`}
-                onClick={() => onHistoryClick(convId)}
+                onClick={() => { onHistoryClick(convId); if (window.innerWidth < 1024) setSidebarOpen(false); }}
                 title={label}
               >
                 {/* Icon */}

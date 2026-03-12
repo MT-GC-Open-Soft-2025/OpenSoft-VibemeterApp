@@ -29,17 +29,19 @@ async def signin(username: str, password: str) -> dict[str, str]:
             detail="Invalid credentials",
         )
 
-    # If password_hash exists, verify the password
-    if user_record.password_hash:
-        if not verify_password(password, user_record.password_hash):
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid credentials",
-            )
-    else:
-        # First login: set password
-        user_record.password_hash = hash_password(password)
-        await user_record.save()
+    # FIXME: Temporary bypass for password verification until
+    # we implement a proper password management system
+    # # If password_hash exists, verify the password
+    # if user_record.password_hash:
+    #     if not verify_password(password, user_record.password_hash):
+    #         raise HTTPException(
+    #             status_code=status.HTTP_401_UNAUTHORIZED,
+    #             detail="Invalid credentials",
+    #         )
+    # else:
+    #     # First login: set password
+    #     user_record.password_hash = hash_password(password)
+    #     await user_record.save()
 
     payload = {
         "emp_id": user_record.emp_id,

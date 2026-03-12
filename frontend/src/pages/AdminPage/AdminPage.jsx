@@ -130,25 +130,27 @@ const AdminPage = () => {
 
         <Tabs value={activeTab} onValueChange={handleTabChange}>
           {/* ── Tab controls + search ──────────────────────── */}
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
-            <div className="space-y-0.5">
-              <h2 className="text-xl font-bold text-foreground">Admin Dashboard</h2>
-              <p className="text-sm text-muted-foreground">Overview of employee performance, moods, and feedback.</p>
-            </div>
-            <div className="flex items-center gap-2 flex-wrap">
-              {activeTab === 'employees' && (
-                <EmployeeSearch onSelect={(id) => setSelectedEmployee(id)} />
-              )}
-              {selectedEmployee && activeTab === 'employees' && (
-                <Button variant="outline" size="sm" onClick={() => setSelectedEmployee('')}>
-                  ← Back
-                </Button>
-              )}
+          <div className="space-y-3 mb-2">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="space-y-0.5">
+                <h2 className="text-xl font-bold text-foreground">Admin Dashboard</h2>
+                <p className="text-sm text-muted-foreground">Overview of employee performance, moods, and feedback.</p>
+              </div>
               <TabsList>
                 <TabsTrigger value="employees">Employees</TabsTrigger>
                 <TabsTrigger value="agents">Agents</TabsTrigger>
               </TabsList>
             </div>
+            {activeTab === 'employees' && (
+              <div className="flex items-center gap-2 flex-wrap">
+                <EmployeeSearch onSelect={(id) => setSelectedEmployee(id)} />
+                {selectedEmployee && (
+                  <Button variant="outline" size="sm" onClick={() => setSelectedEmployee('')}>
+                    ← Back
+                  </Button>
+                )}
+              </div>
+            )}
           </div>
 
           {/* ── EMPLOYEES TAB ──────────────────────────────── */}
