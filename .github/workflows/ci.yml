@@ -16,6 +16,7 @@ env:
   REGISTRY: ghcr.io
   BACKEND_IMAGE: ghcr.io/mt-gc-open-soft-2025/vibemeter-backend
   FRONTEND_IMAGE: ghcr.io/mt-gc-open-soft-2025/vibemeter-frontend
+  AGENT_RUNTIME_IMAGE: ghcr.io/mt-gc-open-soft-2025/wellbee-agent-runtime
 
 jobs:
   changes:
@@ -24,6 +25,7 @@ jobs:
     outputs:
       backend: ${{ steps.filter.outputs.backend }}
       frontend: ${{ steps.filter.outputs.frontend }}
+      agent_runtime: ${{ steps.filter.outputs.agent_runtime }}
     steps:
       - uses: actions/checkout@v6
       - uses: dorny/paths-filter@v3
@@ -35,6 +37,9 @@ jobs:
               - '.github/workflows/**'
             frontend:
               - 'frontend/**'
+              - '.github/workflows/**'
+            agent_runtime:
+              - 'agent_runtime/**'
               - '.github/workflows/**'
 
   backend-checks:
@@ -92,13 +97,37 @@ jobs:
         working-directory: ./frontend
         run: bun run test
 
+  agent-runtime-checks:
+    name: Agent Runtime (Install + Compile)
+    needs: changes
+    if: needs.changes.outputs.agent_runtime == 'true' || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+          python-version: "3.12"
+          cache-dependency-glob: "agent_runtime/uv.lock"
+
+      - name: Install dependencies
+        working-directory: ./agent_runtime
+        run: uv sync --dev
+
+      - name: Compile
+        working-directory: ./agent_runtime
+        run: uv run python -m compileall .
+
   build-backend:
     name: Backend Docker Build
-    needs: [backend-checks, frontend-checks]
+    needs: [changes, backend-checks]
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') &&
+      (needs.changes.outputs.backend == 'true' || startsWith(github.ref, 'refs/tags/v')) &&
       (github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -152,11 +181,12 @@ jobs:
 
   build-frontend:
     name: Frontend Docker Build
-    needs: [backend-checks, frontend-checks]
+    needs: [changes, frontend-checks]
     if: |
       always() &&
       !contains(needs.*.result, 'failure') &&
       !contains(needs.*.result, 'cancelled') &&
+      (needs.changes.outputs.frontend == 'true' || startsWith(github.ref, 'refs/tags/v')) &&
       (github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -206,5 +236,64 @@ jobs:
         uses: actions/attest-build-provenance@v4
         with:
           subject-name: ${{ env.FRONTEND_IMAGE }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+  build-agent-runtime:
+    name: Agent Runtime Docker Build
+    needs: [changes, agent-runtime-checks]
+    if: |
+      always() &&
+      !contains(needs.*.result, 'failure') &&
+      !contains(needs.*.result, 'cancelled') &&
+      (needs.changes.outputs.agent_runtime == 'true' || startsWith(github.ref, 'refs/tags/v')) &&
+      (github.event_name == 'pull_request' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.AGENT_RUNTIME_IMAGE }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix=sha-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - uses: docker/setup-buildx-action@v4
+
+      - name: Log in to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        id: push
+        uses: docker/build-push-action@v7
+        with:
+          context: ./agent_runtime
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=agent-runtime
+          cache-to: type=gha,mode=max,scope=agent-runtime
+
+      - name: Attest build provenance
+        if: github.event_name != 'pull_request'
+        uses: actions/attest-build-provenance@v4
+        with:
+          subject-name: ${{ env.AGENT_RUNTIME_IMAGE }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true

@@ -52,8 +52,10 @@ infra-down: ## Stop local MongoDB + Redis
 dev-docker: ## Run full stack in Docker with hot-reload
 	docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
-build: ## Build production Docker images
-	docker compose build
+build: ## Build production Docker images locally
+	docker build -t "$${BACKEND_IMAGE:-ghcr.io/mt-gc-open-soft-2025/vibemeter-backend}:$${TAG:-latest}" ./backend
+	docker build --build-arg VITE_API_BASE_URL="$${VITE_API_BASE_URL:-http://localhost:8000}" -t "$${FRONTEND_IMAGE:-ghcr.io/mt-gc-open-soft-2025/vibemeter-frontend}:$${TAG:-latest}" ./frontend
+	docker build -t "$${AGENT_RUNTIME_IMAGE:-ghcr.io/mt-gc-open-soft-2025/wellbee-agent-runtime}:$${TAG:-latest}" ./agent_runtime
 
 lint: ## Lint backend with ruff
 	cd backend && uv run ruff check .

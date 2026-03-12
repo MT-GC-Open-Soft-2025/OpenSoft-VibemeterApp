@@ -26,9 +26,7 @@ services:
       start_period: 15s
 
   agent-anchor:
-    build:
-      context: ./agent_runtime
-    image: ${AGENT_RUNTIME_IMAGE:-wellbee-agent-runtime}:${TAG:-latest}
+    image: ${AGENT_RUNTIME_IMAGE:-ghcr.io/mt-gc-open-soft-2025/wellbee-agent-runtime}:${TAG:-latest}
     container_name: wellbee-agent-anchor
     environment:
       PORT: 8101
@@ -46,9 +44,7 @@ services:
         condition: service_healthy
 
   agent-spark:
-    build:
-      context: ./agent_runtime
-    image: ${AGENT_RUNTIME_IMAGE:-wellbee-agent-runtime}:${TAG:-latest}
+    image: ${AGENT_RUNTIME_IMAGE:-ghcr.io/mt-gc-open-soft-2025/wellbee-agent-runtime}:${TAG:-latest}
     container_name: wellbee-agent-spark
     environment:
       PORT: 8102
@@ -66,9 +62,7 @@ services:
         condition: service_healthy
 
   agent-sage:
-    build:
-      context: ./agent_runtime
-    image: ${AGENT_RUNTIME_IMAGE:-wellbee-agent-runtime}:${TAG:-latest}
+    image: ${AGENT_RUNTIME_IMAGE:-ghcr.io/mt-gc-open-soft-2025/wellbee-agent-runtime}:${TAG:-latest}
     container_name: wellbee-agent-sage
     environment:
       PORT: 8103

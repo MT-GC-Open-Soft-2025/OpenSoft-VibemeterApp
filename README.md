@@ -135,7 +135,8 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 ### 9. Run published production images
 
 ```bash
-docker compose up        # pulls latest images from ghcr.io
+docker compose pull
+docker compose up
 ```
 
 ### 10. Build production images locally
@@ -143,7 +144,9 @@ docker compose up        # pulls latest images from ghcr.io
 ```bash
 make build
 # or:
-docker compose build
+docker build -t "${BACKEND_IMAGE:-ghcr.io/mt-gc-open-soft-2025/vibemeter-backend}:${TAG:-latest}" ./backend
+docker build --build-arg VITE_API_BASE_URL="${VITE_API_BASE_URL:-http://localhost:8000}" -t "${FRONTEND_IMAGE:-ghcr.io/mt-gc-open-soft-2025/vibemeter-frontend}:${TAG:-latest}" ./frontend
+docker build -t "${AGENT_RUNTIME_IMAGE:-ghcr.io/mt-gc-open-soft-2025/wellbee-agent-runtime}:${TAG:-latest}" ./agent_runtime
 ```
 
 ## Environment Variables
@@ -215,7 +218,7 @@ bun run preview   # serve production build locally
 
 ## CI/CD
 
-GitHub Actions (`.github/workflows/docker-publish.yml`) builds and pushes Docker images to [GitHub Container Registry](https://ghcr.io/mt-gc-open-soft-2025):
+GitHub Actions (`.github/workflows/ci.yml`) builds and pushes Docker images to [GitHub Container Registry](https://ghcr.io/mt-gc-open-soft-2025):
 
 - **Push to `main`** → tagged `latest` + short SHA
 - **Push `v*.*.*` tag** → versioned release tags
@@ -224,6 +227,7 @@ GitHub Actions (`.github/workflows/docker-publish.yml`) builds and pushes Docker
 Images:
 - `ghcr.io/mt-gc-open-soft-2025/vibemeter-backend`
 - `ghcr.io/mt-gc-open-soft-2025/vibemeter-frontend`
+- `ghcr.io/mt-gc-open-soft-2025/wellbee-agent-runtime`
 
 Set the `VITE_API_BASE_URL` repository variable in **Settings → Secrets and variables → Actions → Variables** to point the frontend build at your API endpoint.
 
