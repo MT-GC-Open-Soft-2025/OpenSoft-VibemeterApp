@@ -1,144 +1,119 @@
-/* ── Google Fonts ──────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Quicksand:wght@400;500;600;700&display=swap');
 
-/* ── Tailwind directives ────────────────────────────────────── */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ================================================================
-   shadcn/ui + WellBee Design System
-   Unified CSS variables – single source of truth
-   ================================================================ */
 @layer base {
   :root {
-    /* shadcn required variables (HSL format) */
-    --background: 210 33% 96%;      /* #f0f4f8 – wb-bg */
-    --foreground: 215 28% 17%;      /* #1e293b – wb-ink */
+    --background: 213 60% 97%;
+    --foreground: 230 25% 18%;
 
     --card: 0 0% 100%;
-    --card-foreground: 215 28% 17%;
+    --card-foreground: 230 25% 18%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 215 28% 17%;
+    --popover-foreground: 230 25% 18%;
 
-    --primary: 175 77% 26%;         /* #0f766e – wb-teal */
+    --primary: 263 76% 51%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 20% 97%;
-    --secondary-foreground: 215 28% 17%;
+    --secondary: 213 60% 94%;
+    --secondary-foreground: 263 76% 51%;
 
-    --muted: 210 20% 96%;
-    --muted-foreground: 215 16% 47%; /* #64748b – wb-muted */
+    --muted: 213 40% 94%;
+    --muted-foreground: 230 10% 46%;
 
-    --accent: 175 60% 94%;          /* teal-tinted accent */
-    --accent-foreground: 175 77% 26%;
+    --accent: 263 40% 95%;
+    --accent-foreground: 263 76% 41%;
 
-    --destructive: 0 84% 60%;       /* #ef4444 */
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 213 32% 89%;          /* #e2e8f0 */
-    --input: 213 32% 89%;
-    --ring: 175 77% 26%;            /* teal focus ring */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
 
-    --radius: 0.75rem;              /* 12px – rounded-xl */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
 
-    /* ── WellBee brand tokens (kept for existing components) ── */
-    --wb-teal:          #0f766e;
-    --wb-teal-dark:     #0d5e57;
-    --wb-blue:          #0369a1;
-    --wb-grad:          linear-gradient(135deg, #0f766e 0%, #0369a1 100%);
+    --border: 213 30% 89%;
+    --input: 213 30% 89%;
+    --ring: 263 76% 51%;
 
-    --wb-bg:            #f0f4f8;
-    --wb-surface:       #ffffff;
-    --wb-surface-alt:   #f8fafc;
-    --wb-border:        #e2e8f0;
-    --wb-border-focus:  rgba(15, 118, 110, 0.45);
+    --radius: 0.75rem;
 
-    --wb-ink:           #1e293b;
-    --wb-muted:         #64748b;
-    --wb-faint:         #94a3b8;
-    --wb-text-on-dark:  #ffffff;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 230 25% 18%;
+    --sidebar-primary: 263 76% 51%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 263 40% 95%;
+    --sidebar-accent-foreground: 263 76% 41%;
+    --sidebar-border: 213 30% 91%;
+    --sidebar-ring: 263 76% 51%;
 
-    --wb-success:       #10b981;
-    --wb-success-bg:    rgba(16, 185, 129, 0.1);
-    --wb-warning:       #f59e0b;
-    --wb-warning-bg:    rgba(245, 158, 11, 0.08);
-    --wb-danger:        #ef4444;
-    --wb-danger-bg:     rgba(239, 68, 68, 0.06);
-    --wb-info:          #3b82f6;
-    --wb-info-bg:       rgba(59, 130, 246, 0.08);
-
-    --wb-r-xs:          6px;
-    --wb-r-sm:          10px;
-    --wb-r-md:          16px;
-    --wb-r-lg:          24px;
-    --wb-r-pill:        9999px;
-
-    --wb-shadow-xs:     0 1px 4px rgba(0, 0, 0, 0.04);
-    --wb-shadow-sm:     0 2px 10px rgba(0, 0, 0, 0.06);
-    --wb-shadow-md:     0 4px 20px rgba(0, 0, 0, 0.08);
-    --wb-shadow-lg:     0 8px 40px rgba(0, 0, 0, 0.12);
-    --wb-shadow-teal:   0 6px 24px rgba(15, 118, 110, 0.28);
-
-    --wb-ease:          cubic-bezier(0.4, 0, 0.2, 1);
-    --wb-duration-fast: 0.15s;
-    --wb-duration:      0.2s;
-    --wb-duration-slow: 0.3s;
-
-    /* legacy aliases */
-    --wb-bg-main:       var(--wb-bg);
-    --wb-bg-card:       var(--wb-surface);
-    --wb-primary:       var(--wb-teal);
-    --wb-primary-hover: var(--wb-teal-dark);
-    --wb-text-main:     var(--wb-ink);
-    --wb-text-muted:    var(--wb-muted);
-
-    /* App shell layout */
-    --shell-topbar-h:   56px;
-    --shell-sidebar-w:  256px;
+    --chart-1: 263 76% 51%;
+    --chart-2: 142 71% 45%;
+    --chart-3: 38 92% 50%;
+    --chart-4: 199 89% 48%;
+    --chart-5: 340 75% 55%;
   }
 
+  .dark {
+    --background: 230 25% 9%;
+    --foreground: 213 60% 95%;
+
+    --card: 230 25% 12%;
+    --card-foreground: 213 60% 95%;
+
+    --popover: 230 25% 12%;
+    --popover-foreground: 213 60% 95%;
+
+    --primary: 263 76% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 230 20% 18%;
+    --secondary-foreground: 263 60% 75%;
+
+    --muted: 230 20% 18%;
+    --muted-foreground: 213 20% 60%;
+
+    --accent: 263 30% 20%;
+    --accent-foreground: 263 60% 75%;
+
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 60% 40%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 80% 45%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 230 20% 20%;
+    --input: 230 20% 20%;
+    --ring: 263 76% 60%;
+
+    --sidebar-background: 230 25% 10%;
+    --sidebar-foreground: 213 60% 95%;
+    --sidebar-primary: 263 76% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 263 30% 18%;
+    --sidebar-accent-foreground: 263 60% 75%;
+    --sidebar-border: 230 20% 18%;
+    --sidebar-ring: 263 76% 60%;
+  }
+}
+
+@layer base {
   * {
-    border-color: hsl(var(--border));
+    @apply border-border;
   }
 
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-      'Oxygen', 'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
-    font-size: 16px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    @apply bg-background text-foreground font-body;
   }
 
-  /* Thin scrollbar — app wide */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(0,0,0,0.12) transparent;
-  }
-  *::-webkit-scrollbar { width: 5px; height: 5px; }
-  *::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.12);
-    border-radius: 9999px;
-  }
-
-  /* Focus ring */
-  :focus-visible {
-    outline: 2px solid hsl(var(--ring));
-    outline-offset: 2px;
-  }
-
-  /* Selection */
-  ::selection {
-    background: rgba(15, 118, 110, 0.18);
-    color: hsl(var(--foreground));
-  }
-
-  /* Box-sizing */
-  *, *::before, *::after {
-    box-sizing: border-box;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Quicksand', sans-serif;
   }
 }

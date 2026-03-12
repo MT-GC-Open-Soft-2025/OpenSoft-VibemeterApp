@@ -3,7 +3,7 @@ FROM oven/bun:1-alpine AS build
 WORKDIR /app
 
 # Install dependencies first (better layer caching)
-COPY package.json bun.lockb* ./
+COPY package.json bun.lockb* bun.lock* ./
 RUN bun install --frozen-lockfile
 
 # Copy source and build

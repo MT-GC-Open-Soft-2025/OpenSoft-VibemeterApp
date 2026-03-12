@@ -1,50 +1,24 @@
-.App {
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
   text-align: center;
 }
 
-.skip-link {
-  position: absolute;
-  top: -100px;
-  left: 0;
-  z-index: 10000;
-  padding: 0.5rem 1rem;
-  background: var(--wb-primary, #4A7C59);
-  color: #fff;
-  text-decoration: none;
-  border-radius: 0 0 4px 0;
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
-.skip-link:focus {
-  top: 0;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
+@keyframes logo-spin {
   from {
     transform: rotate(0deg);
   }
@@ -53,81 +27,16 @@
   }
 }
 
-.bg-white {
-  background: linear-gradient(to bottom right, #e0f2fe, #f8fbff) !important;
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
 }
 
-.section {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-top: 80px;
+.card {
+  padding: 2em;
 }
 
-.navbar {
-  z-index: 999;
-}
-
-.dark-mode {
-  background-color: #121212;
-  color: #e0e0e0;
-}
-
-.dark-mode .bg-white {
-  background-color: #1e1e1e !important;
-}
-
-.dark-mode .navbar-light {
-  background-color: #1e1e1e !important;
-}
-
-.dark-mode input,
-.dark-mode textarea,
-.dark-mode select,
-.dark-mode .form-control {
-  background-color: #2a2a2a;
-  color: #fff;
-  border-color: #444;
-}
-
-.dark-mode .btn-primary {
-  background-color: #4f46e5;
-  border-color: #4f46e5;
-}
-
-.dark-mode .btn-dark {
-  background-color: #fff;
-  color: #121212;
-}
-
-.dark-mode .chat-container {
-  background-color: #181818;
-}
-
-.dark-mode .chat-window {
-  background-color: #1e1e1e;
-}
-
-.dark-mode .chat-bubble.bot {
-  background-color: #2d3748;
-  color: #f0f0f0;
-}
-
-.dark-mode .chat-bubble.user {
-  background-color: #4f46e5;
-  color: #fff;
-}
-
-.dark-mode .chat-sidebar {
-  background-color: #111827;
-}
-
-.dark-mode .chat-thread {
-  background-color: #1f2937;
-}
-
-.dark-mode .chat-thread.active,
-.dark-mode .chat-thread:hover {
-  background-color: #374151;
+.read-the-docs {
+  color: #888;
 }
