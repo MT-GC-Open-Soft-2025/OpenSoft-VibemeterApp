@@ -17,7 +17,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               {user?.company} • {user?.role === "admin" ? "Administrator" : "Employee"}
             </span>
           </header>
-          <main className="flex-1 overflow-auto">{children}</main>
+          <main className="flex-1 flex flex-col overflow-hidden">{children}</main>
         </div>
       </div>
     </SidebarProvider>

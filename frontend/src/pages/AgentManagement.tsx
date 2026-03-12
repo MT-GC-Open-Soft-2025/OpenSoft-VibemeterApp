@@ -160,7 +160,7 @@ const AgentManagement = () => {
 
   return (
     <AppLayout>
-      <div className="p-6 max-w-6xl mx-auto space-y-6">
+      <div className="flex-1 overflow-auto p-6 max-w-6xl mx-auto space-y-6">
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-heading font-bold">Agent Management</h1>

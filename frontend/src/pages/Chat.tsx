@@ -46,7 +46,7 @@ const Chat = () => {
   const [pastSessions, setPastSessions] = useState<ChatSession[]>([]);
   const [loadingAgents, setLoadingAgents] = useState(true);
   const [convoId, setConvoId] = useState<string | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   const recommendedAgentId = user ? getRecommendedAgent(user.vibeScore, agents) : null;
@@ -78,7 +78,7 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
   const startChat = useCallback(async (agent: Agent) => {
@@ -222,7 +222,7 @@ const Chat = () => {
 
   return (
     <AppLayout>
-      <div className="h-[calc(100vh-3.5rem)] flex">
+      <div className="flex-1 flex min-h-0">
         {/* Desktop Sidebar */}
         <div className="hidden lg:flex flex-col w-72 border-r border-border bg-card p-4">
           <div className="flex items-center justify-between mb-4">
@@ -237,10 +237,11 @@ const Chat = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-h-0">
           <AnimatePresence mode="wait">
             {view === "pick" ? (
-              <motion.div key="pick" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 flex items-center justify-center p-6">
+              <motion.div key="pick" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 overflow-auto">
+                <div className="min-h-full flex items-center justify-center p-6">
                 <div className="max-w-4xl w-full">
                   <div className="lg:hidden mb-4 flex justify-end">
                     <Sheet>
@@ -291,9 +292,10 @@ const Chat = () => {
                     <EmptyState emoji="🤖" title="No agents available" description="No AI counselors are currently active. Please check back later." />
                   )}
                 </div>
+                </div>
               </motion.div>
             ) : (
-              <motion.div key="chat" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 flex flex-col">
+              <motion.div key="chat" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex-1 flex flex-col min-h-0">
                 {/* Chat Header */}
                 <div className="flex items-center gap-3 p-4 border-b border-border bg-card">
                   {view === "history" ? (
@@ -335,7 +337,7 @@ const Chat = () => {
                 </div>
 
                 {/* Messages */}
-                <div ref={scrollRef} className="flex-1 overflow-auto p-4 space-y-4">
+                <div className="flex-1 overflow-y-auto min-h-0 p-4 space-y-4">
                   {messages.map((msg) => (
                     <motion.div key={msg.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
                       className={`flex items-end gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -373,6 +375,7 @@ const Chat = () => {
                       </div>
                     </div>
                   )}
+                  <div ref={messagesEndRef} />
                 </div>
 
                 {/* Input */}

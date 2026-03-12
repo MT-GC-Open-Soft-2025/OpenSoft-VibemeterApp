@@ -56,7 +56,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <AppLayout>
-        <div className="p-6 max-w-6xl mx-auto space-y-6">
+        <div className="flex-1 overflow-auto p-6 max-w-6xl mx-auto space-y-6">
           <Skeleton className="h-10 w-64" />
           <Skeleton className="h-5 w-48" />
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -71,7 +71,7 @@ const Dashboard = () => {
 
   return (
     <AppLayout>
-      <div className="p-6 max-w-6xl mx-auto space-y-6">
+      <div className="flex-1 overflow-auto p-6 max-w-6xl mx-auto space-y-6">
         {showOnboarding && (
           <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
             <Card className="border-0 shadow-lg bg-primary/5 border-l-4 border-l-primary">

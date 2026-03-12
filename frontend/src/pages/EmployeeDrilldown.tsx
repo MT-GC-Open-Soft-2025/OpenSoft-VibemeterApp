@@ -117,7 +117,7 @@ const EmployeeDrilldown = () => {
   if (loading) {
     return (
       <AppLayout>
-        <div className="p-6 max-w-5xl mx-auto space-y-6">
+        <div className="flex-1 overflow-auto p-6 max-w-5xl mx-auto space-y-6">
           <Skeleton className="h-8 w-24" />
           <div className="flex items-center gap-4">
             <Skeleton className="w-16 h-16 rounded-full" />
@@ -134,7 +134,7 @@ const EmployeeDrilldown = () => {
   if (!employee) {
     return (
       <AppLayout>
-        <div className="p-6 text-center">
+        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
           <p className="text-muted-foreground">Employee not found.</p>
           <Link to="/admin"><Button variant="link">Back to Dashboard</Button></Link>
         </div>
@@ -163,7 +163,7 @@ const EmployeeDrilldown = () => {
 
   return (
     <AppLayout>
-      <div className="p-6 max-w-5xl mx-auto space-y-6">
+      <div className="flex-1 overflow-auto p-6 max-w-5xl mx-auto space-y-6">
         <Link to="/admin">
           <Button variant="ghost" size="sm"><ArrowLeft className="h-4 w-4 mr-1" /> Back</Button>
         </Link>
