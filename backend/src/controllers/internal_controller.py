@@ -18,7 +18,7 @@ async def session_started_controller(
     return await mark_session_started(
         convid=payload["convo_id"],
         agent_session_id=payload["agent_session_id"],
-        started_at=datetime.datetime.utcnow(),
+        started_at=datetime.datetime.now(datetime.UTC),
     )
 
 
@@ -33,7 +33,7 @@ async def turn_completed_controller(
         agent_session_id=payload["agent_session_id"],
         user_message=payload["user_message"],
         bot_message=payload.get("bot_message", ""),
-        occurred_at=datetime.datetime.utcnow(),
+        occurred_at=datetime.datetime.now(datetime.UTC),
     )
 
 

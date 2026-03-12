@@ -49,7 +49,7 @@ async def _write_event(
         new_status=new_status,
         changed_fields=changed_fields,
         changed_by=changed_by,
-        timestamp=datetime.datetime.utcnow(),
+        timestamp=datetime.datetime.now(datetime.UTC),
     )
     await event.insert()
 
@@ -112,7 +112,7 @@ async def get_agent_location(agent_id: str) -> Agent:
 
 
 async def create_agent(payload: dict[str, Any], changed_by: str | None = None) -> dict[str, Any]:
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now(datetime.UTC)
     status_value = payload.get("status", "active")
     if status_value not in ALLOWED_AGENT_STATUSES:
         raise HTTPException(status_code=422, detail="Invalid status")
@@ -201,7 +201,7 @@ async def update_agent(
     elif payload.get("run_healthcheck"):
         agent.health_status = await check_agent_health(agent.base_url)
 
-    agent.updated_at = datetime.datetime.utcnow()
+    agent.updated_at = datetime.datetime.now(datetime.UTC)
     agent.updated_by = changed_by
     await agent.save()
 
@@ -257,7 +257,7 @@ async def get_agent_history(agent_id: str) -> list[dict[str, Any]]:
 async def run_agent_healthcheck(agent_id: str) -> dict[str, Any]:
     agent = await get_agent_or_404(agent_id)
     agent.health_status = await check_agent_health(agent.base_url)
-    agent.updated_at = datetime.datetime.utcnow()
+    agent.updated_at = datetime.datetime.now(datetime.UTC)
     await agent.save()
     return {"agent_id": agent.agent_id, "health_status": agent.health_status}
 
@@ -266,6 +266,12 @@ async def seed_default_agents() -> None:
     settings = get_settings()
     if not settings.seed_default_agents:
         return
+
+    def _base_url(override: str, port: int) -> str:
+        return override if override else f"{settings.agent_seed_base_host}:{port}"
+
+    def _public_url(override: str, port: int) -> str:
+        return override if override else f"{settings.agent_seed_base_host}:{port}"
 
     defaults = [
         {
@@ -276,8 +282,8 @@ async def seed_default_agents() -> None:
             "greeting_style": "reassuring",
             "avatar_key": "anchor",
             "theme_key": "anchor",
-            "base_url": f"{settings.agent_seed_base_host}:8101",
-            "public_base_url": f"{settings.agent_seed_base_host}:8101",
+            "base_url": _base_url(settings.agent_seed_anchor_base_url, 8101),
+            "public_base_url": _public_url(settings.agent_seed_anchor_public_url, 8101),
             "status": "active",
         },
         {
@@ -288,8 +294,8 @@ async def seed_default_agents() -> None:
             "greeting_style": "energetic",
             "avatar_key": "spark",
             "theme_key": "spark",
-            "base_url": f"{settings.agent_seed_base_host}:8102",
-            "public_base_url": f"{settings.agent_seed_base_host}:8102",
+            "base_url": _base_url(settings.agent_seed_spark_base_url, 8102),
+            "public_base_url": _public_url(settings.agent_seed_spark_public_url, 8102),
             "status": "active",
         },
         {
@@ -300,8 +306,8 @@ async def seed_default_agents() -> None:
             "greeting_style": "reflective",
             "avatar_key": "sage",
             "theme_key": "sage",
-            "base_url": f"{settings.agent_seed_base_host}:8103",
-            "public_base_url": f"{settings.agent_seed_base_host}:8103",
+            "base_url": _base_url(settings.agent_seed_sage_base_url, 8103),
+            "public_base_url": _public_url(settings.agent_seed_sage_public_url, 8103),
             "status": "active",
         },
     ]

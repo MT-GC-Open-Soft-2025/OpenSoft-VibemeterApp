@@ -147,7 +147,7 @@ async def initiate_chat_service(convo_id: str, user: Any, agent_id: str) -> dict
     bot_message = Message(sender="bot", timestamp=datetime.datetime.now(), message=bot_message_text)
     new_chat_doc.messages.append(bot_message)
     new_chat_doc.agent_session_id = session_data["agent_session_id"]
-    new_chat_doc.agent_session_started_at = datetime.datetime.utcnow()
+    new_chat_doc.agent_session_started_at = datetime.datetime.now(datetime.UTC)
     await new_chat_doc.save()
     return {
         "convo_id": convo_id,

@@ -37,6 +37,16 @@ class Settings(BaseSettings):
     agent_bootstrap_token_ttl_seconds: int = 300
     seed_default_agents: bool = True
     agent_seed_base_host: str = "http://localhost"
+    # Per-agent internal base URL overrides (used by backend to reach agents within Docker network).
+    # If set, these take precedence over agent_seed_base_host:<port> for each agent.
+    agent_seed_anchor_base_url: str = ""
+    agent_seed_spark_base_url: str = ""
+    agent_seed_sage_base_url: str = ""
+    # Per-agent public base URL overrides (returned to the frontend for direct agent connections).
+    # If set, these take precedence over agent_seed_base_host:<port> for each agent.
+    agent_seed_anchor_public_url: str = ""
+    agent_seed_spark_public_url: str = ""
+    agent_seed_sage_public_url: str = ""
 
     model_config = {
         "env_file": str(_ENV_FILE),

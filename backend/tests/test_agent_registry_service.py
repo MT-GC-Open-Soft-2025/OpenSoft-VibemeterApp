@@ -68,7 +68,7 @@ async def test_update_agent_location_writes_location_event():
             "public_base_url": "http://localhost:8101",
             "status": "active",
             "health_status": "healthy",
-            "created_at": datetime.datetime.utcnow(),
+            "created_at": datetime.datetime.now(datetime.UTC),
             "save": AsyncMock(),
         },
     )()

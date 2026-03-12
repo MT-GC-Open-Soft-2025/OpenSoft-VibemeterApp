@@ -17,6 +17,15 @@ services:
       DB_NAME: ${DB_NAME}
       GEMINI_KEY: ${GEMINI_KEY}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost,http://localhost:80,http://localhost:3000}
+      REDIS_URL: ${REDIS_URL:-}
+      # Agent seeding: internal URLs (backend→agent within Docker network)
+      AGENT_SEED_ANCHOR_BASE_URL: ${AGENT_SEED_ANCHOR_BASE_URL:-http://agent-anchor:8101}
+      AGENT_SEED_SPARK_BASE_URL: ${AGENT_SEED_SPARK_BASE_URL:-http://agent-spark:8102}
+      AGENT_SEED_SAGE_BASE_URL: ${AGENT_SEED_SAGE_BASE_URL:-http://agent-sage:8103}
+      # Agent seeding: public URLs (returned to browser for direct agent SSE connections)
+      AGENT_SEED_ANCHOR_PUBLIC_URL: ${AGENT_SEED_ANCHOR_PUBLIC_URL:-}
+      AGENT_SEED_SPARK_PUBLIC_URL: ${AGENT_SEED_SPARK_PUBLIC_URL:-}
+      AGENT_SEED_SAGE_PUBLIC_URL: ${AGENT_SEED_SAGE_PUBLIC_URL:-}
     ports:
       - "8000:8000"
     restart: unless-stopped
@@ -41,6 +50,8 @@ services:
       AGENT_INTERNAL_SYNC_SECRET: ${AGENT_INTERNAL_SYNC_SECRET:-wellbee-agent-sync-secret}
       MAIN_BACKEND_INTERNAL_URL: http://backend:8000/api/v1/internal
       GEMINI_KEY: ${GEMINI_KEY}
+      REDIS_URL: ${REDIS_URL:-}
+      CORS_ORIGINS: ${AGENT_CORS_ORIGINS:-https://wellbee.live,https://www.wellbee.live}
     ports:
       - "8101:8101"
     depends_on:
@@ -61,6 +72,8 @@ services:
       AGENT_INTERNAL_SYNC_SECRET: ${AGENT_INTERNAL_SYNC_SECRET:-wellbee-agent-sync-secret}
       MAIN_BACKEND_INTERNAL_URL: http://backend:8000/api/v1/internal
       GEMINI_KEY: ${GEMINI_KEY}
+      REDIS_URL: ${REDIS_URL:-}
+      CORS_ORIGINS: ${AGENT_CORS_ORIGINS:-https://wellbee.live,https://www.wellbee.live}
     ports:
       - "8102:8102"
     depends_on:
@@ -81,6 +94,8 @@ services:
       AGENT_INTERNAL_SYNC_SECRET: ${AGENT_INTERNAL_SYNC_SECRET:-wellbee-agent-sync-secret}
       MAIN_BACKEND_INTERNAL_URL: http://backend:8000/api/v1/internal
       GEMINI_KEY: ${GEMINI_KEY}
+      REDIS_URL: ${REDIS_URL:-}
+      CORS_ORIGINS: ${AGENT_CORS_ORIGINS:-https://wellbee.live,https://www.wellbee.live}
     ports:
       - "8103:8103"
     depends_on:

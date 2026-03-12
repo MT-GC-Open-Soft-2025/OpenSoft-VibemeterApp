@@ -23,7 +23,7 @@ async def mark_session_started(
     if not chat:
         raise HTTPException(status_code=404, detail="Chat not found")
     chat.agent_session_id = agent_session_id
-    chat.agent_session_started_at = started_at or datetime.datetime.utcnow()
+    chat.agent_session_started_at = started_at or datetime.datetime.now(datetime.UTC)
     await chat.save()
     return {"status": "ok"}
 
@@ -40,7 +40,7 @@ async def record_turn_completed(
     if not chat:
         raise HTTPException(status_code=404, detail="Chat not found")
 
-    message_time = occurred_at or datetime.datetime.utcnow()
+    message_time = occurred_at or datetime.datetime.now(datetime.UTC)
     chat.agent_session_id = agent_session_id
     chat.messages.append(Message(sender="user", timestamp=message_time, message=user_message))
     chat.messages.append(Message(sender="bot", timestamp=message_time, message=bot_message))
