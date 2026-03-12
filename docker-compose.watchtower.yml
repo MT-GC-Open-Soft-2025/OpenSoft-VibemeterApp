@@ -1,6 +1,6 @@
 services:
   watchtower:
-    image: containrrr/watchtower:latest
+    image: containrrr/watchtower:1.5.3
     container_name: vibemeter-watchtower
     restart: unless-stopped
     volumes:
