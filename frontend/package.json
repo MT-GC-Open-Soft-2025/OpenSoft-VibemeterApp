@@ -49,6 +49,7 @@
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.35.2",
     "input-otp": "^1.4.2",
+    "lottie-react": "^2.4.1",
     "lucide-react": "^0.462.0",
     "markdown-to-jsx": "^7.7.4",
     "nanoid": "^5.1.5",

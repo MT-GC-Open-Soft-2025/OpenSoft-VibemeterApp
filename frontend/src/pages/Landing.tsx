@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BarChart3, Brain, ChevronRight, Send, Menu, X } from "lucide-react";
+import Lottie from "lottie-react";
+import animationData from "@/assets/animation.json";
 import botImg from "@/assets/bot.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -136,7 +138,7 @@ const Landing = () => {
                   <CardContent className="p-8 text-center">
                     <div className={`inline-flex items-center justify-center w-14 h-14 rounded-2xl ${f.bg} mb-5`}>
                       {f.icon === null
-                        ? <img src={botImg} alt="Vibey" className="w-10 h-10 object-contain" />
+                        ? <Lottie animationData={animationData} loop style={{ width: 48, height: 48 }} />
                         : <f.icon className={`h-7 w-7 ${f.color}`} />
                       }
                     </div>

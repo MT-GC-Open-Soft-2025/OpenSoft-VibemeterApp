@@ -60,8 +60,9 @@ const AgentManagement = () => {
 
   const fetchAgents = async () => {
     try {
-      const data = await adminApi.getAgentsAdmin();
-      setAgents((Array.isArray(data) ? data : []).map(mapBackendAgent));
+      const response = await adminApi.getAgentsAdmin();
+      const agentList = response.agents || response;
+      setAgents((Array.isArray(agentList) ? agentList : []).map(mapBackendAgent));
     } catch (err) {
       console.error("Failed to fetch agents:", err);
     }

@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, ArrowLeft, Star, History, Plus } from "lucide-react";
+import Lottie from "lottie-react";
+import animationData from "@/assets/animation.json";
 import botImg from "@/assets/bot.png";
 import { AppLayout } from "@/components/AppLayout";
 import { mapBackendAgent, type Agent, type ChatMessage, type ChatSession } from "@/lib/mock-data";
@@ -51,8 +53,9 @@ const Chat = () => {
 
   // Fetch agents on mount
   useEffect(() => {
-    chatApi.getAgents().then((data: any[]) => {
-      const mapped = data.filter((a: any) => a.status === "active").map(mapBackendAgent);
+    chatApi.getAgents().then((resp: any) => {
+      const data: any[] = resp.agents || resp;
+      const mapped = data.map(mapBackendAgent);
       setAgents(mapped);
     }).catch((err) => {
       console.error("Failed to fetch agents:", err);
@@ -62,7 +65,7 @@ const Chat = () => {
   // Fetch past sessions
   useEffect(() => {
     getConvoids().then((data: any) => {
-      const convIds: string[] = data.convo_ids || data || [];
+      const convIds: string[] = data.convid_list || data || [];
       const sessions: ChatSession[] = convIds.map((id: string) => ({
         id,
         agentId: "",
@@ -109,14 +112,14 @@ const Chat = () => {
   const loadPastSession = useCallback(async (sessionId: string) => {
     try {
       const data = await chatApi.getChat(sessionId);
-      const chatMessages: ChatMessage[] = (data.messages || []).map((m: any, i: number) => ({
+      const chatMessages: ChatMessage[] = (data.chat || []).map((m: any, i: number) => ({
         id: `msg-${i}`,
         role: m.sender === "user" ? "user" : "assistant",
         content: m.message,
         timestamp: m.timestamp ? new Date(m.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "",
       }));
-      const agentName = data.agent_name_snapshot || "";
-      const agent = agents.find((a) => a.name === agentName || a.id === data.agent_id);
+      const agentName = data.meta?.agent_name || "";
+      const agent = agents.find((a) => a.name === agentName || a.id === data.meta?.agent_id);
       setSelectedAgent(agent || { id: "", name: agentName, personality: "", description: "", avatar: "🤖", color: "", status: "active", createdAt: "", sessionsCount: 0, avgRating: 0 });
       setMessages(chatMessages);
       setActiveSessionId(sessionId);
@@ -251,6 +254,9 @@ const Chat = () => {
                     </Sheet>
                   </div>
                   <div className="text-center mb-10">
+                    <div className="flex justify-center mb-4" style={{ filter: 'drop-shadow(0 0 28px rgba(15,118,110,0.2))' }}>
+                      <Lottie animationData={animationData} loop style={{ width: 100, height: 100 }} />
+                    </div>
                     <h2 className="text-3xl font-heading font-bold mb-2">Choose Your Counselor</h2>
                     <p className="text-muted-foreground">Each counselor has a unique style. Pick the one that feels right for you.</p>
                   </div>

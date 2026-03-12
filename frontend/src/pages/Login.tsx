@@ -27,7 +27,7 @@ const Login = () => {
     if (!password.trim()) { setError("Please enter your password"); return; }
 
     setLoading(true);
-    const result = await login(company, employeeId.toUpperCase(), password);
+    const result = await login(company, employeeId.trim(), password);
     setLoading(false);
 
     if (result.success) {
@@ -79,7 +79,7 @@ const Login = () => {
                 <Input
                   placeholder="e.g., EMP0001"
                   value={employeeId}
-                  onChange={(e) => setEmployeeId(e.target.value.toUpperCase())}
+                  onChange={(e) => setEmployeeId(e.target.value)}
                 />
               </div>
 
